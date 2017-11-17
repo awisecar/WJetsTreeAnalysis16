@@ -19,12 +19,14 @@
 
     //Plotter("SMu",30);
     Plotter("SMu", 30, 0, 0, 0, 0, -1);
+    //Plotter("SMu", 30, 0, 0, 0, 0, 0);
+    
     //Plotter("SMu", 30, 1, 0, 0, 0, -1);
     //Plotter("SMu", 30, 2, 0, 0, 0, -1);
     //Plotter("SMu", 30, 3, 0, 0, 0, -1);
 
     getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1);
-
+    //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 0);
 
     //--- clean the *_cc.d and *_cc.so files ---
     string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";

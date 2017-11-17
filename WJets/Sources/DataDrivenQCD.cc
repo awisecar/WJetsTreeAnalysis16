@@ -45,9 +45,12 @@ using namespace std;
 #include "variablesOfInterestVarWidth.h"
 
 const int NQCD = 4 ;
-const int NMC = 10 ;
+//const int NMC = 10 ;
+const int NMC = 11 ;
 
-string energy = getEnergy();
+//string energy = getEnergy();
+string energy = "13TeV";
+
 int JetPtMin(30);
 int JetPtMax(0);
 
@@ -58,7 +61,9 @@ void DataDrivenQCD( string leptonFlavor, int METcut , int doBJets ){
     
     TFile *fData[NQCD] = {NULL};
     TFile *fMC[NQCD][NMC] = {{NULL}};
-    
+   
+    std::cout << "error here" << std::endl;
+ 
     FuncOpenAllFiles(fData, fMC, leptonFlavor, METcut, false, true, doBJets);
     vector<string> histoNameRun = getVectorOfHistoNames(fData);
     
@@ -91,7 +96,7 @@ void DataDrivenQCD( string leptonFlavor, int METcut , int doBJets ){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][10], string leptonFlavor,int METcut, bool doFlat , bool doVarWidth, int doBJets){
+void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor,int METcut, bool doFlat , bool doVarWidth, int doBJets){
     // Get data files
     for ( int i = 0 ; i < NQCD ; i++){
         fData[i] = getFile(FILESDIRECTORY,  leptonFlavor, energy, ProcessInfo[DATAFILENAME].filename, JetPtMin, JetPtMax, doFlat, doVarWidth, i, 0, 0, METcut, doBJets, "", "0");
@@ -104,16 +109,20 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][10], string leptonFlavor,int 
             cout << endl;
             
             string FilenameTemp;
-            if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
+            //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
+            //note: is this the wjets file that needs to be used? (other is MLM)
+            //comment: believe so, MLM is matching/merching for LO and FxFx is for NLO
+            if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
             if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
             if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "WW_dR_5311_List";
-            if (j == 8) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 9) FilenameTemp = "ZZ_dR_5311_List";
+            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 8) FilenameTemp = "WW_dR_5311_List";
+            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             
             
             fMC[i][j] = getFile(FILESDIRECTORY,  leptonFlavor, energy, FilenameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, i , 0, 0, METcut, doBJets, "", "0");
@@ -174,21 +183,23 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         for ( int j = 0 ; j < NMC ; j++){
             
             string FilenameTemp;
-            if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
+            //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
+            if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
             if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
             if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "WW_dR_5311_List";
-            if (j == 8) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 9) FilenameTemp = "ZZ_dR_5311_List";
+            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 8) FilenameTemp = "WW_dR_5311_List";
+            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             
             //cout << endl;
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
             cout << " going to fetch " << FilenameTemp << "   integral: " << hTemp1 ->Integral()<<endl;
-            if ( FilenameTemp.find("WJetsALL") != string::npos ) {
+            if ( FilenameTemp.find("WJets") != string::npos ) {
                 cout << " This is signal: " << FilenameTemp << endl;
                 hSignal[i] = (TH1D *) hTemp1->Clone();
             }

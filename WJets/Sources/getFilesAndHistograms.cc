@@ -249,6 +249,8 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
 {
     std::string  variable = "ZNGoodJets_Zexc";
     string energy = getEnergy();
+    //andrew -- just easy fix for now
+    energy = "13TeV";
 
     std::cout <<" let us get jet multiplicity statistics " << std::endl;
     // jet counter

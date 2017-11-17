@@ -29,6 +29,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         bool doRoch = 0, bool doFlat = 0, bool doVarWidth = 1)
 {
     string energy = getEnergy();
+    energy = "13TeV";
 
     cout << endl << "Running the Plotter with the following files as input: " <<doQCD << "   " << MET << "   " << doBJets << endl;
     TH1::SetDefaultSumw2();
@@ -41,7 +42,8 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     ostringstream doQCDStr;     doQCDStr << doQCD ;
     ostringstream METStr;   METStr << MET ; 
     string year = "2016"; 
-    if (energy == "13TeV") year = "2015";
+    //if (energy == "13TeV") year = "2015";
+    if (energy == "13TeV") year = "2016";
     int Colors[] = {kBlack, kSpring+5, kOrange, kOrange-3, kRed+1, kPink-6, kViolet+5, kPink, kAzure+4, kBlue, kCyan+1, kCyan+1, kCyan+1}; 
     string legendNames[] = {
         " #mu#mu ", " ZZJets2L2Nu", " ZZJets4L", " ZZJets2L2Q", 
@@ -156,9 +158,11 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     int nHistNoGen=0;
     for (unsigned short i(0); i < nHist; i++) {
         histoNameTemp = file[0]->GetListOfKeys()->At(i)->GetName();
+        //looks at all of the histograms without double-counting the gen ones
         if (histoNameTemp.find("gen") != string::npos) continue;
         histTemp = (TH1D*) file[0]->Get(histoNameTemp.c_str());
         if (histTemp->GetEntries() < 1) continue;
+        //only TH1's considered
         if (!histTemp->InheritsFrom(TH1D::Class())) continue;
 
         //        histoName[nHistNoGen] = file[0]->GetListOfKeys()->At(i)->GetName();
@@ -254,66 +258,71 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
 	//this is where we start using ttbar rescaling option
 
 
-	double SFttbar(1);
-	
+        //andrew -- no ttbar scale factors yet derived for 2016 data
+	//double SFttbar(1);
+	//
+    //looping over files
     for (int i = 0; i < nFiles; i++) {
         cout << i <<"  "<<legendNames[i]  << "   "<<  endl;
+        //looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
         for (int j = 0; j < nHistNoGen ; j++) {
             // cout << i <<"  "<<legendNames[i]  << "   "<< j << "   " <<  histoName[j] << endl;
             hist[i][j] = getHisto(file[i], histoName[j]);
             hist[i][j]->SetTitle(histoTitle[j].c_str());
 			
-                        //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions
-			if (histoName[j].find("Zinc2jet")!= string::npos) SFttbar = 1.00624717;
-			else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 0.95995655;
-			else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.91573438;
+                //no 2016 ttbar SFs yet
+                //        //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions
+		//	if (histoName[j].find("Zinc2jet")!= string::npos) SFttbar = 1.00624717;
+		//	else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 0.95995655;
+		//	else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.91573438;
 			
             if ( i == 0) {
+                //don't need to do anything to the data, just plotting it on top of the stacked MC
                 hist[i][j]->SetMarkerStyle(20);
                 hist[i][j]->SetMarkerColor(Colors[i]);
                 hist[i][j]->SetLineColor(Colors[i]);
             }
-			else if (i == 5){ // you have to check which i is ttbar
-				if (histoName[j].find("ZNGoodJets")== string::npos){
-					hist[i][j]->Scale(SFttbar);
-				}
-				else if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
-					//for (int nbin = 1; nbin <= 8; nbin++){
-					hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.00624717);
-					hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*0.95995655);
-					hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.91573438);
-					hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.85241859);
-					hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.75126800);
-					hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.74294841);
-				
-					hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.00624717);
-					hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*0.95995655);
-					hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.91573438);
-					hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.85241859);
-					hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.75126800);
-					hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.74294841);
-				
-				}
-				else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
-					hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.13995359);
-					hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.01319751);
-					hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.95978845);
-					hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.90872393);
-					hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.75519978);
-					hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.79367983);
-					
-					hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.13995359);
-					hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.01319751);
-					hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.95978845);
-					hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.90872393);
-					hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.75519978);
-					hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.79367983);
-				}
+	//		else if (i == 5){ // you have to check which i is ttbar
+	//			if (histoName[j].find("ZNGoodJets")== string::npos){
+	//				hist[i][j]->Scale(SFttbar);
+	//			}
+	//			else if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
+	//				//for (int nbin = 1; nbin <= 8; nbin++){
+	//				hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.00624717);
+	//				hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*0.95995655);
+	//				hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.91573438);
+	//				hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.85241859);
+	//				hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.75126800);
+	//				hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.74294841);
+	//			
+	//				hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.00624717);
+	//				hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*0.95995655);
+	//				hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.91573438);
+	//				hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.85241859);
+	//				hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.75126800);
+	//				hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.74294841);
+	//			
+	//			}
+	//			else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
+	//				hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.13995359);
+	//				hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.01319751);
+	//				hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.95978845);
+	//				hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.90872393);
+	//				hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.75519978);
+	//				hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.79367983);
+	//				
+	//				hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.13995359);
+	//				hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.01319751);
+	//				hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.95978845);
+	//				hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.90872393);
+	//				hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.75519978);
+	//				hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.79367983);
+	//			}
 
-				hist[i][j]->SetFillColor(Colors[i]);
-				hist[i][j]->SetLineColor(Colors[i]);
-				legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
-			}
+	//			hist[i][j]->SetFillColor(Colors[i]);
+	//			hist[i][j]->SetLineColor(Colors[i]);
+	//			legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
+	//		}
             else {
                 hist[i][j]->SetFillColor(Colors[i]);
                 hist[i][j]->SetLineColor(Colors[i]);
@@ -321,13 +330,16 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             }
         }
     }
-   
+    
+    //here is where the THStack histSumMC is filled/stacked
     for (int i = 1; i < nFiles; i++) {
         for (int j = 0; j < nHistNoGen ; j++) {
             if (doBJets <= 0 ){
                 histSumMC[j]->Add(hist[i][j]);
             }
             else {
+                //if no bveto, then the ttbar background changes in size
+                //the following lines switch the order in which ttbar and dy+jets is stacked
                 if (i == nFiles - 2) histSumMC[j]->Add(hist[nFiles - 1][j]);
                 else if (i == nFiles - 1) histSumMC[j]->Add(hist[nFiles - 2][j]);
                 else histSumMC[j]->Add(hist[i][j]);
@@ -399,8 +411,9 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         legend[i]->Draw();
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
         //cmsPre[i]->DrawLatex(0.27,0.87, "Preliminary"); //uncomment later on
-        if (energy == "8TeV") intLumi[i]->DrawLatex(0.20,0.83, "#int L dt = 19.6 fb^{-1},  #sqrt{s} = 8 TeV");
-        if (energy == "13TeV") intLumi[i]->DrawLatex(0.73,0.955, "2.2 fb^{-1} (13 TeV)");
+       
+        //if (energy == "8TeV") intLumi[i]->DrawLatex(0.20,0.83, "#int L dt = 19.6 fb^{-1},  #sqrt{s} = 8 TeV");
+        //if (energy == "13TeV") intLumi[i]->DrawLatex(0.73,0.955, "2.2 fb^{-1} (13 TeV)");
 
 
         if ( histoName[i].find("inc0") == string::npos){

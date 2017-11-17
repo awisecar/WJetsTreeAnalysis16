@@ -3,7 +3,6 @@
 //---- 2015_04_09
 // Fixing to be able to run Sherpa2
 
-void runDYJets(int doWhat = 0, int doQCD = 0)
 {
     string srcdir = "Sources/";
 
@@ -14,7 +13,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
     sources.push_back("HistoSet");
     sources.push_back("ZJetsAndDPS");
 
-    ////--- Load shared libraries ---
+    ////--- Load shaared libraries ---
     unsigned int nSources = sources.size();
     gSystem->AddIncludePath("-D__USE_XOPEN2K8");
     //gROOT->ProcessLine(".L /usr/local/lib/libLHAPDF.dylib");
@@ -25,9 +24,8 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
     }
         
     //------
-//    int doWhat       = 0;
-                              // 100 - all ; 0 - data total; 101, 102, ... - individual data samples;
-                              //1 - background , 2 - tau ?, 3 - DY, 4 - W+jets,
+    int doWhat       = 0;
+                              // 100 - all ; 0 - data, 1 - background , 2 - tau ?, 3 - DY, 4 - W+jets,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
     int doSysRunning = 0;
@@ -35,7 +33,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
-//    int doQCD        = 0;
+    int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts
         
     int doBJets      = -1;
@@ -140,107 +138,15 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
         
 
     // Data
-//    if ( doWhat == 0 || doWhat == 100) {
-//        for (unsigned int i(0); i < NSystData; i++) {
-//        //for (unsigned int i(1); i < 3; i++) {
-//            if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-//
-//            ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-//            DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-//        }
-//    }
-       
-
-    //Note: break up large data files list into smaller lists, then hadd the results later 
-    if ( doWhat == 101 || doWhat == 100) {
+    if ( doWhat == 0 || doWhat == 100) {
         for (unsigned int i(0); i < NSystData; i++) {
+        //for (unsigned int i(1); i < 3; i++) {
             if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-            ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_1_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
+            
+            ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
             DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
         }
     }
-        
-        if ( doWhat == 102 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_2_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 103 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_3_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 104 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_4_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 105 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_5_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 106 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_6_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 107 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_7_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 108 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_8_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 109 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_9_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
-        
-        if ( doWhat == 110 || doWhat == 100) {
-            for (unsigned int i(0); i < NSystData; i++) {
-                if (dataSyst[i] != doSysRunning && doSysRunning != 100) continue;
-                
-                ZJetsAndDPS DMudata(lepSelection+"_13TeV_Data_10_dR_5311_List", 1., 1, 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
-                DMudata.Loop(1, 0, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy);
-            }
-        }
         
     // Background
     if ( doWhat == 1 || doWhat == 100 ){
@@ -445,16 +351,16 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
         
         
         
-//    //--- clean the *_cc.d and *_cc.so files ---
-//    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
-//    system(cmd.c_str());
-//    system("rm .ls_tmp.list");
+    //--- clean the *_cc.d and *_cc.so files ---
+    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
+    system(cmd.c_str());
+    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
+    system(cmd.c_str());
+    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
+    system(cmd.c_str());
+    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
+    system(cmd.c_str());
+    system("rm .ls_tmp.list");
 
 }
 

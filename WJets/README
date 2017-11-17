@@ -23,16 +23,20 @@ cd -
 
 -- Ready to run the code!!! 
 
--- Run the code under /WJets
-root -b runDYJets.cc++
+Two different approaches to running:
 
--- For QCD Background go to WJets/runDYJets.cc change int doQCD = 1
-root -b -q runDYJets.cc
-# Change it 1-3 and run every time. 
+1) python wjets_jobsub.py
+which will submit batch jobs for doWhat's and doQCD's specified in the script, producing STDOUT, STDERR, and the submitted shell scripts in the folder "tmpjobs_<date>"
 
--- Output root files are in the directory HistoFiles.
+2) root -b -q runDYJets.cc
+is the main command, which will be run in your current shell.
 
--- Merge single top and DYJets root files:
+Note: for QCD multijets background estimation we use the "ABCD" data-driven method, so we must run over the one signal and three control regions, doQCD=0, 1...3, respectively.
+The doWhat, doQCD, doSysRunning, and doBJets options tell the main code (Sources/ZJetsAndDPS.cc) what you'd like to run
+
+-- Output root files are in the directory HistoFiles. 
+
+-- Merge single top and DYJets root files (change if your total number of top or DY MC samples changes):
 root -b -q MergeTop_BVeto.cc++
 root -b -q MergeVV_BVeto.cc++
 

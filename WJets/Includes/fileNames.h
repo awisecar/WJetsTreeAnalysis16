@@ -44,7 +44,10 @@ const processInfoStruct ProcessInfo[] = {
     {"DYJets_FromTau_UNFOLDING_dR_5311_List_Inf3", 30459503.,  3531.8,  1,         0.033,         kAzure+4,    " DYtautau"},
     {"DYJets10toInf3_dR_5311_List",	              1.,         1,       1,         0.04,          kGreen-8,   " DY+jets"},          // 23
     {"DataQCD_dR_5311_List",	                      1.,         1,       1,         0.04,          kGreen+3,     " QCD multijet"},         // 24
-    {"WJetsALL_MIX_UNFOLDING_dR_5311_List",        76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    //{"WJetsALL_MIX_UNFOLDING_dR_5311_List",        76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    //andrew -- 2016 update (from MIX to FxFx), these xsec numbers don't matter?
+    {"WJets_FxFx_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+
     {"WJetsALL_MIX_dR_5311_List",                  76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},  // relative weight for mixed DY and WJ files are set inthe code
     {"WJetsALL_dR_5311_List",                      76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},
     {"DYJets_UNFOLDING_dR_5311_List_Inf3",         30459503.,  3531.8,  1,         0.04,          kAzure+10,   " DY+jets"}, /// up to this line files are set for W+jet s and TTbar
@@ -55,8 +58,14 @@ const processInfoStruct ProcessInfo[] = {
 const int NFILESDYJETS(12);
 //const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 13};
 const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 27};
+
+//andrew
 const int NFILESTTBAR(7);
 const int FilesTTbarWJets[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
+//no qcd background
+//const int NFILESTTBAR(6);
+//const int FilesTTbarWJets[NFILESTTBAR] = {0, 5, 21, 10, 9, 25};
+
 const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
 const int NFILESWJETS_M(11);
 const int FilesWJets_M[NFILESWJETS_M] = {0, 2, 3, 4, 23, 5, 6, 7, 8, 9, 24};
@@ -71,7 +80,8 @@ const string FILENAMESTTbar[NFILESTTBAR] = {
     "Top_dR_5311_List",
     "DYJets10toInf3_dR_5311_List",
     "TTJets_dR_5311_List",
-    "WJetsALL_UNFOLDING_dR_5311_List",
+    //"WJetsALL_UNFOLDING_dR_5311_List",
+    "WJets_FxFx_dR_5311_List"
 };
 const int NFILESVJETS(14);
 const string FILENAMES[NFILESVJETS] = {
