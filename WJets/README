@@ -36,6 +36,9 @@ The doWhat, doQCD, doSysRunning, and doBJets options tell the main code (Sources
 
 -- Output root files are in the directory HistoFiles. 
 
+-- Merge each of the separate datafiles. (The data batch jobs are split into separate lists -- see runDYJets.cc -- and submitted separately to speed up the process.) This shell script uses the 'hadd' command to combine several rootfiles into one.
+./wjets_mergeData.sh
+
 -- Merge single top and DYJets root files (change if your total number of top or DY MC samples changes):
 root -b -q MergeTop_BVeto.cc++
 root -b -q MergeVV_BVeto.cc++
