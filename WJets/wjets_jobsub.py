@@ -14,11 +14,11 @@ os.system('mkdir ' + mtmpdir)
 
 #doWhat = [0,1,3,4]
 #The 101...110 is for the data
-#doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1, 3, 4]
-doWhat = [110]
-#doQCD = [0,1,2,3]
-doQCD = [1]
-#doQCD = [0,1,2,3]
+doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1, 3, 4]
+#doWhat = [110]
+#doQCD = [0]
+#doQCD = [1,2,3]
+doQCD = [0,1,2,3]
 
 
 for what in doWhat:

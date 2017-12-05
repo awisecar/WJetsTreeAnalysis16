@@ -59,12 +59,17 @@ const int NFILESDYJETS(12);
 //const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 13};
 const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 27};
 
-//andrew
 const int NFILESTTBAR(7);
-const int FilesTTbarWJets[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
-//no qcd background
-//const int NFILESTTBAR(6);
-//const int FilesTTbarWJets[NFILESTTBAR] = {0, 5, 21, 10, 9, 25};
+
+///////////////
+//andrew -- 2016 W+jets
+//const int NFILESTTBARWJETS(7);
+//const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
+//
+//no qcd background -- use for ttbar study
+const int NFILESTTBARWJETS(6);
+const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 21, 10, 9, 25};
+///////////////
 
 const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
 const int NFILESWJETS_M(11);

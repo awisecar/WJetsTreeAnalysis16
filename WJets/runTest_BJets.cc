@@ -13,6 +13,9 @@
         gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc++").c_str());
     }
 
+    //Note--> In Plotter, the function "getFile" is used to grab each of the necessary files (from directory FILESDIRECTORY, or "HistoFiles/"): the variable fileSelect is set equal to a vector of integers (e.g. FilesTTBarWJets) corresponding to the different entries of the structure ProcessInfo (in fileNames.h), which contains the names of the data and BG files we're using
+    //If you want to change the files you're stacking the histograms of, do it in fileNames.h
+
     //Plotter("SMu",30);
     Plotter("SMu", 30, 0, 0, 0, 0, 2);
     getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 2);

@@ -35,7 +35,8 @@ ClassImp(ZJetsAndDPS);
 void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSign, bool doInvMassCut, 
         int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
-	bool doMETFiltering = true;
+        //andrew: currently turn off because no 2016 MET filters yet
+	bool doMETFiltering = false;
 
     //--- Initialize PDF from LHAPDF if needed ---
     if (pdfSet != "") {

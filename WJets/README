@@ -2,7 +2,15 @@
 
 
 
-The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC).
+The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for 2016 data provided by Kadir Ocalan and Metin Yalvac.
+
+If you are interested in 2015 data/MC, please see Apichart's repository here:
+https://github.com/ahortian/WJetsTreeAnalysis/tree/master/WJets
+
+Note: the unfolding of these data is done at a different step. Previously, for 2015 13 TeV we have used RooUnfold, with the Bayesian iterative method:
+https://github.com/ahortian/WJets13TeVUnfolding
+
+(TODO: change to an unfolding method based on Root's TUnfold class, as recommended by the Statistics Community.)
 
 -- For now use CMSSW_5_3_20
 cmsrel CMSSW_5_3_20  
@@ -37,7 +45,7 @@ The doWhat, doQCD, doSysRunning, and doBJets options tell the main code (Sources
 -- Output root files are in the directory HistoFiles. 
 
 -- Merge each of the separate datafiles. (The data batch jobs are split into separate lists -- see runDYJets.cc -- and submitted separately to speed up the process.) This shell script uses the 'hadd' command to combine several rootfiles into one.
-./wjets_mergeData.sh
+./wjets_mergeDataBVeto.sh
 
 -- Merge single top and DYJets root files (change if your total number of top or DY MC samples changes):
 root -b -q MergeTop_BVeto.cc++
@@ -49,4 +57,17 @@ root -b -q runQCD_BVeto.cc++
 -- Plotting: After you have all needed output files, you can plot the histograms by
 root -b -q runTest_BVeto.cc++
 
---Congratulations! Output PDF files will be in the directory PNGFiles
+--Congratulations! Output PDF files will be in the directory PNGFile
+A .tex file detailing the bin statistics will be available in WJets directory with title beginning with "outputTable_"
+
+----------------------------------
+
+TTbar SFs Study:
+Run requiring 2 btag jets (doBJets=2) and WJets signal region (doQCD=0)
+
+root -b -q MergeTop_BJets.cc++
+root -b -q MergeVV_BJets.cc++
+
+Don't need to consider QCD MJ background for now(?)
+
+root -b -q runTest_BJets.cc++

@@ -65,7 +65,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     bool isDoubleLep(1);
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
         isDoubleLep = 0;
-        nFiles = NFILESTTBAR; 
+        nFiles = NFILESTTBARWJETS; 
     }
     TFile *file[nFiles];
     int countFiles = 0 ;
@@ -517,6 +517,6 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     //-- Close all the files ------------------------------
     for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);
     //-----------------------------------------------------
-    cout << "Everything went fine" << endl;
+    cout << "Everything went fine -- Plotting done" << endl;
 
 }

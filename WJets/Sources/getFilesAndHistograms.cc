@@ -259,7 +259,8 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     double DataEv[20][20] = {{0}};
 
     //-- fetch the data files and histograms --------------
-    int usedFiles = NFILESTTBAR ; 
+    //andrew -- 2016 w+jets uses NFILESTTBARWJETS
+    int usedFiles = NFILESTTBARWJETS ; 
     bool doDY(0) ;
     if (leptonFlavor.find("Muons") != string::npos ||  leptonFlavor.find("Electrons") != string::npos ) {
         usedFiles = NFILESDYJETS;
@@ -273,6 +274,7 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
         else if (leptonFlavor.find("SMuE") != string::npos) sel = FilesTTbar[i];
         else sel = FilesTTbarWJets[i];
 
+        //following line skips over any of the QCD control region files(?)
         if ((doQCD > 0 || doInvMassCut || doSSign ) && ProcessInfo[sel].filename.find("QCD") != string::npos) continue;
         fData = getFile(FILESDIRECTORY,  leptonFlavor, energy, ProcessInfo[sel].filename, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD , doSSign,  doInvMassCut, MET, doBJets,  "","0");
         std::cout << "opened :  " << i << "   " << sel <<"   " << FilesTTbarWJets[i] <<"  " << ProcessInfo[sel].filename <<"   " << leptonFlavor.find("SMuE") << std::endl;
