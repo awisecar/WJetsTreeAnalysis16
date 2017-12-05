@@ -65,6 +65,8 @@ A .tex file detailing the bin statistics will be available in WJets directory wi
 TTbar SFs Study:
 Run requiring 2 btag jets (doBJets=2) and WJets signal region (doQCD=0)
 
+./wjets_mergeDataBJets.sh
+
 root -b -q MergeTop_BJets.cc++
 root -b -q MergeVV_BJets.cc++
 
