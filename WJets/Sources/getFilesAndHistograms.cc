@@ -247,7 +247,10 @@ void getResps(RooUnfoldResponse *responses[], TFile *Files[], string variable)
 
 void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int MET, int doBJets)
 {
+    //"variable" is the name of the histogram whos bin counts we are recording
     std::string  variable = "ZNGoodJets_Zexc";
+    //std::string  variable = "ZNGoodJets_Zinc";
+    
     string energy = getEnergy();
     //andrew -- just easy fix for now
     energy = "13TeV";
@@ -255,6 +258,7 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     std::cout <<" let us get jet multiplicity statistics " << std::endl;
     // jet counter
     //int NBins = 11
+
     int NBins = 8 ;
     double DataEv[20][20] = {{0}};
 
@@ -268,13 +272,14 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
         NBins = 8 ; /// FIXED !!!!
     }
     for (int i(0); i < usedFiles; i++) {
+        //"fData" is the name of the file (either data or MC) recording bin counts of
         TFile *fData;
         int sel = i; 
         if (doDY) sel = FilesDYJets[i];
         else if (leptonFlavor.find("SMuE") != string::npos) sel = FilesTTbar[i];
         else sel = FilesTTbarWJets[i];
 
-        //following line skips over any of the QCD control region files(?)
+        //following line skips over any of the QCD control region files
         if ((doQCD > 0 || doInvMassCut || doSSign ) && ProcessInfo[sel].filename.find("QCD") != string::npos) continue;
         fData = getFile(FILESDIRECTORY,  leptonFlavor, energy, ProcessInfo[sel].filename, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD , doSSign,  doInvMassCut, MET, doBJets,  "","0");
         std::cout << "opened :  " << i << "   " << sel <<"   " << FilesTTbarWJets[i] <<"  " << ProcessInfo[sel].filename <<"   " << leptonFlavor.find("SMuE") << std::endl;
@@ -282,7 +287,11 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
 
         for (int j = 1 ; j < NBins + 1 ; j++ ){
             Double_t binContent = hTemp->GetBinContent(j);
+            //"DataEv" records the number of bin counts in each of the files
+            //The distribution it records the bin counts of is given by "variable" above
             DataEv[i][j] = binContent;
+
+            //records total bin counts of all contributing MC
             if ( i > 0 ) DataEv[usedFiles][j]+=int(binContent);
         }
         // close all input root files
@@ -291,13 +300,13 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
 
     std::cout << "Closed all files" << std::endl;
 
-    ostringstream nameStr;  nameStr << "outputTable_" << leptonFlavor <<"_JetPtMin_" <<JetPtMin;
+    ostringstream nameStr;  nameStr << "outputTable_" << leptonFlavor << "_" << variable << "_JetPtMin_" << JetPtMin;
     if (doInvMassCut) nameStr << "_InvMass";
-    if (doSSign )   nameStr << "_SS";
-    //if (doBJets) nameStr << "_BJets";
-    if (doQCD>0) nameStr << "_QCD"<<doQCD;
-    if ( MET > 0 ) nameStr << "_MET"<< MET;
-    if ( doBJets < 0 ) nameStr <<"_BVeto";
+    if (doSSign)   nameStr << "_SS";
+    if (doQCD > 0) nameStr << "_QCD"<<doQCD;
+    if (MET > 0) nameStr << "_MET"<< MET;
+    if (doBJets < 0) nameStr <<"_BVeto";
+    if (doBJets > 0) nameStr << "_BJets";
     nameStr<<".tex";
 
     FILE *outFile = fopen(nameStr.str().c_str(),"w");
@@ -320,8 +329,9 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
             else fprintf( outFile, "%d \\\\ \n ", int(DataEv[i][j]));
 
         }
-        std::cout << std::endl;
     }
+    
+    std::cout << std::endl;
 
     // print data statistics
     fprintf( outFile, "\\hline \n");
@@ -330,11 +340,12 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
         if (j < NBins ) fprintf( outFile, "%d & ",  int(DataEv[0][j]));
         else fprintf( outFile, "%d \\\\ \n ",  int(DataEv[0][j]));
     }
-    // print ratio of MC/data
+    // print ratio of Data/MC
     fprintf( outFile, " Ratio          & ");
+    std::cout << "Histogram: " << variable << std::endl;
     for (int j=1; j<NBins + 1; j++){
-        double temp= DataEv[usedFiles][j]/DataEv[0][j];
-        std:: cout << DataEv[usedFiles][j] << "   " << DataEv[0][j] << std::endl;
+        double temp = DataEv[0][j]/DataEv[usedFiles][j];
+        std:: cout << "Histogram bin number:" << j << "    Total MC: " << DataEv[usedFiles][j] << "    Data: " << DataEv[0][j] << "    Data/MC Ratio: " << temp << std::endl;
         if (j<NBins) fprintf( outFile, "%f & ", float(temp));
         else fprintf( outFile, "%f \\\\ \n ",temp);
 

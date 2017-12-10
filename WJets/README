@@ -1,13 +1,11 @@
 # WJetsTreeAnalysis16
 
-
-
 The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for 2016 data provided by Kadir Ocalan and Metin Yalvac.
 
 If you are interested in 2015 data/MC, please see Apichart's repository here:
 https://github.com/ahortian/WJetsTreeAnalysis/tree/master/WJets
 
-Note: the unfolding of these data is done at a different step. Previously, for 2015 13 TeV we have used RooUnfold, with the Bayesian iterative method:
+Note: the unfolding of these data is done at a different step. Previously, for 2015 13 TeV we have used RooUnfold, with the Bayesian iterative method (::kBayes):
 https://github.com/ahortian/WJets13TeVUnfolding
 
 (TODO: change to an unfolding method based on Root's TUnfold class, as recommended by the Statistics Community.)
@@ -67,9 +65,8 @@ Run requiring 2 btag jets (doBJets=2) and WJets signal region (doQCD=0)
 
 ./wjets_mergeDataBJets.sh
 
-root -b -q MergeTop_BJets.cc++
-root -b -q MergeVV_BJets.cc++
-
-Don't need to consider QCD MJ background for now(?)
+root -b -q MergeTop_BJets.cc
+root -b -q MergeVV_BJets.cc
+root -b -q runQCD_BJets.cc
 
 root -b -q runTest_BJets.cc++

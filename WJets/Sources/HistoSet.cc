@@ -160,11 +160,11 @@ HistoSet::HistoSet(string leptonFlavor)
     string lJetdEta = "#Delta#eta(#mu_{1}#mu_{2},j_{1})";
 
     //andrew
-    string HTover2 = "H_{T}/2 [GeV]";
-    string HTover3 = "H_{T}/3 [GeV]";
+    string HTover2 = "H_{T,2}/2 [GeV]";
+    string HTover3 = "H_{T,3}/3 [GeV]";
     string lpT_HT = "p_{T}(#mu)+H_{T} [GeV]";
-    string lpT_HTover2 = "p_{T}(#mu)+H_{T}/2 [GeV]";
-    string lpT_HTover3 = "p_{T}(#mu)+H_{T}/3 [GeV]";
+    string lpT_HTover2 = "p_{T}(#mu)+H_{T,2}/2 [GeV]";
+    string lpT_HTover3 = "p_{T}(#mu)+H_{T,3}/3 [GeV]";
     string lpT_LJpT = "p_{T}(#mu)+p_{T}(j_{leading}) [GeV]";
 
     bool doWJets = false;

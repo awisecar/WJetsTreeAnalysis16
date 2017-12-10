@@ -11,11 +11,11 @@
 #include <TFile.h>
 #include <sstream>
 
-void runMergeVV(string lepSelection = "DE", int systematics =0  , int jetPtCutMin = 30 , int doQCD = 0 );
+void runMergeVV_BJets(string lepSelection = "DE", int systematics =0  , int jetPtCutMin = 30 , int doQCD = 0 );
 
-void MergeVV(){
+void MergeVV_BJets(){
     
-    runMergeVV("SMu",0,30,0);
+    runMergeVV_BJets("SMu",0,30,0);
     //runMergeTop_BVeto("SMu",0,30,1);
     //runMergeTop_BVeto("SMu",0,30,2);
     //runMergeTop_BVeto("SMu",0,30,3);
@@ -29,7 +29,7 @@ void MergeVV(){
 
 }
 
-void runMergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD)
+void runMergeVV_BJets(string lepSelection, int systematics, int jetPtCutMin, int doQCD)
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();

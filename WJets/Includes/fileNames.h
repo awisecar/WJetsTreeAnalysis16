@@ -66,7 +66,7 @@ const int NFILESTTBAR(7);
 //const int NFILESTTBARWJETS(7);
 //const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
 //
-//no qcd background -- use for ttbar study
+//use the pair of lines below to turn off qcd background in plotting
 const int NFILESTTBARWJETS(6);
 const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 21, 10, 9, 25};
 ///////////////
