@@ -245,11 +245,12 @@ void getResps(RooUnfoldResponse *responses[], TFile *Files[], string variable)
 }
 
 
-void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int MET, int doBJets)
+void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int MET, int doBJets, bool doTTScale)
 {
-    //"variable" is the name of the histogram whos bin counts we are recording
-    std::string  variable = "ZNGoodJets_Zexc";
-    //std::string  variable = "ZNGoodJets_Zinc";
+
+    //variableExc/Inc is the name of the histogram whos bin counts we are recording
+    std::string variableExc = "ZNGoodJets_Zexc";
+    std::string variableInc = "ZNGoodJets_Zinc";
     
     string energy = getEnergy();
     //andrew -- just easy fix for now
@@ -258,9 +259,9 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     std::cout <<" let us get jet multiplicity statistics " << std::endl;
     // jet counter
     //int NBins = 11
-
     int NBins = 8 ;
-    double DataEv[20][20] = {{0}};
+    double DataEvExc[20][20] = {{0}};
+    double DataEvInc[20][20] = {{0}};
 
     //-- fetch the data files and histograms --------------
     //andrew -- 2016 w+jets uses NFILESTTBARWJETS
@@ -281,37 +282,84 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
 
         //following line skips over any of the QCD control region files
         if ((doQCD > 0 || doInvMassCut || doSSign ) && ProcessInfo[sel].filename.find("QCD") != string::npos) continue;
+        
         fData = getFile(FILESDIRECTORY,  leptonFlavor, energy, ProcessInfo[sel].filename, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD , doSSign,  doInvMassCut, MET, doBJets,  "","0");
         std::cout << "opened :  " << i << "   " << sel <<"   " << FilesTTbarWJets[i] <<"  " << ProcessInfo[sel].filename <<"   " << leptonFlavor.find("SMuE") << std::endl;
-        TH1D *hTemp = getHisto(fData, variable);
+        TH1D *hTempExc = getHisto(fData, variableExc);
+        TH1D *hTempInc = getHisto(fData, variableInc);
+        
+        //andrew -- ttbar SFs computed before 2016 MET filters and b-tag SFs
+        //i==4 is the ttbar file when QCD is turned off (see fileNames.h)
+        //i==5 when running the usual distributions with bveto == -1
+        //if (i==4){
+        if (i==5){
+            if (doTTScale){
+                //inclusive jets
+                hTempInc->SetBinContent(3, hTempInc->GetBinContent(3)*1.100549991);
+                hTempInc->SetBinContent(4, hTempInc->GetBinContent(4)*1.016080563);
+                hTempInc->SetBinContent(5, hTempInc->GetBinContent(5)*0.979844961);
+                hTempInc->SetBinContent(6, hTempInc->GetBinContent(6)*0.941202003);
+                hTempInc->SetBinContent(7, hTempInc->GetBinContent(7)*0.927091125);
+                hTempInc->SetBinContent(8, hTempInc->GetBinContent(8)*0.939210833);
+                hTempInc->SetBinError(3, hTempInc->GetBinError(3)*1.100549991);
+                hTempInc->SetBinError(4, hTempInc->GetBinError(4)*1.016080563);
+                hTempInc->SetBinError(5, hTempInc->GetBinError(5)*0.979844961);
+                hTempInc->SetBinError(6, hTempInc->GetBinError(6)*0.941202003);
+                hTempInc->SetBinError(7, hTempInc->GetBinError(7)*0.927091125);
+                hTempInc->SetBinError(8, hTempInc->GetBinError(8)*0.939210833);
+                
+                //exclusive jets
+                hTempExc->SetBinContent(3, hTempExc->GetBinContent(3)*1.461640581);
+                hTempExc->SetBinContent(4, hTempExc->GetBinContent(4)*1.06483934);
+                hTempExc->SetBinContent(5, hTempExc->GetBinContent(5)*1.006837223);
+                hTempExc->SetBinContent(6, hTempExc->GetBinContent(6)*0.948498974);
+                hTempExc->SetBinContent(7, hTempExc->GetBinContent(7)*0.92190308);
+                hTempExc->SetBinContent(8, hTempExc->GetBinContent(8)*0.959601048);
+                hTempExc->SetBinError(3, hTempExc->GetBinError(3)*1.461640581);
+                hTempExc->SetBinError(4, hTempExc->GetBinError(4)*1.06483934);
+                hTempExc->SetBinError(5, hTempExc->GetBinError(5)*1.006837223);
+                hTempExc->SetBinError(6, hTempExc->GetBinError(6)*0.948498974);
+                hTempExc->SetBinError(7, hTempExc->GetBinError(7)*0.92190308);
+                hTempExc->SetBinError(8, hTempExc->GetBinError(8)*0.959601048);
+            }
+        }
 
         for (int j = 1 ; j < NBins + 1 ; j++ ){
-            Double_t binContent = hTemp->GetBinContent(j);
+            Double_t binContentExc = hTempExc->GetBinContent(j);
+            Double_t binContentInc = hTempInc->GetBinContent(j);
             //"DataEv" records the number of bin counts in each of the files
             //The distribution it records the bin counts of is given by "variable" above
-            DataEv[i][j] = binContent;
+            DataEvExc[i][j] = binContentExc;
+            DataEvInc[i][j] = binContentInc;
 
-            //records total bin counts of all contributing MC
-            if ( i > 0 ) DataEv[usedFiles][j]+=int(binContent);
+            //records total bin counts of all contributing MC (the files are indexed from 0 to usedFiles-1 in the loop, so we entire summed MC in the usedFiles entry)
+            //i==0 is the datafile (see fileNames.h)
+            if ( i > 0 ) DataEvExc[usedFiles][j]+=int(binContentExc);
+            if ( i > 0 ) DataEvInc[usedFiles][j]+=int(binContentInc);
         }
         // close all input root files
         fData->Close();
     }
 
     std::cout << "Closed all files" << std::endl;
-
-    ostringstream nameStr;  nameStr << "outputTable_" << leptonFlavor << "_" << variable << "_JetPtMin_" << JetPtMin;
-    if (doInvMassCut) nameStr << "_InvMass";
-    if (doSSign)   nameStr << "_SS";
-    if (doQCD > 0) nameStr << "_QCD"<<doQCD;
-    if (MET > 0) nameStr << "_MET"<< MET;
-    if (doBJets < 0) nameStr <<"_BVeto";
-    if (doBJets > 0) nameStr << "_BJets";
-    nameStr<<".tex";
-
-    FILE *outFile = fopen(nameStr.str().c_str(),"w");
-    fprintf( outFile, "\\footnotesize{\n\\begin{tabular}{l|cccccccc} \n ");
-    fprintf( outFile, " &  $N_{\\text{jets}} = 0 $ & $N_{\\text{jets}} = 1 $ & $N_{\\text{jets}} = 2 $ & $N_{\\text{jets}} = 3 $ & $N_{\\text{jets}} = 4 $ & $N_{\\text{jets}} = 5 $ & $N_{\\text{jets}} = 6 $ & $N_{\\text{jets}} = 7$ \\\\ \\hline \n ");
+    
+    ////////////////////////////////////////////////////////Statistics Tables
+    
+    ////Create exclusive jets statistics table
+    ostringstream nameStrExc;  nameStrExc << "statsTable_" << leptonFlavor << "_" << variableExc << "_JetPtMin_" << JetPtMin;
+    if (doInvMassCut) nameStrExc << "_InvMass";
+    if (doSSign)   nameStrExc << "_SS";
+    if (doQCD > 0) nameStrExc << "_QCD"<<doQCD;
+    if (MET > 0) nameStrExc << "_MET"<< MET;
+    if (doBJets < 0) nameStrExc <<"_BVeto";
+    if (doBJets > 0) nameStrExc << "_BJets";
+    if (doTTScale) nameStrExc << "_TTSFs";
+    if (!doTTScale) nameStrExc << "_noTTSFs";
+    nameStrExc << ".tex";
+    
+    FILE *outFileExc = fopen(nameStrExc.str().c_str(),"w");
+    fprintf( outFileExc, "\\footnotesize{\n\\begin{tabular}{l|cccccccc} \n ");
+    fprintf( outFileExc, " &  $N_{\\text{jets}} = 0 $ & $N_{\\text{jets}} = 1 $ & $N_{\\text{jets}} = 2 $ & $N_{\\text{jets}} = 3 $ & $N_{\\text{jets}} = 4 $ & $N_{\\text{jets}} = 5 $ & $N_{\\text{jets}} = 6 $ & $N_{\\text{jets}} = 7$ \\\\ \\hline \n ");
 
     //// print statistics of all the MC samples
     for (int i=1; i< usedFiles + 1 ; i++){
@@ -319,14 +367,14 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
         if ( doDY ) sel = FilesDYJets[i];
         else sel = FilesTTbarWJets[i];
 
-        if (i < usedFiles) fprintf(outFile, " %s        & ", ProcessInfo[sel].legend.c_str());
+        if (i < usedFiles) fprintf(outFileExc, " %s        & ", ProcessInfo[sel].legend.c_str());
         else {
-            fprintf( outFile, "\\hline \n");
-            fprintf( outFile, " TOTAL & ");
+            fprintf( outFileExc, "\\hline \n");
+            fprintf( outFileExc, " TOTAL & ");
         }
         for (int j = 1 ; j < NBins + 1  ; j++ ) {
-            if (j < NBins ) fprintf( outFile, "%d & ", int(DataEv[i][j]));
-            else fprintf( outFile, "%d \\\\ \n ", int(DataEv[i][j]));
+            if (j < NBins ) fprintf( outFileExc, "%d & ", int(DataEvExc[i][j]));
+            else fprintf( outFileExc, "%d \\\\ \n ", int(DataEvExc[i][j]));
 
         }
     }
@@ -334,25 +382,90 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     std::cout << std::endl;
 
     // print data statistics
-    fprintf( outFile, "\\hline \n");
-    fprintf( outFile, " Data          & ");
+    fprintf( outFileExc, "\\hline \n");
+    fprintf( outFileExc, " Data          & ");
     for (int j = 1; j< NBins + 1 ; j++){
-        if (j < NBins ) fprintf( outFile, "%d & ",  int(DataEv[0][j]));
-        else fprintf( outFile, "%d \\\\ \n ",  int(DataEv[0][j]));
+        if (j < NBins ) fprintf( outFileExc, "%d & ",  int(DataEvExc[0][j]));
+        else fprintf( outFileExc, "%d \\\\ \n ",  int(DataEvExc[0][j]));
     }
-    // print ratio of Data/MC
-    fprintf( outFile, " Ratio          & ");
-    std::cout << "Histogram: " << variable << std::endl;
+    // print ratio of MC/Data
+    fprintf( outFileExc, " MC/Data Ratio          & ");
+    std::cout << "Histogram: " << variableExc << std::endl;
     for (int j=1; j<NBins + 1; j++){
-        double temp = DataEv[0][j]/DataEv[usedFiles][j];
-        std:: cout << "Histogram bin number:" << j << "    Total MC: " << DataEv[usedFiles][j] << "    Data: " << DataEv[0][j] << "    Data/MC Ratio: " << temp << std::endl;
-        if (j<NBins) fprintf( outFile, "%f & ", float(temp));
-        else fprintf( outFile, "%f \\\\ \n ",temp);
+        double temp = DataEvExc[usedFiles][j]/DataEvExc[0][j];
+        std:: cout << "Histogram bin number:" << j << "    Total MC: " << DataEvExc[usedFiles][j] << "    Data: " << DataEvExc[0][j] << "    MC/Data Ratio: " << temp << std::endl;
+        if (j<NBins) fprintf( outFileExc, "%f & ", float(temp));
+        else fprintf( outFileExc, "%f \\\\ \n ",temp);
 
     }
-    fprintf( outFile, "\\end{tabular}}");
-    fclose(outFile);
+    fprintf( outFileExc, "\\end{tabular}}");
+    fclose(outFileExc);
+    
+    ////Now create inclusive jets statistics table
+    ostringstream nameStrInc;  nameStrInc << "statsTable_" << leptonFlavor << "_" << variableInc << "_JetPtMin_" << JetPtMin;
+    if (doInvMassCut) nameStrInc << "_InvMass";
+    if (doSSign)   nameStrInc << "_SS";
+    if (doQCD > 0) nameStrInc << "_QCD"<<doQCD;
+    if (MET > 0) nameStrInc << "_MET"<< MET;
+    if (doBJets < 0) nameStrInc <<"_BVeto";
+    if (doBJets > 0) nameStrInc << "_BJets";
+    if (doTTScale) nameStrInc << "_TTSFs";
+    if (!doTTScale) nameStrInc << "_noTTSFs";
+    nameStrInc << ".tex";
+    
+    FILE *outFileInc = fopen(nameStrInc.str().c_str(),"w");
+    fprintf( outFileInc, "\\footnotesize{\n\\begin{tabular}{l|cccccccc} \n ");
+    fprintf( outFileInc, " &  $N_{\\text{jets}} = 0 $ & $N_{\\text{jets}} = 1 $ & $N_{\\text{jets}} = 2 $ & $N_{\\text{jets}} = 3 $ & $N_{\\text{jets}} = 4 $ & $N_{\\text{jets}} = 5 $ & $N_{\\text{jets}} = 6 $ & $N_{\\text{jets}} = 7$ \\\\ \\hline \n ");
+    
+    //// print statistics of all the MC samples
+    for (int i=1; i< usedFiles + 1 ; i++){
+        int sel = i ;
+        if ( doDY ) sel = FilesDYJets[i];
+        else sel = FilesTTbarWJets[i];
+        
+        if (i < usedFiles) fprintf(outFileInc, " %s        & ", ProcessInfo[sel].legend.c_str());
+        else {
+            fprintf( outFileInc, "\\hline \n");
+            fprintf( outFileInc, " TOTAL & ");
+        }
+        for (int j = 1 ; j < NBins + 1  ; j++ ) {
+            if (j < NBins ) fprintf( outFileInc, "%d & ", int(DataEvInc[i][j]));
+            else fprintf( outFileInc, "%d \\\\ \n ", int(DataEvInc[i][j]));
+            
+        }
+    }
+    
+    std::cout << std::endl;
+    
+    // print data statistics
+    fprintf( outFileInc, "\\hline \n");
+    fprintf( outFileInc, " Data          & ");
+    for (int j = 1; j< NBins + 1 ; j++){
+        if (j < NBins ) fprintf( outFileInc, "%d & ",  int(DataEvInc[0][j]));
+        else fprintf( outFileInc, "%d \\\\ \n ",  int(DataEvInc[0][j]));
+    }
+    // print ratio of MC/Data
+    fprintf( outFileInc, " MC/Data Ratio          & ");
+    std::cout << "Histogram: " << variableInc << std::endl;
+    for (int j=1; j<NBins + 1; j++){
+        double temp = DataEvInc[usedFiles][j]/DataEvInc[0][j];
+        std:: cout << "Histogram bin number:" << j << "    Total MC: " << DataEvInc[usedFiles][j] << "    Data: " << DataEvInc[0][j] << "    MC/Data Ratio: " << temp << std::endl;
+        if (j<NBins) fprintf( outFileInc, "%f & ", float(temp));
+        else fprintf( outFileInc, "%f \\\\ \n ",temp);
+        
+    }
+    fprintf( outFileInc, "\\end{tabular}}");
+    fclose(outFileInc);
+    
+    
+    
+    
+    
 }
+
+
+
+
 
 
 

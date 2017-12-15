@@ -24,8 +24,11 @@
     //Plotter("SMu", 30, 1, 0, 0, 0, -1);
     //Plotter("SMu", 30, 2, 0, 0, 0, -1);
     //Plotter("SMu", 30, 3, 0, 0, 0, -1);
+   
+    //last option of function is doTTScale
+    //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, true);
+    getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, false);
 
-    getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1);
     //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 0);
 
     //--- clean the *_cc.d and *_cc.so files ---

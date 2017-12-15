@@ -14,13 +14,13 @@ os.system('mkdir ' + mtmpdir)
 
 #doWhat = [0,1,3,4]
 #The 101...110 is for the data
-#doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1, 3, 4]
+doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1, 3, 41, 42]
 #doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
-doWhat = [41, 42]
+#doWhat = [41, 42]
 #doWhat = [1]
-doQCD = [2]
+#doQCD = [2]
 #doQCD = [1,2,3]
-#doQCD = [0,1,2,3]
+doQCD = [0,1,2,3]
 
 
 for what in doWhat:
@@ -31,7 +31,7 @@ for what in doWhat:
 		tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.sh'
 
 		job = '#!/bin/bash\n'
-                job += 'cd /afs/cern.ch/work/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJetsDup\n'
+                job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
 		#job += 'cd $CMSSW_BASE/src/WJetsTreeAnalysis16/WJets\n'
 		job += 'eval `scramv1 runtime -sh`'
 		#job += 'cd $CMSSW_BASE/src\n'

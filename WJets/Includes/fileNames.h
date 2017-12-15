@@ -63,12 +63,13 @@ const int NFILESTTBAR(7);
 
 ///////////////
 //andrew -- 2016 W+jets
-//const int NFILESTTBARWJETS(7);
-//const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
+const int NFILESTTBARWJETS(7);
+const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
 //
 //use the pair of lines below to turn off qcd background in plotting
-const int NFILESTTBARWJETS(6);
-const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 21, 10, 9, 25};
+//used for ttbar study
+//const int NFILESTTBARWJETS(6);
+//const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 21, 10, 9, 25};
 ///////////////
 
 const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};

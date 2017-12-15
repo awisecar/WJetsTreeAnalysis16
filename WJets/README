@@ -67,6 +67,9 @@ Run requiring 2 btag jets (doBJets=2) and WJets signal region (doQCD=0)
 
 root -b -q MergeTop_BJets.cc
 root -b -q MergeVV_BJets.cc
+//Note: We don't used QCD BG for ttbar study, but if one is so inclined, they can create it using this command:
 root -b -q runQCD_BJets.cc
 
+//if(doTTScale), then ttbar SFs are applied in getStatistics function to print out the statistics tables
+//ttbar SFs are applied in Plotter.cc when plotting the distributions (but original files not altered)
 root -b -q runTest_BJets.cc++
