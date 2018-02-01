@@ -308,6 +308,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         */
     }
     else{
+        std::cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!  Processing jet-binned histogram!  !!!!!! \n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
         // for ZNGoodJets dist.
         for ( int i = 0  ; i < NQCD ; i++){
             scaledMC[i] = (TH1D*) hSignal[i]->Clone();
@@ -375,7 +376,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         }
         
         cout << "   print out error for " << variable << endl;
-        cout << " \t" << "# event QCD" << " \t" << "error " << " \t" << "%error" << " \t" << "fw" << " \t" << "f_B/D" << " \t" << "%error f_B/D" << endl;
+        cout << " \t" << "# event QCD" << " \t\t" << "error " << " \t\t" << "%error" << " \t\t" << "fw" << " \t\t" << "f_B/D" << " \t\t" << "%error f_B/D" << endl;
         for (int i = 1; i <= hQCD[0]->GetNbinsX(); i++){
             
             cout << "\t" <<  hQCD[0]->GetBinContent(i) << "\t" << hQCD[0]->GetBinError(i) << "\t" <<  hQCD[0]->GetBinError(i) * 100/hQCD[0]->GetBinContent(i) << "\t" << NormFactor_o[i] << "\t" << NormFactorISO_o[i] << "\t" << NormFactIsoError_o[i] *100/NormFactorISO_o[i] << endl;

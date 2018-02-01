@@ -12,16 +12,12 @@ dateTo = datetime.datetime.now().strftime("%Y_%m_%d_%H%M%S")
 mtmpdir = 'wjetsjobs_' + dateTo
 os.system('mkdir ' + mtmpdir)
 
-#doWhat = [0,1,3,4]
-#The 101...110 is for the data
-doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 1, 3, 41, 42]
-#doWhat = [101, 102, 103, 104, 105, 106, 107, 108, 109, 110]
-#doWhat = [41, 42]
-#doWhat = [1]
-#doQCD = [2]
-#doQCD = [1,2,3]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+#doWhat = [1, 3, 41, 42, 5, 6]
 doQCD = [0,1,2,3]
 
+print '\nCode finished compiling, beginning job submission:'
 
 for what in doWhat:
 	for QCD in doQCD:
@@ -31,7 +27,7 @@ for what in doWhat:
 		tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.sh'
 
 		job = '#!/bin/bash\n'
-                job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
+                job += 'cd /afs/cern.ch/work/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
 		#job += 'cd $CMSSW_BASE/src/WJetsTreeAnalysis16/WJets\n'
 		job += 'eval `scramv1 runtime -sh`'
 		#job += 'cd $CMSSW_BASE/src\n'
@@ -39,7 +35,7 @@ for what in doWhat:
 		#job += 'mycwd=`pwd`\n'
 		#job += 'cd $mycwd\n'
 		
-		com = 'root -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + '\)'
+		com = 'root -l -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + '\) 2>&1'
 		print '... going to submit run command ==> ', com
 		com +='\n\n'
 
@@ -53,7 +49,7 @@ for what in doWhat:
                 print '.out filename ==>', tjobname_out
                 print '.err filename ==>', tjobname_err
 
-		bsub = 'bsub -q 2nw -o ' +tjobname_out+ ' -e ' +tjobname_err+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
+		bsub = 'bsub -q 1nw -o ' +tjobname_out+ ' -e ' +tjobname_err+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
 		print bsub, '\n'
 		os.system(bsub)
 		os.system('sleep 1')

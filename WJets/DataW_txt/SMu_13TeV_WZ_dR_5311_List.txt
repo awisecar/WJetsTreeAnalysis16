@@ -1,1 +1,1 @@
-/store/user/myalvac/03Feb2017/Bonzai/MC/WZ/CRAB_PrivateMC/crab_WZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu/170915_104213/0000/Bonzai-WZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu_1.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/MC/v7.3/WZ/CRAB_PrivateMC/crab_WZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu/171216_034628/0000/Bonzai-WZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu_1.root
