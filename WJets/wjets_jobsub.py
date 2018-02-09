@@ -1,4 +1,3 @@
-
 import os
 import sys
 #from ROOT import *
@@ -15,7 +14,9 @@ os.system('mkdir ' + mtmpdir)
 doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 #doWhat = [1, 3, 41, 42, 5, 6]
-doQCD = [0,1,2,3]
+#doWhat = [19]
+doQCD = [0, 1, 2, 3]
+#doQCD = [1]
 
 print '\nCode finished compiling, beginning job submission:'
 
@@ -23,7 +24,7 @@ for what in doWhat:
 	for QCD in doQCD:
 
 		tjobname_out = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.out'
-		tjobname_err = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.err'
+		#tjobname_err = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.err'
 		tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.sh'
 
 		job = '#!/bin/bash\n'
@@ -35,7 +36,7 @@ for what in doWhat:
 		#job += 'mycwd=`pwd`\n'
 		#job += 'cd $mycwd\n'
 		
-		com = 'root -l -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + '\) 2>&1'
+		com = 'root -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + '\) 2>&1'
 		print '... going to submit run command ==> ', com
 		com +='\n\n'
 
@@ -47,9 +48,10 @@ for what in doWhat:
 		os.system('chmod 755 '+tjobname)
 
                 print '.out filename ==>', tjobname_out
-                print '.err filename ==>', tjobname_err
+                #print '.err filename ==>', tjobname_err
 
-		bsub = 'bsub -q 1nw -o ' +tjobname_out+ ' -e ' +tjobname_err+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
+		#bsub = 'bsub -q 1nw -o ' +tjobname_out+ ' -e ' +tjobname_err+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
+                bsub = 'bsub -R "pool>30000" -q 2nd -o ' +tjobname_out+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
 		print bsub, '\n'
 		os.system(bsub)
 		os.system('sleep 1')

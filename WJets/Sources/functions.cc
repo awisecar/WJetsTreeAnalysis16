@@ -243,9 +243,9 @@ table::table()
 table::table(string filename)
 {
     ifstream file(filename.c_str());
-    cout << filename << endl;
-    if (file) cout << "OK" << endl;
-    else cout << "Not OK" << endl;
+    //cout << filename << endl;
+    if (file) cout << filename << " has been found" << endl;
+    else cout << filename << "has NOT been found..." << endl;
     /*
        double  pt1, pt2, eta1, eta2, effi, effiErrorLow, effiErrorHigh ;
        while( file >> eta1 >> eta2 >> pt1 >> pt2 >> effi >> effiErrorLow >> effiErrorHigh){
@@ -259,12 +259,13 @@ table::table(string filename)
         for (int i=0;i<7;i++)
         {
             file>>data[i];
-            cout << data[i] <<"  " ;
+            //cout << data[i] <<"  " ;
         }
-        cout << endl;
+        //cout << endl;
         recd.push_back(record(data[2],data[3],data[0],data[1],data[4],data[5],data[6]));
 
     }
+    //std::cout << std::endl;
 
 }
 

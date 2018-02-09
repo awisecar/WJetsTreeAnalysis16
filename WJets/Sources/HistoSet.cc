@@ -337,14 +337,19 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //lep pt + hadronic pT binnings
     //andrew - 25.1.2018 - this seems like this will be the most promising set of scale quantities at the moment, so experiment with binning
+    //original binning
     int nLepJetPt_ZRatios(14);
     double lepJetPt_ZRatios[15] = {20, 25, 30, 40, 50, 65, 80, 105, 140, 185, 235, 300, 400, 550, 900}; 
+    //same number of bins, but stretched upward
     int nLepJetPt_1_ZRatios(14);
     double lepJetPt_1_ZRatios[15] = {20, 30, 50, 65, 80, 105, 140, 185, 235, 300, 400, 550, 750, 1000, 1300};
+    //binning that keep low pT bin size but has stretches high pT range higher with a few more bins
     int nLepJetPt_2_ZRatios(18);
     double lepJetPt_2_ZRatios[19] = {20, 25, 30, 40, 50, 65, 80, 105, 140, 175, 220, 265, 320, 390, 500, 650, 900, 1200, 1600};
+    //binning that keeps same range but increases precision
     int nLepJetPt_3_ZRatios(19);
     double lepJetPt_3_ZRatios[20] = {20, 25, 30, 35, 40, 50, 60, 75, 90, 110, 135, 165, 200, 240, 300, 375, 475, 600, 750, 900};
+    //binning with the stretched high pT range but with increased precision
     int nLepJetPt_4_ZRatios(23);
     double lepJetPt_4_ZRatios[24] = {20, 25, 30, 40, 50, 65, 75, 90, 105, 130, 160, 195, 235, 270, 310, 350, 400, 450, 550, 700, 900, 1100, 1300, 1600};
 
@@ -2099,351 +2104,354 @@ HistoSet::HistoSet(string leptonFlavor)
     MT_Zinc2jet                      = newTH1D("MT_Zinc2jet",                      "MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
     MT_Zinc3jet                      = newTH1D("MT_Zinc3jet",                      "MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
 
-    ZNGoodJetsEWK_Zexc = newTH1D("ZNGoodJetsEWK_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-    ZNGoodJetsEWKbtw_Zexc = newTH1D("ZNGoodJetsEWKbtw_Zexc","Between: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-
-    // MET properties
-    METEWK_Zinc2jet                      = newTH1D("METEWK_Zinc2jet",                      "MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
-    METEWK_Zinc3jet                      = newTH1D("METEWK_Zinc3jet",                      "MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
-
-    METphiEWK_Zinc2jet                      = newTH1D("METphiEWK_Zinc2jet",                      "MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
-    METphiEWK_Zinc3jet                      = newTH1D("METphiEWK_Zinc3jet",                      "MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
-
-    MTEWK_Zinc2jet                      = newTH1D("MTEWK_Zinc2jet",                      "MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
-    MTEWK_Zinc3jet                      = newTH1D("MTEWK_Zinc3jet",                      "MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
-
-
-
-    /// jet properties
-    int nJetPtEWK_Zinc2jet(15);
-    double jetPtEWK_Zinc2jet[16] = {15, 20, 24, 30, 38, 50, 68, 88, 113, 144, 184, 234, 297, 377, 480, 700 };
-    int nJetPtEWKbtw_Zinc2jet(12);
-    double jetPtEWKbtw_Zinc2jet[13] = {15, 20, 24, 30, 38, 50, 68, 88, 113, 144, 184, 234, 297 };
-    int nJetHTEWK_Zinc2jet(15);
-    double jetHTEWK_Zinc2jet[16] = {60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737, 962, 1200, 1500, 2000, 2500};
-
-    FirstJetPtEWK_Zinc2jet                 = newTH1D("FirstJetPtEWK_Zinc2jet",                 "1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    SecondJetPtEWK_Zinc2jet                = newTH1D("SecondJetPtEWK_Zinc2jet",                "2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-
-    FirstJetEtaEWK_Zinc2jet                = newTH1D("FirstJetEtaEWK_Zinc2jet",                "1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
-    SecondJetEtaEWK_Zinc2jet               = newTH1D("SecondJetEtaEWK_Zinc2jet",               "2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
-    FirstJetPhiEWK_Zinc2jet                = newTH1D("FirstJetPhiEWK_Zinc2jet",                "1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
-    SecondJetPhiEWK_Zinc2jet               = newTH1D("SecondJetPhiEWK_Zinc2jet",               "2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
-
-    ForwardJetPtEWK_Zinc2jet                 = newTH1D("ForwardJetPtEWK_Zinc2jet",                 "Fwd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    ForwardJetEtaEWK_Zinc2jet                = newTH1D("ForwardJetEtaEWK_Zinc2jet",                "Fwd jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
-    ForwardJetPhiEWK_Zinc2jet                = newTH1D("ForwardJetPhiEWK_Zinc2jet",                "Fwd jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
-
-    CentralJetPtEWK_Zinc2jet                 = newTH1D("CentralJetPtEWK_Zinc2jet",                 "Cnt jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    CentralJetEtaEWK_Zinc2jet                = newTH1D("CentralJetEtaEWK_Zinc2jet",                "Cnt jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
-    CentralJetPhiEWK_Zinc2jet                = newTH1D("CentralJetPhiEWK_Zinc2jet",                "Cnt jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
-
-
-
-    ThirdJetPtEWK_Zinc2jet                = newTH1D("ThirdJetPtEWK_Zinc2jet",                "Ext 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    ThirdJetPhiEWK_Zinc2jet                = newTH1D("ThirdJetPhiEWK_Zinc2jet",              "Ext 3nd jet #Phi (N_{jets} #geq 2)",             "#Phi(j_{3}) ",     30, -PI, PI);
-    ThirdJetEtaEWK_Zinc2jet               = newTH1D("ThirdJetEtaEWK_Zinc2jet",               "Ext 3nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
-    /// additional activity > 15 GeV full space
-    ThirdJetPtEWKadd_Zinc2jet                = newTH1D("ThirdJetPtEWKadd_Zinc2jet",                "Ext pt#ge 15 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    ThirdJetPhiEWKadd_Zinc2jet                = newTH1D("ThirdJetPhiEWKadd_Zinc2jet",                "Ext 3nd pt#ge 15 jet p_{T} (N_{jets} #geq 2)",             "#Phi(j_{3}) ",     30, -PI, PI);
-    ThirdJetEtaEWKadd_Zinc2jet               = newTH1D("ThirdJetEtaEWKadd_Zinc2jet",               "Ext 3nd pt#ge 15 jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
-
-
-    /////  dijet properties
-    string jSEta = "#eta(j_{1})+ #eta(j_{2})";
-    SumEtaJetsEWK_Zinc2jet             = newTH1D("SumEtaJetsEWK_Zinc2jet",             "|#Sigma| #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10);
-    AbsSumEtaJetsEWK_Zinc2jet             = newTH1D("AbsSumEtaJetsEWK_Zinc2jet",       "#Sigma |#eta| of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10 );
-    SumEtaJetsEWK_Zinc3jet             = newTH1D("SumEtaJetsEWK_Zinc3jet",             "sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
-
-
-    dEtaJetsEWK_Zinc2jet             = newTH1D("dEtaJetsEWK_Zinc2jet",             "#Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
-
-    TwoJetsPtDiffEWK_Zinc2jet        = newTH1D("TwoJetsPtDiffEWK_Zinc2jet",        "pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
-
-
-    ptBalEWK_Zinc2jet                = newTH1D("ptBalEWK_Zinc2jet",                "Vectorial pT sum: Z_{pT} + DiJet_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
-    SpTJetsEWK_Zinc2jet              = newTH1D("SpTJetsEWK_Zinc2jet",              "#Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
-
-    dPhiJetsEWK_Zinc2jet             = newTH1D("dPhiJetsEWK_Zinc2jet",             "#Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
-
-
-    JetsHTEWK_Zinc2jet                     = newTH1D("JetsHTEWK_Zinc2jet",                     "Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-
-    JetsMassEWK_Zinc2jet             = newTH1D("JetsMassEWK_Zinc2jet",             "2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
-
-
-    //// third jet properties
-    string  j3Eta = "#eta(j_{3})";
-    EtaThirdJetsEWK_Zinc3jet             = newTH1D("EtaThirdJetsEWK_Zinc3jet",             "Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
-
-    /// all jets between leading two jets 
-    AllJetPtEWKbtw_Zinc2jet                = newTH1D("AllJetPtEWKbtw_Zinc2jet",                "Ext,btw All jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWKbtw_Zinc2jet, jetPtEWKbtw_Zinc2jet);
-    AllJetPhiEWKbtw_Zinc2jet               = newTH1D("AllJetPhiEWKbtw_Zinc2jet",               "Ext,btw All jet #phi (N_{jets} #geq 2)",              "#phi(j_{3})",  30,-PI, PI);
-    AllJetEtaEWKbtw_Zinc2jet               = newTH1D("AllJetEtaEWKbtw_Zinc2jet",               "Ext,btw All jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
-    double jetHTEWKbtw_Zinc2jet[16] = {0,15, 20, 30, 42, 60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737};
-    JetsHTEWKbtw_Zinc2jet                  = newTH1D("JetsHTEWKbtw_Zinc2jet",                  "Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWKbtw_Zinc2jet);
-    //TH1D *JetsHTEWKbtw_Zinc2jet                     = newTH1D("JetsHTEWKbtw_Zinc2jet",                     "Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-    // third jet between
-    ThirdJetPtEWKbtw_Zinc2jet                = newTH1D("ThirdJetPtEWKbtw_Zinc2jet",                "Ext,btw 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    ThirdJetPhiEWKbtw_Zinc2jet               = newTH1D("ThirdJetPhiEWKbtw_Zinc2jet",               "Ext,btw 3nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{3})",  30,-PI, PI);
-    ThirdJetEtaEWKbtw_Zinc2jet               = newTH1D("ThirdJetEtaEWKbtw_Zinc2jet",               "Ext,btw 3nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
-
-
-    genZNGoodJetsEWK_Zexc = newTH1D("genZNGoodJetsEWK_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-    genZNGoodJetsEWKbtw_Zexc = newTH1D("genZNGoodJetsEWKbtw_Zexc","Between: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-
-
-    genFirstJetPtEWK_Zinc2jet                 = newTH1D("genFirstJetPtEWK_Zinc2jet",                 "Gen:1st jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genSecondJetPtEWK_Zinc2jet                = newTH1D("genSecondJetPtEWK_Zinc2jet",                "Gen:2nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-
-    genFirstJetEtaEWK_Zinc2jet                = newTH1D("genFirstJetEtaEWK_Zinc2jet",                "Gen:1st jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
-    genSecondJetEtaEWK_Zinc2jet               = newTH1D("genSecondJetEtaEWK_Zinc2jet",               "Gen:2nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{2})",  24,-4.8, 4.8);
-    genFirstJetPhiEWK_Zinc2jet                = newTH1D("genFirstJetPhiEWK_Zinc2jet",                "Gen:1st jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
-    genSecondJetPhiEWK_Zinc2jet               = newTH1D("genSecondJetPhiEWK_Zinc2jet",               "Gen:2nd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{2})",  30,-PI, PI);
-
-    genForwardJetPtEWK_Zinc2jet                 = newTH1D("genForwardJetPtEWK_Zinc2jet",                 "Gen:Fwd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genForwardJetEtaEWK_Zinc2jet                = newTH1D("genForwardJetEtaEWK_Zinc2jet",                "Gen:Fwd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
-    genForwardJetPhiEWK_Zinc2jet                = newTH1D("genForwardJetPhiEWK_Zinc2jet",                "Gen:Fwd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
-
-    genCentralJetPtEWK_Zinc2jet                 = newTH1D("genCentralJetPtEWK_Zinc2jet",                 "Gen:Cnt jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genCentralJetEtaEWK_Zinc2jet                = newTH1D("genCentralJetEtaEWK_Zinc2jet",                "Gen:Cnt jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
-    genCentralJetPhiEWK_Zinc2jet                = newTH1D("genCentralJetPhiEWK_Zinc2jet",                "Gen:Cnt jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
-
-
-
-
-
-    genThirdJetPtEWK_Zinc2jet                = newTH1D("genThirdJetPtEWK_Zinc2jet",                "Gen:Ext 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genThirdJetPhiEWK_Zinc2jet                = newTH1D("genThirdJetPhiEWK_Zinc2jet",              "Gen:Ext 3nd jet #Phi (N_{jets} #geq 2)",             "Gen:#Phi(j_{3}) ",     30, -PI, PI);
-    genThirdJetEtaEWK_Zinc2jet               = newTH1D("genThirdJetEtaEWK_Zinc2jet",               "Gen:Ext 3nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
-    /// additional activity > 15 GeV full space
-    genThirdJetPtEWKadd_Zinc2jet                = newTH1D("genThirdJetPtEWKadd_Zinc2jet",                "Gen:Ext pt#ge 15 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genThirdJetPhiEWKadd_Zinc2jet                = newTH1D("genThirdJetPhiEWKadd_Zinc2jet",                "Gen:Ext 3nd pt#ge 15 jet p_{T} (N_{jets} #geq 2)",             "Gen:#Phi(j_{3}) ",     30, -PI, PI);
-    genThirdJetEtaEWKadd_Zinc2jet               = newTH1D("genThirdJetEtaEWKadd_Zinc2jet",               "Gen:Ext 3nd pt#ge 15 jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
-
-
-    /////  dijet properties
-    //string jSEta = "#eta(j_{1})+ #eta(j_{2})";
-    genSumEtaJetsEWK_Zinc2jet             = newTH1D("genSumEtaJetsEWK_Zinc2jet",             "Gen:|#Sigma| #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10);
-    genAbsSumEtaJetsEWK_Zinc2jet             = newTH1D("genAbsSumEtaJetsEWK_Zinc2jet",       "Gen:#Sigma |#eta| of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10 );
-    genSumEtaJetsEWK_Zinc3jet             = newTH1D("genSumEtaJetsEWK_Zinc3jet",             "Gen:sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
-
-
-    gendEtaJetsEWK_Zinc2jet             = newTH1D("gendEtaJetsEWK_Zinc2jet",             "Gen:#Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
-
-    genTwoJetsPtDiffEWK_Zinc2jet        = newTH1D("genTwoJetsPtDiffEWK_Zinc2jet",        "Gen:pT diff of the two highest jet (N_{jets} #geq 2)",                             "Gen:#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
-
-
-    genptBalEWK_Zinc2jet                = newTH1D("genptBalEWK_Zinc2jet",                "Gen:Vectorial pT sum: Z_{pT} + DiJet_{pT} (N_{jets} #geq 2)",                       "Gen:#Sigma pT [GeV]",      50,  0, 500);
-    genSpTJetsEWK_Zinc2jet              = newTH1D("genSpTJetsEWK_Zinc2jet",              "Gen:#Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
-
-    gendPhiJetsEWK_Zinc2jet             = newTH1D("gendPhiJetsEWK_Zinc2jet",             "Gen:#Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
-
-
-    genJetsHTEWK_Zinc2jet                     = newTH1D("genJetsHTEWK_Zinc2jet",                     "Gen:Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-
-    genJetsMassEWK_Zinc2jet             = newTH1D("genJetsMassEWK_Zinc2jet",             "Gen:2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
-
-
-    //// third jet properties
-    //string  j3Eta = "#eta(j_{3})";
-    genEtaThirdJetsEWK_Zinc3jet             = newTH1D("genEtaThirdJetsEWK_Zinc3jet",             "Gen:Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
-
-    /// all jets between leading two jets 
-    genAllJetPtEWKbtw_Zinc2jet                = newTH1D("genAllJetPtEWKbtw_Zinc2jet",                "Gen:Ext,btw All jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWKbtw_Zinc2jet, jetPtEWKbtw_Zinc2jet);
-    genAllJetPhiEWKbtw_Zinc2jet               = newTH1D("genAllJetPhiEWKbtw_Zinc2jet",               "Gen:Ext,btw All jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{3})",  30,-PI, PI);
-    genAllJetEtaEWKbtw_Zinc2jet               = newTH1D("genAllJetEtaEWKbtw_Zinc2jet",               "Gen:Ext,btw All jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
-
-
-    //double jetHTEWKbtw_Zinc2jet[16] = {0,15, 20, 30, 42, 60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737};
-    genJetsHTEWKbtw_Zinc2jet                  = newTH1D("genJetsHTEWKbtw_Zinc2jet",                  "Gen:Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWKbtw_Zinc2jet);
-    //TH1D *genJetsHTEWKbtw_Zinc2jet                     = newTH1D("genJetsHTEWKbtw_Zinc2jet",                     "Gen:Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-    // third jet between
-    genThirdJetPtEWKbtw_Zinc2jet                = newTH1D("genThirdJetPtEWKbtw_Zinc2jet",                "Gen:Ext,btw 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    genThirdJetPhiEWKbtw_Zinc2jet               = newTH1D("genThirdJetPhiEWKbtw_Zinc2jet",               "Gen:Ext,btw 3nd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{3})",  30,-PI, PI);
-    genThirdJetEtaEWKbtw_Zinc2jet               = newTH1D("genThirdJetEtaEWKbtw_Zinc2jet",               "Gen:Ext,btw 3nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
-
-
-
-    //// at least one forward jet
-    ZNGoodJetsEWKfwd_Zexc = newTH1D("ZNGoodJetsEWKfwd_Zexc"," 1 Fwd jet: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-
-    // met properties
-    METEWKfwd_Zinc2jet                      = newTH1D("METEWKfwd_Zinc2jet",                   " 1 Fwd jet: MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
-    METEWKfwd_Zinc3jet                      = newTH1D("METEWKfwd_Zinc3jet",                   " 1 Fwd jet: MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
-
-    METphiEWKfwd_Zinc2jet                      = newTH1D("METphiEWKfwd_Zinc2jet",                   " 1 Fwd jet: MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
-    METphiEWKfwd_Zinc3jet                      = newTH1D("METphiEWKfwd_Zinc3jet",                   " 1 Fwd jet: MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
-
-    MTEWKfwd_Zinc2jet                      = newTH1D("MTEWKfwd_Zinc2jet",                   " 1 Fwd jet: MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
-    MTEWKfwd_Zinc3jet                      = newTH1D("MTEWKfwd_Zinc3jet",                   " 1 Fwd jet: MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
-
-    // jet hisotgrams
-    FirstJetPtEWKfwd_Zinc2jet                 = newTH1D("FirstJetPtEWKfwd_Zinc2jet",              " 1 Fwd jet: 1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    SecondJetPtEWKfwd_Zinc2jet                = newTH1D("SecondJetPtEWKfwd_Zinc2jet",             " 1 Fwd jet: 2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-
-    FirstJetEtaEWKfwd_Zinc2jet                = newTH1D("FirstJetEtaEWKfwd_Zinc2jet",             " 1 Fwd jet: 1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
-    SecondJetEtaEWKfwd_Zinc2jet               = newTH1D("SecondJetEtaEWKfwd_Zinc2jet",            " 1 Fwd jet: 2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
-
-    FirstJetPhiEWKfwd_Zinc2jet                = newTH1D("FirstJetPhiEWKfwd_Zinc2jet",             " 1 Fwd jet: 1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
-    SecondJetPhiEWKfwd_Zinc2jet               = newTH1D("SecondJetPhiEWKfwd_Zinc2jet",            " 1 Fwd jet: 2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
-
-
-    SumEtaJetsEWKfwd_Zinc2jet             = newTH1D("SumEtaJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, -8, 8);
-    SumEtaJetsEWKfwd_Zinc3jet             = newTH1D("SumEtaJetsEWKfwd_Zinc3jet",          " 1 Fwd jet: sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
-    genSumEtaJetsEWKfwd_Zinc2jet          = newTH1D("genSumEtaJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                   jSEta,           50, -8, 8);
-
-
-    dEtaJetsEWKfwd_Zinc2jet             = newTH1D("dEtaJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: #Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50,  0, 10);
-    gendEtaJetsEWKfwd_Zinc2jet          = newTH1D("gendEtaJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen #Delta#eta btwn jets (N_{jets} #geq 2)",                                   jdEta,           50,  0, 10);
-
-    TwoJetsPtDiffEWKfwd_Zinc2jet        = newTH1D("TwoJetsPtDiffEWKfwd_Zinc2jet",     " 1 Fwd jet: pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
-    genTwoJetsPtDiffEWKfwd_Zinc2jet     = newTH1D("genTwoJetsPtDiffEWKfwd_Zinc2jet",  " 1 Fwd jet: gen pT diff of the two highest jet (N_{jets} #geq 2)",                         "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 1000);
-
-
-    ptBalEWKfwd_Zinc2jet                = newTH1D("ptBalEWKfwd_Zinc2jet",             " 1 Fwd jet: Vectorial pT sum: Z_{pT} + Jets_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
-    SpTJetsEWKfwd_Zinc2jet              = newTH1D("SpTJetsEWKfwd_Zinc2jet",           " 1 Fwd jet: #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
-    genSpTJetsEWKfwd_Zinc2jet           = newTH1D("genSpTJetsEWKfwd_Zinc2jet",        " 1 Fwd jet: gen #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                            jSpt,   50,  0, 1);
-
-    dPhiJetsEWKfwd_Zinc2jet             = newTH1D("dPhiJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: #Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
-    gendPhiJetsEWKfwd_Zinc2jet          = newTH1D("gendPhiJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen #Delta#phi btwn jets (N_{jets} #geq 2)",                                   jdPhi,           100,  0, PI);
-
-
-    JetsHTEWKfwd_Zinc2jet                     = newTH1D("JetsHTEWKfwd_Zinc2jet",                  " 1 Fwd jet: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-    genJetsHTEWKfwd_Zinc2jet                  = newTH1D("genJetsHTEWKfwd_Zinc2jet",               " 1 Fwd jet: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-
-    JetsMassEWKfwd_Zinc2jet             = newTH1D("JetsMassEWKfwd_Zinc2jet",          " 1 Fwd jet: 2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
-    genJetsMassEWKfwd_Zinc2jet          = newTH1D("genJetsMassEWKfwd_Zinc2jet",       " 1 Fwd jet: gen 2Jets Invariant Mass (N_{jets} #geq 2)",                                   Mjj, 50, 20, 2620);
-
-
-
-    //// at least one forward jet
-    ZNGoodJetsEWKmjj_Zexc = newTH1D("ZNGoodJetsEWKmjj_Zexc","M_{jj} #geq 1 TeV: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-
-    // met properties
-    METEWKmjj_Zinc2jet                      = newTH1D("METEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
-    METEWKmjj_Zinc3jet                      = newTH1D("METEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
-
-    METphiEWKmjj_Zinc2jet                      = newTH1D("METphiEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
-    ///TH1D *METphiEWKmjj_Zinc3jet                      = newTH1D("METphiEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
-
-    MTEWKmjj_Zinc2jet                      = newTH1D("MTEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
-    //TH1D *MTEWKmjj_Zinc3jet                      = newTH1D("MTEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
-
-    // jet hisotgrams
-    FirstJetPtEWKmjj_Zinc2jet                 = newTH1D("FirstJetPtEWKmjj_Zinc2jet",              "M_{jj} #geq 1 TeV: 1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    SecondJetPtEWKmjj_Zinc2jet                = newTH1D("SecondJetPtEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-    ThirdJetPtEWKmjj_Zinc3jet                 = newTH1D("ThirdJetPtEWKmjj_Zinc3jet",              "M_{jj} #geq 1 TeV: 3rd jet p_{T} (N_{jets} #geq 3)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
-
-    FirstJetEtaEWKmjj_Zinc2jet                = newTH1D("FirstJetEtaEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
-    SecondJetEtaEWKmjj_Zinc2jet               = newTH1D("SecondJetEtaEWKmjj_Zinc2jet",            "M_{jj} #geq 1 TeV: 2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
-
-    FirstJetPhiEWKmjj_Zinc2jet                = newTH1D("FirstJetPhiEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
-    SecondJetPhiEWKmjj_Zinc2jet               = newTH1D("SecondJetPhiEWKmjj_Zinc2jet",            "M_{jj} #geq 1 TeV: 2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
-
-
-    SumEtaJetsEWKmjj_Zinc2jet             = newTH1D("SumEtaJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, -8, 8);
-    SumEtaJetsEWKmjj_Zinc3jet             = newTH1D("SumEtaJetsEWKmjj_Zinc3jet",          "M_{jj} #geq 1 TeV: sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
-    genSumEtaJetsEWKmjj_Zinc2jet          = newTH1D("genSumEtaJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                   jSEta,           50, -8, 8);
-
-
-    dEtaJetsEWKmjj_Zinc2jet             = newTH1D("dEtaJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: #Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
-
-    gendEtaJetsEWKmjj_Zinc2jet          = newTH1D("gendEtaJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen #Delta#eta btwn jets (N_{jets} #geq 2)",                                   jdEta,           50, 0, 10);
-
-    TwoJetsPtDiffEWKmjj_Zinc2jet        = newTH1D("TwoJetsPtDiffEWKmjj_Zinc2jet",     "M_{jj} #geq 1 TeV: pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
-    genTwoJetsPtDiffEWKmjj_Zinc2jet     = newTH1D("genTwoJetsPtDiffEWKmjj_Zinc2jet",  "M_{jj} #geq 1 TeV: gen pT diff of the two highest jet (N_{jets} #geq 2)",                         "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 1000);
-
-
-    ptBalEWKmjj_Zinc2jet                = newTH1D("ptBalEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: Vectorial pT sum: Z_{pT} + Jets_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
-    SpTJetsEWKmjj_Zinc2jet              = newTH1D("SpTJetsEWKmjj_Zinc2jet",           "M_{jj} #geq 1 TeV: #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
-    genSpTJetsEWKmjj_Zinc2jet           = newTH1D("genSpTJetsEWKmjj_Zinc2jet",        "M_{jj} #geq 1 TeV: gen #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                            jSpt,   50,  0, 1);
-
-    dPhiJetsEWKmjj_Zinc2jet             = newTH1D("dPhiJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: #Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
-    gendPhiJetsEWKmjj_Zinc2jet          = newTH1D("gendPhiJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen #Delta#phi btwn jets (N_{jets} #geq 2)",                                   jdPhi,           100,  0, PI);
-
-
-    JetsHTEWKmjj_Zinc2jet                     = newTH1D("JetsHTEWKmjj_Zinc2jet",                  "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-    genJetsHTEWKmjj_Zinc2jet                  = newTH1D("genJetsHTEWKmjj_Zinc2jet",               "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
-
-    JetsHTEWKmjjAdd_Zinc2jet                     = newTH1D("JetsHTEWKmjjAdd_Zinc2jet",                  "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} , 15 GeV cut on third)",     HT,     nJetPtEWKbtw_Zinc2jet, jetHTEWKbtw_Zinc2jet);
-
-    JetsMassEWKmjj_Zinc2jet             = newTH1D("JetsMassEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: 2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 1000, 2620);
-    genJetsMassEWKmjj_Zinc2jet          = newTH1D("genJetsMassEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen 2Jets Invariant Mass (N_{jets} #geq 2)",                                   Mjj, 50, 1000, 2620);
-
-    //// third jet properties
-    ThirdJetEtaEWKmjj_Zinc3jet          = newTH1D("ThirdJetEtaEWKmjj_Zinc3jet",             "M_{jj} #geq 1 TeV: Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
+    //andrew -- turning of EWK histograms due to memory issues with ROOT
+    //they don't seem relevant for the alpha_s analysis, at least for the moment
+//    ZNGoodJetsEWK_Zexc = newTH1D("ZNGoodJetsEWK_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//    ZNGoodJetsEWKbtw_Zexc = newTH1D("ZNGoodJetsEWKbtw_Zexc","Between: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    ZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//
+//    // MET properties
+//    METEWK_Zinc2jet                      = newTH1D("METEWK_Zinc2jet",                      "MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
+//    METEWK_Zinc3jet                      = newTH1D("METEWK_Zinc3jet",                      "MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
+//
+//    METphiEWK_Zinc2jet                      = newTH1D("METphiEWK_Zinc2jet",                      "MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
+//    METphiEWK_Zinc3jet                      = newTH1D("METphiEWK_Zinc3jet",                      "MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
+//
+//    MTEWK_Zinc2jet                      = newTH1D("MTEWK_Zinc2jet",                      "MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
+//    MTEWK_Zinc3jet                      = newTH1D("MTEWK_Zinc3jet",                      "MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
+//
+//
+//
+//    /// jet properties
+//    int nJetPtEWK_Zinc2jet(15);
+//    double jetPtEWK_Zinc2jet[16] = {15, 20, 24, 30, 38, 50, 68, 88, 113, 144, 184, 234, 297, 377, 480, 700 };
+//    int nJetPtEWKbtw_Zinc2jet(12);
+//    double jetPtEWKbtw_Zinc2jet[13] = {15, 20, 24, 30, 38, 50, 68, 88, 113, 144, 184, 234, 297 };
+//    int nJetHTEWK_Zinc2jet(15);
+//    double jetHTEWK_Zinc2jet[16] = {60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737, 962, 1200, 1500, 2000, 2500};
+//
+//    FirstJetPtEWK_Zinc2jet                 = newTH1D("FirstJetPtEWK_Zinc2jet",                 "1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    SecondJetPtEWK_Zinc2jet                = newTH1D("SecondJetPtEWK_Zinc2jet",                "2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//
+//    FirstJetEtaEWK_Zinc2jet                = newTH1D("FirstJetEtaEWK_Zinc2jet",                "1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
+//    SecondJetEtaEWK_Zinc2jet               = newTH1D("SecondJetEtaEWK_Zinc2jet",               "2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
+//    FirstJetPhiEWK_Zinc2jet                = newTH1D("FirstJetPhiEWK_Zinc2jet",                "1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
+//    SecondJetPhiEWK_Zinc2jet               = newTH1D("SecondJetPhiEWK_Zinc2jet",               "2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
+//
+//    ForwardJetPtEWK_Zinc2jet                 = newTH1D("ForwardJetPtEWK_Zinc2jet",                 "Fwd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    ForwardJetEtaEWK_Zinc2jet                = newTH1D("ForwardJetEtaEWK_Zinc2jet",                "Fwd jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
+//    ForwardJetPhiEWK_Zinc2jet                = newTH1D("ForwardJetPhiEWK_Zinc2jet",                "Fwd jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
+//
+//    CentralJetPtEWK_Zinc2jet                 = newTH1D("CentralJetPtEWK_Zinc2jet",                 "Cnt jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    CentralJetEtaEWK_Zinc2jet                = newTH1D("CentralJetEtaEWK_Zinc2jet",                "Cnt jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
+//    CentralJetPhiEWK_Zinc2jet                = newTH1D("CentralJetPhiEWK_Zinc2jet",                "Cnt jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
+//
+//
+//
+//    ThirdJetPtEWK_Zinc2jet                = newTH1D("ThirdJetPtEWK_Zinc2jet",                "Ext 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    ThirdJetPhiEWK_Zinc2jet                = newTH1D("ThirdJetPhiEWK_Zinc2jet",              "Ext 3nd jet #Phi (N_{jets} #geq 2)",             "#Phi(j_{3}) ",     30, -PI, PI);
+//    ThirdJetEtaEWK_Zinc2jet               = newTH1D("ThirdJetEtaEWK_Zinc2jet",               "Ext 3nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
+//    /// additional activity > 15 GeV full space
+//    ThirdJetPtEWKadd_Zinc2jet                = newTH1D("ThirdJetPtEWKadd_Zinc2jet",                "Ext pt#ge 15 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    ThirdJetPhiEWKadd_Zinc2jet                = newTH1D("ThirdJetPhiEWKadd_Zinc2jet",                "Ext 3nd pt#ge 15 jet p_{T} (N_{jets} #geq 2)",             "#Phi(j_{3}) ",     30, -PI, PI);
+//    ThirdJetEtaEWKadd_Zinc2jet               = newTH1D("ThirdJetEtaEWKadd_Zinc2jet",               "Ext 3nd pt#ge 15 jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
+//
+//
+//    /////  dijet properties
+//    string jSEta = "#eta(j_{1})+ #eta(j_{2})";
+//    SumEtaJetsEWK_Zinc2jet             = newTH1D("SumEtaJetsEWK_Zinc2jet",             "|#Sigma| #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10);
+//    AbsSumEtaJetsEWK_Zinc2jet             = newTH1D("AbsSumEtaJetsEWK_Zinc2jet",       "#Sigma |#eta| of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10 );
+//    SumEtaJetsEWK_Zinc3jet             = newTH1D("SumEtaJetsEWK_Zinc3jet",             "sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
+//
+//
+//    dEtaJetsEWK_Zinc2jet             = newTH1D("dEtaJetsEWK_Zinc2jet",             "#Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
+//
+//    TwoJetsPtDiffEWK_Zinc2jet        = newTH1D("TwoJetsPtDiffEWK_Zinc2jet",        "pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
+//
+//
+//    ptBalEWK_Zinc2jet                = newTH1D("ptBalEWK_Zinc2jet",                "Vectorial pT sum: Z_{pT} + DiJet_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
+//    SpTJetsEWK_Zinc2jet              = newTH1D("SpTJetsEWK_Zinc2jet",              "#Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
+//
+//    dPhiJetsEWK_Zinc2jet             = newTH1D("dPhiJetsEWK_Zinc2jet",             "#Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
+//
+//
+//    JetsHTEWK_Zinc2jet                     = newTH1D("JetsHTEWK_Zinc2jet",                     "Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//
+//    JetsMassEWK_Zinc2jet             = newTH1D("JetsMassEWK_Zinc2jet",             "2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
+//
+//
+//    //// third jet properties
+//    string  j3Eta = "#eta(j_{3})";
+//    EtaThirdJetsEWK_Zinc3jet             = newTH1D("EtaThirdJetsEWK_Zinc3jet",             "Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
+//
+//    /// all jets between leading two jets 
+//    AllJetPtEWKbtw_Zinc2jet                = newTH1D("AllJetPtEWKbtw_Zinc2jet",                "Ext,btw All jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWKbtw_Zinc2jet, jetPtEWKbtw_Zinc2jet);
+//    AllJetPhiEWKbtw_Zinc2jet               = newTH1D("AllJetPhiEWKbtw_Zinc2jet",               "Ext,btw All jet #phi (N_{jets} #geq 2)",              "#phi(j_{3})",  30,-PI, PI);
+//    AllJetEtaEWKbtw_Zinc2jet               = newTH1D("AllJetEtaEWKbtw_Zinc2jet",               "Ext,btw All jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
+//    double jetHTEWKbtw_Zinc2jet[16] = {0,15, 20, 30, 42, 60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737};
+//    JetsHTEWKbtw_Zinc2jet                  = newTH1D("JetsHTEWKbtw_Zinc2jet",                  "Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWKbtw_Zinc2jet);
+//    //TH1D *JetsHTEWKbtw_Zinc2jet                     = newTH1D("JetsHTEWKbtw_Zinc2jet",                     "Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//    // third jet between
+//    ThirdJetPtEWKbtw_Zinc2jet                = newTH1D("ThirdJetPtEWKbtw_Zinc2jet",                "Ext,btw 3nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    ThirdJetPhiEWKbtw_Zinc2jet               = newTH1D("ThirdJetPhiEWKbtw_Zinc2jet",               "Ext,btw 3nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{3})",  30,-PI, PI);
+//    ThirdJetEtaEWKbtw_Zinc2jet               = newTH1D("ThirdJetEtaEWKbtw_Zinc2jet",               "Ext,btw 3nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{3})",  24,-4.8, 4.8);
+//
+//
+//    genZNGoodJetsEWK_Zexc = newTH1D("genZNGoodJetsEWK_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    genZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//    genZNGoodJetsEWKbtw_Zexc = newTH1D("genZNGoodJetsEWKbtw_Zexc","Between: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    genZNGoodJetsEWKbtw_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//
+//
+//    genFirstJetPtEWK_Zinc2jet                 = newTH1D("genFirstJetPtEWK_Zinc2jet",                 "Gen:1st jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genSecondJetPtEWK_Zinc2jet                = newTH1D("genSecondJetPtEWK_Zinc2jet",                "Gen:2nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//
+//    genFirstJetEtaEWK_Zinc2jet                = newTH1D("genFirstJetEtaEWK_Zinc2jet",                "Gen:1st jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
+//    genSecondJetEtaEWK_Zinc2jet               = newTH1D("genSecondJetEtaEWK_Zinc2jet",               "Gen:2nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{2})",  24,-4.8, 4.8);
+//    genFirstJetPhiEWK_Zinc2jet                = newTH1D("genFirstJetPhiEWK_Zinc2jet",                "Gen:1st jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
+//    genSecondJetPhiEWK_Zinc2jet               = newTH1D("genSecondJetPhiEWK_Zinc2jet",               "Gen:2nd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{2})",  30,-PI, PI);
+//
+//    genForwardJetPtEWK_Zinc2jet                 = newTH1D("genForwardJetPtEWK_Zinc2jet",                 "Gen:Fwd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genForwardJetEtaEWK_Zinc2jet                = newTH1D("genForwardJetEtaEWK_Zinc2jet",                "Gen:Fwd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
+//    genForwardJetPhiEWK_Zinc2jet                = newTH1D("genForwardJetPhiEWK_Zinc2jet",                "Gen:Fwd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
+//
+//    genCentralJetPtEWK_Zinc2jet                 = newTH1D("genCentralJetPtEWK_Zinc2jet",                 "Gen:Cnt jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genCentralJetEtaEWK_Zinc2jet                = newTH1D("genCentralJetEtaEWK_Zinc2jet",                "Gen:Cnt jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{1})",  24,-4.8, 4.8);
+//    genCentralJetPhiEWK_Zinc2jet                = newTH1D("genCentralJetPhiEWK_Zinc2jet",                "Gen:Cnt jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{1})",  30,-PI, PI);
+//
+//
+//
+//
+//
+//    genThirdJetPtEWK_Zinc2jet                = newTH1D("genThirdJetPtEWK_Zinc2jet",                "Gen:Ext 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genThirdJetPhiEWK_Zinc2jet                = newTH1D("genThirdJetPhiEWK_Zinc2jet",              "Gen:Ext 3nd jet #Phi (N_{jets} #geq 2)",             "Gen:#Phi(j_{3}) ",     30, -PI, PI);
+//    genThirdJetEtaEWK_Zinc2jet               = newTH1D("genThirdJetEtaEWK_Zinc2jet",               "Gen:Ext 3nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
+//    /// additional activity > 15 GeV full space
+//    genThirdJetPtEWKadd_Zinc2jet                = newTH1D("genThirdJetPtEWKadd_Zinc2jet",                "Gen:Ext pt#ge 15 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genThirdJetPhiEWKadd_Zinc2jet                = newTH1D("genThirdJetPhiEWKadd_Zinc2jet",                "Gen:Ext 3nd pt#ge 15 jet p_{T} (N_{jets} #geq 2)",             "Gen:#Phi(j_{3}) ",     30, -PI, PI);
+//    genThirdJetEtaEWKadd_Zinc2jet               = newTH1D("genThirdJetEtaEWKadd_Zinc2jet",               "Gen:Ext 3nd pt#ge 15 jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
+//
+//
+//    /////  dijet properties
+//    //string jSEta = "#eta(j_{1})+ #eta(j_{2})";
+//    genSumEtaJetsEWK_Zinc2jet             = newTH1D("genSumEtaJetsEWK_Zinc2jet",             "Gen:|#Sigma| #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10);
+//    genAbsSumEtaJetsEWK_Zinc2jet             = newTH1D("genAbsSumEtaJetsEWK_Zinc2jet",       "Gen:#Sigma |#eta| of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, 0, 10 );
+//    genSumEtaJetsEWK_Zinc3jet             = newTH1D("genSumEtaJetsEWK_Zinc3jet",             "Gen:sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
+//
+//
+//    gendEtaJetsEWK_Zinc2jet             = newTH1D("gendEtaJetsEWK_Zinc2jet",             "Gen:#Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
+//
+//    genTwoJetsPtDiffEWK_Zinc2jet        = newTH1D("genTwoJetsPtDiffEWK_Zinc2jet",        "Gen:pT diff of the two highest jet (N_{jets} #geq 2)",                             "Gen:#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
+//
+//
+//    genptBalEWK_Zinc2jet                = newTH1D("genptBalEWK_Zinc2jet",                "Gen:Vectorial pT sum: Z_{pT} + DiJet_{pT} (N_{jets} #geq 2)",                       "Gen:#Sigma pT [GeV]",      50,  0, 500);
+//    genSpTJetsEWK_Zinc2jet              = newTH1D("genSpTJetsEWK_Zinc2jet",              "Gen:#Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
+//
+//    gendPhiJetsEWK_Zinc2jet             = newTH1D("gendPhiJetsEWK_Zinc2jet",             "Gen:#Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
+//
+//
+//    genJetsHTEWK_Zinc2jet                     = newTH1D("genJetsHTEWK_Zinc2jet",                     "Gen:Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//
+//    genJetsMassEWK_Zinc2jet             = newTH1D("genJetsMassEWK_Zinc2jet",             "Gen:2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
+//
+//
+//    //// third jet properties
+//    //string  j3Eta = "#eta(j_{3})";
+//    genEtaThirdJetsEWK_Zinc3jet             = newTH1D("genEtaThirdJetsEWK_Zinc3jet",             "Gen:Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
+//
+//    /// all jets between leading two jets 
+//    genAllJetPtEWKbtw_Zinc2jet                = newTH1D("genAllJetPtEWKbtw_Zinc2jet",                "Gen:Ext,btw All jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWKbtw_Zinc2jet, jetPtEWKbtw_Zinc2jet);
+//    genAllJetPhiEWKbtw_Zinc2jet               = newTH1D("genAllJetPhiEWKbtw_Zinc2jet",               "Gen:Ext,btw All jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{3})",  30,-PI, PI);
+//    genAllJetEtaEWKbtw_Zinc2jet               = newTH1D("genAllJetEtaEWKbtw_Zinc2jet",               "Gen:Ext,btw All jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
+//
+//
+//    //double jetHTEWKbtw_Zinc2jet[16] = {0,15, 20, 30, 42, 60, 80, 95, 121, 155, 200, 260, 336, 436, 566, 737};
+//    genJetsHTEWKbtw_Zinc2jet                  = newTH1D("genJetsHTEWKbtw_Zinc2jet",                  "Gen:Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWKbtw_Zinc2jet);
+//    //TH1D *genJetsHTEWKbtw_Zinc2jet                     = newTH1D("genJetsHTEWKbtw_Zinc2jet",                     "Gen:Ext,btw Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//    // third jet between
+//    genThirdJetPtEWKbtw_Zinc2jet                = newTH1D("genThirdJetPtEWKbtw_Zinc2jet",                "Gen:Ext,btw 3nd jet p_{T} (N_{jets} #geq 2)",             "Gen:p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    genThirdJetPhiEWKbtw_Zinc2jet               = newTH1D("genThirdJetPhiEWKbtw_Zinc2jet",               "Gen:Ext,btw 3nd jet #phi (N_{jets} #geq 2)",              "Gen:#phi(j_{3})",  30,-PI, PI);
+//    genThirdJetEtaEWKbtw_Zinc2jet               = newTH1D("genThirdJetEtaEWKbtw_Zinc2jet",               "Gen:Ext,btw 3nd jet #eta (N_{jets} #geq 2)",              "Gen:#eta(j_{3})",  24,-4.8, 4.8);
+//
+//
+//
+//    //// at least one forward jet
+//    ZNGoodJetsEWKfwd_Zexc = newTH1D("ZNGoodJetsEWKfwd_Zexc"," 1 Fwd jet: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//
+//    // met properties
+//    METEWKfwd_Zinc2jet                      = newTH1D("METEWKfwd_Zinc2jet",                   " 1 Fwd jet: MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
+//    METEWKfwd_Zinc3jet                      = newTH1D("METEWKfwd_Zinc3jet",                   " 1 Fwd jet: MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
+//
+//    METphiEWKfwd_Zinc2jet                      = newTH1D("METphiEWKfwd_Zinc2jet",                   " 1 Fwd jet: MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
+//    METphiEWKfwd_Zinc3jet                      = newTH1D("METphiEWKfwd_Zinc3jet",                   " 1 Fwd jet: MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
+//
+//    MTEWKfwd_Zinc2jet                      = newTH1D("MTEWKfwd_Zinc2jet",                   " 1 Fwd jet: MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
+//    MTEWKfwd_Zinc3jet                      = newTH1D("MTEWKfwd_Zinc3jet",                   " 1 Fwd jet: MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
+//
+//    // jet hisotgrams
+//    FirstJetPtEWKfwd_Zinc2jet                 = newTH1D("FirstJetPtEWKfwd_Zinc2jet",              " 1 Fwd jet: 1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    SecondJetPtEWKfwd_Zinc2jet                = newTH1D("SecondJetPtEWKfwd_Zinc2jet",             " 1 Fwd jet: 2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//
+//    FirstJetEtaEWKfwd_Zinc2jet                = newTH1D("FirstJetEtaEWKfwd_Zinc2jet",             " 1 Fwd jet: 1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
+//    SecondJetEtaEWKfwd_Zinc2jet               = newTH1D("SecondJetEtaEWKfwd_Zinc2jet",            " 1 Fwd jet: 2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
+//
+//    FirstJetPhiEWKfwd_Zinc2jet                = newTH1D("FirstJetPhiEWKfwd_Zinc2jet",             " 1 Fwd jet: 1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
+//    SecondJetPhiEWKfwd_Zinc2jet               = newTH1D("SecondJetPhiEWKfwd_Zinc2jet",            " 1 Fwd jet: 2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
+//
+//
+//    SumEtaJetsEWKfwd_Zinc2jet             = newTH1D("SumEtaJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, -8, 8);
+//    SumEtaJetsEWKfwd_Zinc3jet             = newTH1D("SumEtaJetsEWKfwd_Zinc3jet",          " 1 Fwd jet: sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
+//    genSumEtaJetsEWKfwd_Zinc2jet          = newTH1D("genSumEtaJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                   jSEta,           50, -8, 8);
+//
+//
+//    dEtaJetsEWKfwd_Zinc2jet             = newTH1D("dEtaJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: #Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50,  0, 10);
+//    gendEtaJetsEWKfwd_Zinc2jet          = newTH1D("gendEtaJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen #Delta#eta btwn jets (N_{jets} #geq 2)",                                   jdEta,           50,  0, 10);
+//
+//    TwoJetsPtDiffEWKfwd_Zinc2jet        = newTH1D("TwoJetsPtDiffEWKfwd_Zinc2jet",     " 1 Fwd jet: pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
+//    genTwoJetsPtDiffEWKfwd_Zinc2jet     = newTH1D("genTwoJetsPtDiffEWKfwd_Zinc2jet",  " 1 Fwd jet: gen pT diff of the two highest jet (N_{jets} #geq 2)",                         "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 1000);
+//
+//
+//    ptBalEWKfwd_Zinc2jet                = newTH1D("ptBalEWKfwd_Zinc2jet",             " 1 Fwd jet: Vectorial pT sum: Z_{pT} + Jets_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
+//    SpTJetsEWKfwd_Zinc2jet              = newTH1D("SpTJetsEWKfwd_Zinc2jet",           " 1 Fwd jet: #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
+//    genSpTJetsEWKfwd_Zinc2jet           = newTH1D("genSpTJetsEWKfwd_Zinc2jet",        " 1 Fwd jet: gen #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                            jSpt,   50,  0, 1);
+//
+//    dPhiJetsEWKfwd_Zinc2jet             = newTH1D("dPhiJetsEWKfwd_Zinc2jet",          " 1 Fwd jet: #Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
+//    gendPhiJetsEWKfwd_Zinc2jet          = newTH1D("gendPhiJetsEWKfwd_Zinc2jet",       " 1 Fwd jet: gen #Delta#phi btwn jets (N_{jets} #geq 2)",                                   jdPhi,           100,  0, PI);
+//
+//
+//    JetsHTEWKfwd_Zinc2jet                     = newTH1D("JetsHTEWKfwd_Zinc2jet",                  " 1 Fwd jet: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//    genJetsHTEWKfwd_Zinc2jet                  = newTH1D("genJetsHTEWKfwd_Zinc2jet",               " 1 Fwd jet: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//
+//    JetsMassEWKfwd_Zinc2jet             = newTH1D("JetsMassEWKfwd_Zinc2jet",          " 1 Fwd jet: 2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 20, 2620);
+//    genJetsMassEWKfwd_Zinc2jet          = newTH1D("genJetsMassEWKfwd_Zinc2jet",       " 1 Fwd jet: gen 2Jets Invariant Mass (N_{jets} #geq 2)",                                   Mjj, 50, 20, 2620);
+//
+//
+//
+//    //// at least one forward jet
+//    ZNGoodJetsEWKmjj_Zexc = newTH1D("ZNGoodJetsEWKmjj_Zexc","M_{jj} #geq 1 TeV: Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+//    ZNGoodJetsEWK_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+//
+//    // met properties
+//    METEWKmjj_Zinc2jet                      = newTH1D("METEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,500 );
+//    METEWKmjj_Zinc3jet                      = newTH1D("METEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,500 );
+//
+//    METphiEWKmjj_Zinc2jet                      = newTH1D("METphiEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
+//    ///TH1D *METphiEWKmjj_Zinc3jet                      = newTH1D("METphiEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
+//
+//    MTEWKmjj_Zinc2jet                      = newTH1D("MTEWKmjj_Zinc2jet",                   "M_{jj} #geq 1 TeV: MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
+//    //TH1D *MTEWKmjj_Zinc3jet                      = newTH1D("MTEWKmjj_Zinc3jet",                   "M_{jj} #geq 1 TeV: MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
+//
+//    // jet hisotgrams
+//    FirstJetPtEWKmjj_Zinc2jet                 = newTH1D("FirstJetPtEWKmjj_Zinc2jet",              "M_{jj} #geq 1 TeV: 1st jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{1}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    SecondJetPtEWKmjj_Zinc2jet                = newTH1D("SecondJetPtEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 2nd jet p_{T} (N_{jets} #geq 2)",             "p_{T}(j_{2}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//    ThirdJetPtEWKmjj_Zinc3jet                 = newTH1D("ThirdJetPtEWKmjj_Zinc3jet",              "M_{jj} #geq 1 TeV: 3rd jet p_{T} (N_{jets} #geq 3)",             "p_{T}(j_{3}) [GeV]",     nJetPtEWK_Zinc2jet, jetPtEWK_Zinc2jet);
+//
+//    FirstJetEtaEWKmjj_Zinc2jet                = newTH1D("FirstJetEtaEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 1st jet #eta (N_{jets} #geq 2)",              "#eta(j_{1})",  24,-4.8, 4.8);
+//    SecondJetEtaEWKmjj_Zinc2jet               = newTH1D("SecondJetEtaEWKmjj_Zinc2jet",            "M_{jj} #geq 1 TeV: 2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  24,-4.8, 4.8);
+//
+//    FirstJetPhiEWKmjj_Zinc2jet                = newTH1D("FirstJetPhiEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: 1st jet #phi (N_{jets} #geq 2)",              "#phi(j_{1})",  30,-PI, PI);
+//    SecondJetPhiEWKmjj_Zinc2jet               = newTH1D("SecondJetPhiEWKmjj_Zinc2jet",            "M_{jj} #geq 1 TeV: 2nd jet #phi (N_{jets} #geq 2)",              "#phi(j_{2})",  30,-PI, PI);
+//
+//
+//    SumEtaJetsEWKmjj_Zinc2jet             = newTH1D("SumEtaJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                       jSEta,           50, -8, 8);
+//    SumEtaJetsEWKmjj_Zinc3jet             = newTH1D("SumEtaJetsEWKmjj_Zinc3jet",          "M_{jj} #geq 1 TeV: sum of #eta of j1,j2 jets (N_{jets} #geq 3)",                                       jSEta,           50, -8, 8);
+//    genSumEtaJetsEWKmjj_Zinc2jet          = newTH1D("genSumEtaJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen sum of #eta of j1,j2 jets (N_{jets} #geq 2)",                                   jSEta,           50, -8, 8);
+//
+//
+//    dEtaJetsEWKmjj_Zinc2jet             = newTH1D("dEtaJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: #Delta#eta btwn jets (N_{jets} #geq 2)",                                       jdEta,           50, 0, 10);
+//
+//    gendEtaJetsEWKmjj_Zinc2jet          = newTH1D("gendEtaJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen #Delta#eta btwn jets (N_{jets} #geq 2)",                                   jdEta,           50, 0, 10);
+//
+//    TwoJetsPtDiffEWKmjj_Zinc2jet        = newTH1D("TwoJetsPtDiffEWKmjj_Zinc2jet",     "M_{jj} #geq 1 TeV: pT diff of the two highest jet (N_{jets} #geq 2)",                             "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 500);
+//    genTwoJetsPtDiffEWKmjj_Zinc2jet     = newTH1D("genTwoJetsPtDiffEWKmjj_Zinc2jet",  "M_{jj} #geq 1 TeV: gen pT diff of the two highest jet (N_{jets} #geq 2)",                         "#Delta pT(j_{1}j_{2}) [GeV]",      50,  0, 1000);
+//
+//
+//    ptBalEWKmjj_Zinc2jet                = newTH1D("ptBalEWKmjj_Zinc2jet",             "M_{jj} #geq 1 TeV: Vectorial pT sum: Z_{pT} + Jets_{pT} (N_{jets} #geq 2)",                       "#Sigma pT [GeV]",      50,  0, 500);
+//    SpTJetsEWKmjj_Zinc2jet              = newTH1D("SpTJetsEWKmjj_Zinc2jet",           "M_{jj} #geq 1 TeV: #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                                jSpt,   50,  0, 1);
+//    genSpTJetsEWKmjj_Zinc2jet           = newTH1D("genSpTJetsEWKmjj_Zinc2jet",        "M_{jj} #geq 1 TeV: gen #Delta_{pT}^{rel} jets (N_{jets} #geq 2)",                            jSpt,   50,  0, 1);
+//
+//    dPhiJetsEWKmjj_Zinc2jet             = newTH1D("dPhiJetsEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: #Delta#phi btwn jets (N_{jets} #geq 2)",                                       jdPhi,           100,  0, PI);
+//    gendPhiJetsEWKmjj_Zinc2jet          = newTH1D("gendPhiJetsEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen #Delta#phi btwn jets (N_{jets} #geq 2)",                                   jdPhi,           100,  0, PI);
+//
+//
+//    JetsHTEWKmjj_Zinc2jet                     = newTH1D("JetsHTEWKmjj_Zinc2jet",                  "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//    genJetsHTEWKmjj_Zinc2jet                  = newTH1D("genJetsHTEWKmjj_Zinc2jet",               "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} (N_{jets} #geq 2)",     HT,     nJetHTEWK_Zinc2jet, jetHTEWK_Zinc2jet);
+//
+//    JetsHTEWKmjjAdd_Zinc2jet                     = newTH1D("JetsHTEWKmjjAdd_Zinc2jet",                  "M_{jj} #geq 1 TeV: Scalar sum jets p_{T} , 15 GeV cut on third)",     HT,     nJetPtEWKbtw_Zinc2jet, jetHTEWKbtw_Zinc2jet);
+//
+//    JetsMassEWKmjj_Zinc2jet             = newTH1D("JetsMassEWKmjj_Zinc2jet",          "M_{jj} #geq 1 TeV: 2Jets Invariant Mass (N_{jets} #geq 2)",                                       Mjj, 50, 1000, 2620);
+//    genJetsMassEWKmjj_Zinc2jet          = newTH1D("genJetsMassEWKmjj_Zinc2jet",       "M_{jj} #geq 1 TeV: gen 2Jets Invariant Mass (N_{jets} #geq 2)",                                   Mjj, 50, 1000, 2620);
+//
+//    //// third jet properties
+//    ThirdJetEtaEWKmjj_Zinc3jet          = newTH1D("ThirdJetEtaEWKmjj_Zinc3jet",             "M_{jj} #geq 1 TeV: Third jet #eta in dijet frame (N_{jets} #geq 3)",                                       j3Eta,           50, -5, 5);
+    //end EWK
 
 
     partonsN          = newTH1D("partonsN","Number of ME partons ", "N_{partons}", 16, -0.5, 15.5);

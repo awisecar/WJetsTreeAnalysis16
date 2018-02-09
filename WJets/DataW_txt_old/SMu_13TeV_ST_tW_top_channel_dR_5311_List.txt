@@ -1,1 +1,0 @@
-/store/user/myalvac/03Feb2017/Bonzai/MC/St_tW-top/CRAB_PrivateMC/crab_ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-VJetPruner-SMu/170915_102634/0000/Bonzai-ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-VJetPruner-SMu_1.root

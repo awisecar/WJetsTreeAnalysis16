@@ -1,4 +1,3 @@
-
 void runDYJets(int doWhat = 0, int doQCD = 0)
 {
     string srcdir = "Sources/";
@@ -10,7 +9,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
     sources.push_back("HistoSet");
     sources.push_back("ZJetsAndDPS");
 
-    ////--- Load shared libraries ---
+    ////--- Load shared libraries (the .so's) ---
     unsigned int nSources = sources.size();
     gSystem->AddIncludePath("-D__USE_XOPEN2K8");
     //gROOT->ProcessLine(".L /usr/local/lib/libLHAPDF.dylib");
@@ -519,17 +518,17 @@ void runDYJets(int doWhat = 0, int doQCD = 0)
     }
         
         
-        
-    //--- clean the *_cc.d and *_cc.so files ---
-    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
-    system(cmd.c_str());
-    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
-    system(cmd.c_str());
-    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
-    system(cmd.c_str());
-    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
-    system(cmd.c_str());
-    system("rm .ls_tmp.list");
+    //andrew -- now that we have a script that recompiles before all of the runDYJet() batch submissions are done, we ask the runDYJets.cc code to load the libraries instead of recompiling      
+//    //--- clean the *_cc.d and *_cc.so files ---
+//    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
+//    system(cmd.c_str());
+//    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
+//    system(cmd.c_str());
+//    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
+//    system(cmd.c_str());
+//    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
+//    system(cmd.c_str());
+//    system("rm .ls_tmp.list");
 
 }
 

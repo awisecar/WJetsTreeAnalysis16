@@ -1494,246 +1494,250 @@ public:
     TH1D *MT_Zinc1jet;
     TH1D *MT_Zinc2jet;
     TH1D *MT_Zinc3jet;
-    TH1D *ZNGoodJetsEWK_Zexc;
-    TH1D *ZNGoodJetsEWKbtw_Zexc;
-    TH1D *METEWK_Zinc2jet;      
-    TH1D *METEWK_Zinc3jet;     
 
-    TH1D *METphiEWK_Zinc2jet;   
-    TH1D *METphiEWK_Zinc3jet;   
-
-    TH1D *MTEWK_Zinc2jet;       
-    TH1D *MTEWK_Zinc3jet;       
-    TH1D *FirstJetPtEWK_Zinc2jet;    
-    TH1D *SecondJetPtEWK_Zinc2jet;   
-
-    TH1D *FirstJetEtaEWK_Zinc2jet;   
-    TH1D *SecondJetEtaEWK_Zinc2jet;  
-    TH1D *FirstJetPhiEWK_Zinc2jet;   
-    TH1D *SecondJetPhiEWK_Zinc2jet;  
-
-    TH1D *ForwardJetPtEWK_Zinc2jet;  
-    TH1D *ForwardJetEtaEWK_Zinc2jet; 
-    TH1D *ForwardJetPhiEWK_Zinc2jet; 
-
-    TH1D *CentralJetPtEWK_Zinc2jet;  
-    TH1D *CentralJetEtaEWK_Zinc2jet; 
-    TH1D *CentralJetPhiEWK_Zinc2jet; 
-
-    TH1D *ThirdJetPtEWK_Zinc2jet;   
-    TH1D *ThirdJetPhiEWK_Zinc2jet;   
-    TH1D *ThirdJetEtaEWK_Zinc2jet;   
-    /// additional activity > 15 GeV
-    TH1D *ThirdJetPtEWKadd_Zinc2jet; 
-    TH1D *ThirdJetPhiEWKadd_Zinc2jet;
-    TH1D *ThirdJetEtaEWKadd_Zinc2jet;
-    TH1D *SumEtaJetsEWK_Zinc2jet;     
-    TH1D *AbsSumEtaJetsEWK_Zinc2jet;  
-    TH1D *SumEtaJetsEWK_Zinc3jet;     
-
-
-    TH1D *dEtaJetsEWK_Zinc2jet;       
-
-    TH1D *TwoJetsPtDiffEWK_Zinc2jet;  
-
-
-    TH1D *ptBalEWK_Zinc2jet;          
-    TH1D* SpTJetsEWK_Zinc2jet;        
-
-    TH1D *dPhiJetsEWK_Zinc2jet;       
-
-
-    TH1D *JetsHTEWK_Zinc2jet;         
-
-
-    TH1D *JetsMassEWK_Zinc2jet;       
-
-
-    //// third jet properties
-    TH1D *EtaThirdJetsEWK_Zinc3jet;   
-
-    /// all jets between leading two 
-    TH1D *AllJetPtEWKbtw_Zinc2jet;    
-    TH1D *AllJetPhiEWKbtw_Zinc2jet;  
-    TH1D *AllJetEtaEWKbtw_Zinc2jet;   
-    TH1D *JetsHTEWKbtw_Zinc2jet; 
-    //TH1D *JetsHTEWKbtw_Zinc2jet    
-
-    // third jet between
-    TH1D *ThirdJetPtEWKbtw_Zinc2jet;
-    TH1D *ThirdJetPhiEWKbtw_Zinc2jet;
-    TH1D *ThirdJetEtaEWKbtw_Zinc2jet; 
-
-    TH1D *genZNGoodJetsEWK_Zexc;
-    TH1D *genZNGoodJetsEWKbtw_Zexc;
-    TH1D *genFirstJetPtEWK_Zinc2jet;     
-    TH1D *genSecondJetPtEWK_Zinc2jet;    
-
-    TH1D *genFirstJetEtaEWK_Zinc2jet;  
-    TH1D *genSecondJetEtaEWK_Zinc2jet;   
-    TH1D *genFirstJetPhiEWK_Zinc2jet;    
-    TH1D *genSecondJetPhiEWK_Zinc2jet;   
-
-    TH1D *genForwardJetPtEWK_Zinc2jet;   
-    TH1D *genForwardJetEtaEWK_Zinc2jet;  
-    TH1D *genForwardJetPhiEWK_Zinc2jet;  
-
-    TH1D *genCentralJetPtEWK_Zinc2jet;   
-    TH1D *genCentralJetEtaEWK_Zinc2jet;  
-    TH1D *genCentralJetPhiEWK_Zinc2jet; 
-
-
-    TH1D *genThirdJetPtEWK_Zinc2jet;     
-    TH1D *genThirdJetPhiEWK_Zinc2jet;    
-    TH1D *genThirdJetEtaEWK_Zinc2jet;    
-    /// additional activity > 15 GeV ful
-    TH1D *genThirdJetPtEWKadd_Zinc2jet;  
-    TH1D *genThirdJetPhiEWKadd_Zinc2jet; 
-    TH1D *genThirdJetEtaEWKadd_Zinc2jet; 
-
-
-    /////  dijet properties
-    TH1D *genSumEtaJetsEWK_Zinc2jet;     
-    TH1D *genAbsSumEtaJetsEWK_Zinc2jet;  
-    TH1D *genSumEtaJetsEWK_Zinc3jet;     
-
-
-    TH1D *gendEtaJetsEWK_Zinc2jet;       
-
-    TH1D *genTwoJetsPtDiffEWK_Zinc2jet; 
-
-
-    TH1D *genptBalEWK_Zinc2jet;          
-    TH1D* genSpTJetsEWK_Zinc2jet;        
-
-    TH1D *gendPhiJetsEWK_Zinc2jet;       
-
-
-    TH1D *genJetsHTEWK_Zinc2jet;         
-
-
-    TH1D *genJetsMassEWK_Zinc2jet;       
-
-
-    //// third jet properties
-    TH1D *genEtaThirdJetsEWK_Zinc3jet;   
-
-    /// all jets between leading two jet
-    TH1D *genAllJetPtEWKbtw_Zinc2jet;    
-    TH1D *genAllJetPhiEWKbtw_Zinc2jet;   
-    TH1D *genAllJetEtaEWKbtw_Zinc2jet;   
-
-
-    TH1D *genJetsHTEWKbtw_Zinc2jet;      
-    //TH1D *genJetsHTEWKbtw_Zinc2jet    
-
-    // third jet between
-    TH1D *genThirdJetPtEWKbtw_Zinc2jet;  
-    TH1D *genThirdJetPhiEWKbtw_Zinc2jet; 
-    TH1D *genThirdJetEtaEWKbtw_Zinc2jet; 
-
-    TH1D *ZNGoodJetsEWKfwd_Zexc;
-    // met properties
-    TH1D *METEWKfwd_Zinc2jet;              
-    TH1D *METEWKfwd_Zinc3jet;              
-
-    TH1D *METphiEWKfwd_Zinc2jet;           
-    TH1D *METphiEWKfwd_Zinc3jet;           
-
-    TH1D *MTEWKfwd_Zinc2jet;               
-    TH1D *MTEWKfwd_Zinc3jet;               
-
-    // jet hisotgrams
-    TH1D *FirstJetPtEWKfwd_Zinc2jet;       
-    TH1D *SecondJetPtEWKfwd_Zinc2jet;      
-    TH1D *FirstJetEtaEWKfwd_Zinc2jet;      
-    TH1D *SecondJetEtaEWKfwd_Zinc2jet;    
-
-    TH1D *FirstJetPhiEWKfwd_Zinc2jet;      
-    TH1D *SecondJetPhiEWKfwd_Zinc2jet;     
-
-
-    TH1D *SumEtaJetsEWKfwd_Zinc2jet;       
-    TH1D *SumEtaJetsEWKfwd_Zinc3jet;       
-    TH1D *genSumEtaJetsEWKfwd_Zinc2jet;    
-
-
-    TH1D *dEtaJetsEWKfwd_Zinc2jet;         
-    TH1D *gendEtaJetsEWKfwd_Zinc2jet;      
-
-    TH1D *TwoJetsPtDiffEWKfwd_Zinc2jet;    
-    TH1D *genTwoJetsPtDiffEWKfwd_Zinc2jet; 
-
-
-    TH1D *ptBalEWKfwd_Zinc2jet;            
-    TH1D* SpTJetsEWKfwd_Zinc2jet;          
-    TH1D *genSpTJetsEWKfwd_Zinc2jet;       
-
-    TH1D *dPhiJetsEWKfwd_Zinc2jet;         
-    TH1D *gendPhiJetsEWKfwd_Zinc2jet;      
-
-
-    TH1D *JetsHTEWKfwd_Zinc2jet;           
-    TH1D *genJetsHTEWKfwd_Zinc2jet;       
-
-
-    TH1D *JetsMassEWKfwd_Zinc2jet;         
-    TH1D *genJetsMassEWKfwd_Zinc2jet;      
-
-    TH1D *ZNGoodJetsEWKmjj_Zexc;
-
-    TH1D *METEWKmjj_Zinc2jet;               
-    TH1D *METEWKmjj_Zinc3jet;               
-    TH1D *METphiEWKmjj_Zinc2jet;            
-    ///TH1D *METphiEWKmjj_Zinc3jet         
-
-    TH1D *MTEWKmjj_Zinc2jet;                
-    //TH1D *MTEWKmjj_Zinc3jet              
-
-    // jet hisotgrams
-    TH1D *FirstJetPtEWKmjj_Zinc2jet;        
-    TH1D *SecondJetPtEWKmjj_Zinc2jet;       
-    TH1D *ThirdJetPtEWKmjj_Zinc3jet;        
-
-    TH1D *FirstJetEtaEWKmjj_Zinc2jet;       
-    TH1D *SecondJetEtaEWKmjj_Zinc2jet;      
-
-    TH1D *FirstJetPhiEWKmjj_Zinc2jet;       
-    TH1D *SecondJetPhiEWKmjj_Zinc2jet;      
-
-
-    TH1D *SumEtaJetsEWKmjj_Zinc2jet;        
-    TH1D *SumEtaJetsEWKmjj_Zinc3jet;        
-    TH1D *genSumEtaJetsEWKmjj_Zinc2jet;     
-
-
-    TH1D *dEtaJetsEWKmjj_Zinc2jet;          
-
-    TH1D *gendEtaJetsEWKmjj_Zinc2jet;       
-
-    TH1D *TwoJetsPtDiffEWKmjj_Zinc2jet;     
-    TH1D *genTwoJetsPtDiffEWKmjj_Zinc2jet;  
-
-
-    TH1D *ptBalEWKmjj_Zinc2jet;             
-    TH1D* SpTJetsEWKmjj_Zinc2jet;          
-    TH1D *genSpTJetsEWKmjj_Zinc2jet;        
-
-    TH1D *dPhiJetsEWKmjj_Zinc2jet;          
-    TH1D *gendPhiJetsEWKmjj_Zinc2jet;       
-
-
-    TH1D *JetsHTEWKmjj_Zinc2jet;            
-    TH1D *genJetsHTEWKmjj_Zinc2jet;         
-
-    TH1D *JetsHTEWKmjjAdd_Zinc2jet;         
-
-    TH1D *JetsMassEWKmjj_Zinc2jet;          
-    TH1D *genJetsMassEWKmjj_Zinc2jet;       
-
-    //// third jet properties
-    TH1D *ThirdJetEtaEWKmjj_Zinc3jet;      
-    TH1D *genThirdJetEtaEWKmjj_Zinc3jet;      
+    //andrew -- turning off EWK histograms due to memory issues with ROOT
+    //they don't seem relevant to the alpha_s analysis, at least for the moment
+//    TH1D *ZNGoodJetsEWK_Zexc;
+//    TH1D *ZNGoodJetsEWKbtw_Zexc;
+//    TH1D *METEWK_Zinc2jet;      
+//    TH1D *METEWK_Zinc3jet;     
+//
+//    TH1D *METphiEWK_Zinc2jet;   
+//    TH1D *METphiEWK_Zinc3jet;   
+//
+//    TH1D *MTEWK_Zinc2jet;       
+//    TH1D *MTEWK_Zinc3jet;       
+//    TH1D *FirstJetPtEWK_Zinc2jet;    
+//    TH1D *SecondJetPtEWK_Zinc2jet;   
+//
+//    TH1D *FirstJetEtaEWK_Zinc2jet;   
+//    TH1D *SecondJetEtaEWK_Zinc2jet;  
+//    TH1D *FirstJetPhiEWK_Zinc2jet;   
+//    TH1D *SecondJetPhiEWK_Zinc2jet;  
+//
+//    TH1D *ForwardJetPtEWK_Zinc2jet;  
+//    TH1D *ForwardJetEtaEWK_Zinc2jet; 
+//    TH1D *ForwardJetPhiEWK_Zinc2jet; 
+//
+//    TH1D *CentralJetPtEWK_Zinc2jet;  
+//    TH1D *CentralJetEtaEWK_Zinc2jet; 
+//    TH1D *CentralJetPhiEWK_Zinc2jet; 
+//
+//    TH1D *ThirdJetPtEWK_Zinc2jet;   
+//    TH1D *ThirdJetPhiEWK_Zinc2jet;   
+//    TH1D *ThirdJetEtaEWK_Zinc2jet;   
+//    /// additional activity > 15 GeV
+//    TH1D *ThirdJetPtEWKadd_Zinc2jet; 
+//    TH1D *ThirdJetPhiEWKadd_Zinc2jet;
+//    TH1D *ThirdJetEtaEWKadd_Zinc2jet;
+//    TH1D *SumEtaJetsEWK_Zinc2jet;     
+//    TH1D *AbsSumEtaJetsEWK_Zinc2jet;  
+//    TH1D *SumEtaJetsEWK_Zinc3jet;     
+//
+//
+//    TH1D *dEtaJetsEWK_Zinc2jet;       
+//
+//    TH1D *TwoJetsPtDiffEWK_Zinc2jet;  
+//
+//
+//    TH1D *ptBalEWK_Zinc2jet;          
+//    TH1D* SpTJetsEWK_Zinc2jet;        
+//
+//    TH1D *dPhiJetsEWK_Zinc2jet;       
+//
+//
+//    TH1D *JetsHTEWK_Zinc2jet;         
+//
+//
+//    TH1D *JetsMassEWK_Zinc2jet;       
+//
+//
+//    //// third jet properties
+//    TH1D *EtaThirdJetsEWK_Zinc3jet;   
+//
+//    /// all jets between leading two 
+//    TH1D *AllJetPtEWKbtw_Zinc2jet;    
+//    TH1D *AllJetPhiEWKbtw_Zinc2jet;  
+//    TH1D *AllJetEtaEWKbtw_Zinc2jet;   
+//    TH1D *JetsHTEWKbtw_Zinc2jet; 
+//    //TH1D *JetsHTEWKbtw_Zinc2jet    
+//
+//    // third jet between
+//    TH1D *ThirdJetPtEWKbtw_Zinc2jet;
+//    TH1D *ThirdJetPhiEWKbtw_Zinc2jet;
+//    TH1D *ThirdJetEtaEWKbtw_Zinc2jet; 
+//
+//    TH1D *genZNGoodJetsEWK_Zexc;
+//    TH1D *genZNGoodJetsEWKbtw_Zexc;
+//    TH1D *genFirstJetPtEWK_Zinc2jet;     
+//    TH1D *genSecondJetPtEWK_Zinc2jet;    
+//
+//    TH1D *genFirstJetEtaEWK_Zinc2jet;  
+//    TH1D *genSecondJetEtaEWK_Zinc2jet;   
+//    TH1D *genFirstJetPhiEWK_Zinc2jet;    
+//    TH1D *genSecondJetPhiEWK_Zinc2jet;   
+//
+//    TH1D *genForwardJetPtEWK_Zinc2jet;   
+//    TH1D *genForwardJetEtaEWK_Zinc2jet;  
+//    TH1D *genForwardJetPhiEWK_Zinc2jet;  
+//
+//    TH1D *genCentralJetPtEWK_Zinc2jet;   
+//    TH1D *genCentralJetEtaEWK_Zinc2jet;  
+//    TH1D *genCentralJetPhiEWK_Zinc2jet; 
+//
+//
+//    TH1D *genThirdJetPtEWK_Zinc2jet;     
+//    TH1D *genThirdJetPhiEWK_Zinc2jet;    
+//    TH1D *genThirdJetEtaEWK_Zinc2jet;    
+//    /// additional activity > 15 GeV ful
+//    TH1D *genThirdJetPtEWKadd_Zinc2jet;  
+//    TH1D *genThirdJetPhiEWKadd_Zinc2jet; 
+//    TH1D *genThirdJetEtaEWKadd_Zinc2jet; 
+//
+//
+//    /////  dijet properties
+//    TH1D *genSumEtaJetsEWK_Zinc2jet;     
+//    TH1D *genAbsSumEtaJetsEWK_Zinc2jet;  
+//    TH1D *genSumEtaJetsEWK_Zinc3jet;     
+//
+//
+//    TH1D *gendEtaJetsEWK_Zinc2jet;       
+//
+//    TH1D *genTwoJetsPtDiffEWK_Zinc2jet; 
+//
+//
+//    TH1D *genptBalEWK_Zinc2jet;          
+//    TH1D* genSpTJetsEWK_Zinc2jet;        
+//
+//    TH1D *gendPhiJetsEWK_Zinc2jet;       
+//
+//
+//    TH1D *genJetsHTEWK_Zinc2jet;         
+//
+//
+//    TH1D *genJetsMassEWK_Zinc2jet;       
+//
+//
+//    //// third jet properties
+//    TH1D *genEtaThirdJetsEWK_Zinc3jet;   
+//
+//    /// all jets between leading two jet
+//    TH1D *genAllJetPtEWKbtw_Zinc2jet;    
+//    TH1D *genAllJetPhiEWKbtw_Zinc2jet;   
+//    TH1D *genAllJetEtaEWKbtw_Zinc2jet;   
+//
+//
+//    TH1D *genJetsHTEWKbtw_Zinc2jet;      
+//    //TH1D *genJetsHTEWKbtw_Zinc2jet    
+//
+//    // third jet between
+//    TH1D *genThirdJetPtEWKbtw_Zinc2jet;  
+//    TH1D *genThirdJetPhiEWKbtw_Zinc2jet; 
+//    TH1D *genThirdJetEtaEWKbtw_Zinc2jet; 
+//
+//    TH1D *ZNGoodJetsEWKfwd_Zexc;
+//    // met properties
+//    TH1D *METEWKfwd_Zinc2jet;              
+//    TH1D *METEWKfwd_Zinc3jet;              
+//
+//    TH1D *METphiEWKfwd_Zinc2jet;           
+//    TH1D *METphiEWKfwd_Zinc3jet;           
+//
+//    TH1D *MTEWKfwd_Zinc2jet;               
+//    TH1D *MTEWKfwd_Zinc3jet;               
+//
+//    // jet hisotgrams
+//    TH1D *FirstJetPtEWKfwd_Zinc2jet;       
+//    TH1D *SecondJetPtEWKfwd_Zinc2jet;      
+//    TH1D *FirstJetEtaEWKfwd_Zinc2jet;      
+//    TH1D *SecondJetEtaEWKfwd_Zinc2jet;    
+//
+//    TH1D *FirstJetPhiEWKfwd_Zinc2jet;      
+//    TH1D *SecondJetPhiEWKfwd_Zinc2jet;     
+//
+//
+//    TH1D *SumEtaJetsEWKfwd_Zinc2jet;       
+//    TH1D *SumEtaJetsEWKfwd_Zinc3jet;       
+//    TH1D *genSumEtaJetsEWKfwd_Zinc2jet;    
+//
+//
+//    TH1D *dEtaJetsEWKfwd_Zinc2jet;         
+//    TH1D *gendEtaJetsEWKfwd_Zinc2jet;      
+//
+//    TH1D *TwoJetsPtDiffEWKfwd_Zinc2jet;    
+//    TH1D *genTwoJetsPtDiffEWKfwd_Zinc2jet; 
+//
+//
+//    TH1D *ptBalEWKfwd_Zinc2jet;            
+//    TH1D* SpTJetsEWKfwd_Zinc2jet;          
+//    TH1D *genSpTJetsEWKfwd_Zinc2jet;       
+//
+//    TH1D *dPhiJetsEWKfwd_Zinc2jet;         
+//    TH1D *gendPhiJetsEWKfwd_Zinc2jet;      
+//
+//
+//    TH1D *JetsHTEWKfwd_Zinc2jet;           
+//    TH1D *genJetsHTEWKfwd_Zinc2jet;       
+//
+//
+//    TH1D *JetsMassEWKfwd_Zinc2jet;         
+//    TH1D *genJetsMassEWKfwd_Zinc2jet;      
+//
+//    TH1D *ZNGoodJetsEWKmjj_Zexc;
+//
+//    TH1D *METEWKmjj_Zinc2jet;               
+//    TH1D *METEWKmjj_Zinc3jet;               
+//    TH1D *METphiEWKmjj_Zinc2jet;            
+//    ///TH1D *METphiEWKmjj_Zinc3jet         
+//
+//    TH1D *MTEWKmjj_Zinc2jet;                
+//    //TH1D *MTEWKmjj_Zinc3jet              
+//
+//    // jet hisotgrams
+//    TH1D *FirstJetPtEWKmjj_Zinc2jet;        
+//    TH1D *SecondJetPtEWKmjj_Zinc2jet;       
+//    TH1D *ThirdJetPtEWKmjj_Zinc3jet;        
+//
+//    TH1D *FirstJetEtaEWKmjj_Zinc2jet;       
+//    TH1D *SecondJetEtaEWKmjj_Zinc2jet;      
+//
+//    TH1D *FirstJetPhiEWKmjj_Zinc2jet;       
+//    TH1D *SecondJetPhiEWKmjj_Zinc2jet;      
+//
+//
+//    TH1D *SumEtaJetsEWKmjj_Zinc2jet;        
+//    TH1D *SumEtaJetsEWKmjj_Zinc3jet;        
+//    TH1D *genSumEtaJetsEWKmjj_Zinc2jet;     
+//
+//
+//    TH1D *dEtaJetsEWKmjj_Zinc2jet;          
+//
+//    TH1D *gendEtaJetsEWKmjj_Zinc2jet;       
+//
+//    TH1D *TwoJetsPtDiffEWKmjj_Zinc2jet;     
+//    TH1D *genTwoJetsPtDiffEWKmjj_Zinc2jet;  
+//
+//
+//    TH1D *ptBalEWKmjj_Zinc2jet;             
+//    TH1D* SpTJetsEWKmjj_Zinc2jet;          
+//    TH1D *genSpTJetsEWKmjj_Zinc2jet;        
+//
+//    TH1D *dPhiJetsEWKmjj_Zinc2jet;          
+//    TH1D *gendPhiJetsEWKmjj_Zinc2jet;       
+//
+//
+//    TH1D *JetsHTEWKmjj_Zinc2jet;            
+//    TH1D *genJetsHTEWKmjj_Zinc2jet;         
+//
+//    TH1D *JetsHTEWKmjjAdd_Zinc2jet;         
+//
+//    TH1D *JetsMassEWKmjj_Zinc2jet;          
+//    TH1D *genJetsMassEWKmjj_Zinc2jet;       
+//
+//    //// third jet properties
+//    TH1D *ThirdJetEtaEWKmjj_Zinc3jet;      
+//    TH1D *genThirdJetEtaEWKmjj_Zinc3jet;      
+    //end EWK
 
     //--- number of addtion genrated parton
     TH1D *partonsN;         

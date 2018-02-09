@@ -62,8 +62,6 @@ void DataDrivenQCD( string leptonFlavor, int METcut , int doBJets ){
     TFile *fData[NQCD] = {NULL};
     TFile *fMC[NQCD][NMC] = {{NULL}};
    
-    std::cout << "error here" << std::endl;
- 
     FuncOpenAllFiles(fData, fMC, leptonFlavor, METcut, false, true, doBJets);
     vector<string> histoNameRun = getVectorOfHistoNames(fData);
     
@@ -243,7 +241,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         for ( int j = 0  ; j < 12 ; j++){
             // recalculate NormFactor by including QCD[0]
             if ( j > 0 )  NormFactor = (hData[0]->Integral() - hBack[0]->Integral() - hQCD[0] ->Integral() ) / hSignal[0]->Integral() ;
-            cout << " NormFactor f_w : " << NormFactor << endl;
+            cout << " NormFactor f_W : " << NormFactor << endl;
             
             // step 1:
             for ( int i = 0  ; i < NQCD ; i++){
@@ -316,7 +314,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         }
         
         for (int m = 1; m <= hData[0]->GetNbinsX(); m++){
-            cout << " -------- processing binth : " << m << endl;
+            cout << " -------- processing bin number: " << m << endl;
             // step 0 : initial normalization of Wjets and data
             double NormFactor(1);
             if(hSignal[0]->GetBinContent(m) > 0){NormFactor = (hData[0]->GetBinContent(m) - hBack[0]->GetBinContent(m)) / hSignal[0]->GetBinContent(m) ;}
@@ -356,7 +354,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                     NormFactIsoError = NormFactorISO * sqrt( pow( (hQCD[1]->GetBinError(m)/hQCD[1]->GetBinContent(m) ), 2) + pow( (hQCD[3]->GetBinError(m)/hQCD[3]->GetBinContent(m) ), 2) );
                 }
                 cout << " ratio of regions B to D   " << NormFactorISO << "   " << hQCD[1]->GetBinContent(m) << "   " << hQCD[3]->GetBinContent(m) <<  endl;
-                cout << " NormFactor: " << NormFactor << " f_B/D = " << NormFactorISO << " Error (%) = " << NormFactIsoError*100/NormFactorISO << endl;
+                cout << " NormFactor f_W: " << NormFactor << " f_B/D = " << NormFactorISO << " Error (%) = " << NormFactIsoError*100/NormFactorISO << endl;
                 
                 // step 3 : isolation fake-rate from step 2 is aplied to QCD[2] to get QCD[0]
                 hQCD[0]->SetBinContent(m, NormFactorISO * hQCD[2]->GetBinContent(m));

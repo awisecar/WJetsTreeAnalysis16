@@ -355,6 +355,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     }
     
     //here is where the THStack histSumMC is filled/stacked
+    //loop starts with i=1 here because hist[0] refers to the data file (see fileNames.h)
     for (int i = 1; i < nFiles; i++) {
         for (int j = 0; j < nHistNoGen ; j++) {
             if (doBJets <= 0 ){
@@ -500,7 +501,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         hist[0][i]->GetYaxis()->SetLabelSize(0.09);  //0.08
         hist[0][i]->GetYaxis()->SetLabelFont(42); 
 
-        //andrew -- dividing data by stacked MC(?)
+        //andrew -- dividing data (hist[0]) by stacked MC (histSumMC)
         hist[0][i]->Divide((TH1D*) histSumMC[i]->GetStack()->Last());
         for (unsigned short j(1); j <= nBins; j++){
 
@@ -515,8 +516,9 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
                 //hist[0][i]->SetBinError(j, error*1./(binW));
             }
      */
-    //andrew -- uncomment these next few lines if you don't want Sim/Data(?)
-    double content(hist[0][i]->GetBinContent(j));
+            //andrew -- these lines flip the bin content to Sim/Data
+            //no treatment of errors here??? - need to SetBinError?
+            double content(hist[0][i]->GetBinContent(j));
             if (content > 0){
                 hist[0][i]->SetBinContent(j, 1./content);
             }

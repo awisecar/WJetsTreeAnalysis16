@@ -1,3 +1,0 @@
-/store/user/myalvac/03Feb2017/Bonzai/MC/WJets/FxFx/CRAB_PrivateMC/crab_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu/170915_110325/0000/Bonzai-WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu_1.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/WJets/FxFx/CRAB_PrivateMC/crab_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu/170915_110325/0000/Bonzai-WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu_2.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/WJets/FxFx/CRAB_PrivateMC/crab_WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu/170915_110325/0000/Bonzai-WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu_3.root

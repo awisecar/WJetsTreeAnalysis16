@@ -1,9 +1,0 @@
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_1.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_2.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_3.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_4.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_5.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_6.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_7.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_8.root
-/store/user/myalvac/03Feb2017/Bonzai/MC/ttbar/CRAB_PrivateMC/crab_TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu/170916_213951/0000/Bonzai-TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-VJetPruner-SMu_9.root
