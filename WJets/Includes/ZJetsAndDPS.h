@@ -151,6 +151,9 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *METPz;
     vector<float>  *METE;
     ULong64_t TrigMET;
+    ULong64_t TrigMETBit;
+    vector<bool>  *EvtFilterbadChCandidate;
+    vector<bool>  *EvtFilterbadPFMuon;
 
     //vector<float>  *METPhi;
     vector<float>  *METsig;
@@ -256,6 +259,9 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_METPz;   //!
     TBranch        *b_METE;   //!
     TBranch        *b_TrigMET;   //!
+    TBranch        *b_TrigMETBit;   //!
+    TBranch        *b_EvtFilterbadChCandidate;   //!
+    TBranch        *b_EvtFilterbadPFMuon;   //!
     TBranch        *b_METPhi;   //!
     TBranch        *b_METsig;   //!
     

@@ -36,7 +36,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
         //andrew: currently turn off because no 2016 MET filters yet
-	bool doMETFiltering = false;
+	bool doMETFiltering = true;
 
     //--- Initialize PDF from LHAPDF if needed ---
     if (pdfSet != "") {
@@ -275,10 +275,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
    
     //------------------------------------
 
-    cout << " run on " << nentries << " events" << endl;
+    std::cout << "hasRecoInfo: " << hasRecoInfo << std::endl;
+    std::cout << "hasGenInfo: " << hasGenInfo << std::endl;
+    std::cout << "hasPartonInfo: " << hasPartonInfo << std::endl;
+    std::cout << "isData: " << isData << std::endl;
+
     //--- Begin Loop All Entries --
-    for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //for (Long64_t jentry(0); jentry < 1000000; jentry++){
+    //for (Long64_t jentry(0); jentry < nentries; jentry++){
+    for (Long64_t jentry(0); jentry < 500000; jentry++){
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
@@ -387,21 +391,36 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 		//--- MET FILTERING ---
 		//--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
 		//===================================//
-		bool passMETFILTER(false);
-		if (hasRecoInfo && doMETFiltering){
+		bool passMETFILTER(true);
+                bool EvtFilterbadChCandidate(true);
+                bool EvtFilterbadPFMuon(true);
+		if (hasRecoInfo && isData && doMETFiltering){
 			//cout << " " << TrigMET << " " << (TrigMET & 1LL<<0) << " " << (TrigMET & 1LL<<1) << " " << (TrigMET & 1LL<<5) << " " << (TrigMET & 1LL<<9) << " " << (TrigMET & 1LL<<11) << " " << (TrigMET & 1LL<<13) << " " << (TrigMET & 1LL<<18) << " " << (TrigMET & 1LL<<19) << endl;
 			passMETFILTER = (
-							    (TrigMET & 1LL<<0)   // Flag_HBHENoiseFilter
-							 && (TrigMET & 1LL<<1)   // Flag_HBHENoiseIsoFilter
-							 && (TrigMET & 1LL<<5)   // Flag_globalTightHalo2016Filter
-							 && (TrigMET & 1LL<<9)   // Flag_EcalDeadCellTriggerPrimitiveFilter
-							 && (TrigMET & 1LL<<11)  // Flag_goodVertices
-							 && (TrigMET & 1LL<<13)  // Flag_eeBadScFilter
-							 && (TrigMET & 1LL<<18)  // Flag_BadChargedCandidateFilter
-							 && (TrigMET & 1LL<<19)  // Flag_BadPFMuonFilter
-							 );
+                            (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                            && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+                            && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+                            && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+                            && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                            && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
+                            && (EvtFilterbadChCandidate)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter (use on the fly)
+                            && (EvtFilterbadPFMuon)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter (use on the fly)
+			);
 			if (passMETFILTER) nEventsPassMETFilter++ ;
 		}
+                if (hasRecoInfo && !isData && doMETFiltering){
+                    passMETFILTER = (
+                        (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                        && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+                        && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+                        && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+                        && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                        && (EvtFilterbadChCandidate)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter (use on the fly)
+                        && (EvtFilterbadPFMuon)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter (use on the fly)
+                     );
+                     if (passMETFILTER) nEventsPassMETFilter++ ;
+                 }
+
 		//=======================================================================================================//
 
         double puWeightFact(1);
@@ -3975,7 +3994,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //std::cout << "Deleting histogram " << hName << "... " << std::endl;
         delete listOfHistograms[i];
     }
-    std::cout << "All histograms written! Yay!\n" << std::endl;
+    std::cout << "\nAll histograms written! Yay!" << std::endl;
 
     //--- Save all the RooUnfoldResponses ---
     if ( hasGenInfo && hasRecoInfo ){
@@ -3984,11 +4003,11 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             string currentName = listOfResponses[i]->GetName();
             currentName = currentName.substr(0, currentName.find("_gen"));
             string savingName = "response" + currentName;
-            std::cout << "Writing response object " << savingName << std::endl;
+            //std::cout << "Writing response object " << savingName << std::endl;
             outputFile->WriteTObject(listOfResponses[i], savingName.c_str());
         }
     }
-    std::cout << "All response objects written! Woohoo!\n" << std::endl;
+    std::cout << "All response objects written! Woohoo!" << std::endl;
     
 //    // let's delete all histograms, just to be safe
 //    for (unsigned short i(0); i < numbOfHistograms; i++){
@@ -4183,9 +4202,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     // Init() will be called many times when running on PROOF
     // (once per file to be processed).
 
-    std::cout << "hasRecoInfo: " << hasRecoInfo << std::endl;
-    std::cout << "hasGenInfo: " << hasGenInfo << std::endl;
-    std::cout << "hasPartonInfo: " << hasPartonInfo << std::endl;
 
     // Set object pointer
     
@@ -4278,6 +4294,9 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     METPz = 0 ;
     METE = 0 ;
     TrigMET = 0;
+    TrigMETBit = 0;
+    EvtFilterbadChCandidate = 0;
+    EvtFilterbadPFMuon = 0;
     //koMETPhi = 0 ;
     //METsig = 0 ;
     //HBHENoiseFilterFlag = 0;
@@ -4321,6 +4340,9 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
         fChain->SetBranchAddress("METPz", &METPz, &b_METPz);
         fChain->SetBranchAddress("METE", &METE, &b_METE);
         fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
+        fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
+        fChain->SetBranchAddress("EvtFilterbadChCandidate", &EvtFilterbadChCandidate, &b_EvtFilterbadChCandidate);
+        fChain->SetBranchAddress("EvtFilterbadPFMuon", &EvtFilterbadPFMuon, &b_EvtFilterbadPFMuon);
         //KOfChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
         //fChain->SetBranchAddress("METsig", &METsig, &b_METsig); // not used
         //fChain->SetBranchAddress("HBHENoiseFilterFlag", &HBHENoiseFilterFlag, &b_HBHENoiseFilterFlag);
