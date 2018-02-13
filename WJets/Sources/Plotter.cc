@@ -412,11 +412,11 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
          //       histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
          //   }
             
-            //andrew -- use the below option if plotting the ttbar control region
-            if (histoName[i].find("ZNGoodJets_") != string::npos){
-                 hist[0][i]->GetXaxis()->SetRangeUser(2,6);
-                 histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
-             }
+       //     //andrew -- use the below option if plotting the ttbar control region
+       //     if (histoName[i].find("ZNGoodJets_") != string::npos){
+       //          hist[0][i]->GetXaxis()->SetRangeUser(2,6);
+       //          histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
+       //      }
 
 
 
@@ -463,6 +463,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             pad1[i]->Draw();
         }  
    
+        //Drawing the data-to-MC ratio plot on the bottom of the canvas
         canvas[i]->cd();
         pad2[i] = new TPad("pad2", "pad2", 0, 0, 1, 0.3);
         pad2[i]->SetTopMargin(0.);
@@ -517,10 +518,13 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             }
      */
             //andrew -- these lines flip the bin content to Sim/Data
-            //no treatment of errors here??? - need to SetBinError?
             double content(hist[0][i]->GetBinContent(j));
+            double contentError(hist[0][i]->GetBinError(j));
             if (content > 0){
                 hist[0][i]->SetBinContent(j, 1./content);
+                //need to also re-assign errors
+                hist[0][i]->SetBinError(j, pow(hist[0][i]->GetBinContent(j),2.)*contentError);
+       
             }
         }
 

@@ -8,8 +8,6 @@ https://github.com/ahortian/WJetsTreeAnalysis/tree/master/WJets
 Note: the unfolding of these data is done at a different step, this code produces reco-level plots. Previously, for 2015 13 TeV we have used RooUnfold, with the Bayesian iterative method (::kBayes):
 https://github.com/ahortian/WJets13TeVUnfolding
 
-(TODO: change to an unfolding method based on Root's TUnfold class, as recommended by the Statistics Community.)
-
 -- For now use CMSSW_5_3_20
 cmsrel CMSSW_5_3_20  
 cd CMSSW_5_3_20/src
@@ -32,7 +30,7 @@ cd -
 Two different approaches to running:
 
 1) python wjets_jobsub.py
-which will submit batch jobs for doWhat's and doQCD's specified in the script, producing STDOUT, and the submitted shell scripts in the folder "tmpjobs_<date>"
+which will submit batch jobs for the values of doWhat, doQCD, and doSysRunning specified in the script, producing STDOUT, and the submitted shell scripts in the folder "tmpjobs_<date>"
 
 2) root -b -q wjets_compileCode.cc
    root -b -q runDYJets.cc
