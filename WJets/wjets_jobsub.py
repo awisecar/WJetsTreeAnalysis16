@@ -30,7 +30,7 @@ for what in doWhat:
 			tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.sh'
 
 			job = '#!/bin/bash\n'
-     	 	        job += 'cd /afs/cern.ch/work/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
+     	 	        job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
 			#job += 'cd $CMSSW_BASE/src/WJetsTreeAnalysis16/WJets\n'
 			job += 'eval `scramv1 runtime -sh`'
 			#job += 'cd $CMSSW_BASE/src\n'
