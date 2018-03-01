@@ -5,18 +5,21 @@ import random
 import time
 import datetime
 
+cwd = os.getcwd()
+print 'Current working directory: ' + cwd + '\n'
+
 os.system('root -b -q wjets_compileCode.cc')
 
 dateTo = datetime.datetime.now().strftime("%Y_%m_%d_%H%M%S")
 mtmpdir = 'wjetsjobs_' + dateTo
 os.system('mkdir ' + mtmpdir)
 
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-#doWhat = [1, `3, 41, 42, 5, 6]
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 5, 6]
+#doWhat = [1, 3, 41, 42, 5, 6]
 #doWhat = [12]
-doQCD = [0, 1, 2, 3]
-#doQCD = [0]
+#doQCD = [0, 1, 2, 3]
+doQCD = [0]
 doSysRunning = [0]
 
 print '\nCode finished compiling, beginning job submission:'
@@ -30,13 +33,9 @@ for what in doWhat:
 			tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.sh'
 
 			job = '#!/bin/bash\n'
-     	 	        job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
-			#job += 'cd $CMSSW_BASE/src/WJetsTreeAnalysis16/WJets\n'
+     	 	        #job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
+                        job += 'cd ' + cwd + ' \n'
 			job += 'eval `scramv1 runtime -sh`'
-			#job += 'cd $CMSSW_BASE/src\n'
-			#job += 'cmsenv\n'
-			#job += 'mycwd=`pwd`\n'
-			#job += 'cd $mycwd\n'
 		
 			com = 'root -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + '\) 2>&1'
 			print '... going to submit run command ==> ', com

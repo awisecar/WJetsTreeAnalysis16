@@ -1,3 +1,9 @@
+// History
+//---- 2015_06_13
+// fix get efficiency
+//---- 2015_06_12
+// fix smear jet function
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -259,6 +265,7 @@ table::table(string filename)
         recd.push_back(record(data[2],data[3],data[0],data[1],data[4],data[5],data[6]));
 
     }
+    //std::cout << std::endl;
 
 }
 
@@ -316,59 +323,59 @@ double table::getEfficiencyHigh(double pt, double eta){
 
 
 double SmearJetPt(double recoPt, double genPt, double eta, int smearJet){
-    // 2016 jet resolution scale factors: twiki.cern.ch/twiki/bin/view/CMS/JetResolution
-    // Results for 2016 data: Spring16_25nsV10 (80X, 2016, BCD+GH PromtReco) DATA/MC SFs
-    // https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution#JER_Scaling_factors_and_Uncertai
+    // Fall 2015 resolution scale factor: twiki.cern.ch/twiki/bin/view/CMS/JetResolution
+    // Results for 2015 data : 76X (2015) DATA/MC SFs 
+    // https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution#MC_truth_JER_at_13_TeV_new
     
     double centralSF(1.00);
-    if      (fabs(eta) < 0.5) centralSF = 1.109;
-    else if (fabs(eta) < 0.8) centralSF = 1.138;
-    else if (fabs(eta) < 1.1) centralSF = 1.114;
-    else if (fabs(eta) < 1.3) centralSF = 1.123;
-    else if (fabs(eta) < 1.7) centralSF = 1.084;
-    else if (fabs(eta) < 1.9) centralSF = 1.082;
-    else if (fabs(eta) < 2.1) centralSF = 1.140;
-    else if (fabs(eta) < 2.3) centralSF = 1.067;
-    else if (fabs(eta) < 2.5) centralSF = 1.177;
-    else if (fabs(eta) < 2.8) centralSF = 1.364;
-    else if (fabs(eta) < 3.0) centralSF = 1.857;
-    else if (fabs(eta) < 3.2) centralSF = 1.328;
-    else if (fabs(eta) < 5.0) centralSF = 1.160;
-    else centralSF = 1.160;
+    if      (fabs(eta) < 0.5) centralSF = 1.095;
+    else if (fabs(eta) < 0.8) centralSF = 1.120;
+    else if (fabs(eta) < 1.1) centralSF = 1.097;
+    else if (fabs(eta) < 1.3) centralSF = 1.103;
+    else if (fabs(eta) < 1.7) centralSF = 1.118;
+    else if (fabs(eta) < 1.9) centralSF = 1.100;
+    else if (fabs(eta) < 2.1) centralSF = 1.162;
+    else if (fabs(eta) < 2.3) centralSF = 1.160;
+    else if (fabs(eta) < 2.5) centralSF = 1.161;
+    else if (fabs(eta) < 2.8) centralSF = 1.209;
+    else if (fabs(eta) < 3.0) centralSF = 1.564;
+    else if (fabs(eta) < 3.2) centralSF = 1.384;
+    else if (fabs(eta) < 5.0) centralSF = 1.216;
+    else centralSF = 1.216;
     
     double upSF(1.00);
-    if      (fabs(eta) < 0.5) upSF = 1.109+0.008;
-    else if (fabs(eta) < 0.8) upSF = 1.138+0.013;
-    else if (fabs(eta) < 1.1) upSF = 1.114+0.013;
-    else if (fabs(eta) < 1.3) upSF = 1.123+0.024;
-    else if (fabs(eta) < 1.7) upSF = 1.084+0.011;
-    else if (fabs(eta) < 1.9) upSF = 1.082+0.035;
-    else if (fabs(eta) < 2.1) upSF = 1.140+0.047;
-    else if (fabs(eta) < 2.3) upSF = 1.067+0.053;
-    else if (fabs(eta) < 2.5) upSF = 1.177+0.041;
-    else if (fabs(eta) < 2.8) upSF = 1.364+0.039;
-    else if (fabs(eta) < 3.0) upSF = 1.857+0.071;
-    else if (fabs(eta) < 3.2) upSF = 1.328+0.022;
-    else if (fabs(eta) < 5.0) upSF = 1.160+0.029;
-    else upSF = 1.160+0.029;
+    if      (fabs(eta) < 0.5) upSF = 1.095+0.018;
+    else if (fabs(eta) < 0.8) upSF = 1.120+0.028;
+    else if (fabs(eta) < 1.1) upSF = 1.097+0.017;
+    else if (fabs(eta) < 1.3) upSF = 1.103+0.033;
+    else if (fabs(eta) < 1.7) upSF = 1.118+0.014;
+    else if (fabs(eta) < 1.9) upSF = 1.100+0.033;
+    else if (fabs(eta) < 2.1) upSF = 1.162+0.044;
+    else if (fabs(eta) < 2.3) upSF = 1.160+0.048;
+    else if (fabs(eta) < 2.5) upSF = 1.161+0.060;
+    else if (fabs(eta) < 2.8) upSF = 1.209+0.059;
+    else if (fabs(eta) < 3.0) upSF = 1.564+0.321;
+    else if (fabs(eta) < 3.2) upSF = 1.384+0.033;
+    else if (fabs(eta) < 5.0) upSF = 1.216+0.050;
+    else upSF = 1.216+0.050;
     
     double downSF(1.00);
-    if      (fabs(eta) < 0.5) downSF = 1.109-0.008;
-    else if (fabs(eta) < 0.8) downSF = 1.138-0.013;
-    else if (fabs(eta) < 1.1) downSF = 1.114-0.013;
-    else if (fabs(eta) < 1.3) downSF = 1.123-0.024;
-    else if (fabs(eta) < 1.7) downSF = 1.084-0.011;
-    else if (fabs(eta) < 1.9) downSF = 1.082-0.035;
-    else if (fabs(eta) < 2.1) downSF = 1.140-0.047;
-    else if (fabs(eta) < 2.3) downSF = 1.067-0.053;
-    else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
-    else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
-    else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
-    else if (fabs(eta) < 3.2) downSF = 1.328+0.022;
-    else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
-    else downSF = 1.160-0.029;
-    
-    
+    if      (fabs(eta) < 0.5) downSF = 1.095-0.018;
+    else if (fabs(eta) < 0.8) downSF = 1.120-0.028;
+    else if (fabs(eta) < 1.1) downSF = 1.097-0.017;
+    else if (fabs(eta) < 1.3) downSF = 1.103-0.033;
+    else if (fabs(eta) < 1.7) downSF = 1.118-0.014;
+    else if (fabs(eta) < 1.9) downSF = 1.100-0.033;
+    else if (fabs(eta) < 2.1) downSF = 1.162-0.044;
+    else if (fabs(eta) < 2.3) downSF = 1.160-0.048;
+    else if (fabs(eta) < 2.5) downSF = 1.161-0.060;
+    else if (fabs(eta) < 2.8) downSF = 1.209-0.059;
+    else if (fabs(eta) < 3.0) downSF = 1.564-0.321;
+    else if (fabs(eta) < 3.2) downSF = 1.384-0.033;
+    else if (fabs(eta) < 5.0) downSF = 1.216-0.050;
+    else downSF = 1.216-0.050;
+
+
     double smearedPt(0);
     
     if (smearJet == 0) {
