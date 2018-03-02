@@ -34,7 +34,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
     //int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
-    int doBJets      = -1;
+    int doBJets      = 2;
                             // 0 - no infor on B-jets will be used ;
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
                             // -1, -2, .. veto the event if you have 1 or more, 2 or more .. b-jets ;
@@ -53,7 +53,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
     */
     
     string lepSelection = "SMu"; // default lumi is set for double muon dataset
-    double muLumi(35859.044); // 80X 2016 data bonzai 23Sep2016ReReco golden json
+    double muLumi(35916.637); // 80X 2016 data bonzai 23Sep2016ReReco golden json
 
     double w_sum_WJets(3.73654e+12);
     double w_sum_TTbar(1.15005e+07);
@@ -249,10 +249,10 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
             ZJetsAndDPS DMuT3(lepSelection+"_13TeV_ST_t_antitop_channel_dR_5311_List", muLumi * 80.95  ,  1, 1, !doDataEff, tcsSyst[i], tcsDir[i], tcsScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
             DMuT3.Loop(1, 0, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy);
 
-            ZJetsAndDPS DMuT4(lepSelection+"_13TeV_ST_tW_top_channel_dR_5311_List", muLumi * 35.6  , 1, 1, !doDataEff, tcwSyst[i], tcwDir[i], tcwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
+            ZJetsAndDPS DMuT4(lepSelection+"_13TeV_ST_tW_top_channel_dR_5311_List", muLumi * 35.85  , 1, 1, !doDataEff, tcwSyst[i], tcwDir[i], tcwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
             DMuT4.Loop(1, 0, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy);
 
-            ZJetsAndDPS DMuT5(lepSelection+"_13TeV_ST_tW_antitop_channel_dR_5311_List", muLumi * 35.6 ,  1, 1, !doDataEff, tcwSyst[i], tcwDir[i], tcwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
+            ZJetsAndDPS DMuT5(lepSelection+"_13TeV_ST_tW_antitop_channel_dR_5311_List", muLumi * 35.85 ,  1, 1, !doDataEff, tcwSyst[i], tcwDir[i], tcwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax);
             DMuT5.Loop(1, 0, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy);
 
             
@@ -293,7 +293,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
             if ((lepSelection.find("DMu") == 0 || lepSelection.find("DE") == 0) && dySyst[i] == 3) continue; // xsec -- not done for Z+jets ---
             if (dySyst[i] != doSysRunning && doSysRunning != 100) continue;
             
-            ZJetsAndDPS DMuDYMix(lepSelection+"_13TeV_DYJets50toInf_dR_5311_List", muLumi * 6025.2 , 1., 1, !doDataEff, dySyst[i], dyDir[i], dyScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, 0);
+            ZJetsAndDPS DMuDYMix(lepSelection+"_13TeV_DYJets50toInf_dR_5311_List", muLumi * 5765.4 , 1., 1, !doDataEff, dySyst[i], dyDir[i], dyScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, 0);
             DMuDYMix.Loop(1, doGen,  doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy);
         }
         

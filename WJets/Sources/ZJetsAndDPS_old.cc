@@ -35,6 +35,7 @@ ClassImp(ZJetsAndDPS);
 void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSign, bool doInvMassCut, 
         int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
+        //andrew: currently turn off because no 2016 MET filters yet
 	bool doMETFiltering = true;
 
     //--- Initialize PDF from LHAPDF if needed ---
@@ -281,7 +282,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 
     //--- Begin Loop All Entries --
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //for (Long64_t jentry(0); jentry < 1000000; jentry++){
+    //for (Long64_t jentry(0); jentry < 100000; jentry++){
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
@@ -393,11 +394,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 		bool passMETFILTER(true);
                 bool EvtFilterbadChCandidate(true);
                 bool EvtFilterbadPFMuon(true);
-        
 		if (hasRecoInfo && isData && doMETFiltering){
 			//cout << " " << TrigMET << " " << (TrigMET & 1LL<<0) << " " << (TrigMET & 1LL<<1) << " " << (TrigMET & 1LL<<5) << " " << (TrigMET & 1LL<<9) << " " << (TrigMET & 1LL<<11) << " " << (TrigMET & 1LL<<13) << " " << (TrigMET & 1LL<<18) << " " << (TrigMET & 1LL<<19) << endl;
 			passMETFILTER = (
-                               (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                            (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
                             && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
                             && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
                             && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
@@ -408,18 +408,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 			);
 			if (passMETFILTER) nEventsPassMETFilter++ ;
 		}
-        if (hasRecoInfo && !isData && doMETFiltering){
-            passMETFILTER = (
-                               (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                            && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                            && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                            && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                            && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                            && (EvtFilterbadChCandidate)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter (use on the fly)
-                            && (EvtFilterbadPFMuon)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter (use on the fly)
-            );
-            if (passMETFILTER) nEventsPassMETFilter++ ;
-         }
+                if (hasRecoInfo && !isData && doMETFiltering){
+                    passMETFILTER = (
+                        (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                        && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+                        && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+                        && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+                        && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                        && (EvtFilterbadChCandidate)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter (use on the fly)
+                        && (EvtFilterbadPFMuon)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter (use on the fly)
+                     );
+                     if (passMETFILTER) nEventsPassMETFilter++ ;
+                 }
 
 		//=======================================================================================================//
 
@@ -833,8 +833,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 
                 //if (JetAk04BTagCsv->at(i) >= 0.679) passBJets = true;
                 //if (JetAk04BDiscCisvV2->at(i) >= 0.890) passBJets = true; //for 13 TeV Btag POG recommended discriminator with medium wp cut
-                //if (JetAk04BDiscCisvV2->at(i) >= 0.800) passBJets = true; //76x for 13 TeV Btag POG recommended discriminator with medium wp cut
-                if (JetAk04BDiscCisvV2->at(i) >= 0.8484) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
+                if (JetAk04BDiscCisvV2->at(i) >= 0.800) passBJets = true; //76x for 13 TeV Btag POG recommended discriminator with medium wp cut
 
                 //************************* B-tag Veto Correction *******************************//
                 float this_rand = RandGen->Rndm(); // Get a random number.
@@ -846,47 +845,53 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     
                     bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
                     bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                    
+                       
                     int jetflavour= JetAk04HadFlav->at(i);
-                    //cout << " i: " << i << " jetflavour: " << jetflavour << " pt: " << pt << endl;
-                    
+					//cout << " i: " << i << " jetflavour: " << jetflavour << " pt: " << pt << endl;
+                
                     if (abs(jetflavour)==5){
-                        float effb = 0.67298;
+                        float effb = 0.611778;
                         float effb_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos) {
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 effb = 0.67298  * effb_corr;
-                            if (pt >= 30.  && pt < 50.)   effb = 0.67298  * effb_corr;
-                            if (pt >= 50.  && pt < 70.)   effb = 0.70732  * effb_corr;
-                            if (pt >= 70.  && pt < 100.)  effb = 0.715349 * effb_corr;
-                            if (pt >= 100. && pt < 140.)  effb = 0.712663 * effb_corr;
-                            if (pt >= 140. && pt < 200.)  effb = 0.694916 * effb_corr;
-                            if (pt >= 200. && pt < 300.)  effb = 0.667261 * effb_corr;
-                            if (pt >= 300. && pt < 600.)  effb = 0.607964 * effb_corr;
-                            if (pt >= 600. && pt < 1000.) effb = 0.489927 * effb_corr;
-                            if (pt >= 1000.)              effb = 0.489927 * effb_corr;
-                        }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFb = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFb = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFb = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+						if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos) {
+							//effb_corr = 0.822890316501902697;
+							if (pt < 30.)                effb = 0.496573  * effb_corr;
+							if (pt >= 30. && pt < 50.)   effb = 0.496573  * effb_corr;
+							if (pt >= 50. && pt < 70.)   effb = 0.58068 * effb_corr;
+							if (pt >= 70. && pt < 100.)  effb = 0.631837 * effb_corr;
+							if (pt >= 100. && pt < 140.) effb = 0.651154 * effb_corr;
+							if (pt >= 140. && pt < 200.) effb = 0.645856   * effb_corr;
+							if (pt >= 200. && pt < 300.) effb = 0.626365 * effb_corr;
+							if (pt >= 300. && pt < 670.) effb = 0.575519 * effb_corr;
+							if (pt >= 670.)              effb = 0.575519 * effb_corr;
+						}
+						else{
+							if (pt < 30.)                effb = 0.611778  * effb_corr;
+							if (pt >= 30. && pt < 50.)   effb = 0.611778  * effb_corr;
+							if (pt >= 50. && pt < 70.)   effb = 0.680703 * effb_corr;
+							if (pt >= 70. && pt < 100.)  effb = 0.711369 * effb_corr;
+							if (pt >= 100. && pt < 140.) effb = 0.713747 * effb_corr;
+							if (pt >= 140. && pt < 200.) effb = 0.697743   * effb_corr;
+							if (pt >= 200. && pt < 300.) effb = 0.654485 * effb_corr;
+							if (pt >= 300. && pt < 670.) effb = 0.585757 * effb_corr;
+							if (pt >= 670.)              effb = 0.585757 * effb_corr;
+						}
+
+                        //---76X values
+                        float SFb = 0.934588*((1.+(0.00678184*pt))/(1.+(0.00627144*pt)));
+                        if (pt < 30.) SFb = 0.934588*((1.+(0.00678184*30.))/(1.+(0.00627144*30.)));
+                        if (pt > 670.) SFb = 0.934588*((1.+(0.00678184*670.))/(1.+(0.00627144*670.)));
                         
                         float SFb_error = 0.0;
-                        if (pt < 20.)                 SFb_error = 0.040213499218225479*2.;
-                        if (pt >= 20.  && pt < 30.)   SFb_error = 0.040213499218225479;
-                        if (pt >= 30.  && pt < 50.)   SFb_error = 0.014046305790543556;
-                        if (pt >= 50.  && pt < 70.)   SFb_error = 0.012372690252959728;
-                        if (pt >= 70.  && pt < 100.)  SFb_error = 0.012274007312953472;
-                        if (pt >= 100. && pt < 140.)  SFb_error = 0.011465910822153091;
-                        if (pt >= 140. && pt < 200.)  SFb_error = 0.012079551815986633;
-                        if (pt >= 200. && pt < 300.)  SFb_error = 0.014995276927947998;
-                        if (pt >= 300. && pt < 600.)  SFb_error = 0.021414462476968765;
-                        if (pt >= 600. && pt < 1000.) SFb_error = 0.032377112656831741;
-                        if (pt >= 1000.)              SFb_error = 0.032377112656831741*2.;
-                        
+                        if (pt < 30.)                SFb_error = 0.018076473847031593*2.;
+                        if (pt >= 30. && pt < 50.)   SFb_error = 0.018076473847031593;
+                        if (pt >= 50. && pt < 70.)   SFb_error = 0.024799736216664314;
+                        if (pt >= 70. && pt < 100.)  SFb_error = 0.024073265492916107;
+                        if (pt >= 100. && pt < 140.) SFb_error = 0.020040607079863548;
+                        if (pt >= 140. && pt < 200.) SFb_error = 0.016540588811039925;
+                        if (pt >= 200. && pt < 300.) SFb_error = 0.025977084413170815;
+                        if (pt >= 300. && pt < 670.) SFb_error = 0.027120551094412804;
+                        if (pt >= 670.)              SFb_error = 0.027120551094412804*2.;
+
                         float SFb_up = SFb + SFb_error;
                         float SFb_down = SFb - SFb_error;
                         
@@ -918,45 +923,51 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                         
                     }
-                    
+
                     // ---------------- For Real C-jets--------------- //
                     if (abs(jetflavour)==4){
-                        float effc = 0.185922;
+                        float effc = 0.15873;
                         float effc_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 effc = 0.185922 * effc_corr;
-                            if (pt >= 30.  && pt < 50.)   effc = 0.185922 * effc_corr;
-                            if (pt >= 50.  && pt < 70.)   effc = 0.182578 * effc_corr;
-                            if (pt >= 70.  && pt < 100.)  effc = 0.18893 * effc_corr;
-                            if (pt >= 100. && pt < 140.)  effc = 0.189251 * effc_corr;
-                            if (pt >= 140. && pt < 200.)  effc = 0.186575 * effc_corr;
-                            if (pt >= 200. && pt < 300.)  effc = 0.194419 * effc_corr;
-                            if (pt >= 300. && pt < 600.)  effc = 0.171999 * effc_corr;
-                            if (pt >= 600. && pt < 1000.) effc = 0.143033 * effc_corr;
-                            if (pt >= 1000.)              effc = 0.143033 * effc_corr;
-                        }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFc = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFc = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFc = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
-                        
+						if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
+							//effc_corr = 0.898527356143169476;
+							if (pt < 30.)                effc = 0.142668 * effc_corr;
+							if (pt >= 30. && pt < 50.)   effc = 0.142668 * effc_corr;
+							if (pt >= 50. && pt < 70.)   effc = 0.158505 * effc_corr;
+							if (pt >= 70. && pt < 100.)  effc = 0.171041 * effc_corr;
+							if (pt >= 100. && pt < 140.) effc = 0.179474 * effc_corr;
+							if (pt >= 140. && pt < 200.) effc = 0.177331 * effc_corr;
+							if (pt >= 200. && pt < 300.) effc = 0.172065 * effc_corr;
+							if (pt >= 300. && pt < 670.) effc = 0.147151 * effc_corr;
+							if (pt >= 670.)              effc = 0.147151 * effc_corr;
+						}
+						else{
+							if (pt < 30.)                effc = 0.15873 * effc_corr;
+							if (pt >= 30. && pt < 50.)   effc = 0.15873 * effc_corr;
+							if (pt >= 50. && pt < 70.)   effc = 0.16926 * effc_corr;
+							if (pt >= 70. && pt < 100.)  effc = 0.181116 * effc_corr;
+							if (pt >= 100. && pt < 140.) effc = 0.184428 * effc_corr;
+							if (pt >= 140. && pt < 200.) effc = 0.181213 * effc_corr;
+							if (pt >= 200. && pt < 300.) effc = 0.1649 * effc_corr;
+							if (pt >= 300. && pt < 670.) effc = 0.148626 * effc_corr;
+							if (pt >= 670.)              effc = 0.148626 * effc_corr;
+						}
+
+                        //---76X values
+                        float SFc = 0.934588*((1.+(0.00678184*pt))/(1.+(0.00627144*pt)));
+                        if (pt < 30.) SFc = 0.934588*((1.+(0.00678184*30.))/(1.+(0.00627144*30.)));
+                        if (pt > 670.) SFc = 0.934588*((1.+(0.00678184*670.))/(1.+(0.00627144*670.)));
+
                         float SFc_error = 0.0;
-                        if (pt < 20.)                 SFc_error = 0.12064050137996674*2.;
-                        if (pt >= 20.  && pt < 30.)   SFc_error = 0.12064050137996674;
-                        if (pt >= 30.  && pt < 50.)   SFc_error = 0.042138919234275818;
-                        if (pt >= 50.  && pt < 70.)   SFc_error = 0.03711806982755661;
-                        if (pt >= 70.  && pt < 100.)  SFc_error = 0.036822021007537842;
-                        if (pt >= 100. && pt < 140.)  SFc_error = 0.034397732466459274;
-                        if (pt >= 140. && pt < 200.)  SFc_error = 0.0362386554479599;
-                        if (pt >= 200. && pt < 300.)  SFc_error = 0.044985830783843994;
-                        if (pt >= 300. && pt < 600.)  SFc_error = 0.064243391156196594;
-                        if (pt >= 600. && pt < 1000.) SFc_error = 0.097131341695785522;
-                        if (pt >= 1000.)              SFc_error = 0.097131341695785522*2.;
-                        
+                        if (pt < 30.)                SFc_error = 0.036152947694063187*2;
+                        if (pt >= 30. && pt < 50.)   SFc_error = 0.036152947694063187;
+                        if (pt >= 50. && pt < 70.)   SFc_error = 0.049599472433328629;
+                        if (pt >= 70. && pt < 100.)  SFc_error = 0.048146530985832214;
+                        if (pt >= 100. && pt < 140.) SFc_error = 0.040081214159727097;
+                        if (pt >= 140. && pt < 200.) SFc_error = 0.033081177622079849;
+                        if (pt >= 200. && pt < 300.) SFc_error = 0.051954168826341629;
+                        if (pt >= 300. && pt < 670.) SFc_error = 0.054241102188825607;
+                        if (pt >= 670.)              SFc_error = 0.054241102188825607*2;
+
                         float SFc_up = SFc + SFc_error;
                         float SFc_down = SFc - SFc_error;
                         
@@ -987,40 +998,91 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                         
                     }
-                    
+ 
                     // ---------------- For REAL Light-jets --------------- //
                     if (abs(jetflavour)<4){
-                        float eff_l = 0.0200484;
+                        float eff_l = 0.0113606;
                         float eff_l_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
-                        if (false) {
+						if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
+							//eff_l_corr = 0.777626143742958909;
+							if (pt < 30.)                eff_l = 0.00815513 * eff_l_corr;
+							if (pt >= 30. && pt < 50.)   eff_l = 0.00815513 * eff_l_corr;
+							if (pt >= 50. && pt < 70.)   eff_l = 0.00818065 * eff_l_corr;
+							if (pt >= 70. && pt < 100.)  eff_l = 0.00920758 * eff_l_corr;
+							if (pt >= 100. && pt < 140.) eff_l = 0.0093294  * eff_l_corr;
+							if (pt >= 140. && pt < 200.) eff_l = 0.011014 * eff_l_corr;
+							if (pt >= 200. && pt < 300.) eff_l = 0.011669 * eff_l_corr;
+							if (pt >= 300. && pt < 670.) eff_l = 0.0145145 * eff_l_corr;
+							if (pt >= 670.)              eff_l = 0.0145145 * eff_l_corr;
+						}
+						else{
+							if (pt < 30.)                eff_l = 0.0113606 * eff_l_corr;
+							if (pt >= 30. && pt < 50.)   eff_l = 0.0113606 * eff_l_corr;
+							if (pt >= 50. && pt < 70.)   eff_l = 0.00974459 * eff_l_corr;
+							if (pt >= 70. && pt < 100.)  eff_l = 0.010083 * eff_l_corr;
+							if (pt >= 100. && pt < 140.) eff_l = 0.0101942  * eff_l_corr;
+							if (pt >= 140. && pt < 200.) eff_l = 0.0111528 * eff_l_corr;
+							if (pt >= 200. && pt < 300.) eff_l = 0.0122716 * eff_l_corr;
+							if (pt >= 300. && pt < 670.) eff_l = 0.0166585 * eff_l_corr;
+							if (pt >= 670.)              eff_l = 0.0166585 * eff_l_corr;
+						}
+
+                        //---76X values
+                        float SFlight=1.0;
+                        float SFlight_up=1.0;
+                        float SFlight_down=1.0;
+                        if (pt >= 20. && pt <= 1000.) {
+                            if (eta >= 0 && eta <= 0.8){
+                                SFlight      = ((0.994351+(0.000250077*pt))+(9.24801e-07*(pt*pt)))+(-8.73293e-10*(pt*(pt*pt)));
+                                SFlight_up   = ((1.03928+(0.000857422*pt))+(-4.02756e-07*(pt*pt)))+(-8.45836e-11*(pt*(pt*pt)));
+                                SFlight_down = ((0.949401+(-0.000356232*pt))+(2.24887e-06*(pt*pt)))+(-1.66011e-09*(pt*(pt*pt)));
+                            }
+                            else if (eta > 0.8 && eta <= 1.6){
+                                SFlight      = ((1.00939+(0.000461283*pt))+(-6.30306e-07*(pt*pt)))+(3.53075e-10*(pt*(pt*pt)));
+                                SFlight_up   = ((1.05392+(0.000944135*pt))+(-1.73386e-06*(pt*pt)))+(1.04242e-09*(pt*(pt*pt)));
+                                SFlight_down = ((0.964857+(-2.19898e-05*pt))+(4.74117e-07*(pt*pt)))+(-3.36548e-10*(pt*(pt*pt)));
+                            }
+                            else if (eta > 1.6 && eta <= 2.4){
+                                SFlight      = ((0.955798+(0.00146058*pt))+(-3.76689e-06*(pt*pt)))+(2.39196e-09*(pt*(pt*pt)));
+                                SFlight_up   = ((1.00151+(0.00175547*pt))+(-4.50251e-06*(pt*pt)))+(2.91473e-09*(pt*(pt*pt)));
+                                SFlight_down = ((0.910086+(0.00116371*pt))+(-3.02747e-06*(pt*pt)))+(1.86906e-09*(pt*(pt*pt)));
+                            }
+                        }
+                        else if (pt < 20) {
+                            if (eta >= 0 && eta <= 0.8){
+                                SFlight      = ((0.994351+(0.000250077*20))+(9.24801e-07*(20*20)))+(-8.73293e-10*(20*(20*20)));
+                                SFlight_up   = ((1.03928+(0.000857422*20))+(-4.02756e-07*(20*20)))+(-8.45836e-11*(20*(20*20)));
+                                SFlight_down = ((0.949401+(-0.000356232*20))+(2.24887e-06*(20*20)))+(-1.66011e-09*(20*(20*20)));
+                            }
+                            else if (eta > 0.8 && eta <= 1.6){
+                                SFlight      = ((1.00939+(0.000461283*20))+(-6.30306e-07*(20*20)))+(3.53075e-10*(20*(20*20)));
+                                SFlight_up   = ((1.05392+(0.000944135*20))+(-1.73386e-06*(20*20)))+(1.04242e-09*(20*(20*20)));
+                                SFlight_down = ((0.964857+(-2.19898e-05*20))+(4.74117e-07*(20*20)))+(-3.36548e-10*(20*(20*20)));
+                            }
+                            else if (eta > 1.6 && eta <= 2.4){
+                                SFlight      = ((0.955798+(0.00146058*20))+(-3.76689e-06*(20*20)))+(2.39196e-09*(20*(20*20)));
+                                SFlight_up   = ((1.00151+(0.00175547*20))+(-4.50251e-06*(20*20)))+(2.91473e-09*(20*(20*20)));
+                                SFlight_down = ((0.910086+(0.00116371*20))+(-3.02747e-06*(20*20)))+(1.86906e-09*(20*(20*20)));
+                            }
                         }
                         else{
-                            if (pt < 30.)                 eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 30.  && pt < 50.)   eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 50.  && pt < 70.)   eff_l = 0.0171176 * eff_l_corr;
-                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0158081 * eff_l_corr;
-                            if (pt >= 100. && pt < 140.)  eff_l = 0.0155987 * eff_l_corr;
-                            if (pt >= 140. && pt < 200.)  eff_l = 0.0211239 * eff_l_corr;
-                            if (pt >= 200. && pt < 300.)  eff_l = 0.0223319 * eff_l_corr;
-                            if (pt >= 300. && pt < 600.)  eff_l = 0.030051  * eff_l_corr;
-                            if (pt >= 600. && pt < 1000.) eff_l = 0.0427809 * eff_l_corr;
-                            if (pt >= 1000.)              eff_l = 0.0427809 * eff_l_corr;
+                            if (eta >= 0 && eta <= 0.8){
+                                SFlight      = ((0.994351+(0.000250077*1000.))+(9.24801e-07*(1000.*1000.)))+(-8.73293e-10*(1000.*(1000.*1000.)));
+                                SFlight_up   = ((1.03928+(0.000857422*1000.))+(-4.02756e-07*(1000.*1000.)))+(-8.45836e-11*(1000.*(1000.*1000.)));
+                                SFlight_down = ((0.949401+(-0.000356232*1000.))+(2.24887e-06*(1000.*1000.)))+(-1.66011e-09*(1000.*(1000.*1000.)));
+                            }
+                            else if (eta > 0.8 && eta <= 1.6){
+                                SFlight      = ((1.00939+(0.000461283*1000.))+(-6.30306e-07*(1000.*1000.)))+(3.53075e-10*(1000.*(1000.*1000.)));
+                                SFlight_up   = ((1.05392+(0.000944135*1000.))+(-1.73386e-06*(1000.*1000.)))+(1.04242e-09*(1000.*(1000.*1000.)));
+                                SFlight_down = ((0.964857+(-2.19898e-05*1000.))+(4.74117e-07*(1000.*1000.)))+(-3.36548e-10*(1000.*(1000.*1000.)));
+                            }
+                            else if (eta > 1.6 && eta <= 2.4){
+                                SFlight      = ((0.955798+(0.00146058*1000.))+(-3.76689e-06*(1000.*1000.)))+(2.39196e-09*(1000.*(1000.*1000.)));
+                                SFlight_up   = ((1.00151+(0.00175547*1000.))+(-4.50251e-06*(1000.*1000.)))+(2.91473e-09*(1000.*(1000.*1000.)));
+                                SFlight_down = ((0.910086+(0.00116371*1000.))+(-3.02747e-06*(1000.*1000.)))+(1.86906e-09*(1000.*(1000.*1000.)));
+                            }
                         }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFlight = 1.0589+(0.000382569*pt)+(-2.4252e-07*(pt*pt))+(2.20966e-10*(pt*pt*pt));
-                        if (pt < 20.)   SFlight = 1.0589+(0.000382569*20)+(-2.4252e-07*(20*20))+(2.20966e-10*(20*20*20));
-                        if (pt > 1000.) SFlight = 1.0589+(0.000382569*1000)+(-2.4252e-07*(1000*1000))+(2.20966e-10*(1000*1000*1000));
-                        
-                        float           SFlight_up = SFlight * (1+(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
-                        float           SFlight_down = SFlight * (1-(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
+
                         // F values for rand comparison
                         float f = 0.0;
                         float f_up = 0.0;
@@ -1411,8 +1473,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                  APICHART */
 
                 // apply transverse mass and MET cut
-                //if (METpt >= METcut && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
-                if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
+                if (METpt >= METcut && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
+		//if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
 
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
