@@ -364,7 +364,7 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet){
     else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
     else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
     else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
-    else if (fabs(eta) < 3.2) downSF = 1.328+0.022;
+    else if (fabs(eta) < 3.2) downSF = 1.328-0.022;
     else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
     else downSF = 1.160-0.029;
     

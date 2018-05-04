@@ -14,8 +14,8 @@ dateTo = datetime.datetime.now().strftime("%Y_%m_%d_%H%M%S")
 mtmpdir = 'wjetsjobs_' + dateTo
 os.system('mkdir ' + mtmpdir)
 
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 5, 6]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 #doWhat = [1, 3, 41, 42, 5, 6]
 #doWhat = [12]
 #doQCD = [0, 1, 2, 3]
