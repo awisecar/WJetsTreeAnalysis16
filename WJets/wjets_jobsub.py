@@ -17,10 +17,13 @@ os.system('mkdir ' + mtmpdir)
 doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 #doWhat = [1, 3, 41, 42, 5, 6]
-#doWhat = [12]
-#doQCD = [0, 1, 2, 3]
-doQCD = [0]
+#doWhat = [12, 18]
+doQCD = [0, 1, 2, 3]
+#doQCD = [0]
 doSysRunning = [0]
+#doSysRunning = [2]
+
+cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 
 print '\nCode finished compiling, beginning job submission:'
 
@@ -34,8 +37,9 @@ for what in doWhat:
 
 			job = '#!/bin/bash\n'
      	 	        #job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
+                        job += 'cd ' + cmsswdir + ' \n'
+			job += 'eval `scramv1 runtime -sh` \n'
                         job += 'cd ' + cwd + ' \n'
-			job += 'eval `scramv1 runtime -sh`'
 		
 			com = 'root -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + '\) 2>&1'
 			print '... going to submit run command ==> ', com

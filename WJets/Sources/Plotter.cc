@@ -447,7 +447,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         hist[0][i]->DrawCopy("e same");
         legend[i]->Draw();
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
-        cmsPre[i]->DrawLatex(0.27,0.87, "Preliminary"); //uncomment later on
+        cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
        
         //if (energy == "8TeV") intLumi[i]->DrawLatex(0.20,0.83, "#int L dt = 19.6 fb^{-1},  #sqrt{s} = 8 TeV");
         //if (energy == "13TeV") intLumi[i]->DrawLatex(0.73,0.955, "2.2 fb^{-1} (13 TeV)");

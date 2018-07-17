@@ -1,1 +1,1 @@
-/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/MC/v7.3/WW/CRAB_PrivateMC/crab_WWTo2L2Nu_13TeV-powheg-VJetPruner-SMu/171216_034007/0000/Bonzai-WWTo2L2Nu_13TeV-powheg-VJetPruner-SMu_1.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v8.1/MC/CRAB_PrivateMC/crab_WWTo2L2Nu_13TeV-powheg-VJetPruner-SMu/180425_082050/0000/Bonzai-WWTo2L2Nu_13TeV-powheg-VJetPruner-SMu_1.root
