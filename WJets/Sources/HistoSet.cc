@@ -151,7 +151,7 @@ HistoSet::HistoSet(string leptonFlavor)
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
-    string ZpT = "p_{T}(Z) [GeV]", Zrap = "y(Z)", Zeta = "#eta(Z)";
+    string ZpT = "p_{T}(W) [GeV]", Zrap = "y(W)", Zeta = "#eta(W)";
     string HT = "H_{T}(jets) [GeV]", Mjj = "M_{j_{1}j_{2}} [GeV]", jSpt = "#Delta_{pT}^{rel}(j_{1}j_{2})", jdPhi = "#Delta#phi(j_{1}j_{2})", jdEta = "#Delta#eta(j_{1}j_{2})";
     string Mll = "M_{#mu#mu} [GeV]", leta = "#eta(#mu)", lphi = "#phi(#mu)",lpT = "p_{T}(#mu) [GeV]", ldPhi = "#Delta#phi(#mu_{1}#mu_{2})", ldEta = "#Delta#eta(#mu_{1}#mu_{2})", ldR = "#DeltaR(#mu_{1}#mu_{2})";
     string lSpt = "#Delta_{pT}^{rel}(#mu_{1}#mu_{2})";
@@ -518,19 +518,19 @@ HistoSet::HistoSet(string leptonFlavor)
     LeadingJetPt_Zinc3jet_R43 = newTH1D("LeadingJetPt_Zinc3jet_R43", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
     LeadingJetPt_Zinc4jet_R43 = newTH1D("LeadingJetPt_Zinc4jet_R43", "leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
     
-    LeadingJetPt_1_Zinc1jet_R21 = newTH1D("LeadingJetPt_1_Zinc1jet_R21", "leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    LeadingJetPt_1_Zinc2jet_R21 = newTH1D("LeadingJetPt_1_Zinc2jet_R21", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    LeadingJetPt_1_Zinc2jet_R32 = newTH1D("LeadingJetPt_1_Zinc2jet_R32", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    LeadingJetPt_1_Zinc3jet_R32 = newTH1D("LeadingJetPt_1_Zinc3jet_R32", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    LeadingJetPt_1_Zinc3jet_R43 = newTH1D("LeadingJetPt_1_Zinc3jet_R43", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    LeadingJetPt_1_Zinc4jet_R43 = newTH1D("LeadingJetPt_1_Zinc4jet_R43", "leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc1jet_R21 = newTH1D("LeadingJetPt_1_Zinc1jet_R21", "leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc2jet_R21 = newTH1D("LeadingJetPt_1_Zinc2jet_R21", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc2jet_R32 = newTH1D("LeadingJetPt_1_Zinc2jet_R32", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc3jet_R32 = newTH1D("LeadingJetPt_1_Zinc3jet_R32", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc3jet_R43 = newTH1D("LeadingJetPt_1_Zinc3jet_R43", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // LeadingJetPt_1_Zinc4jet_R43 = newTH1D("LeadingJetPt_1_Zinc4jet_R43", "leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
     
-    LeadingJetPt_2_Zinc1jet_R21 = newTH1D("LeadingJetPt_2_Zinc1jet_R21", "leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    LeadingJetPt_2_Zinc2jet_R21 = newTH1D("LeadingJetPt_2_Zinc2jet_R21", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    LeadingJetPt_2_Zinc2jet_R32 = newTH1D("LeadingJetPt_2_Zinc2jet_R32", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    LeadingJetPt_2_Zinc3jet_R32 = newTH1D("LeadingJetPt_2_Zinc3jet_R32", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    LeadingJetPt_2_Zinc3jet_R43 = newTH1D("LeadingJetPt_2_Zinc3jet_R43", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    LeadingJetPt_2_Zinc4jet_R43 = newTH1D("LeadingJetPt_2_Zinc4jet_R43", "leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc1jet_R21 = newTH1D("LeadingJetPt_2_Zinc1jet_R21", "leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc2jet_R21 = newTH1D("LeadingJetPt_2_Zinc2jet_R21", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc2jet_R32 = newTH1D("LeadingJetPt_2_Zinc2jet_R32", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc3jet_R32 = newTH1D("LeadingJetPt_2_Zinc3jet_R32", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc3jet_R43 = newTH1D("LeadingJetPt_2_Zinc3jet_R43", "leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // LeadingJetPt_2_Zinc4jet_R43 = newTH1D("LeadingJetPt_2_Zinc4jet_R43", "leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
 
  //   LeadingJetPt_Zexc1jet_R21 = newTH1D("LeadingJetPt_Zexc1jet_R21", "leading j_pt for 1 exc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
  //   LeadingJetPt_Zexc2jet_R21 = newTH1D("LeadingJetPt_Zexc2jet_R21", "leading j_pt for 2 exc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
@@ -547,19 +547,19 @@ HistoSet::HistoSet(string leptonFlavor)
     genLeadingJetPt_Zinc3jet_R43 = newTH1D("genLeadingJetPt_Zinc3jet_R43", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
     genLeadingJetPt_Zinc4jet_R43 = newTH1D("genLeadingJetPt_Zinc4jet_R43", "gen leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
     
-    genLeadingJetPt_1_Zinc1jet_R21 = newTH1D("genLeadingJetPt_1_Zinc1jet_R21", "gen leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    genLeadingJetPt_1_Zinc2jet_R21 = newTH1D("genLeadingJetPt_1_Zinc2jet_R21", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    genLeadingJetPt_1_Zinc2jet_R32 = newTH1D("genLeadingJetPt_1_Zinc2jet_R32", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    genLeadingJetPt_1_Zinc3jet_R32 = newTH1D("genLeadingJetPt_1_Zinc3jet_R32", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    genLeadingJetPt_1_Zinc3jet_R43 = newTH1D("genLeadingJetPt_1_Zinc3jet_R43", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    genLeadingJetPt_1_Zinc4jet_R43 = newTH1D("genLeadingJetPt_1_Zinc4jet_R43", "gen leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc1jet_R21 = newTH1D("genLeadingJetPt_1_Zinc1jet_R21", "gen leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc2jet_R21 = newTH1D("genLeadingJetPt_1_Zinc2jet_R21", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc2jet_R32 = newTH1D("genLeadingJetPt_1_Zinc2jet_R32", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc3jet_R32 = newTH1D("genLeadingJetPt_1_Zinc3jet_R32", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc3jet_R43 = newTH1D("genLeadingJetPt_1_Zinc3jet_R43", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // genLeadingJetPt_1_Zinc4jet_R43 = newTH1D("genLeadingJetPt_1_Zinc4jet_R43", "gen leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_1_ZRatios, jetPt_1_ZRatios);
     
-    genLeadingJetPt_2_Zinc1jet_R21 = newTH1D("genLeadingJetPt_2_Zinc1jet_R21", "gen leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    genLeadingJetPt_2_Zinc2jet_R21 = newTH1D("genLeadingJetPt_2_Zinc2jet_R21", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    genLeadingJetPt_2_Zinc2jet_R32 = newTH1D("genLeadingJetPt_2_Zinc2jet_R32", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    genLeadingJetPt_2_Zinc3jet_R32 = newTH1D("genLeadingJetPt_2_Zinc3jet_R32", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    genLeadingJetPt_2_Zinc3jet_R43 = newTH1D("genLeadingJetPt_2_Zinc3jet_R43", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    genLeadingJetPt_2_Zinc4jet_R43 = newTH1D("genLeadingJetPt_2_Zinc4jet_R43", "gen leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc1jet_R21 = newTH1D("genLeadingJetPt_2_Zinc1jet_R21", "gen leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc2jet_R21 = newTH1D("genLeadingJetPt_2_Zinc2jet_R21", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc2jet_R32 = newTH1D("genLeadingJetPt_2_Zinc2jet_R32", "gen leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc3jet_R32 = newTH1D("genLeadingJetPt_2_Zinc3jet_R32", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc3jet_R43 = newTH1D("genLeadingJetPt_2_Zinc3jet_R43", "gen leading j_pt for 3 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // genLeadingJetPt_2_Zinc4jet_R43 = newTH1D("genLeadingJetPt_2_Zinc4jet_R43", "gen leading j_pt for 4 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_2_ZRatios, jetPt_2_ZRatios);
 
  //   genLeadingJetPt_Zexc1jet_R21 = newTH1D("genLeadingJetPt_Zexc1jet_R21", "gen leading j_pt for 1 exc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
  //   genLeadingJetPt_Zexc2jet_R21 = newTH1D("genLeadingJetPt_Zexc2jet_R21", "gen leading j_pt for 2 exc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
@@ -575,19 +575,19 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseLeadingJetPt_Zinc3jet_R43     = newTH2D("hresponseLeadingJetPt_Zinc3jet_R43", "hresp 3rd leading inc jet pt", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
     hresponseLeadingJetPt_Zinc4jet_R43     = newTH2D("hresponseLeadingJetPt_Zinc4jet_R43", "hresp 4th leading inc jet pt", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
     
-    hresponseLeadingJetPt_1_Zinc1jet_R21     = newTH2D("hresponseLeadingJetPt_1_Zinc1jet_R21", "hresp 1st leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    hresponseLeadingJetPt_1_Zinc2jet_R21     = newTH2D("hresponseLeadingJetPt_1_Zinc2jet_R21", "hresp 2nd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    hresponseLeadingJetPt_1_Zinc2jet_R32     = newTH2D("hresponseLeadingJetPt_1_Zinc2jet_R32", "hresp 2nd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    hresponseLeadingJetPt_1_Zinc3jet_R32     = newTH2D("hresponseLeadingJetPt_1_Zinc3jet_R32", "hresp 3rd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    hresponseLeadingJetPt_1_Zinc3jet_R43     = newTH2D("hresponseLeadingJetPt_1_Zinc3jet_R43", "hresp 3rd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
-    hresponseLeadingJetPt_1_Zinc4jet_R43     = newTH2D("hresponseLeadingJetPt_1_Zinc4jet_R43", "hresp 4th leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc1jet_R21     = newTH2D("hresponseLeadingJetPt_1_Zinc1jet_R21", "hresp 1st leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc2jet_R21     = newTH2D("hresponseLeadingJetPt_1_Zinc2jet_R21", "hresp 2nd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc2jet_R32     = newTH2D("hresponseLeadingJetPt_1_Zinc2jet_R32", "hresp 2nd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc3jet_R32     = newTH2D("hresponseLeadingJetPt_1_Zinc3jet_R32", "hresp 3rd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc3jet_R43     = newTH2D("hresponseLeadingJetPt_1_Zinc3jet_R43", "hresp 3rd leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
+    // hresponseLeadingJetPt_1_Zinc4jet_R43     = newTH2D("hresponseLeadingJetPt_1_Zinc4jet_R43", "hresp 4th leading inc jet pt", nJetPt_1_ZRatios, jetPt_1_ZRatios, nJetPt_1_ZRatios, jetPt_1_ZRatios);
     
-    hresponseLeadingJetPt_2_Zinc1jet_R21     = newTH2D("hresponseLeadingJetPt_2_Zinc1jet_R21", "hresp 1st leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    hresponseLeadingJetPt_2_Zinc2jet_R21     = newTH2D("hresponseLeadingJetPt_2_Zinc2jet_R21", "hresp 2nd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    hresponseLeadingJetPt_2_Zinc2jet_R32     = newTH2D("hresponseLeadingJetPt_2_Zinc2jet_R32", "hresp 2nd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    hresponseLeadingJetPt_2_Zinc3jet_R32     = newTH2D("hresponseLeadingJetPt_2_Zinc3jet_R32", "hresp 3rd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    hresponseLeadingJetPt_2_Zinc3jet_R43     = newTH2D("hresponseLeadingJetPt_2_Zinc3jet_R43", "hresp 3rd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
-    hresponseLeadingJetPt_2_Zinc4jet_R43     = newTH2D("hresponseLeadingJetPt_2_Zinc4jet_R43", "hresp 4th leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc1jet_R21     = newTH2D("hresponseLeadingJetPt_2_Zinc1jet_R21", "hresp 1st leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc2jet_R21     = newTH2D("hresponseLeadingJetPt_2_Zinc2jet_R21", "hresp 2nd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc2jet_R32     = newTH2D("hresponseLeadingJetPt_2_Zinc2jet_R32", "hresp 2nd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc3jet_R32     = newTH2D("hresponseLeadingJetPt_2_Zinc3jet_R32", "hresp 3rd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc3jet_R43     = newTH2D("hresponseLeadingJetPt_2_Zinc3jet_R43", "hresp 3rd leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
+    // hresponseLeadingJetPt_2_Zinc4jet_R43     = newTH2D("hresponseLeadingJetPt_2_Zinc4jet_R43", "hresp 4th leading inc jet pt", nJetPt_2_ZRatios, jetPt_2_ZRatios, nJetPt_2_ZRatios, jetPt_2_ZRatios);
     
  //   hresponseLeadingJetPt_Zexc1jet_R21     = newTH2D("hresponseLeadingJetPt_Zexc1jet_R21", "hresp 1st leading exc jet pt", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
  //   hresponseLeadingJetPt_Zexc2jet_R21     = newTH2D("hresponseLeadingJetPt_Zexc2jet_R21", "hresp 2nd leading exc jet pt", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
@@ -688,15 +688,15 @@ HistoSet::HistoSet(string leptonFlavor)
     HTover2_Zinc3jet_R43 = newTH1D("HTover2_Zinc3jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     HTover2_Zinc4jet_R43 = newTH1D("HTover2_Zinc4jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     
-    HTover2_1_Zinc2jet_R32 = newTH1D("HTover2_1_Zinc2jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    HTover2_1_Zinc3jet_R32 = newTH1D("HTover2_1_Zinc3jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    HTover2_1_Zinc3jet_R43 = newTH1D("HTover2_1_Zinc3jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    HTover2_1_Zinc4jet_R43 = newTH1D("HTover2_1_Zinc4jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // HTover2_1_Zinc2jet_R32 = newTH1D("HTover2_1_Zinc2jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // HTover2_1_Zinc3jet_R32 = newTH1D("HTover2_1_Zinc3jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // HTover2_1_Zinc3jet_R43 = newTH1D("HTover2_1_Zinc3jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // HTover2_1_Zinc4jet_R43 = newTH1D("HTover2_1_Zinc4jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
     
-    HTover2_2_Zinc2jet_R32 = newTH1D("HTover2_2_Zinc2jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    HTover2_2_Zinc3jet_R32 = newTH1D("HTover2_2_Zinc3jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    HTover2_2_Zinc3jet_R43 = newTH1D("HTover2_2_Zinc3jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    HTover2_2_Zinc4jet_R43 = newTH1D("HTover2_2_Zinc4jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // HTover2_2_Zinc2jet_R32 = newTH1D("HTover2_2_Zinc2jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // HTover2_2_Zinc3jet_R32 = newTH1D("HTover2_2_Zinc3jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // HTover2_2_Zinc3jet_R43 = newTH1D("HTover2_2_Zinc3jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // HTover2_2_Zinc4jet_R43 = newTH1D("HTover2_2_Zinc4jet_R43", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
     
 //    HTover2_3_Zinc2jet_R32 = newTH1D("HTover2_3_Zinc2jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
 //    HTover2_3_Zinc3jet_R32 = newTH1D("HTover2_3_Zinc3jet_R32", "Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
@@ -713,15 +713,15 @@ HistoSet::HistoSet(string leptonFlavor)
     genHTover2_Zinc3jet_R43 = newTH1D("genHTover2_Zinc3jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     genHTover2_Zinc4jet_R43 = newTH1D("genHTover2_Zinc4jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     
-    genHTover2_1_Zinc2jet_R32 = newTH1D("genHTover2_1_Zinc2jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    genHTover2_1_Zinc3jet_R32 = newTH1D("genHTover2_1_Zinc3jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    genHTover2_1_Zinc3jet_R43 = newTH1D("genHTover2_1_Zinc3jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    genHTover2_1_Zinc4jet_R43 = newTH1D("genHTover2_1_Zinc4jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // genHTover2_1_Zinc2jet_R32 = newTH1D("genHTover2_1_Zinc2jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // genHTover2_1_Zinc3jet_R32 = newTH1D("genHTover2_1_Zinc3jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // genHTover2_1_Zinc3jet_R43 = newTH1D("genHTover2_1_Zinc3jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // genHTover2_1_Zinc4jet_R43 = newTH1D("genHTover2_1_Zinc4jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
     
-    genHTover2_2_Zinc2jet_R32 = newTH1D("genHTover2_2_Zinc2jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    genHTover2_2_Zinc3jet_R32 = newTH1D("genHTover2_2_Zinc3jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    genHTover2_2_Zinc3jet_R43 = newTH1D("genHTover2_2_Zinc3jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    genHTover2_2_Zinc4jet_R43 = newTH1D("genHTover2_2_Zinc4jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // genHTover2_2_Zinc2jet_R32 = newTH1D("genHTover2_2_Zinc2jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // genHTover2_2_Zinc3jet_R32 = newTH1D("genHTover2_2_Zinc3jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // genHTover2_2_Zinc3jet_R43 = newTH1D("genHTover2_2_Zinc3jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // genHTover2_2_Zinc4jet_R43 = newTH1D("genHTover2_2_Zinc4jet_R43", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 4)", HTover2, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
     
 //    genHTover2_3_Zinc2jet_R32 = newTH1D("genHTover2_3_Zinc2jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 2)", HTover2, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
 //    genHTover2_3_Zinc3jet_R32 = newTH1D("genHTover2_3_Zinc3jet_R32", "gen Scalar sum jets p_{T} over 2 (N_{jets} #geq 3)", HTover2, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
@@ -738,15 +738,15 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseHTover2_Zinc3jet_R43 = newTH2D("hresponseHTover2_Zinc3jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_ZRatios, jetHTover2_ZRatios, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     hresponseHTover2_Zinc4jet_R43 = newTH2D("hresponseHTover2_Zinc4jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 4)", nJetHTover2_ZRatios, jetHTover2_ZRatios, nJetHTover2_ZRatios, jetHTover2_ZRatios);
     
-    hresponseHTover2_1_Zinc2jet_R32 = newTH2D("hresponseHTover2_1_Zinc2jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 2)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    hresponseHTover2_1_Zinc3jet_R32 = newTH2D("hresponseHTover2_1_Zinc3jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    hresponseHTover2_1_Zinc3jet_R43 = newTH2D("hresponseHTover2_1_Zinc3jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
-    hresponseHTover2_1_Zinc4jet_R43 = newTH2D("hresponseHTover2_1_Zinc4jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 4)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // hresponseHTover2_1_Zinc2jet_R32 = newTH2D("hresponseHTover2_1_Zinc2jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 2)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // hresponseHTover2_1_Zinc3jet_R32 = newTH2D("hresponseHTover2_1_Zinc3jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // hresponseHTover2_1_Zinc3jet_R43 = newTH2D("hresponseHTover2_1_Zinc3jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
+    // hresponseHTover2_1_Zinc4jet_R43 = newTH2D("hresponseHTover2_1_Zinc4jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 4)", nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios, nJetHTover2_1_ZRatios, jetHTover2_1_ZRatios);
     
-    hresponseHTover2_2_Zinc2jet_R32 = newTH2D("hresponseHTover2_2_Zinc2jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 2)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    hresponseHTover2_2_Zinc3jet_R32 = newTH2D("hresponseHTover2_2_Zinc3jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    hresponseHTover2_2_Zinc3jet_R43 = newTH2D("hresponseHTover2_2_Zinc3jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
-    hresponseHTover2_2_Zinc4jet_R43 = newTH2D("hresponseHTover2_2_Zinc4jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 4)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // hresponseHTover2_2_Zinc2jet_R32 = newTH2D("hresponseHTover2_2_Zinc2jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 2)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // hresponseHTover2_2_Zinc3jet_R32 = newTH2D("hresponseHTover2_2_Zinc3jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // hresponseHTover2_2_Zinc3jet_R43 = newTH2D("hresponseHTover2_2_Zinc3jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
+    // hresponseHTover2_2_Zinc4jet_R43 = newTH2D("hresponseHTover2_2_Zinc4jet_R43", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 4)", nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios, nJetHTover2_2_ZRatios, jetHTover2_2_ZRatios);
     
 //    hresponseHTover2_3_Zinc2jet_R32 = newTH2D("hresponseHTover2_3_Zinc2jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 2)", nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
 //    hresponseHTover2_3_Zinc3jet_R32 = newTH2D("hresponseHTover2_3_Zinc3jet_R32", "hresp HT/2 inc jets p_{T} (N_{jets} #geq 3)", nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios, nJetHTover2_3_ZRatios, jetHTover2_3_ZRatios);
@@ -1280,22 +1280,63 @@ HistoSet::HistoSet(string leptonFlavor)
     ZMass_Zexc5jet                      = newTH1D("ZMass_Zexc5jet",                      "Z Invariant Mass (N_{jets} = 5)",             Mll,    111, 50, 260 );
     ZMass_Zexc6jet                      = newTH1D("ZMass_Zexc6jet",                      "Z Invariant Mass (N_{jets} = 6)",             Mll,    111, 50, 260 );
     
-    ZPt_Zinc0jet                        = newTH1D("ZPt_Zinc0jet",                        "Z p_{T} (N_{jets} #geq 0)",                   ZpT,    40, 0, 400);
-    ZPt_Zinc1jet                        = newTH1D("ZPt_Zinc1jet",                        "Z p_{T} (N_{jets} #geq 1)",                   ZpT,    40, 0, 400);
-    ZPt_Zinc2jet                        = newTH1D("ZPt_Zinc2jet",                        "Z p_{T} (N_{jets} #geq 2)",                   ZpT,    40, 0, 400);
-    ZPt_Zinc3jet                        = newTH1D("ZPt_Zinc3jet",                        "Z p_{T} (N_{jets} #geq 3)",                   ZpT,    40, 0, 300);
-    ZPt_Zinc4jet                        = newTH1D("ZPt_Zinc4jet",                        "Z p_{T} (N_{jets} #geq 4)",                   ZpT,    40, 0, 200);
-    ZPt_Zinc5jet                        = newTH1D("ZPt_Zinc5jet",                        "Z p_{T} (N_{jets} #geq 5)",                   ZpT,    40, 0, 200);
-    ZPt_Zinc6jet                        = newTH1D("ZPt_Zinc6jet",                        "Z p_{T} (N_{jets} #geq 6)",                   ZpT,    40, 0, 200);
+    //andrew -- W pT
+    ZPt_Zinc0jet                        = newTH1D("ZPt_Zinc0jet",                        "Z p_{T} (N_{jets} #geq 0)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc1jet                        = newTH1D("ZPt_Zinc1jet",                        "Z p_{T} (N_{jets} #geq 1)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc2jet                        = newTH1D("ZPt_Zinc2jet",                        "Z p_{T} (N_{jets} #geq 2)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc3jet                        = newTH1D("ZPt_Zinc3jet",                        "Z p_{T} (N_{jets} #geq 3)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc4jet                        = newTH1D("ZPt_Zinc4jet",                        "Z p_{T} (N_{jets} #geq 4)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc5jet                        = newTH1D("ZPt_Zinc5jet",                        "Z p_{T} (N_{jets} #geq 5)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    ZPt_Zinc6jet                        = newTH1D("ZPt_Zinc6jet",                        "Z p_{T} (N_{jets} #geq 6)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
     
-    genZPt_Zinc0jet                     = newTH1D("genZPt_Zinc0jet",                     "gen Z p_{T} (N_{jets} #geq 0)",               ZpT,    40, 0, 200);
-    genZPt_Zinc1jet                     = newTH1D("genZPt_Zinc1jet",                     "gen Z p_{T} (N_{jets} #geq 1)",               ZpT,    40, 0, 400);
-    genZPt_Zinc2jet                     = newTH1D("genZPt_Zinc2jet",                     "gen Z p_{T} (N_{jets} #geq 2)",               ZpT,    40, 0, 400);
-    genZPt_Zinc3jet                     = newTH1D("genZPt_Zinc3jet",                     "gen Z p_{T} (N_{jets} #geq 3)",               ZpT,    40, 0, 300);
-    genZPt_Zinc4jet                     = newTH1D("genZPt_Zinc4jet",                     "gen Z p_{T} (N_{jets} #geq 4)",               ZpT,    40, 0, 200);
-    genZPt_Zinc5jet                     = newTH1D("genZPt_Zinc5jet",                     "gen Z p_{T} (N_{jets} #geq 5)",               ZpT,    40, 0, 200);
-    genZPt_Zinc6jet                     = newTH1D("genZPt_Zinc6jet",                     "gen Z p_{T} (N_{jets} #geq 6)",               ZpT,    40, 0, 200);
+    genZPt_Zinc0jet                     = newTH1D("genZPt_Zinc0jet",                     "gen Z p_{T} (N_{jets} #geq 0)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc1jet                     = newTH1D("genZPt_Zinc1jet",                     "gen Z p_{T} (N_{jets} #geq 1)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc2jet                     = newTH1D("genZPt_Zinc2jet",                     "gen Z p_{T} (N_{jets} #geq 2)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc3jet                     = newTH1D("genZPt_Zinc3jet",                     "gen Z p_{T} (N_{jets} #geq 3)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc4jet                     = newTH1D("genZPt_Zinc4jet",                     "gen Z p_{T} (N_{jets} #geq 4)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc5jet                     = newTH1D("genZPt_Zinc5jet",                     "gen Z p_{T} (N_{jets} #geq 5)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
+    genZPt_Zinc6jet                     = newTH1D("genZPt_Zinc6jet",                     "gen Z p_{T} (N_{jets} #geq 6)", ZpT, nJetPt_ZRatios, jetPt_ZRatios);
     
+    // hresponseZPt_Zinc0jet                     = newTH2D("hresponseZPt_Zinc0jet",                     "hresponse Z p_{T} (N_{jets} #geq 0)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPt_Zinc1jet                     = newTH2D("hresponseZPt_Zinc1jet",                     "hresponse Z p_{T} (N_{jets} #geq 1)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPt_Zinc2jet                     = newTH2D("hresponseZPt_Zinc2jet",                     "hresponse Z p_{T} (N_{jets} #geq 2)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPt_Zinc3jet                     = newTH2D("hresponseZPt_Zinc3jet",                     "hresponse Z p_{T} (N_{jets} #geq 3)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPt_Zinc4jet                     = newTH2D("hresponseZPt_Zinc4jet",                     "hresponse Z p_{T} (N_{jets} #geq 4)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    // hresponseZPt_Zinc5jet                     = newTH2D("hresponseZPt_Zinc5jet",                     "hresponse Z p_{T} (N_{jets} #geq 5)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    // hresponseZPt_Zinc6jet                     = newTH2D("hresponseZPt_Zinc6jet",                     "hresponse Z p_{T} (N_{jets} #geq 6)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+
+    //W pT + LJ pT
+    ZPtPlusLeadingJetPt_Zinc1jet  = newTH1D("ZPtPlusLeadingJetPt_Zinc1jet", "W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 1)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    ZPtPlusLeadingJetPt_Zinc2jet = newTH1D("ZPtPlusLeadingJetPt_Zinc2jet", "W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 2)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    ZPtPlusLeadingJetPt_Zinc3jet = newTH1D("ZPtPlusLeadingJetPt_Zinc3jet", "W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 3)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    ZPtPlusLeadingJetPt_Zinc4jet = newTH1D("ZPtPlusLeadingJetPt_Zinc4jet", "W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 4)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+
+    genZPtPlusLeadingJetPt_Zinc1jet  = newTH1D("genZPtPlusLeadingJetPt_Zinc1jet", "gen W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 1)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    genZPtPlusLeadingJetPt_Zinc2jet = newTH1D("genZPtPlusLeadingJetPt_Zinc2jet", "gen W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 2)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    genZPtPlusLeadingJetPt_Zinc3jet = newTH1D("genZPtPlusLeadingJetPt_Zinc3jet", "gen W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 3)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    genZPtPlusLeadingJetPt_Zinc4jet = newTH1D("genZPtPlusLeadingJetPt_Zinc4jet", "gen W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 4)", "p_{T}(W) + p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+
+    hresponseZPtPlusLeadingJetPt_Zinc1jet  = newTH2D("hresponseZPtPlusLeadingJetPt_Zinc1jet", "hresponse W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 1)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPtPlusLeadingJetPt_Zinc2jet = newTH2D("hresponseZPtPlusLeadingJetPt_Zinc2jet", "hresponse W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 2)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPtPlusLeadingJetPt_Zinc3jet = newTH2D("hresponseZPtPlusLeadingJetPt_Zinc3jet", "hresponse W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 3)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPtPlusLeadingJetPt_Zinc4jet = newTH2D("hresponseZPtPlusLeadingJetPt_Zinc4jet", "hresponse W p_{T} + p_{T}(j_{leading}) (N_{jets} #geq 4)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+
+    //W pT + HT,2/2
+    ZPtPlusHTover2_Zinc2jet = newTH1D("ZPtPlusHTover2_Zinc2jet", "W p_{T} + H_{T,2}/2 (N_{jets} #geq 2)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    ZPtPlusHTover2_Zinc3jet = newTH1D("ZPtPlusHTover2_Zinc3jet", "W p_{T} + H_{T,2}/2 (N_{jets} #geq 3)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    ZPtPlusHTover2_Zinc4jet = newTH1D("ZPtPlusHTover2_Zinc4jet", "W p_{T} + H_{T,2}/2 (N_{jets} #geq 4)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+
+    genZPtPlusHTover2_Zinc2jet = newTH1D("genZPtPlusHTover2_Zinc2jet", "gen W p_{T} + H_{T,2}/2 (N_{jets} #geq 2)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    genZPtPlusHTover2_Zinc3jet = newTH1D("genZPtPlusHTover2_Zinc3jet", "gen W p_{T} + H_{T,2}/2 (N_{jets} #geq 3)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+    genZPtPlusHTover2_Zinc4jet = newTH1D("genZPtPlusHTover2_Zinc4jet", "gen W p_{T} + H_{T,2}/2 (N_{jets} #geq 4)", "p_{T}(W) + H_{T,2}/2 [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
+
+    hresponseZPtPlusHTover2_Zinc2jet = newTH2D("hresponseZPtPlusHTover2_Zinc2jet", "hresponse W p_{T} + H_{T,2}/2 (N_{jets} #geq 2)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPtPlusHTover2_Zinc3jet = newTH2D("hresponseZPtPlusHTover2_Zinc3jet", "hresponse W p_{T} + H_{T,2}/2 (N_{jets} #geq 3)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+    hresponseZPtPlusHTover2_Zinc4jet = newTH2D("hresponseZPtPlusHTover2_Zinc4jet", "hresponse W p_{T} + H_{T,2}/2 (N_{jets} #geq 4)", nJetPt_ZRatios, jetPt_ZRatios, nJetPt_ZRatios, jetPt_ZRatios);
+
+
+    ////
+
     ZPt_Zexc0jet                        = newTH1D("ZPt_Zexc0jet",                        "Z p_{T} (N_{jets} = 0)",                      ZpT,    40, 0, 400);
     ZPt_Zexc1jet                        = newTH1D("ZPt_Zexc1jet",                        "Z p_{T} (N_{jets} = 1)",                      ZpT,    40, 0, 400);
     ZPt_Zexc2jet                        = newTH1D("ZPt_Zexc2jet",                        "Z p_{T} (N_{jets} = 2)",                      ZpT,    40, 0, 400);
@@ -1502,19 +1543,19 @@ HistoSet::HistoSet(string leptonFlavor)
     LepPtPlusLeadingJetPt_Zinc3jet_R43 = newTH1D("LepPtPlusLeadingJetPt_Zinc3jet_R43", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     LepPtPlusLeadingJetPt_Zinc4jet_R43 = newTH1D("LepPtPlusLeadingJetPt_Zinc4jet_R43", "lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     
-    LepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc1jet_R21", "lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc2jet_R21", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc2jet_R32", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc3jet_R32", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc3jet_R43", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc4jet_R43", "lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc1jet_R21", "lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc2jet_R21", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc2jet_R32", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc3jet_R32", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc3jet_R43", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH1D("LepPtPlusLeadingJetPt_1_Zinc4jet_R43", "lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
     
-    LepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc1jet_R21", "lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc2jet_R21", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc2jet_R32", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc3jet_R32", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc3jet_R43", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc4jet_R43", "lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc1jet_R21", "lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc2jet_R21", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc2jet_R32", "lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc3jet_R32", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc3jet_R43", "lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH1D("LepPtPlusLeadingJetPt_2_Zinc4jet_R43", "lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 
     genLepPtPlusLeadingJetPt_Zinc1jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_Zinc1jet_R21", "gen lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     genLepPtPlusLeadingJetPt_Zinc2jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_Zinc2jet_R21", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
@@ -1523,19 +1564,19 @@ HistoSet::HistoSet(string leptonFlavor)
     genLepPtPlusLeadingJetPt_Zinc3jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_Zinc3jet_R43", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     genLepPtPlusLeadingJetPt_Zinc4jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_Zinc4jet_R43", "gen lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     
-    genLepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc1jet_R21", "gen lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc2jet_R21", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc2jet_R32", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc3jet_R32", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc3jet_R43", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc4jet_R43", "gen lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc1jet_R21", "gen lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc2jet_R21", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc2jet_R32", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc3jet_R32", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc3jet_R43", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_1_Zinc4jet_R43", "gen lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
     
-    genLepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc1jet_R21", "gen lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc2jet_R21", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc2jet_R32", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc3jet_R32", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc3jet_R43", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc4jet_R43", "gen lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc1jet_R21", "gen lepton pt plus LJ pt for 1 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc2jet_R21", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc2jet_R32", "gen lepton pt plus LJ pt for 2 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc3jet_R32", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc3jet_R43", "gen lepton pt plus LJ pt for 3 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH1D("genLepPtPlusLeadingJetPt_2_Zinc4jet_R43", "gen lepton pt plus LJ pt for 4 inc jet", lpT_LJpT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 
     hresponseLepPtPlusLeadingJetPt_Zinc1jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_Zinc1jet_R21", "hresp lepton pt plus LJ pt for 1 inc jet", nLepJetPt_ZRatios, lepJetPt_ZRatios, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     hresponseLepPtPlusLeadingJetPt_Zinc2jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_Zinc2jet_R21", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_ZRatios, lepJetPt_ZRatios, nLepJetPt_ZRatios, lepJetPt_ZRatios);
@@ -1544,19 +1585,19 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseLepPtPlusLeadingJetPt_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_Zinc3jet_R43", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_ZRatios, lepJetPt_ZRatios, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     hresponseLepPtPlusLeadingJetPt_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_Zinc4jet_R43", "hresp lepton pt plus LJ pt for 4 inc jet", nLepJetPt_ZRatios, lepJetPt_ZRatios, nLepJetPt_ZRatios, lepJetPt_ZRatios);
     
-    hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21", "hresp lepton pt plus LJ pt for 1 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43", "hresp lepton pt plus LJ pt for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21", "hresp lepton pt plus LJ pt for 1 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43", "hresp lepton pt plus LJ pt for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
     
-    hresponseLepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc1jet_R21", "hresp lepton pt plus LJ pt for 1 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R21", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R32", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R32", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R43", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc4jet_R43", "hresp lepton pt plus LJ pt for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc1jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc1jet_R21", "hresp lepton pt plus LJ pt for 1 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R21 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R21", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R32", "hresp lepton pt plus LJ pt for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R32", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc3jet_R43", "hresp lepton pt plus LJ pt for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusLeadingJetPt_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusLeadingJetPt_2_Zinc4jet_R43", "hresp lepton pt plus LJ pt for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 
     //--- Lep pT + jet HT, HT/2, HT/3
 //    LepPtPlusHT_Zinc1jet_R21 = newTH1D("LepPtPlusHT_Zinc1jet_R21", "lepton pt plus HT for 1 inc jet", lpT_HT, nLepJetPt_ZRatios, lepJetPt_ZRatios);
@@ -1604,10 +1645,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    LepPtPlusHT_1_Zinc3jet_R32 = newTH1D("LepPtPlusHT_1_Zinc3jet_R32", "lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    LepPtPlusHT_1_Zinc3jet_R43 = newTH1D("LepPtPlusHT_1_Zinc3jet_R43", "lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    LepPtPlusHT_1_Zinc4jet_R43 = newTH1D("LepPtPlusHT_1_Zinc4jet_R43", "lepton pt plus HT for 4 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusHTover2_1_Zinc2jet_R32 = newTH1D("LepPtPlusHTover2_1_Zinc2jet_R32", "lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusHTover2_1_Zinc3jet_R32 = newTH1D("LepPtPlusHTover2_1_Zinc3jet_R32", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusHTover2_1_Zinc3jet_R43 = newTH1D("LepPtPlusHTover2_1_Zinc3jet_R43", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    LepPtPlusHTover2_1_Zinc4jet_R43 = newTH1D("LepPtPlusHTover2_1_Zinc4jet_R43", "lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusHTover2_1_Zinc2jet_R32 = newTH1D("LepPtPlusHTover2_1_Zinc2jet_R32", "lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusHTover2_1_Zinc3jet_R32 = newTH1D("LepPtPlusHTover2_1_Zinc3jet_R32", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusHTover2_1_Zinc3jet_R43 = newTH1D("LepPtPlusHTover2_1_Zinc3jet_R43", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // LepPtPlusHTover2_1_Zinc4jet_R43 = newTH1D("LepPtPlusHTover2_1_Zinc4jet_R43", "lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    LepPtPlusHTover3_1_Zinc3jet_R43 = newTH1D("LepPtPlusHTover3_1_Zinc3jet_R43", "lepton pt plus HT/3 for 3 inc jet", lpT_HTover3, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    LepPtPlusHTover3_1_Zinc4jet_R43 = newTH1D("LepPtPlusHTover3_1_Zinc4jet_R43", "lepton pt plus HT/3 for 4 inc jet", lpT_HTover3, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //
@@ -1617,10 +1658,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    genLepPtPlusHT_1_Zinc3jet_R32 = newTH1D("genLepPtPlusHT_1_Zinc3jet_R32", "gen lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    genLepPtPlusHT_1_Zinc3jet_R43 = newTH1D("genLepPtPlusHT_1_Zinc3jet_R43", "gen lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    genLepPtPlusHT_1_Zinc4jet_R43 = newTH1D("genLepPtPlusHT_1_Zinc4jet_R43", "gen lepton pt plus HT for 4 inc jet", lpT_HT, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusHTover2_1_Zinc2jet_R32 = newTH1D("genLepPtPlusHTover2_1_Zinc2jet_R32", "gen lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusHTover2_1_Zinc3jet_R32 = newTH1D("genLepPtPlusHTover2_1_Zinc3jet_R32", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusHTover2_1_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover2_1_Zinc3jet_R43", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    genLepPtPlusHTover2_1_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover2_1_Zinc4jet_R43", "gen lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusHTover2_1_Zinc2jet_R32 = newTH1D("genLepPtPlusHTover2_1_Zinc2jet_R32", "gen lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusHTover2_1_Zinc3jet_R32 = newTH1D("genLepPtPlusHTover2_1_Zinc3jet_R32", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusHTover2_1_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover2_1_Zinc3jet_R43", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // genLepPtPlusHTover2_1_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover2_1_Zinc4jet_R43", "gen lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    genLepPtPlusHTover3_1_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover3_1_Zinc3jet_R43", "gen lepton pt plus HT/3 for 3 inc jet", lpT_HTover3, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    genLepPtPlusHTover3_1_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover3_1_Zinc4jet_R43", "gen lepton pt plus HT/3 for 4 inc jet", lpT_HTover3, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //
@@ -1630,10 +1671,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    hresponseLepPtPlusHT_1_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHT_1_Zinc3jet_R32", "hresp lepton pt plus HT for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    hresponseLepPtPlusHT_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHT_1_Zinc3jet_R43", "hresp lepton pt plus HT for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    hresponseLepPtPlusHT_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHT_1_Zinc4jet_R43", "hresp lepton pt plus HT for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusHTover2_1_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc2jet_R32", "hresp lepton pt plus HT/2 for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusHTover2_1_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc3jet_R32", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusHTover2_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc3jet_R43", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
-    hresponseLepPtPlusHTover2_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc4jet_R43", "hresp lepton pt plus HT/2 for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusHTover2_1_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc2jet_R32", "hresp lepton pt plus HT/2 for 2 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusHTover2_1_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc3jet_R32", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusHTover2_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc3jet_R43", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
+    // hresponseLepPtPlusHTover2_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover2_1_Zinc4jet_R43", "hresp lepton pt plus HT/2 for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    hresponseLepPtPlusHTover3_1_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover3_1_Zinc3jet_R43", "hresp lepton pt plus HT/3 for 3 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //    hresponseLepPtPlusHTover3_1_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover3_1_Zinc4jet_R43", "hresp lepton pt plus HT/3 for 4 inc jet", nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios, nLepJetPt_1_ZRatios, lepJetPt_1_ZRatios);
 //
@@ -1643,10 +1684,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    LepPtPlusHT_2_Zinc3jet_R32 = newTH1D("LepPtPlusHT_2_Zinc3jet_R32", "lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    LepPtPlusHT_2_Zinc3jet_R43 = newTH1D("LepPtPlusHT_2_Zinc3jet_R43", "lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    LepPtPlusHT_2_Zinc4jet_R43 = newTH1D("LepPtPlusHT_2_Zinc4jet_R43", "lepton pt plus HT for 4 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusHTover2_2_Zinc2jet_R32 = newTH1D("LepPtPlusHTover2_2_Zinc2jet_R32", "lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusHTover2_2_Zinc3jet_R32 = newTH1D("LepPtPlusHTover2_2_Zinc3jet_R32", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusHTover2_2_Zinc3jet_R43 = newTH1D("LepPtPlusHTover2_2_Zinc3jet_R43", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    LepPtPlusHTover2_2_Zinc4jet_R43 = newTH1D("LepPtPlusHTover2_2_Zinc4jet_R43", "lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusHTover2_2_Zinc2jet_R32 = newTH1D("LepPtPlusHTover2_2_Zinc2jet_R32", "lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusHTover2_2_Zinc3jet_R32 = newTH1D("LepPtPlusHTover2_2_Zinc3jet_R32", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusHTover2_2_Zinc3jet_R43 = newTH1D("LepPtPlusHTover2_2_Zinc3jet_R43", "lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // LepPtPlusHTover2_2_Zinc4jet_R43 = newTH1D("LepPtPlusHTover2_2_Zinc4jet_R43", "lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    LepPtPlusHTover3_2_Zinc3jet_R43 = newTH1D("LepPtPlusHTover3_2_Zinc3jet_R43", "lepton pt plus HT/3 for 3 inc jet", lpT_HTover3, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    LepPtPlusHTover3_2_Zinc4jet_R43 = newTH1D("LepPtPlusHTover3_2_Zinc4jet_R43", "lepton pt plus HT/3 for 4 inc jet", lpT_HTover3, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //
@@ -1656,10 +1697,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    genLepPtPlusHT_2_Zinc3jet_R32 = newTH1D("genLepPtPlusHT_2_Zinc3jet_R32", "gen lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    genLepPtPlusHT_2_Zinc3jet_R43 = newTH1D("genLepPtPlusHT_2_Zinc3jet_R43", "gen lepton pt plus HT for 3 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    genLepPtPlusHT_2_Zinc4jet_R43 = newTH1D("genLepPtPlusHT_2_Zinc4jet_R43", "gen lepton pt plus HT for 4 inc jet", lpT_HT, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusHTover2_2_Zinc2jet_R32 = newTH1D("genLepPtPlusHTover2_2_Zinc2jet_R32", "gen lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusHTover2_2_Zinc3jet_R32 = newTH1D("genLepPtPlusHTover2_2_Zinc3jet_R32", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusHTover2_2_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover2_2_Zinc3jet_R43", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    genLepPtPlusHTover2_2_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover2_2_Zinc4jet_R43", "gen lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusHTover2_2_Zinc2jet_R32 = newTH1D("genLepPtPlusHTover2_2_Zinc2jet_R32", "gen lepton pt plus HT/2 for 2 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusHTover2_2_Zinc3jet_R32 = newTH1D("genLepPtPlusHTover2_2_Zinc3jet_R32", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusHTover2_2_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover2_2_Zinc3jet_R43", "gen lepton pt plus HT/2 for 3 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // genLepPtPlusHTover2_2_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover2_2_Zinc4jet_R43", "gen lepton pt plus HT/2 for 4 inc jet", lpT_HTover2, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    genLepPtPlusHTover3_2_Zinc3jet_R43 = newTH1D("genLepPtPlusHTover3_2_Zinc3jet_R43", "gen lepton pt plus HT/3 for 3 inc jet", lpT_HTover3, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    genLepPtPlusHTover3_2_Zinc4jet_R43 = newTH1D("genLepPtPlusHTover3_2_Zinc4jet_R43", "gen lepton pt plus HT/3 for 4 inc jet", lpT_HTover3, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //
@@ -1669,10 +1710,10 @@ HistoSet::HistoSet(string leptonFlavor)
 //    hresponseLepPtPlusHT_2_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHT_2_Zinc3jet_R32", "hresp lepton pt plus HT for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    hresponseLepPtPlusHT_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHT_2_Zinc3jet_R43", "hresp lepton pt plus HT for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    hresponseLepPtPlusHT_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHT_2_Zinc4jet_R43", "hresp lepton pt plus HT for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusHTover2_2_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc2jet_R32", "hresp lepton pt plus HT/2 for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusHTover2_2_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc3jet_R32", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusHTover2_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc3jet_R43", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
-    hresponseLepPtPlusHTover2_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc4jet_R43", "hresp lepton pt plus HT/2 for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusHTover2_2_Zinc2jet_R32 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc2jet_R32", "hresp lepton pt plus HT/2 for 2 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusHTover2_2_Zinc3jet_R32 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc3jet_R32", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusHTover2_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc3jet_R43", "hresp lepton pt plus HT/2 for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
+    // hresponseLepPtPlusHTover2_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover2_2_Zinc4jet_R43", "hresp lepton pt plus HT/2 for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    hresponseLepPtPlusHTover3_2_Zinc3jet_R43 = newTH2D("hresponseLepPtPlusHTover3_2_Zinc3jet_R43", "hresp lepton pt plus HT/3 for 3 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //    hresponseLepPtPlusHTover3_2_Zinc4jet_R43 = newTH2D("hresponseLepPtPlusHTover3_2_Zinc4jet_R43", "hresp lepton pt plus HT/3 for 4 inc jet", nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios, nLepJetPt_2_ZRatios, lepJetPt_2_ZRatios);
 //

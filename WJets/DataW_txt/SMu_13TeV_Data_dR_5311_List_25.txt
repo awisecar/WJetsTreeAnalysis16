@@ -1,0 +1,7 @@
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_169.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_170.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_171.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_172.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_173.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_174.root
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/180909_122255/0000/Bonzai-SingleMuon-VJetPruner-SMu_175.root

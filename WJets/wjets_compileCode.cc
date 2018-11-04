@@ -1,5 +1,4 @@
 {
-
     string srcdir = "Sources/";
 
     //--- clean the old *_cc.d and *_cc.so files to allow for fresh compilation ---

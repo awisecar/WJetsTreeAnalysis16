@@ -11,17 +11,19 @@ print 'Current working directory: ' + cwd + '\n'
 os.system('root -b -q wjets_compileCode.cc')
 
 dateTo = datetime.datetime.now().strftime("%Y_%m_%d_%H%M%S")
-mtmpdir = 'wjetsjobs_' + dateTo
+mtmpdir = 'wjetsLSF_' + dateTo
 os.system('mkdir ' + mtmpdir)
 
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1, 3, 41, 42, 5, 6]
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
-#doWhat = [1, 3, 41, 42, 5, 6]
-#doWhat = [12, 18]
-doQCD = [0, 1, 2, 3]
-#doQCD = [0]
-doSysRunning = [0]
-#doSysRunning = [2]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #everything
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
+# doWhat = [21, 22, 23, 24, 30] #Background
+# doWhat = [41, 42, 51, 52, 53, 54, 61, 62, 63] #W+jets MC
+
+doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
+# doQCD = [0]
+
+doSysRunning = [0] #nominal
+#doSysRunning = [2] #JES uncertainties
 
 cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 
@@ -32,11 +34,10 @@ for what in doWhat:
 		for sys in doSysRunning:
 
 			tjobname_out = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.out'
-			#tjobname_err = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '.err'
 			tjobname = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.sh'
 
 			job = '#!/bin/bash\n'
-     	 	        #job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
+           #job += 'cd /afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src/WJetsTreeAnalysis16/WJets\n'
                         job += 'cd ' + cmsswdir + ' \n'
 			job += 'eval `scramv1 runtime -sh` \n'
                         job += 'cd ' + cwd + ' \n'
@@ -52,11 +53,9 @@ for what in doWhat:
 			tjob.close()
 			os.system('chmod 755 '+tjobname)
 
-        	        print '.out filename ==>', tjobname_out
-          	        #print '.err filename ==>', tjobname_err
+                        print '.out filename ==>', tjobname_out
 
-			#bsub = 'bsub -q 1nw -o ' +tjobname_out+ ' -e ' +tjobname_err+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
-      	                bsub = 'bsub -R "pool>30000" -q 2nd -o ' +tjobname_out+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
+                        bsub = 'bsub -R "pool>30000" -q 2nd -o ' +tjobname_out+ ' -J ' +  tjobname + ' < ' + tjobname + ' '
 			print bsub, '\n'
 			os.system(bsub)
 			os.system('sleep 1')

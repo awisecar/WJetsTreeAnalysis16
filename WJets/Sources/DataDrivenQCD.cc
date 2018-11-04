@@ -111,7 +111,8 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor,int
             //note: is this the wjets file that needs to be used? (other is MLM)
             //comment: believe so, MLM is matching/merching for LO and FxFx is for NLO
             //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
-            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            //if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
             if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
             if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
@@ -184,7 +185,8 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             string FilenameTemp;
             //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
             //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
-            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            //if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
             if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
             if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
