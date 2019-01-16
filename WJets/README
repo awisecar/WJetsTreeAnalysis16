@@ -44,8 +44,8 @@ The doWhat, doQCD, doSysRunning, and doBJets options tell the main code (Sources
 -- Output root files are in the directory HistoFiles. 
 
 -- Merge each of the separate datafiles. (The data batch jobs are split into separate lists -- see runDYJets.cc -- and submitted separately to speed up the process.) This shell script uses the 'hadd' command to combine several rootfiles into one.
-./wjets_mergeDataBVeto.sh
-./wjets_mergeJetBinnedBVeto.sh
+./wjets_Merge_Data_BVeto.sh
+./wjets_Merge_Wpt_BVeto.sh
 
 -- Merge single top and DYJets root files (change if your total number of top or DY MC samples changes):
 root -b -q MergeTop_BVeto.cc++
@@ -53,6 +53,8 @@ root -b -q MergeVV_BVeto.cc++
 
 -- Merge QCD Background:
 root -b -q runQCD_BVeto.cc++
+or if you want to save the output --
+root -b -q runQCD_BVeto.cc++ > mergeQCD.out 2>&1 
 
 -- Plotting: After you have all needed output files, you can plot the histograms by
 root -b -q runTest_BVeto.cc++

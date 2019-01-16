@@ -102,12 +102,12 @@ public:
     TH1D *LeadingJetPt_Zinc3jet_R32;
     TH1D *LeadingJetPt_Zinc3jet_R43;
     TH1D *LeadingJetPt_Zinc4jet_R43;
-     TH1D *LeadingJetPt_1_Zinc1jet_R21;
-     TH1D *LeadingJetPt_1_Zinc2jet_R21;
-     TH1D *LeadingJetPt_1_Zinc2jet_R32;
-     TH1D *LeadingJetPt_1_Zinc3jet_R32;
-     TH1D *LeadingJetPt_1_Zinc3jet_R43;
-     TH1D *LeadingJetPt_1_Zinc4jet_R43;
+    // TH1D *LeadingJetPt_1_Zinc1jet_R21;
+    // TH1D *LeadingJetPt_1_Zinc2jet_R21;
+    // TH1D *LeadingJetPt_1_Zinc2jet_R32;
+    // TH1D *LeadingJetPt_1_Zinc3jet_R32;
+    // TH1D *LeadingJetPt_1_Zinc3jet_R43;
+    // TH1D *LeadingJetPt_1_Zinc4jet_R43;
     // TH1D *LeadingJetPt_2_Zinc1jet_R21;
     // TH1D *LeadingJetPt_2_Zinc2jet_R21;
     // TH1D *LeadingJetPt_2_Zinc2jet_R32;
@@ -146,12 +146,12 @@ public:
     TH1D *genLeadingJetPt_Zinc3jet_R32;
     TH1D *genLeadingJetPt_Zinc3jet_R43;
     TH1D *genLeadingJetPt_Zinc4jet_R43;
-     TH1D *genLeadingJetPt_1_Zinc1jet_R21;
-     TH1D *genLeadingJetPt_1_Zinc2jet_R21;
-     TH1D *genLeadingJetPt_1_Zinc2jet_R32;
-     TH1D *genLeadingJetPt_1_Zinc3jet_R32;
-     TH1D *genLeadingJetPt_1_Zinc3jet_R43;
-     TH1D *genLeadingJetPt_1_Zinc4jet_R43;
+    // TH1D *genLeadingJetPt_1_Zinc1jet_R21;
+    // TH1D *genLeadingJetPt_1_Zinc2jet_R21;
+    // TH1D *genLeadingJetPt_1_Zinc2jet_R32;
+    // TH1D *genLeadingJetPt_1_Zinc3jet_R32;
+    // TH1D *genLeadingJetPt_1_Zinc3jet_R43;
+    // TH1D *genLeadingJetPt_1_Zinc4jet_R43;
     // TH1D *genLeadingJetPt_2_Zinc1jet_R21;
     // TH1D *genLeadingJetPt_2_Zinc2jet_R21;
     // TH1D *genLeadingJetPt_2_Zinc2jet_R32;
@@ -190,12 +190,12 @@ public:
     TH2D *hresponseLeadingJetPt_Zinc3jet_R32;
     TH2D *hresponseLeadingJetPt_Zinc3jet_R43;
     TH2D *hresponseLeadingJetPt_Zinc4jet_R43;
-     TH2D *hresponseLeadingJetPt_1_Zinc1jet_R21;
-     TH2D *hresponseLeadingJetPt_1_Zinc2jet_R21;
-     TH2D *hresponseLeadingJetPt_1_Zinc2jet_R32;
-     TH2D *hresponseLeadingJetPt_1_Zinc3jet_R32;
-     TH2D *hresponseLeadingJetPt_1_Zinc3jet_R43;
-     TH2D *hresponseLeadingJetPt_1_Zinc4jet_R43;
+    // TH2D *hresponseLeadingJetPt_1_Zinc1jet_R21;
+    // TH2D *hresponseLeadingJetPt_1_Zinc2jet_R21;
+    // TH2D *hresponseLeadingJetPt_1_Zinc2jet_R32;
+    // TH2D *hresponseLeadingJetPt_1_Zinc3jet_R32;
+    // TH2D *hresponseLeadingJetPt_1_Zinc3jet_R43;
+    // TH2D *hresponseLeadingJetPt_1_Zinc4jet_R43;
     // TH2D *hresponseLeadingJetPt_2_Zinc1jet_R21;
     // TH2D *hresponseLeadingJetPt_2_Zinc2jet_R21;
     // TH2D *hresponseLeadingJetPt_2_Zinc2jet_R32;
@@ -291,11 +291,11 @@ public:
     TH1D *HTover2_Zinc3jet_R43;
     TH1D *HTover2_Zinc4jet_R43;
     
-     TH1D *HTover2_1_Zinc2jet_R32;
-     TH1D *HTover2_1_Zinc3jet_R32;
-     TH1D *HTover2_1_Zinc3jet_R43;
-     TH1D *HTover2_1_Zinc4jet_R43;
-
+    // TH1D *HTover2_1_Zinc2jet_R32;
+    // TH1D *HTover2_1_Zinc3jet_R32;
+    // TH1D *HTover2_1_Zinc3jet_R43;
+    // TH1D *HTover2_1_Zinc4jet_R43;
+    
     // TH1D *HTover2_2_Zinc2jet_R32;
     // TH1D *HTover2_2_Zinc3jet_R32;
     // TH1D *HTover2_2_Zinc3jet_R43;
@@ -310,11 +310,11 @@ public:
     TH1D *genHTover2_Zinc3jet_R43;
     TH1D *genHTover2_Zinc4jet_R43;
     
-     TH1D *genHTover2_1_Zinc2jet_R32;
-     TH1D *genHTover2_1_Zinc3jet_R32;
-     TH1D *genHTover2_1_Zinc3jet_R43;
-     TH1D *genHTover2_1_Zinc4jet_R43;
-
+    // TH1D *genHTover2_1_Zinc2jet_R32;
+    // TH1D *genHTover2_1_Zinc3jet_R32;
+    // TH1D *genHTover2_1_Zinc3jet_R43;
+    // TH1D *genHTover2_1_Zinc4jet_R43;
+    
     // TH1D *genHTover2_2_Zinc2jet_R32;
     // TH1D *genHTover2_2_Zinc3jet_R32;
     // TH1D *genHTover2_2_Zinc3jet_R43;
@@ -329,11 +329,11 @@ public:
     TH2D *hresponseHTover2_Zinc3jet_R43;
     TH2D *hresponseHTover2_Zinc4jet_R43;
     
-     TH2D *hresponseHTover2_1_Zinc2jet_R32;
-     TH2D *hresponseHTover2_1_Zinc3jet_R32;
-     TH2D *hresponseHTover2_1_Zinc3jet_R43;
-     TH2D *hresponseHTover2_1_Zinc4jet_R43;
-
+    // TH2D *hresponseHTover2_1_Zinc2jet_R32;
+    // TH2D *hresponseHTover2_1_Zinc3jet_R32;
+    // TH2D *hresponseHTover2_1_Zinc3jet_R43;
+    // TH2D *hresponseHTover2_1_Zinc4jet_R43;
+    
     // TH2D *hresponseHTover2_2_Zinc2jet_R32;
     // TH2D *hresponseHTover2_2_Zinc3jet_R32;
     // TH2D *hresponseHTover2_2_Zinc3jet_R43;
@@ -781,19 +781,6 @@ public:
     // TH2D *hresponseZPt_Zinc5jet;
     // TH2D *hresponseZPt_Zinc6jet;
 
-    TH1D *ZPt_1_Zinc1jet;
-    TH1D *ZPt_1_Zinc2jet;
-    TH1D *ZPt_1_Zinc3jet;
-    TH1D *ZPt_1_Zinc4jet;
-    TH1D *genZPt_1_Zinc1jet;
-    TH1D *genZPt_1_Zinc2jet;
-    TH1D *genZPt_1_Zinc3jet;
-    TH1D *genZPt_1_Zinc4jet;
-    TH2D *hresponseZPt_1_Zinc1jet;
-    TH2D *hresponseZPt_1_Zinc2jet;
-    TH2D *hresponseZPt_1_Zinc3jet;
-    TH2D *hresponseZPt_1_Zinc4jet;
-
     //WpT + LJ pT
     TH1D *ZPtPlusLeadingJetPt_Zinc1jet;
     TH1D *ZPtPlusLeadingJetPt_Zinc2jet;
@@ -808,19 +795,6 @@ public:
     TH2D *hresponseZPtPlusLeadingJetPt_Zinc3jet;
     TH2D *hresponseZPtPlusLeadingJetPt_Zinc4jet;
 
-    TH1D *ZPtPlusLeadingJetPt_1_Zinc1jet;
-    TH1D *ZPtPlusLeadingJetPt_1_Zinc2jet;
-    TH1D *ZPtPlusLeadingJetPt_1_Zinc3jet;
-    TH1D *ZPtPlusLeadingJetPt_1_Zinc4jet;
-    TH1D *genZPtPlusLeadingJetPt_1_Zinc1jet;
-    TH1D *genZPtPlusLeadingJetPt_1_Zinc2jet;
-    TH1D *genZPtPlusLeadingJetPt_1_Zinc3jet;
-    TH1D *genZPtPlusLeadingJetPt_1_Zinc4jet;
-    TH2D *hresponseZPtPlusLeadingJetPt_1_Zinc1jet;
-    TH2D *hresponseZPtPlusLeadingJetPt_1_Zinc2jet;
-    TH2D *hresponseZPtPlusLeadingJetPt_1_Zinc3jet;
-    TH2D *hresponseZPtPlusLeadingJetPt_1_Zinc4jet;
-
     //WpT + HT,2/2
     TH1D *ZPtPlusHTover2_Zinc2jet;
     TH1D *ZPtPlusHTover2_Zinc3jet;
@@ -831,16 +805,6 @@ public:
     TH2D *hresponseZPtPlusHTover2_Zinc2jet;
     TH2D *hresponseZPtPlusHTover2_Zinc3jet;
     TH2D *hresponseZPtPlusHTover2_Zinc4jet;
-
-    TH1D *ZPtPlusHTover2_1_Zinc2jet;
-    TH1D *ZPtPlusHTover2_1_Zinc3jet;
-    TH1D *ZPtPlusHTover2_1_Zinc4jet;
-    TH1D *genZPtPlusHTover2_1_Zinc2jet;
-    TH1D *genZPtPlusHTover2_1_Zinc3jet;
-    TH1D *genZPtPlusHTover2_1_Zinc4jet;
-    TH2D *hresponseZPtPlusHTover2_1_Zinc2jet;
-    TH2D *hresponseZPtPlusHTover2_1_Zinc3jet;
-    TH2D *hresponseZPtPlusHTover2_1_Zinc4jet;
 
     /////
 
@@ -1022,13 +986,13 @@ public:
     TH1D *LepPtPlusLeadingJetPt_Zinc3jet_R43;
     TH1D *LepPtPlusLeadingJetPt_Zinc4jet_R43;
     
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc1jet_R21;
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc2jet_R21;
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc2jet_R32;
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc3jet_R32;
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc3jet_R43;
-     TH1D *LepPtPlusLeadingJetPt_1_Zinc4jet_R43;
-
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc1jet_R21;
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc2jet_R21;
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc2jet_R32;
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc3jet_R32;
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc3jet_R43;
+    // TH1D *LepPtPlusLeadingJetPt_1_Zinc4jet_R43;
+    
     // TH1D *LepPtPlusLeadingJetPt_2_Zinc1jet_R21;
     // TH1D *LepPtPlusLeadingJetPt_2_Zinc2jet_R21;
     // TH1D *LepPtPlusLeadingJetPt_2_Zinc2jet_R32;
@@ -1043,13 +1007,13 @@ public:
     TH1D *genLepPtPlusLeadingJetPt_Zinc3jet_R43;
     TH1D *genLepPtPlusLeadingJetPt_Zinc4jet_R43;
     
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc1jet_R21;
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc2jet_R21;
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc2jet_R32;
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc3jet_R32;
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc3jet_R43;
-     TH1D *genLepPtPlusLeadingJetPt_1_Zinc4jet_R43;
-
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc1jet_R21;
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc2jet_R21;
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc2jet_R32;
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc3jet_R32;
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc3jet_R43;
+    // TH1D *genLepPtPlusLeadingJetPt_1_Zinc4jet_R43;
+    
     // TH1D *genLepPtPlusLeadingJetPt_2_Zinc1jet_R21;
     // TH1D *genLepPtPlusLeadingJetPt_2_Zinc2jet_R21;
     // TH1D *genLepPtPlusLeadingJetPt_2_Zinc2jet_R32;
@@ -1064,13 +1028,13 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc3jet_R43;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc4jet_R43;
     
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21;
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21;
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32;
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32;
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43;
-     TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43;
-
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc1jet_R21;
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R21;
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc2jet_R32;
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R32;
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc3jet_R43;
+    // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc4jet_R43;
+    
     // TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc1jet_R21;
     // TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R21;
     // TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc2jet_R32;
@@ -1124,10 +1088,10 @@ public:
 //    TH1D *LepPtPlusHT_1_Zinc3jet_R32;
 //    TH1D *LepPtPlusHT_1_Zinc3jet_R43;
 //    TH1D *LepPtPlusHT_1_Zinc4jet_R43;
-     TH1D *LepPtPlusHTover2_1_Zinc2jet_R32;
-     TH1D *LepPtPlusHTover2_1_Zinc3jet_R32;
-     TH1D *LepPtPlusHTover2_1_Zinc3jet_R43;
-     TH1D *LepPtPlusHTover2_1_Zinc4jet_R43;
+    // TH1D *LepPtPlusHTover2_1_Zinc2jet_R32;
+    // TH1D *LepPtPlusHTover2_1_Zinc3jet_R32;
+    // TH1D *LepPtPlusHTover2_1_Zinc3jet_R43;
+    // TH1D *LepPtPlusHTover2_1_Zinc4jet_R43;
 //    TH1D *LepPtPlusHTover3_1_Zinc3jet_R43;
 //    TH1D *LepPtPlusHTover3_1_Zinc4jet_R43;
 
@@ -1137,10 +1101,10 @@ public:
 //    TH1D *genLepPtPlusHT_1_Zinc3jet_R32;
 //    TH1D *genLepPtPlusHT_1_Zinc3jet_R43;
 //    TH1D *genLepPtPlusHT_1_Zinc4jet_R43;
-     TH1D *genLepPtPlusHTover2_1_Zinc2jet_R32;
-     TH1D *genLepPtPlusHTover2_1_Zinc3jet_R32;
-     TH1D *genLepPtPlusHTover2_1_Zinc3jet_R43;
-     TH1D *genLepPtPlusHTover2_1_Zinc4jet_R43;
+    // TH1D *genLepPtPlusHTover2_1_Zinc2jet_R32;
+    // TH1D *genLepPtPlusHTover2_1_Zinc3jet_R32;
+    // TH1D *genLepPtPlusHTover2_1_Zinc3jet_R43;
+    // TH1D *genLepPtPlusHTover2_1_Zinc4jet_R43;
 //    TH1D *genLepPtPlusHTover3_1_Zinc3jet_R43;
 //    TH1D *genLepPtPlusHTover3_1_Zinc4jet_R43;
 
@@ -1150,10 +1114,10 @@ public:
 //    TH2D *hresponseLepPtPlusHT_1_Zinc3jet_R32;
 //    TH2D *hresponseLepPtPlusHT_1_Zinc3jet_R43;
 //    TH2D *hresponseLepPtPlusHT_1_Zinc4jet_R43;
-     TH2D *hresponseLepPtPlusHTover2_1_Zinc2jet_R32;
-     TH2D *hresponseLepPtPlusHTover2_1_Zinc3jet_R32;
-     TH2D *hresponseLepPtPlusHTover2_1_Zinc3jet_R43;
-     TH2D *hresponseLepPtPlusHTover2_1_Zinc4jet_R43;
+    // TH2D *hresponseLepPtPlusHTover2_1_Zinc2jet_R32;
+    // TH2D *hresponseLepPtPlusHTover2_1_Zinc3jet_R32;
+    // TH2D *hresponseLepPtPlusHTover2_1_Zinc3jet_R43;
+    // TH2D *hresponseLepPtPlusHTover2_1_Zinc4jet_R43;
 //    TH2D *hresponseLepPtPlusHTover3_1_Zinc3jet_R43;
 //    TH2D *hresponseLepPtPlusHTover3_1_Zinc4jet_R43;
 
@@ -1195,6 +1159,91 @@ public:
     // TH2D *hresponseLepPtPlusHTover2_2_Zinc4jet_R43;
 //    TH2D *hresponseLepPtPlusHTover3_2_Zinc3jet_R43;
 //    TH2D *hresponseLepPtPlusHTover3_2_Zinc4jet_R43;
+
+//    TH1D *LepPtPlusHT_3_Zinc1jet_R21;
+//    TH1D *LepPtPlusHT_3_Zinc2jet_R21;
+//    TH1D *LepPtPlusHT_3_Zinc2jet_R32;
+//    TH1D *LepPtPlusHT_3_Zinc3jet_R32;
+//    TH1D *LepPtPlusHT_3_Zinc3jet_R43;
+//    TH1D *LepPtPlusHT_3_Zinc4jet_R43;
+//    TH1D *LepPtPlusHTover2_3_Zinc2jet_R32;
+//    TH1D *LepPtPlusHTover2_3_Zinc3jet_R32;
+//    TH1D *LepPtPlusHTover2_3_Zinc3jet_R43;
+//    TH1D *LepPtPlusHTover2_3_Zinc4jet_R43;
+//    TH1D *LepPtPlusHTover3_3_Zinc3jet_R43;
+//    TH1D *LepPtPlusHTover3_3_Zinc4jet_R43;
+//
+//    TH1D *genLepPtPlusHT_3_Zinc1jet_R21;
+//    TH1D *genLepPtPlusHT_3_Zinc2jet_R21;
+//    TH1D *genLepPtPlusHT_3_Zinc2jet_R32;
+//    TH1D *genLepPtPlusHT_3_Zinc3jet_R32;
+//    TH1D *genLepPtPlusHT_3_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHT_3_Zinc4jet_R43;
+//    TH1D *genLepPtPlusHTover2_3_Zinc2jet_R32;
+//    TH1D *genLepPtPlusHTover2_3_Zinc3jet_R32;
+//    TH1D *genLepPtPlusHTover2_3_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHTover2_3_Zinc4jet_R43;
+//    TH1D *genLepPtPlusHTover3_3_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHTover3_3_Zinc4jet_R43;
+//
+//    TH2D *hresponseLepPtPlusHT_3_Zinc1jet_R21;
+//    TH2D *hresponseLepPtPlusHT_3_Zinc2jet_R21;
+//    TH2D *hresponseLepPtPlusHT_3_Zinc2jet_R32;
+//    TH2D *hresponseLepPtPlusHT_3_Zinc3jet_R32;
+//    TH2D *hresponseLepPtPlusHT_3_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHT_3_Zinc4jet_R43;
+//    TH2D *hresponseLepPtPlusHTover2_3_Zinc2jet_R32;
+//    TH2D *hresponseLepPtPlusHTover2_3_Zinc3jet_R32;
+//    TH2D *hresponseLepPtPlusHTover2_3_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHTover2_3_Zinc4jet_R43;
+//    TH2D *hresponseLepPtPlusHTover3_3_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHTover3_3_Zinc4jet_R43;
+//
+//    TH1D *LepPtPlusHT_4_Zinc1jet_R21;
+//    TH1D *LepPtPlusHT_4_Zinc2jet_R21;
+//    TH1D *LepPtPlusHT_4_Zinc2jet_R32;
+//    TH1D *LepPtPlusHT_4_Zinc3jet_R32;
+//    TH1D *LepPtPlusHT_4_Zinc3jet_R43;
+//    TH1D *LepPtPlusHT_4_Zinc4jet_R43;
+//    TH1D *LepPtPlusHTover2_4_Zinc2jet_R32;
+//    TH1D *LepPtPlusHTover2_4_Zinc3jet_R32;
+//    TH1D *LepPtPlusHTover2_4_Zinc3jet_R43;
+//    TH1D *LepPtPlusHTover2_4_Zinc4jet_R43;
+//    TH1D *LepPtPlusHTover3_4_Zinc3jet_R43;
+//    TH1D *LepPtPlusHTover3_4_Zinc4jet_R43;
+//
+//    TH1D *genLepPtPlusHT_4_Zinc1jet_R21;
+//    TH1D *genLepPtPlusHT_4_Zinc2jet_R21;
+//    TH1D *genLepPtPlusHT_4_Zinc2jet_R32;
+//    TH1D *genLepPtPlusHT_4_Zinc3jet_R32;
+//    TH1D *genLepPtPlusHT_4_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHT_4_Zinc4jet_R43;
+//    TH1D *genLepPtPlusHTover2_4_Zinc2jet_R32;
+//    TH1D *genLepPtPlusHTover2_4_Zinc3jet_R32;
+//    TH1D *genLepPtPlusHTover2_4_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHTover2_4_Zinc4jet_R43;
+//    TH1D *genLepPtPlusHTover3_4_Zinc3jet_R43;
+//    TH1D *genLepPtPlusHTover3_4_Zinc4jet_R43;
+//
+//    TH2D *hresponseLepPtPlusHT_4_Zinc1jet_R21;
+//    TH2D *hresponseLepPtPlusHT_4_Zinc2jet_R21;
+//    TH2D *hresponseLepPtPlusHT_4_Zinc2jet_R32;
+//    TH2D *hresponseLepPtPlusHT_4_Zinc3jet_R32;
+//    TH2D *hresponseLepPtPlusHT_4_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHT_4_Zinc4jet_R43;
+//    TH2D *hresponseLepPtPlusHTover2_4_Zinc2jet_R32;
+//    TH2D *hresponseLepPtPlusHTover2_4_Zinc3jet_R32;
+//    TH2D *hresponseLepPtPlusHTover2_4_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHTover2_4_Zinc4jet_R43;
+//    TH2D *hresponseLepPtPlusHTover3_4_Zinc3jet_R43;
+//    TH2D *hresponseLepPtPlusHTover3_4_Zinc4jet_R43;
+
+    //W Pt + Leading Jet Pt
+
+
+
+    //W Pt + (HT,2)/2
+    
 
 
     ///
