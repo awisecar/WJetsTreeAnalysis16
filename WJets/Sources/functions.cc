@@ -262,41 +262,49 @@ table::table(string filename)
 
 }
 
+//used for Lep SFs
 double table::getEfficiency(double pt, double eta, int sysLepSF){
+    //use the hiPtBin value to grab the efficiency of the last pt-bin if the object pt exceeds the max pt in the table
     double hiPtBin= 0;
+    //nominal
     if (sysLepSF == 0){
         for (unsigned int i=0; i != recd.size(); i++) {
             if((recd[i]).belongTo(pt, eta)) return recd[i].effi;
-            if((recd[i]).belongTo(190, eta)) hiPtBin = recd[i].effi;
+            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi;
         }
         return hiPtBin;
-    }
+    } 
+    //LepSF variation up
     else if (sysLepSF == 1){
         for (unsigned int i=0; i != recd.size(); i++) {
             if((recd[i]).belongTo(pt, eta)) return recd[i].effi+recd[i].effiErrorHigh;
-            if((recd[i]).belongTo(190, eta)) hiPtBin = recd[i].effi;
+            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi+recd[i].effiErrorHigh;
         }
         return hiPtBin;
     }
+    //LepSF variation down
     else if (sysLepSF == -1){
         for (unsigned int i=0; i != recd.size(); i++) {
             if((recd[i]).belongTo(pt, eta)) return recd[i].effi-recd[i].effiErrorLow;
-            if((recd[i]).belongTo(190, eta)) hiPtBin = recd[i].effi;
+            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi-recd[i].effiErrorLow;
         }
         return hiPtBin;
     }
     else return 1;
 }
+
+//used for the smear factors for JES
 double table::getEfficiency(double pt, double eta){
     double hiPtBin= 0;
     for (unsigned int i=0; i != recd.size(); i++) {
-        // if finds the proper bin, then return the efficiency
+        // if finds the proper bin, then return the corresponding efficiency
         if((recd[i]).belongTo(pt, eta)) return recd[i].effi;
-        // else store the average pt of the current bin efficency but do not return and try the next bin
+        // if pt of object goes beyond table bounds, then record the last efficiency value in the pt range
         if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi;
     }
     return hiPtBin;
-}
+} 
+
 double table::getEfficiencyLow(double pt, double eta){
     double hiPtBin= 0;
     for (unsigned int i=0; i != recd.size(); i++) {
@@ -305,6 +313,7 @@ double table::getEfficiencyLow(double pt, double eta){
     }
     return hiPtBin;
 }
+
 double table::getEfficiencyHigh(double pt, double eta){
     double hiPtBin= 0;
     for (unsigned int i=0; i != recd.size(); i++) {
