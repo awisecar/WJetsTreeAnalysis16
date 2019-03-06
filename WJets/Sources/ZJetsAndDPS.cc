@@ -211,6 +211,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "hasGenInfo: " << hasGenInfo << std::endl;
     std::cout << "hasPartonInfo: " << hasPartonInfo << std::endl;
     std::cout << "isData: " << isData << std::endl;
+    std::cout << "lumiScale: " << lumiScale << std::endl;
+    std::cout << "puScale: " << puScale << std::endl;
 
     std::cout << "doW: " << doW << std::endl;
     std::cout << "leptonFlavor: " << leptonFlavor << std::endl;
@@ -226,6 +228,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "doFlat: " << doFlat << std::endl;
     std::cout << "useRoch: " << useRoch << std::endl;
     std::cout << "doInvMassCut: " << doInvMassCut << std::endl;
+    std::cout << "pdfSet: " << pdfSet << std::endl;
+    std::cout << "pdfMember: " << pdfMember << std::endl;
 
     std::cout << "---> Phase Space -- " << std::endl;
     std::cout << "jetPtCutMin: " << jetPtCutMin << std::endl;
@@ -235,6 +239,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "ZPtCutMin: " << ZPtCutMin << std::endl;
     std::cout << "ZEtaCutMin: " << ZEtaCutMin << std::endl;
     std::cout << "ZEtaCutMax: " << ZEtaCutMax << std::endl;
+    std::cout << "ZMCutLow: " << ZMCutLow << std::endl;
+    std::cout << "ZMCutHigh: " << ZMCutHigh << std::endl;
     std::cout << "METcut: " << METcut << std::endl;
     std::cout << "MTCut: " << MTCut << std::endl;
 

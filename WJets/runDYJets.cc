@@ -19,18 +19,18 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
     }
         
     //------------------
-//     int doWhat       = 41;
+     //int doWhat       = 23;
                               // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
-//     int doSysRunning = 0;
+     //int doSysRunning = 1;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
- //    int doQCD        = 0;
+     //int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     int doBJets      = -1;

@@ -63,6 +63,14 @@ root -b -q runTest_BVeto.cc++
 A .tex file detailing the bin statistics will be available in WJets directory with title beginning with "outputTable_"
 
 ----------------------------------
+Systematics:
+./wjets_Merge_Data_Syst.sh
+./wjets_Merge_Wpt_Syst.sh
+//Note: for single top, go in and change the syst switches as needed, but it's the same file to merge them
+root -b -q -l MergeTop_BVeto.cc
+
+
+----------------------------------
 
 TTbar SFs Study:
 Run requiring 2 btag jets (doBJets=2) and WJets signal region (doQCD=0)

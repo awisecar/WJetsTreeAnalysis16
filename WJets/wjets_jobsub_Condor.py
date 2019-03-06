@@ -65,7 +65,7 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 ## Systematics ---
 
 ########## PU Syst
-#doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
+#doWhat = [21, 22, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
 #doQCD = [0]
 #doSysRunning = [1]
 
@@ -80,12 +80,12 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 #doSysRunning = [3]
 
 ########## JER Syst
-doWhat = [41, 42, 51, 52, 53, 54] #W+jets MC
+doWhat = [51, 52, 53, 54] #W+jets MC
 doQCD = [0]
 doSysRunning = [4]
 
 ########### LepSF Syst
-#doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
+#doWhat = [21, 22, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
 #doQCD = [0]
 #doSysRunning = [5]
 ##############################
