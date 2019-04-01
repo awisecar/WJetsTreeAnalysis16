@@ -40,7 +40,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
                             // 101 - require exactly 1 b-jet
     //------------------
     
-    string lepSelection = "SMu"; // default lumi is set for double muon dataset
+    string lepSelection = "SMu";
     double muLumi(35916.625); // 80X 2016 data bonzai 23Sep2016ReReco golden json
 
     //switches

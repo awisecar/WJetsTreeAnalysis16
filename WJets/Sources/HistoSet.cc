@@ -346,12 +346,18 @@ HistoSet::HistoSet(string leptonFlavor)
     double lepJetPt_2_ZRatios[25] = {45, 47.5, 50, 52.5, 55, 60, 65, 72.5, 80, 92.5, 105, 122.5, 140, 162.5, 185, 210, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
 
     //use for W pt based things
-    int nWBosonJetPt_ZRatios(12);
-    double wBosonJetPt_ZRatios[13] = {45, 50, 55, 65, 80, 105, 140, 185, 235, 300, 400, 550, 900};
-    int nWBosonJetPt_1_ZRatios(6);
-    double wBosonJetPt_1_ZRatios[7] = {45, 55, 80, 140, 235, 400, 900};
-    int nWBosonJetPt_2_ZRatios(24);
-    double wBosonJetPt_2_ZRatios[25] = {45, 47.5, 50, 52.5, 55, 60, 65, 72.5, 80, 92.5, 105, 122.5, 140, 162.5, 185, 210, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    //int nWBosonJetPt_ZRatios(12);
+    //double wBosonJetPt_ZRatios[13] = {45, 50, 55, 65, 80, 105, 140, 185, 235, 300, 400, 550, 900};
+    //int nWBosonJetPt_1_ZRatios(6);
+    //double wBosonJetPt_1_ZRatios[7] = {45, 55, 80, 140, 235, 400, 900};
+    //int nWBosonJetPt_2_ZRatios(24);
+    //double wBosonJetPt_2_ZRatios[25] = {45, 47.5, 50, 52.5, 55, 60, 65, 72.5, 80, 92.5, 105, 122.5, 140, 162.5, 185, 210, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    int nWBosonJetPt_ZRatios(10);
+    double wBosonJetPt_ZRatios[11] = {45, 55, 80, 105, 140, 185, 235, 300, 400, 550, 900};
+    int nWBosonJetPt_1_ZRatios(5);
+    double wBosonJetPt_1_ZRatios[6] = {45, 80, 140, 235, 400, 900};
+    int nWBosonJetPt_2_ZRatios(20);
+    double wBosonJetPt_2_ZRatios[21] = {45, 50, 55, 67.5, 80, 92.5, 105, 122.5, 140, 162.5, 185, 210, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
 
 
 

@@ -1,12 +1,13 @@
 # WJetsTreeAnalysis16
 
-The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for 2016 data provided by Kadir Ocalan and Metin Yalvac.
+The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for CMS Run 2 data.
 
 If you are interested in 2015 data/MC, please see Apichart's repository here:
 https://github.com/ahortian/WJetsTreeAnalysis/tree/master/WJets
 
-Note: the unfolding of these data is done at a different step, this code produces reco-level plots. Previously, for 2015 13 TeV we have used RooUnfold, with the Bayesian iterative method (::kBayes):
-https://github.com/ahortian/WJets13TeVUnfolding
+Note: the unfolding of these data is done at a different step, this code produces reco-level plots.
+For unfolding, we are currently using a method based on the TUnfold classes available in ROOT:
+https://github.com/awisecar/WJetsUnfolding16
 
 -- For now use CMSSW_5_3_20
 cmsrel CMSSW_5_3_20  
@@ -31,11 +32,11 @@ cd -
 
 Two different approaches to running:
 
-1) python wjets_jobsub.py
-which will submit batch jobs for the values of doWhat, doQCD, and doSysRunning specified in the script, producing STDOUT, and the submitted shell scripts in the folder "tmpjobs_<date>"
+1) python wjets_jobsub_Condor.py
+which will submit jobs to HTCondor for the values of doWhat, doQCD, and doSysRunning specified in the script, producing STDOUT, and the submitted shell scripts in the folder "wjetsCondor_"
 
-2) root -b -q wjets_compileCode.cc
-   root -b -q runDYJets.cc
+2) root -b -q -l wjets_compileCode.cc
+   root -b -q -l runDYJets.cc
 first compiles the code anew, and then the main command, which will be run in your current shell.
 
 Note: for QCD multijets background estimation we use the "ABCD" data-driven method, so we must run over the one signal and three control regions, doQCD=0, 1...3, respectively.
@@ -48,27 +49,27 @@ The doWhat, doQCD, doSysRunning, and doBJets options tell the main code (Sources
 ./wjets_Merge_Wpt_BVeto.sh
 
 -- Merge single top and DYJets root files (change if your total number of top or DY MC samples changes):
-root -b -q MergeTop_BVeto.cc++
-root -b -q MergeVV_BVeto.cc++
+root -b -q -l MergeTop_BVeto.cc++
+root -b -q -l MergeVV_BVeto.cc++
 
 -- Merge QCD Background:
-root -b -q runQCD_BVeto.cc++
+root -b -q -l runQCD_BVeto.cc++
 or if you want to save the output --
-root -b -q runQCD_BVeto.cc++ > mergeQCD.out 2>&1 
+root -b -q -l runQCD_BVeto.cc++ > mergeQCD_output.out 2>&1 
 
 -- Plotting: After you have all needed output files, you can plot the histograms by
-root -b -q runTest_BVeto.cc++
+root -b -q -l runTest_BVeto.cc++
 
 --Congratulations! Output PDF files will be in the directory PNGFile
-A .tex file detailing the bin statistics will be available in WJets directory with title beginning with "outputTable_"
+A .tex file detailing the bin statistics will be available in WJets directory with title beginning with "statsTable_"
 
 ----------------------------------
+
 Systematics:
 ./wjets_Merge_Data_Syst.sh
 ./wjets_Merge_Wpt_Syst.sh
 //Note: for single top, go in and change the syst switches as needed, but it's the same file to merge them
 root -b -q -l MergeTop_BVeto.cc
-
 
 ----------------------------------
 

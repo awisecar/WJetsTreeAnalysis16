@@ -33,8 +33,6 @@ ClassImp(ZJetsAndDPS);
 void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
 
-    bool doMETFiltering = true;
-
     //--- Initialize PDF from LHAPDF if needed ---
     if (pdfSet != "") {
         LHAPDF::initPDFSet(1, pdfSet.c_str(), pdfMember);
@@ -74,8 +72,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     if (doW || doTT) doZ = false;
     if (fileName.find("_dR_") != string::npos) doDR = true;
     if (fileName.find("TopReweighting") != string::npos) { hasGenInfo = true ; doTTreweighting = true;} // we don't want to use gen plots for ttbar, we just need to load the lepton branch to read the t qurak pt 
-    if ( doZ ) METcut = 0; // no need for MET cut on Z+jets analysis 
-    //if ( doW ) METcut = 30; // remove this if no MET cut
     
     // additional muons variables
     double leptonMass(0.00051);  // 
@@ -84,9 +80,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         leptonMass = 0.105658;
         LeptonID = 13;
     }
+    
+    // Turn on MET filtering
+    bool doMETFiltering = true;
 
     //==========================================================================================================//
-    //         Output file name           //
+    //         Create output file        //
     //===================================//
     string command = "mkdir -p " + outputDirectory;
     system(command.c_str());
@@ -128,29 +127,29 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     //==========================================================================================================//
     //     Systematics: jec, pu, xsec     //
     //====================================//
-    int puYear(2016);
+    int puYear(2016); 
     if (energy == "13TeV") puYear = 2016;
-    int mode = (systematics == 1) ? direction : 0;
+    int mode = (systematics == 1) ? direction : 0; // PU
     cout << "Pile Up Distribution: " << puYear << ", Mode: " << mode << endl;
     standalone_LumiReWeighting puWeight(puYear, mode);
    
-    int scale(0);//0,+1,-1; (keep 0 for noJEC shift study)
+    int scale(0); // JES
     if (systematics == 2 && direction ==  1) scale =  1;
     if (systematics == 2 && direction == -1) scale = -1;
 
-    double xsec(1.);
+    double xsec(1.); // XSEC
     if (systematics == 3 && direction ==  1) xsec = 1. + xsecfactor;
     if (systematics == 3 && direction == -1) xsec = 1. - xsecfactor;
 
-    int smearJet(0);
+    int smearJet(0); // JER
     if (systematics == 4 && direction ==  1) smearJet =  1;
     if (systematics == 4 && direction == -1) smearJet = -1;
     
-    int sysLepSF(0);
+    int sysLepSF(0); // LepSF
     if (systematics == 5 && direction ==  1) sysLepSF =  1;
     if (systematics == 5 && direction == -1) sysLepSF = -1;
     
-    int sysBtagSF(0);
+    int sysBtagSF(0); // BtagSF
     if (systematics == 6 && direction ==  1) sysBtagSF =  1;
     if (systematics == 6 && direction == -1) sysBtagSF = -1;
     
@@ -192,11 +191,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         FlatNVtxWeight = (TH1D*) pad->FindObject("NVtx");
     }
 
-    /// for Z counting
-    int NZtotal = 0 ;
-
-    double sumSherpaW = 0. ;
-    cout << " Sherpa initial weight :  " << sumSherpaW <<endl;
+    //double sumSherpaW = 0. ;
+    //cout << " Sherpa initial weight :  " << sumSherpaW <<endl;
 
     double sumEventW = 0. ;
     cout << " MC initial weight :  " << sumEventW <<endl;
@@ -215,12 +211,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "puScale: " << puScale << std::endl;
 
     std::cout << "doW: " << doW << std::endl;
+    std::cout << "doZ: " << doZ << std::endl;
+    std::cout << "doTT: " << doTT << std::endl;
+    std::cout << "LeptonID: " << LeptonID << std::endl;
     std::cout << "leptonFlavor: " << leptonFlavor << std::endl;
+    std::cout << "energy: " << energy << std::endl;
     std::cout << "doQCD: " << doQCD << std::endl;
     std::cout << "doBJets: " << doBJets << std::endl;
     std::cout << "doDR: " << doDR << std::endl;
     std::cout << "useEfficiencyCorrection: " << useEfficiencyCorrection << std::endl;
     std::cout << "useTriggerCorrection: " << useTriggerCorrection << std::endl;
+    std::cout << "doMETFiltering: " << doMETFiltering << std::endl;
     std::cout << "doVarWidth: " << doVarWidth << std::endl;
 
     std::cout << "doSSign: " << doSSign << std::endl;
@@ -320,12 +321,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         
         weight = weight * lumiScale * xsec;
         
-
         if (hasRecoInfo && !isData){
             weight *= EvtWeights->at(0);
             sumEventW += EvtWeights->at(0);
         }
-
 
         //==========================================================================================================//
         // Compute the weight for PDF syst   //
@@ -362,35 +361,33 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         TotalGenWeight += genWeightBackup;
         //---
 	
-	if (hasRecoInfo){
-		if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) countEventpassTrig++;
-		if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
-	}
-	//==========================================================================================================//
-	//--- MET FILTERING ---
-	//--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
-	//===================================//
-	bool passMETFILTER(true);
-        // bool EvtFilterbadChCandidate(true);
-        // bool EvtFilterbadPFMuon(true);
-        
-	if (hasRecoInfo && isData && doMETFiltering){
-		//cout << " " << TrigMET << " " << (TrigMET & 1LL<<0) << " " << (TrigMET & 1LL<<1) << " " << (TrigMET & 1LL<<5) << " " << (TrigMET & 1LL<<9) << " " << (TrigMET & 1LL<<11) << " " << (TrigMET & 1LL<<13) << " " << (TrigMET & 1LL<<18) << " " << (TrigMET & 1LL<<19) << endl;
-		passMETFILTER = (
-                       (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                    && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                    && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                    && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                    && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                    && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
-                    && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                    && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-		);
-		if (passMETFILTER) nEventsPassMETFilter++ ;
-	}
+        if (hasRecoInfo){
+            if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) countEventpassTrig++;
+            if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
+        }
+        //==========================================================================================================//
+        //--- MET FILTERING ---
+        //--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
+        //===================================//
+        bool passMETFILTER(true);
+        // MET filters for data
+        if (hasRecoInfo && isData && doMETFiltering){
+            passMETFILTER = (
+                        (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                        && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+                        && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+                        && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+                        && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                        && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
+                        && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+                        && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+            );
+            if (passMETFILTER) nEventsPassMETFilter++ ;
+        }
+        // MET filters for reco MC
         if (hasRecoInfo && !isData && doMETFiltering){
             passMETFILTER = (
-                               (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                                (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
                             && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
                             && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
                             && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
@@ -399,10 +396,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                             && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
             );
             if (passMETFILTER) nEventsPassMETFilter++ ;
-         }
+        }
 
 		//=======================================================================================================//
 
+        // Reweighting MC for pileup discrepancy
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
             puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth));
@@ -419,7 +417,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
              }*/ //Need to check later if the argument (EvtVtxCnt + 1) is correct
         }
 
-	weightNoSF = weight;
+	    weightNoSF = weight;
 
         //=======================================================================================================//
         
@@ -431,59 +429,61 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         bool doElectrons(leptonFlavor == "Electrons" || doW || doTT);
         bool passesLeptonCut(0);
         bool passesLeptonReq(0), passesLeptonAndMT(0), passesBtagReq(1);
-        //bool  passesTau3Req(1);
         unsigned short nTotLeptons(0), nLeptons(0), nMuons(0), nElectrons(0);
         vector<leptonStruct> leptons, muons, electrons, mets, allLooseLeptons, selLeptons;
         TLorentzVector lep1, lep2, Z;
         leptonStruct lepton1 = {0, 0, 0, 0, 0, 0, 0};
         leptonStruct lepton2 = {0, 0, 0, 0, 0, 0, 0};
         double METphi(0), METpt(0), MT(0);
-        //double METpt(0), MT(0);
         int whichMet(0); //  0 - slimmedMETs, 1 - slimmedMETsPUPPI
-
-        //APICHART int sumLepCharge(1000);
-        //APICHART if (hasRecoInfo && doTT && METPt->at(whichMet) < METcut) continue;
+        
         if (hasRecoInfo) {
-
             bool eventTrigger = false;
+
             //--- DO MUONS ---
+            // Reco muon cuts here!
             if (doMuons){
                 nTotLeptons = MuEta->size();
                 
-                if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) eventTrigger = true;
+                // trigger cut - for WJets 13 TeV, triggers should be HLTIsoMu24 || HLTIsoTkMu24
+                if ( energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
+
+                    //grabbing reco muon information as a leptonStruct
                     leptonStruct mu = {(MuPt->at(i) * muScale) + merUncer, MuEta->at(i), MuPhi->at(i), MuE->at(i) * (((MuPt->at(i) * muScale) + merUncer)/MuPt->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
-                    bool muPassesPtCut(( (doZ || doTT) && mu.pt >= 20.) || (doW && mu.pt >= 26.));
-     
+                    // pT cut for muon
+                    bool muPassesPtCut( ((doZ || doTT) && mu.pt >= 20.) || (doW && mu.pt >= 26.) );
+                    // eta cut for muon
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
                     bool muPassesEtaCut( ((doZ || doTT) && muPassesEtaLooseCut) || (doW && fabs(mu.eta) <= 2.4) );
-                  
+                    // ID cut for muon
                     bool muPassesIdCut((MuIdTight->at(i) & 1)); // this is for tight ID --> odd number
-
-                    bool muPassesIsoCut((!doW && MuPfIso->at(i) < 0.2) || (doW && MuPfIso->at(i) < 0.15));  
+                    // Iso cut for muon
+                    bool muPassesIsoCut( (!doW && MuPfIso->at(i) < 0.2) || (doW && MuPfIso->at(i) < 0.15) );  
+                    // Iso cut for muon (for doing QCD background)
                     bool muPassesQCDIsoCut(doW && MuPfIso->at(i) >= 0.2); // use 0.15 if you want to cover full Iso space
                     
-
                     // select the good muons only
-                    //-- no Isolation Cut
-                    //koif (!doTT && muPassesEtaLooseCut && MuIdTight->at(i) > 0 && mu.pt >= 15) muons.push_back(mu);
+                    // all muons that survive eta cut of 2.4 and pT cut of 15
                     if (!doTT && muPassesEtaLooseCut && mu.pt >= 15) muons.push_back(mu);
                     
-                    
+                    // check if muon passes all required event cuts
                     if (muPassesPtCut && muPassesEtaCut && muPassesIdCut && (!useTriggerCorrection || eventTrigger)){
-                        //-- isolation Cut
-                        if (doQCD > 1 && muPassesQCDIsoCut && leptonFlavor != "SingleElectron") leptons.push_back(mu);
+                        // analysis iso cut
                         if (muPassesIsoCut){  
                             if (doQCD < 2 && leptonFlavor != "SingleElectron") leptons.push_back(mu); 
                             if (doTT && fabs(mu.eta) < 2.4) muons.push_back(mu); 
                         } 
+                        // QCD isolation cut
+                        if (doQCD > 1 && muPassesQCDIsoCut && leptonFlavor != "SingleElectron") leptons.push_back(mu);                        
                     }
                 }//End of loop over all the muons
             }
             
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+
             //------ DO ELECTRONS -------
             if (doElectrons) {
                 nTotLeptons = 0;
@@ -505,9 +505,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                         //-- isolation Cut
                         if (doQCD > 1  && !elePassesIsoCut && leptonFlavor != "SingleMuon") leptons.push_back(ele);
                         if ( elePassesIsoCut ) {
-                                if (doQCD < 2 && leptonFlavor != "SingleMuon") leptons.push_back(ele);
-                                if (doTT) electrons.push_back(ele);
-                            }
+                            if (doQCD < 2 && leptonFlavor != "SingleMuon") leptons.push_back(ele);
+                            if (doTT) electrons.push_back(ele);
+                        }
                     }
                 }//End of loop over all the electrons
             }
@@ -516,8 +516,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
             nElectrons = electrons.size();
             nLeptons = leptons.size();
             
-	    // sort leptons by descending pt
-	    if (nLeptons >= 2) sort(leptons.begin(), leptons.end(), LepDescendingOrder);
+	        // sort leptons by descending pt (these leptons are the muons that pass event selection)
+            // this line says, if there's two or more, than we need to pT-sort them
+            // if there's only 1 or 0 than there's no need to sort
+	        if (nLeptons >= 2) sort(leptons.begin(), leptons.end(), LepDescendingOrder);
 			
             vector<leptonStruct> tempVec;
             for ( int iLep = 0 ; iLep < nLeptons ; iLep++){
@@ -526,7 +528,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
             selLeptons = tempVec ;
 
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-        }// end has reco info
+        }// end has reco info for leptons
 
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
@@ -547,23 +549,27 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
             nTotGenPhotons = GPhotEta->size();
             nTotGenLeptons = GLepBareEta->size();
             
+            // getting PDG ID for the neutrino
             if (doW) nuID = 14;
             else if (doW && LeptonID == 11) nuID = 12;
             //-- retriveing generated leptons with status 1
             for (unsigned short i(0); i < nTotGenLeptons; i++) {
-                // line below is to check contribution from mainy tau decay : use passesLeptonCut = 0  only if you want to have RECO events that originate from tau ; countTauS3 is used in passesGenLeptonCut
+
+                // allow gen lepton to pass only if satisfies the necessary PDG ID
                 bool lepSelector( 
                         (doZ && abs(GLepBareId->at(i)) == LeptonID) || 
-                        (doW && (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID)) );
-
+                        ( doW && (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID) ) 
+                    );
                 if (!lepSelector) continue ;
-                if (! GLepBarePrompt->at(i)) continue ;
+                if (!GLepBarePrompt->at(i)) continue ;
                 
+                // determining gen lepton charge based on PDG ID
                 double charge;
                 if (abs(GLepBareId->at(i)) == 12 || abs(GLepBareId->at(i)) == 14 || abs(GLepBareId->at(i)) == 16) charge = 0.;
                 else if (GLepBareId->at(i) > 0) charge = -1.;
                 else charge = 1.;
                 
+                // grabbing gen lepton info in the form of a leptonStruct
                 leptonStruct genLep = {GLepBarePt->at(i), GLepBareEta->at(i), GLepBarePhi->at(i), GLepBareE->at(i), charge, 0., 0.};
                 leptonStruct genLepNoFSR = {GLepBarePt->at(i), GLepBareEta->at(i), GLepBarePhi->at(i), GLepBareE->at(i), charge, 0., 0. };
                 
@@ -572,22 +578,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                     && GLepBareSt->at(i) == 1
                     && ( abs(GLepBareId->at(i)) == LeptonID || (charge == 0 && doW) ) )
                  {
-                    // only charged lepton(s) will be dressed
+                    // Only charged lepton(s) will be dressed
                     if( fabs(genLep.charge) > 0 ){
                         TLorentzVector tmpGenLep;
                         tmpGenLep.SetPtEtaPhiM(genLep.pt, genLep.eta, genLep.phi, leptonMass);
 
                          // loop over all photons
                         for (unsigned short j(0); j < nTotGenPhotons; j++){
-                            
                             if( abs(GPhotSt->at(j)) != 1 || GPhotPt->at(j) < 0.000001 ) continue;
-                            
                             TLorentzVector tmpGenPho;
                             tmpGenPho.SetPtEtaPhiM(GPhotPt->at(j), GPhotEta->at(j), GPhotPhi->at(j), 0.);
                             int used(0);
                             for (unsigned short k(0); k < usedGenPho.size(); k++){
                                 if (j == usedGenPho[k]) used = 1;
                             }
+                            // dressing leptons using photons within the delR <= 0.1 cone
                             if (deltaR(tmpGenPho.Phi(), tmpGenPho.Eta(), genLepNoFSR.phi, genLepNoFSR.eta) <= 0.1 && !used){
                                 tmpGenLep += tmpGenPho;
                                 usedGenPho.push_back(j);
@@ -599,21 +604,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                         genLep.energy = tmpGenLep.E();
                     }
                     
-                    //-- store lepton in the collection
+                    // Event selection on gen lepton
                     if (doZ && genLep.pt >= 20 && fabs(genLep.eta) <= 2.4 && fabs(genLep.charge) > 0){
                         genLeptons.push_back(genLep);
                     }
-                    
-                    //if (doW && ((fabs(genLep.charge) > 0 && genLep.pt >= 25 && fabs(genLep.eta) <= 2.1)||(fabs(genLep.charge) == 0))){
-                    if (doW && ((fabs(genLep.charge) > 0 && genLep.pt >= 26 && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut))){
+                    //For WJets, pT and eta cut on the muon, MET cut on the neutrino
+                    if (doW && ( (fabs(genLep.charge) > 0 && genLep.pt >= 26 && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut) ) ){
                         genLeptons.push_back(genLep); 
                     }
                 }
-            }
+            } //end loop over gen leptons
             nGenLeptons = genLeptons.size();
             
 if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             //-- determine if the event passes the leptons requirements
+            // for WJets, should have a muon and a neutrino, for ZJets, should have two muons or two electrons
             if (nGenLeptons >= 2){
                 
                 // sort leptons by descending pt
@@ -621,7 +626,10 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 genLepton1 = genLeptons[0];
                 genLepton2 = genLeptons[1];
                 
+                //----- For W+jets -------
                 if (doW){
+                    //set genLepton1 as the muon, and genLepton2 as the neutrino
+                    //assuming that the two highest pT gen leptons are the signal muon and neutrino
                     if (abs(genLeptons[0].charge) > 0 && genLeptons[1].charge == 0){
                         genLepton1 = genLeptons[0];
                         genLepton2 = genLeptons[1];
@@ -632,36 +640,43 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         genLepton2 = genLeptons[0];
                         genMT = sqrt(2 *genLepton2.pt * genLepton1.pt * (1 - cos(genLepton2.phi - genLepton1.phi)));
                     }
+                    //if the two highest pT leptons aren't exactly one muon and one neutrino, make it fail the MT cut
                     else genMT = -99.0;
                     
+                    //MT cut and MET cut on the neutrino
                     if (genMT >= MTCut && genLepton2.pt >= METcut) passesGenLeptonCut = 1;
                 }
 
                 //----- For Z+jets -------
-                // select the first two leptons with opposite charge
+                // Select the first two leptons with opposite charge
                 if (doZ && genLepton1.charge*genLepton2.charge > 0 && nGenLeptons > 2) {
+                    //try grabbing the third-highest pT lepton as the second lepton
                     genLepton2 = genLeptons[2];
                 }
+
                 // build the TLorentzVectors, the Z candidate and the kinematic
                 genLep1.SetPtEtaPhiE(genLepton1.pt, genLepton1.eta, genLepton1.phi, genLepton1.energy);
                 genLep2.SetPtEtaPhiE(genLepton2.pt, genLepton2.eta, genLepton2.phi, genLepton2.energy);
                 genZ = genLep1 + genLep2; //TLorentzVector for the gen-level W (or Z) boson
-                // apply charge, mass and eta cut
+
+                // Apply charge, mass window, pT, and eta cut for Z+jets
                 if (doZ && genLepton1.charge*genLepton2.charge < 0 
                         && genZ.M() > ZMCutLow && genZ.M() < ZMCutHigh 
-                        && genZ.Eta()*100 > ZEtaCutMin && genZ.Eta()*100 < ZEtaCutMax && genZ.Pt()>= ZPtCutMin) {
-                    
+                        && genZ.Eta()*100 > ZEtaCutMin && genZ.Eta()*100 < ZEtaCutMax 
+                        && genZ.Pt()>= ZPtCutMin) {
                     passesGenLeptonCut = 1;
                 }
-                //----- End For Z+jets -------
             }
-        }
+        } //end gen lepton if statement
         //=======================================================================================================//
 
-	if (doW && ((leptonFlavor == "SingleMuon" && nMuons == 1 && nLeptons == 1 && nElectrons == 0) || (leptonFlavor == "SingleElectron" && nMuons == 0 && nLeptons == 1 && nElectrons == 1))) {
-	    passesLeptonReq = true;
-	    countEventpassLepReq++;
-	}
+        // andrew - For WJets, passesLeptonReq is true if there is only one muon that passes analysis cuts
+        // and no second muon that passes at least 15 GeV and abs(eta) cut of 2.4 (nMuons and nLeptons must be 1 and refer to the same lepton)
+        // this secondary muon event veto is done to reduce DYJets BG
+        if (doW && ( (leptonFlavor == "SingleMuon" && nMuons == 1 && nLeptons == 1 && nElectrons == 0) || (leptonFlavor == "SingleElectron" && nMuons == 0 && nLeptons == 1 && nElectrons == 1) )) {
+            passesLeptonReq = true;
+            countEventpassLepReq++;
+        }
 
         //=======================================================================================================//
         //          Retrieving jets           //
@@ -670,9 +685,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         unsigned short nGoodJets(0),nGoodJets_20(0), nTotJets(0), nJetsAdd(0), nJetsNoDRCut(0), nJetsDR02Cut(0), nJetsPt100DR04(0);
         double jetsHT(0); 
         double jetsHT_20(0);
-        double METscale(0.);
         double XMETscale(0.), YMETscale(0.);            // for calculating METscale
-        double TempMETpt(0.), TempMETphi(0.), XMETpt(0.), YMETpt(0.) ; // for calculating METscale
+        double  XMETpt(0.), YMETpt(0.) ; // for calculating METscale
 
         vector<jetStruct> jets, jetsAdditional, jetsPuMva, jets_20, jetsDR02, jetsNoDRCut, jetsPt100DR04; // additional jet collection with pt threshold of 20 GeV
         TLorentzVector leadJ, secondJ, jet1Plus2, jet1Minus2;
@@ -684,7 +698,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //**************************************** end edit **************************************************************//
         
         int countBJets(0);
-	int countDR02CutBJets(0), countDR04CutBJets(0);
+	    int countDR02CutBJets(0), countDR04CutBJets(0);
         int countWbBjets(0); // Wb study
 
         if (hasRecoInfo) {
@@ -698,13 +712,15 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 double jetPtTemp(0.); // for calculating METscale
                 bool passBJets(0);
                 
+                //btagging criterion
+                //nominal btagging criterion
                 if (JetAk04BDiscCisvV2->at(i) >= 0.8484) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
 
                 //************************* B-tag Veto Correction *******************************//
                 float this_rand = RandGen->Rndm(); // Get a random number.
                 float pt= JetAk04Pt->at(i);
                 float eta= JetAk04Eta->at(i);
-                // --------- MC-only
+                // --------- Begin emulating btagging efficiencies in MC (MC only)
                 if (isData == false){
                     
                     bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
@@ -712,6 +728,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     
                     int jetflavour= JetAk04HadFlav->at(i);
                     
+                    // ---------------- For Real B-jets --------------- //
                     if (abs(jetflavour)==5){
                         float effb = 0.67298;
                         float effb_corr = 1;
@@ -784,7 +801,6 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     if (abs(jetflavour)==4){
                         float effc = 0.185922;
                         float effc_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
                         if (false) {
                         }
                         else{
@@ -909,15 +925,16 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                     }   ////////flavour lop
                     
+                    // for btagging SF systematics
                     if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
                     if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                     
                     // Wb study
                     if (abs(jetflavour)==5) countWbBjets++ ;
-                }
-                // --------- End MC-only
+                } // --------- End MC-only
                 //************************* End B-tag Veto Correction *******************************//
                
+                // grabbing reco jet information in the form of a jetStruct
                 jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0};
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
@@ -926,109 +943,94 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 jetEnergyCorr = TableJESunc.getEfficiency(jet.pt, jet.eta);
 
                 jetPtTemp = jet.pt; // for calculating METscale
+                // scale is 0 unless JES uncertainty turned on
+                // if JES uncertainty, vary pT and energy by a pT, eta-dependent uncertainty
                 jet.pt *= (1 + scale * jetEnergyCorr);
                 jet.energy *= (1 + scale * jetEnergyCorr);
 				
 				// for MET scale (JES uncertainty)
+                // if "scale" is non-zero then we need to re-calculate MET to take the JES uncertainties into account
 				if (fabs(scale) > 0.){
-					//-------- my calculation --------
+                    // summed up for all of the jets looped over in the event
 					XMETscale += ( scale * jetEnergyCorr * jetPtTemp * cos(jet.phi) ) ;
 					YMETscale += ( scale * jetEnergyCorr * jetPtTemp * sin(jet.phi) ) ;
-					//-------- end my calculation --------
 				}
 				
+                // Now do reco jet event selection cuts
                 TLorentzVector jetr;
                 jetr.SetPtEtaPhiE(jet.pt, jet.eta, jet.phi, jet.energy);
-                
-                bool jetPassesEtaCut((jetr.Rapidity() >= jetEtaCutMin / 10.) && (jetr.Rapidity() <= jetEtaCutMax / 10.));
+                // abs(rap) cut
+                bool jetPassesEtaCut( (jetr.Rapidity() >= jetEtaCutMin/10.) && (jetr.Rapidity() <= jetEtaCutMax/10.) );
+                // PF jet ID? (should be loose)
                 bool jetPassesIdCut(JetAk04Id->at(i) > 0);
+                // PU ID cut to help mitigate pileup jets
+                bool jetPassesPuIdCut((JetAk04PuId->at(i) & 1<<2));  //Kadir: jet loose pu ID
+                // PU MVA cut (only jets with pT below 100 GeV have to explicitly pass)
                 double tempMVA = JetAk04PuMva->at(i);
                 bool jetPassesMVACut(0);
                 if (energy == "13TeV") {
                     //  for 22Jan rereco, we use simple loose PU ID : -1  - does not pass, 1 passes
                     //  for 13TeV 76x we use the cut for jets having pT < 100 GeV
                     if(jet.pt >= 100.) jetPassesMVACut = true ;
-                    else{ if (tempMVA > -0.3) jetPassesMVACut = true ; }
+                    else { 
+                        if (tempMVA > -0.3) jetPassesMVACut = true ; 
+                    }
                 }
-                //bool jetPassesMVACut(patJetPfAk05jetpuMVA_->at(i) >= - 0.4); // -0.4 set for the cut was for 44x training. for 53x chs loose jet id is set to -0.89? 
-                //bool jetPassesMVACut(patJetPfAk05jetpuMVA_->at(i) >= - 0.0 && patJetPfAk05jetBZ_->at(i) > 0.05 ); // 0 set for the cut was for 44x training. for 53x chs loose jet id is set to -0.89? 
-
+                // jet dR cut (wrt to muons)
                 bool jetPassesdRCut(1), jetPassesdR02Cut(1);
                 unsigned short nRemovedLep = min(int(nLeptons), doW ? 1:2);
-                
-if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+// if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 for (unsigned short j(0); j < nRemovedLep; j++) {
                     // determine if passes dRCut
+                    // wrt to the leptons that have passed the event selection cuts (should just be the one muon for W+jets)
+                    // if the jet and muon are within a dR cone of < 0.4, then jetPassesdRCut turned to 0
                     if ( (doDR) && deltaR(jet.phi, jet.eta, selLeptons[j].phi, selLeptons[j].eta) < 0.4 ) jetPassesdRCut = 0;
 					if ( (doDR) && deltaR(jet.phi, jet.eta, selLeptons[j].phi, selLeptons[j].eta) < 0.2 ) jetPassesdR02Cut = 0;
-					
-                    //if (jet.pt >= jetPtCutMin && jetPassesMVACut && passesLeptonReq && jetPassesEtaCut && jetPassesIdCut){
-                    //   //KO deltaRjetMu->Fill(deltaR(jet.phi, jet.eta, selLeptons[j].phi, selLeptons[j].eta), weight);
-                    //}
                 }
-				
 				if (jetPassesdRCut)   jet.passDR04 = true;
 				if (jetPassesdR02Cut) jet.passDR02 = true;
 				
 if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-				if ( jetPassesEtaCut && jetPassesIdCut && jetPassesPtCut) {
-					
+
+                // rapidity, PF ID, PU ID, and Pt Cut (lower than analysis cut at 10 GeV)
+                if ( jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesPtCut) {
+                    // getting information about Bjets if doBJets is not 0
+                    // passBJets is the marker for if a jet is btagged or not
 					if ( fabs(doBJets) > 0 && passBJets == true) countBJets++ ;// count BJets, used for BVeto
-					
 					if ( fabs(doBJets) > 0 && passBJets == true && jetPassesdRCut)   countDR04CutBJets++ ;
 					if ( fabs(doBJets) > 0 && passBJets == true && jetPassesdR02Cut) countDR02CutBJets++ ;
-					
-					// We apply only the pu MVA variable for the time being.
-					// This is the recommended one.
+				
+                    // PU MVA cut
 					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut) jetsNoDRCut.push_back(jet);
+                    // PU MVA cut and dR 0.4 cut
 					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut && jetPassesdRCut) jets.push_back(jet);
 					
 					if ( jet.pt >= 50 && jetPassesdRCut) passesEWKJetPt = true ;
 					if ( fabs(jet.eta) > 2.4 && jetPassesdRCut) passesEWKJetFwdEta = true ;
 					
                 }
-				if (jetPassesEtaCut && jetPassesIdCut && jetPassesdRCut && jet.pt >= jetPtCutMin) {
+                // for jetsPuMva
+                // rapidity, PF ID, PU ID, dR 0.4 cut, analysis pT cut (30 GeV)
+                // w/ no PU MVA ID cut yet
+                if (jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut && jet.pt >= jetPtCutMin) {
 					jetsPuMva.push_back(jet);
 				}
-				if (jetPassesEtaCut && jetPassesIdCut && jetPassesdRCut && jet.pt >=  15.) jetsAdditional.push_back(jet);
+                if (jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut && jet.pt >=  15.) jetsAdditional.push_back(jet);
 				
-if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-            }
-            //--- End of loop over all the jets ---
-
+// if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            } //--- End of loop over all the jets ---
+            
             for ( int k = 0 ; k < 10 ; k++){
                 ZNGoodJetsBeta_Zexc->Fill(countNJetsVSBeta[k], k  , weight);
             }
 
+            // nGoodJets/jets is what we use for standard analysis histos
             nGoodJets = jets.size();
             nJetsAdd = jetsAdditional.size();
             nJetsNoDRCut = jetsNoDRCut.size();
             
         }  // END IF HAS RECO
         //=======================================================================================================//
-
-
-
-        //=======================================================================================================//
-        //        Print Event Information     //
-        //====================================//
-        if (PRINTEVENT && passesLeptonCut){
-            vector<jetStruct> tmpJets;
-            for (unsigned short i(0); i < nGoodJets; i++){
-                if (jets[i].pt >= jetPtCutMin) tmpJets.push_back(jets[i]);
-            }
-            unsigned short tempnGoodJets(tmpJets.size());
-            NZtotal++;
-            cout << "event info: " << EvtRunNum << "  " << EvtNum << endl;
-            cout << "Z event #" << NZtotal << "  Zmass : " << Z.M() << "  Zpt : " << Z.Pt() << " NJets : " << tempnGoodJets <<"    " <<weight << endl;
-            if (nGoodJets > 0) cout << "JETS:"<< endl;
-            for (unsigned short i(0); i < tempnGoodJets; i++) 
-                cout << " jet #" << i + 1 << "  pt: " << tmpJets[i].pt << "  eta:"<<tmpJets[i].eta << "   " << endl;
-            cout << "-----------------------------------------------------------------------------------------"<< endl;
-        }
-        //=======================================================================================================//
-
-
 
         //=======================================================================================================//
         //        Retrieving gen jets         //
@@ -1050,14 +1052,19 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             nTotGenJets = GJetAk04Eta->size();
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
+                // getting getJet info in the form of a jetStruct
                 jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0};
+                // genJet dR information (wrt lepton)
                 bool genJetPassesdRCut(1), genJetPassesdR02Cut(1);
-                //double dRmin = 9999.;
                 for (unsigned short j(0); j < nGenLeptons; j++){ 
+                    //andrew - counting both the muon and the neutrino that are in genLeptons here? or just muon?
+                    //genLeptons should contain the muon and the neutrino that pass analysis cuts
+                    //regardless, our topology suggests that the jets kick off of the W-system, so they should be well seprated from all gen leptonic activity
                     if (genJet.pt >=  jetPtCutMin){
-                        gendeltaRjetMu->Fill(deltaR(genJet.phi, genJet.eta, genLeptons[j].phi, genLeptons[j].eta), genWeight);
+                        gendeltaRjetMu->Fill(deltaR(genJet.phi, genJet.eta, genLeptons[j].phi, genLeptons[j].eta), genWeight); //couting both the dR from muon and neutrino?
                     }
 					if ( (genLeptons[j].charge != 0) && (doDR) ){
+                        //ah, it's here that we demand our genLepton to be a muon
 						if (deltaR(genJet.phi, genJet.eta, genLeptons[j].phi, genLeptons[j].eta) < 0.4) genJetPassesdRCut = 0;
 						if (deltaR(genJet.phi, genJet.eta, genLeptons[j].phi, genLeptons[j].eta) < 0.2) genJetPassesdR02Cut = 0;
                     }
@@ -1079,35 +1086,43 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             nGoodGenJets = genJets.size();
             nGenJetsAdd = genJetsAdditional.size();
 			nGenJetsNoDRCut = genJetsNoDRCut.size();
-        }
+
+        } //end if hasGenInfo for gen jets
+
         //=======================================================================================================//
 
         if (DEBUG) cout << "Stop after line " << __LINE__ << "   " << hasGenInfo <<"    gen Wgh = " << genWeight << "  pass gen cuts = " << passesGenLeptonCut <<"  nGenJets = " << nGoodGenJets <<  endl;
 
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+
         //=======================================================================================================//
-        //     Matching gen and reco jets     //
-        //====================================//
+        //     Matching gen and reco jets (for jet pT smearing)    //
+        //=========================================================//
         double XMetSmear(0), YMetSmear(0);
         vector<int> genJetsIndex(nGenJetsNoDRCut, 0);
         vector<vector<int> > matchingTable(nJetsNoDRCut, genJetsIndex);
        
+        // Only signal MC (W+jets) is hasRecoInfo and hasGenInfo
         if (hasRecoInfo && hasGenInfo){
             for (unsigned short i(0); i < nJetsNoDRCut; i++){
-                double mindR(0.5);
                 int index(-1);
+                double mindR(0.5);
                 double dR(9999);
                 for (unsigned short j(0); j < nGenJetsNoDRCut; j++){
                     dR = deltaR(genJetsNoDRCut[j].phi, genJetsNoDRCut[j].eta, jetsNoDRCut[i].phi, jetsNoDRCut[i].eta);
+                    //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                     if (dR < mindR){
                         mindR = dR;
                         index = j;
                     }
-                }
+                } 
                 if (index > -1 ){
+                    // if a gen-reco jet match found
                     matchingTable[i][index] = 1;
                     double oldJetPt = jetsNoDRCut[i].pt;
+                    // Smearing of reco MC jets to match jet energy resolution seen in data
                     double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet);
+                    // Smearing done for both reco jet pT and energy
                     jetsNoDRCut[i].pt = newJetPt;
                     jetsNoDRCut[i].energy = jetsNoDRCut[i].energy * (newJetPt / oldJetPt);
                     
@@ -1119,16 +1134,16 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     jetsEta_JetsMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
                 }
                 else {
+                    // if no match found within dR 0.5 cone, then index == -1
                     puMVA_JetsNoMatchGenJets->Fill(JetAk04PuMva->at(jetsNoDRCut[i].patIndex), weight);
                     jetsEta_JetsNoMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
                 }
             }
-        }
-        
+        } //end if hasRecoInfo and hasGenInfo for reco jet smearing
         
         //=======================================================================================================//
-        //          Retrieving MET             //
-        //====================================//
+        //          Retrieving MET and final selection on leptonic activity             //
+        //==============================================================================//
         if (hasRecoInfo){
             if (doW && !(METPt->size() > 0)) continue; // this has no effect, all event has METPt->size() = 2 (76x)
             
@@ -1140,35 +1155,30 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (passesLeptonReq) {
                 
                 // recalculate METpt and METphi
+                // basically either in the case for JES uncertainties (data), for JER (done for W+jets signal)
                 if ( (fabs(scale) > 0.) || (hasRecoInfo && hasGenInfo) ){
-                    //-------- my calculation --------
-                    //TempMETphi = patMetPhi_->at(whichMet);
-                    //TempMETpt = patMetPt_->at(whichMet);
+                    // get reco MET from branches
                     XMETpt = METPx->at(whichMet);
                     YMETpt = METPy->at(whichMet);
-                    
                     // if do JES systematic variations (Data only), we recalculate MET
                     if (fabs(scale) > 0.){
                         XMETpt -= XMETscale;
                         YMETpt -= YMETscale;
                     }
-                    
                     // Recalculate MET because Smearing jets
                     if (hasRecoInfo && hasGenInfo){
                         XMETpt -= XMetSmear;
                         YMETpt -= YMetSmear;
                     }
-                    
+                    // use this recalculated MET
                     TVector2 METvec;
                     METvec.Set(XMETpt, YMETpt);
-                    
                     // assign new values for METpt and METphi
                     METpt  = METvec.Mod();
                     METphi = METvec.Phi_mpi_pi(METvec.Phi());
-                    //-------- end my calculation --------
                 }
-
-                
+                // lepton1 is the muon that passed event selection
+                // should only be this one muon in "leptons" if passesLeptonReq is True
                 lepton1 = leptons[0];
                 leptonStruct tempMet = {METpt, 0., METphi, METpt, 0, 0, 0};
                 lepton2 = tempMet;
@@ -1178,10 +1188,11 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 // build the TLorentzVectors, the Z candidate and the kinematic
                 lep1.SetPtEtaPhiM(lepton1.pt, lepton1.eta, lepton1.phi, leptonMass);
                 lep2.SetPtEtaPhiM(METpt, 0, METphi, 0);
-                Z = lep1 + lep2;
+                Z = lep1 + lep2; //reco Z or W boson
                 
                 // correct for identification and isolation efficiencies if required by useEfficiencyCorrection
-                // apply scale factors only on MC
+                // and then trigger efficiencies if useTriggerCorrection
+                // Applying scale factors only on reco MC
                 if (useEfficiencyCorrection) {
                     double effWeight = 1.;
                     if (leptonFlavor == "SingleMuon") {
@@ -1194,13 +1205,12 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         effWeight *= Ele_Rec.getEfficiency(lepton1.pt, fabs(lepton1.scEta), sysLepSF);
                         
                     }
-                    
                     if (isData) weight /= effWeight;
-                    else weight *= effWeight;
+                    // The following line should give the emulation of the ID, Iso, Trig efficiencies seen in data to the MC
+                    else weight *= effWeight; 
                 }
 
-
-                // apply transverse mass and MET cut
+                // Apply transverse mass and MET cut
                 if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
@@ -1217,19 +1227,19 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         
         
         // Re-analyze the jets collections and Cut on the Pt
-        // we can do it only now since we needed to smear
-        // the jet pt distribution for the MC
+        // Needed to smear the jets to account for JER
 
-	double mindRjmu(99999), mindRj04Pt100mu(99999);
+	    double mindRjmu(99999), mindRj04Pt100mu(99999);
         double  mindRdijet04Pt100mu(99999);
-	int IndClosestDR02Jet(-1), IndEvtClosestDR04Jet(-1), IndEvtClosestDR04DiJet(-1);
-	double genMindRjmu(99999), genMindRj04Pt100mu(99999); 
+	    int IndClosestDR02Jet(-1), IndEvtClosestDR04Jet(-1), IndEvtClosestDR04DiJet(-1);
+	    double genMindRjmu(99999), genMindRj04Pt100mu(99999); 
         double genMindRdijet04Pt100mu(99999);
-	int genIndClosestDR02Jet(-1), genIndEvtClosestDR04Jet(-1), genIndEvtClosestDR04DiJet(-1);
+	    int genIndClosestDR02Jet(-1), genIndEvtClosestDR04Jet(-1), genIndEvtClosestDR04DiJet(-1);
 
         if (hasRecoInfo){
             vector<jetStruct> tmpJets;
             for (unsigned short i(0); i < nJetsNoDRCut; i++){
+                // the jetsNoDRCut collection are the jets that have been smeared for JER
                 if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR04) tmpJets.push_back(jetsNoDRCut[i]);
                 if (jetsNoDRCut[i].pt >= 20          && jetsNoDRCut[i].passDR04) jets_20.push_back(jetsNoDRCut[i]);
 				if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR02) jetsDR02.push_back(jetsNoDRCut[i]);
@@ -1238,15 +1248,21 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             jets.clear(); 
             jets = tmpJets; 
             tmpJets.clear(); 
+
+            // jets is the main collection to pass event selection
+            // jets_20 is the collection used for W+jets alpha-s
+            // we lower the jet pT cut before unfolding to account for bin migrations up
+            // in the lower part of the spectrum
             nGoodJets = jets.size();
             nGoodJets_20 = jets_20.size();
+
 			nJetsDR02Cut = jetsDR02.size();
 			nJetsPt100DR04 = jetsPt100DR04.size();
 			
-			//--- Sort jets ---
+			//--- Sort jets by decreasing pT ---
 			if (nGoodJets    >= 1) sort(jets.begin(), jets.end(), JetDescendingOrder);
+            if (nGoodJets_20 >= 1) sort(jets_20.begin(), jets_20.end(), JetDescendingOrder);
 			if (nJetsAdd     >= 1) sort(jetsAdditional.begin(), jetsAdditional.end(), JetDescendingOrder);
-			if (nGoodJets_20 >= 1) sort(jets_20.begin(), jets_20.end(), JetDescendingOrder);
 			if (nJetsDR02Cut >= 1) sort(jetsDR02.begin(), jetsDR02.end(), JetDescendingOrder);
 			if (nJetsPt100DR04 >= 1) sort(jetsPt100DR04.begin(), jetsPt100DR04.end(), JetDescendingOrder);
             
@@ -1263,6 +1279,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 ForwardJetRapidity = *max_element(vJetRapidity.begin(), vJetRapidity.end());
                 BackwardJetRapidity = *min_element(vJetRapidity.begin(), vJetRapidity.end());
                 sort(vJetYOrdered.begin(), vJetYOrdered.end(), JetYDescendingOrder);
+                // jet pT max cut (if desired)
                 if (jetPtCutMax > jetPtCutMin){
                     passesJetCut = jets[0].pt < jetPtCutMax;
                 }
@@ -1270,7 +1287,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (nGoodJets >= 2){
                 secondJ.SetPtEtaPhiE(jets[1].pt, jets[1].eta, jets[1].phi, jets[1].energy);               
                 newSecondJ.SetPtEtaPhiE(jets[1].pt, jets[1].eta, jets[1].phi, jets[1].energy);
-		jet1Plus2 = leadJ + secondJ;
+		        jet1Plus2 = leadJ + secondJ;
                 jet1Minus2 = leadJ - secondJ;
             }
             if (nGoodJets >= 3){
@@ -1279,6 +1296,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (nGoodJets >= 4){
                 newFourthJ.SetPtEtaPhiE(jets[3].pt, jets[3].eta, jets[3].phi, jets[3].energy);
             }
+
+            // Next two littel sections grab the jet H_T for the event
 	        jetsHT = 0;
             for (unsigned short i(0); i < nGoodJets; i++){
                 jetsHT += jets[i].pt;  
@@ -1287,6 +1306,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             for (unsigned short i(0); i < nGoodJets_20; i++){
                 jetsHT_20 += jets[i].pt;  
             }
+
 			// calculate the closest jet w.r.t to the muon for jetsDR02 collection
 			if (nJetsDR02Cut >= 1 && passesLeptonReq){
 				for (unsigned short i(0); i < nJetsDR02Cut; i++){
@@ -1312,21 +1332,21 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
 			// calculate the closest jet in dijet w.r.t to the muon for jetsPt100DR04 collection
 			if (nJetsPt100DR04 >= 2 && passesLeptonReq){
-					double dRj1mu(9999);
-					double dRj2mu(9999);
-					dRj1mu = fabs(deltaR(jetsPt100DR04[0].phi, jetsPt100DR04[0].eta, lepton1.phi, lepton1.eta));
-					dRj2mu = fabs(deltaR(jetsPt100DR04[1].phi, jetsPt100DR04[1].eta, lepton1.phi, lepton1.eta));
+                double dRj1mu(9999);
+                double dRj2mu(9999);
+                dRj1mu = fabs(deltaR(jetsPt100DR04[0].phi, jetsPt100DR04[0].eta, lepton1.phi, lepton1.eta));
+                dRj2mu = fabs(deltaR(jetsPt100DR04[1].phi, jetsPt100DR04[1].eta, lepton1.phi, lepton1.eta));
 
-					if (dRj1mu < dRj2mu){
-						mindRdijet04Pt100mu = dRj1mu;
-						IndEvtClosestDR04DiJet = 0;
-					}
-					if (dRj2mu < dRj1mu){
-						mindRdijet04Pt100mu = dRj2mu;
-						IndEvtClosestDR04DiJet = 1;
-					}
-				}
-        }
+                if (dRj1mu < dRj2mu){
+                    mindRdijet04Pt100mu = dRj1mu;
+                    IndEvtClosestDR04DiJet = 0;
+                }
+                if (dRj2mu < dRj1mu){
+                    mindRdijet04Pt100mu = dRj2mu;
+                    IndEvtClosestDR04DiJet = 1;
+                }
+            }
+        } //end if hasRecoInfo
 
         if (hasGenInfo){
             vector< jetStruct> tmpJets;
@@ -1341,12 +1361,18 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             genJets.clear();
             genJets = tmpJets; 
             tmpJets.clear(); 
+
+            // genJets is the main collection to pass event selection
+            // genJets_20 is the collection used for W+jets alpha-s
+            // we lower the jet pT cut before unfolding to account for bin migrations up
+            // in the lower part of the spectrum
             nGoodGenJets = genJets.size();
             nGoodGenJets_20 = genJets_20.size();
+
 			nGenJetsDR02Cut = genJetsDR02.size();
 			nGenJetsPt100DR04 = genJetsPt100DR04.size();
 			
-			//--- Sort gen jets ---
+			//--- Sort gen jets by decreasing pT ---
 			if (nGoodGenJets >= 1) sort(genJets.begin(), genJets.end(), JetDescendingOrder);
 			if (nGoodGenJets_20 >= 1) sort(genJets_20.begin(), genJets_20.end(), JetDescendingOrder);
 			if (nGenJetsDR02Cut >= 1) sort(genJetsDR02.begin(), genJetsDR02.end(), JetDescendingOrder);
@@ -1365,6 +1391,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 genForwardJetRapidity = *max_element(vJetRapidity.begin(), vJetRapidity.end());
                 genBackwardJetRapidity = *min_element(vJetRapidity.begin(), vJetRapidity.end());
                 sort(genvJetYOrdered.begin(), genvJetYOrdered.end(), JetYDescendingOrder);
+                // jet pT max cut (if desired)
                 if (jetPtCutMax > jetPtCutMin){
                     passesGenJetCut = genJets[0].pt < jetPtCutMax;
                 }
@@ -1381,15 +1408,17 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (nGoodGenJets >= 4){
                 genNewFourthJ.SetPtEtaPhiE(genJets[3].pt, genJets[3].eta, genJets[3].phi, genJets[3].energy);
             }
+
+            // Next two littel sections grab the jet H_T for the event
             genJetsHT = 0.;
             for (unsigned short i(0); i < nGoodGenJets; i++){
                 genJetsHT += genJets[i].pt;  
             }
-
             genJetsHT_20 = 0.;
             for (unsigned short i(0); i < nGoodGenJets_20; i++){
                 genJetsHT_20 += genJets[i].pt;  
             }
+
 			// calculate the closest gen jet w.r.t to the muon for jetsDR02 collection
 			if (nGenJetsDR02Cut >= 1 && passesGenLeptonCut){
 				for (unsigned short i(0); i < nGenJetsDR02Cut; i++){
@@ -1414,21 +1443,21 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 			}
 			// calculate the closest gen jet in dijet w.r.t to the muon for genJetsPt100DR04 collection
 			if (nGenJetsPt100DR04 >= 2 && passesGenLeptonCut){
-					double dRGenj1mu(9999);
-					double dRGenj2mu(9999);
-					dRGenj1mu = fabs(deltaR(genJetsPt100DR04[0].phi, genJetsPt100DR04[0].eta, genLepton1.phi, genLepton1.eta));
-					dRGenj2mu = fabs(deltaR(genJetsPt100DR04[1].phi, genJetsPt100DR04[1].eta, genLepton1.phi, genLepton1.eta));
+                double dRGenj1mu(9999);
+                double dRGenj2mu(9999);
+                dRGenj1mu = fabs(deltaR(genJetsPt100DR04[0].phi, genJetsPt100DR04[0].eta, genLepton1.phi, genLepton1.eta));
+                dRGenj2mu = fabs(deltaR(genJetsPt100DR04[1].phi, genJetsPt100DR04[1].eta, genLepton1.phi, genLepton1.eta));
 
-					if (dRGenj1mu < dRGenj2mu){
-						genMindRdijet04Pt100mu = dRGenj1mu;
-						genIndEvtClosestDR04DiJet = 0;
-					}
-					if (dRGenj2mu < dRGenj1mu){
-						genMindRdijet04Pt100mu = dRGenj2mu;
-						genIndEvtClosestDR04DiJet = 1;
-					}
-				}
-        }
+                if (dRGenj1mu < dRGenj2mu){
+                    genMindRdijet04Pt100mu = dRGenj1mu;
+                    genIndEvtClosestDR04DiJet = 0;
+                }
+                if (dRGenj2mu < dRGenj1mu){
+                    genMindRdijet04Pt100mu = dRGenj2mu;
+                    genIndEvtClosestDR04DiJet = 1;
+                }
+            }
+        } //end if hasGenInfo
         //=======================================================================================================//
 
 
@@ -1529,12 +1558,20 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //---
         
         //======= Final Selections: =======
+        // B-tagging event selection
         if (hasRecoInfo){
+            // Note: if doBJets == 0, then we're agnostic to btags in terms of event selection
+            // doBJets < 0 is a btag veto
+            // if doBJets == -1, then veto event if one or more bjets
+            // if doBJets == -2, then veto if two or more
             if (doBJets < 0 && countBJets >= fabs(doBJets)) {
                 passesLeptonCut = 0;
                 passesBtagReq = false;
                 nEventsIncBJets++;
             }
+            // doBJets > 0 is a btag requirement
+            // if doBJets == 2, then veto event if there's not at least two btags
+            // used for moving to the ttbar control region for estimating ttbar SFs
             if (doBJets > 0 && doBJets < 99 && countBJets < fabs(doBJets) ){
                 passesLeptonCut = 0;
                 passesBtagReq = false;
@@ -1550,624 +1587,623 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //   Filling gen and parton histos    //
         //====================================//
-        if (hasGenInfo){
-            if (passesGenLeptonCut && passesDPSPartonCut && passesGenJetCut){
-                GENnEventsIncl0Jets++;
-                genZNGoodJets_Zexc->Fill(nGoodGenJets, genWeight);
-                genZNGoodJetsFull_Zexc->Fill(nGoodGenJets, genWeight);
-                genZNGoodJets_Zinc->Fill(0., genWeight);
-                genZNGoodJetsFull_Zinc->Fill(0., genWeight);
-                genZMass_Zinc0jet->Fill(genZ.M(), genWeight);
-                genZPt_Zinc0jet->Fill(genZ.Pt(), genWeight);
-                genZRapidity_Zinc0jet->Fill(genZ.Rapidity(), genWeight);
-                genZEta_Zinc0jet->Fill(genZ.Eta(), genWeight);
-                GLepBarePtZinc0jet->Fill(genLep1.Pt(), genWeight);
-                GLepBareEtaZinc0jet->Fill(genLep1.Eta(), genWeight);
+        if (hasGenInfo && passesGenLeptonCut && passesGenJetCut && passesDPSPartonCut){
+            GENnEventsIncl0Jets++;
+            genZNGoodJets_Zexc->Fill(nGoodGenJets, genWeight);
+            genZNGoodJetsFull_Zexc->Fill(nGoodGenJets, genWeight);
+            genZNGoodJets_Zinc->Fill(0., genWeight);
+            genZNGoodJetsFull_Zinc->Fill(0., genWeight);
+            genZMass_Zinc0jet->Fill(genZ.M(), genWeight);
+            genZPt_Zinc0jet->Fill(genZ.Pt(), genWeight);
+            genZRapidity_Zinc0jet->Fill(genZ.Rapidity(), genWeight);
+            genZEta_Zinc0jet->Fill(genZ.Eta(), genWeight);
+            GLepBarePtZinc0jet->Fill(genLep1.Pt(), genWeight);
+            GLepBareEtaZinc0jet->Fill(genLep1.Eta(), genWeight);
+            if (doZ || doTT){
+                GLepBarePtZinc0jet->Fill(genLep2.Pt(), genWeight);
+                GLepBareEtaZinc0jet->Fill(genLep2.Eta(), genWeight);
+            }
+            
+            if (nGoodGenJets_20 >= 1){
+                genFirstJetPt_Zinc1jet  ->Fill(genJets_20[0].pt, genWeight);
+                genFirstJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                genFirstJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                genJetsHT_20_Zinc1jet->Fill(genJetsHT_20, genWeight);
+
+                //andrew - alpha-s
+                genLeadingJetPt_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
+                genZPt_1_Zinc1jet->Fill(genZ.Pt(), genWeight);
+                genZPt_2_Zinc1jet->Fill(genZ.Pt(), genWeight);
+                genZPtPlusLeadingJetPt_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_1_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_2_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+            }
+            if (nGoodGenJets_20 >= 2){
+                genSecondJetPt_Zinc2jet  ->Fill(genJets_20[1].pt, genWeight);
+                genSecondJetPt_1_Zinc2jet->Fill(genJets_20[1].pt, genWeight);
+                genSecondJetPt_2_Zinc2jet->Fill(genJets_20[1].pt, genWeight);
+                genJetsHT_20_Zinc2jet->Fill(genJetsHT_20, genWeight);
+
+                //andrew - alpha-s
+                genLeadingJetPt_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_1_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_2_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                genHTover2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_1_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genLepPtPlusLeadingJetPt_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusHTover2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_1_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                genZPt_1_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                genZPt_2_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                genZPtPlusLeadingJetPt_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_1_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_2_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusHTover2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_1_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+            }
+            if (nGoodGenJets_20 >= 3){
+                genThirdJetPt_Zinc3jet  ->Fill(genJets_20[2].pt, genWeight);
+                genThirdJetPt_1_Zinc3jet->Fill(genJets_20[2].pt, genWeight);
+                genThirdJetPt_2_Zinc3jet->Fill(genJets_20[2].pt, genWeight);
+                genJetsHT_20_Zinc3jet->Fill(genJetsHT_20, genWeight);
+
+                //andrew - alpha-s
+                genLeadingJetPt_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_1_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_2_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                genHTover2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_1_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genLepPtPlusLeadingJetPt_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusHTover2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_1_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                genZPt_1_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                genZPt_2_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                genZPtPlusLeadingJetPt_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_1_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_2_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusHTover2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_1_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+            }
+            if (nGoodGenJets_20 >= 4){
+                genFourthJetPt_Zinc4jet  ->Fill(genJets_20[3].pt, genWeight);
+                genFourthJetPt_1_Zinc4jet->Fill(genJets_20[3].pt, genWeight);
+                genFourthJetPt_2_Zinc4jet->Fill(genJets_20[3].pt, genWeight);
+
+                //andrew - alpha-s
+                genLeadingJetPt_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_1_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
+                genLeadingJetPt_2_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
+                genHTover2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_1_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genHTover2_2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                genLepPtPlusLeadingJetPt_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusHTover2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_1_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genLepPtPlusHTover2_2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                genZPt_1_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                genZPt_2_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                genZPtPlusLeadingJetPt_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_1_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusLeadingJetPt_2_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                genZPtPlusHTover2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_1_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                genZPtPlusHTover2_2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+            }
+            if (nGoodGenJets_20 >= 5){
+                genFifthJetPt_Zinc5jet  ->Fill(genJets_20[4].pt, genWeight);
+                genFifthJetPt_1_Zinc5jet->Fill(genJets_20[4].pt, genWeight);
+                genFifthJetPt_2_Zinc5jet->Fill(genJets_20[4].pt, genWeight);
+            }
+            if (nGoodGenJets_20 >= 6){
+                genSixthJetPt_Zinc6jet  ->Fill(genJets_20[5].pt, genWeight);
+                genSixthJetPt_1_Zinc6jet->Fill(genJets_20[5].pt, genWeight);
+            }
+            if (nGenJetsDR02Cut >= 1){
+                gendRLepCloseJet_Zinc1jet->Fill(genMindRjmu, genWeight);
+                gendRLepCloseJet_2_Zinc1jet->Fill(genMindRjmu, genWeight);
+                if(genJetsDR02[0].pt > 500){
+                    gendRLepCloseJetCo_Zinc1jet->Fill(genMindRjmu, genWeight);
+                    gendRLepCloseJetCo_2_Zinc1jet->Fill(genMindRjmu, genWeight);
+                }
+            }
+            if (nGenJetsPt100DR04 >= 1 && genJetsPt100DR04[0].pt > 300){
+                gendRptmin100LepCloseJetCo300dR04_Zinc1jet->Fill(genMindRj04Pt100mu, genWeight);
+                gendRptmin100LepCloseJetCo300dR04_2_Zinc1jet->Fill(genMindRj04Pt100mu, genWeight);
+            }
+            if (nGenJetsPt100DR04 >= 2 && genJetsPt100DR04[0].pt > 300 && deltaPhi(genLeadJ, genSecondJ) > (PI - 0.3)){
+                gendRptmin100LepCloseDiJetCo300dR04_Zinc2jet->Fill(genMindRdijet04Pt100mu, genWeight);
+                gendRptmin100LepCloseDiJetCo300dR04_2_Zinc2jet->Fill(genMindRdijet04Pt100mu, genWeight);
+            }
+            if (nGoodGenJets >= 1){
+                GENnEventsIncl1Jets++;
+                genZNGoodJets_Zinc->Fill(1., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(1., genWeight);
+                genZMass_Zinc1jet->Fill(genZ.M(), genWeight);
+                GLepBarePtZinc1jet->Fill(genLep1.Pt(), genWeight);
+                GLepBareEtaZinc1jet->Fill(genLep1.Eta(), genWeight);
                 if (doZ || doTT){
-                    GLepBarePtZinc0jet->Fill(genLep2.Pt(), genWeight);
-                    GLepBareEtaZinc0jet->Fill(genLep2.Eta(), genWeight);
+                    GLepBarePtZinc1jet->Fill(genLep2.Pt(), genWeight);
+                    GLepBareEtaZinc1jet->Fill(genLep2.Eta(), genWeight);
                 }
-                
-                if (nGoodGenJets_20 >= 1){
-                    genFirstJetPt_Zinc1jet  ->Fill(genJets_20[0].pt, genWeight);
-                    genFirstJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                    genFirstJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                    genJetsHT_20_Zinc1jet->Fill(genJetsHT_20, genWeight);
-
-                    //andrew - alpha-s
-                    genLeadingJetPt_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_1_Zinc1jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_2_Zinc1jet->Fill(genZ.Pt(), genWeight);
-                    genZPtPlusLeadingJetPt_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_1_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_2_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                }
-                if (nGoodGenJets_20 >= 2){
-                    genSecondJetPt_Zinc2jet  ->Fill(genJets_20[1].pt, genWeight);
-                    genSecondJetPt_1_Zinc2jet->Fill(genJets_20[1].pt, genWeight);
-                    genSecondJetPt_2_Zinc2jet->Fill(genJets_20[1].pt, genWeight);
-                    genJetsHT_20_Zinc2jet->Fill(genJetsHT_20, genWeight);
-
-                    //andrew - alpha-s
-                    genLeadingJetPt_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_1_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_2_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
-                    genHTover2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_1_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genLepPtPlusLeadingJetPt_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusHTover2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_1_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_1_Zinc2jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_2_Zinc2jet->Fill(genZ.Pt(), genWeight);
-                    genZPtPlusLeadingJetPt_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_1_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_2_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusHTover2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_1_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                }
-                if (nGoodGenJets_20 >= 3){
-                    genThirdJetPt_Zinc3jet  ->Fill(genJets_20[2].pt, genWeight);
-                    genThirdJetPt_1_Zinc3jet->Fill(genJets_20[2].pt, genWeight);
-                    genThirdJetPt_2_Zinc3jet->Fill(genJets_20[2].pt, genWeight);
-                    genJetsHT_20_Zinc3jet->Fill(genJetsHT_20, genWeight);
-
-                    //andrew - alpha-s
-                    genLeadingJetPt_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_1_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_2_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
-                    genHTover2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_1_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genLepPtPlusLeadingJetPt_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusHTover2_Zinc3jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_1_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_1_Zinc3jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_2_Zinc3jet->Fill(genZ.Pt(), genWeight);
-                    genZPtPlusLeadingJetPt_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_1_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_2_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusHTover2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_1_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                }
-                if (nGoodGenJets_20 >= 4){
-                    genFourthJetPt_Zinc4jet  ->Fill(genJets_20[3].pt, genWeight);
-                    genFourthJetPt_1_Zinc4jet->Fill(genJets_20[3].pt, genWeight);
-                    genFourthJetPt_2_Zinc4jet->Fill(genJets_20[3].pt, genWeight);
-
-                    //andrew - alpha-s
-                    genLeadingJetPt_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_1_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
-                    genLeadingJetPt_2_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
-                    genHTover2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_1_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genHTover2_2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                    genLepPtPlusLeadingJetPt_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                    genLepPtPlusHTover2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_1_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genLepPtPlusHTover2_2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_1_Zinc4jet->Fill(genZ.Pt(), genWeight);
-                    genZPt_2_Zinc4jet->Fill(genZ.Pt(), genWeight);
-                    genZPtPlusLeadingJetPt_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_1_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusLeadingJetPt_2_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                    genZPtPlusHTover2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_1_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                    genZPtPlusHTover2_2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                }
-                if (nGoodGenJets_20 >= 5){
-                    genFifthJetPt_Zinc5jet  ->Fill(genJets_20[4].pt, genWeight);
-                    genFifthJetPt_1_Zinc5jet->Fill(genJets_20[4].pt, genWeight);
-                    genFifthJetPt_2_Zinc5jet->Fill(genJets_20[4].pt, genWeight);
-                }
-                if (nGoodGenJets_20 >= 6){
-                    genSixthJetPt_Zinc6jet  ->Fill(genJets_20[5].pt, genWeight);
-                    genSixthJetPt_1_Zinc6jet->Fill(genJets_20[5].pt, genWeight);
-                }
-		if (nGenJetsDR02Cut >= 1){
-			gendRLepCloseJet_Zinc1jet->Fill(genMindRjmu, genWeight);
-			gendRLepCloseJet_2_Zinc1jet->Fill(genMindRjmu, genWeight);
-			if(genJetsDR02[0].pt > 500){
-				gendRLepCloseJetCo_Zinc1jet->Fill(genMindRjmu, genWeight);
-				gendRLepCloseJetCo_2_Zinc1jet->Fill(genMindRjmu, genWeight);
-			}
-		}
-		if (nGenJetsPt100DR04 >= 1 && genJetsPt100DR04[0].pt > 300){
-			gendRptmin100LepCloseJetCo300dR04_Zinc1jet->Fill(genMindRj04Pt100mu, genWeight);
-			gendRptmin100LepCloseJetCo300dR04_2_Zinc1jet->Fill(genMindRj04Pt100mu, genWeight);
-		}
-		if (nGenJetsPt100DR04 >= 2 && genJetsPt100DR04[0].pt > 300 && deltaPhi(genLeadJ, genSecondJ) > (PI - 0.3)){
-			gendRptmin100LepCloseDiJetCo300dR04_Zinc2jet->Fill(genMindRdijet04Pt100mu, genWeight);
-			gendRptmin100LepCloseDiJetCo300dR04_2_Zinc2jet->Fill(genMindRdijet04Pt100mu, genWeight);
-		}
-                if (nGoodGenJets >= 1){
-                    GENnEventsIncl1Jets++;
-                    genZNGoodJets_Zinc->Fill(1., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(1., genWeight);
-                    genZMass_Zinc1jet->Fill(genZ.M(), genWeight);
-                    GLepBarePtZinc1jet->Fill(genLep1.Pt(), genWeight);
-                    GLepBareEtaZinc1jet->Fill(genLep1.Eta(), genWeight);
-                    if (doZ || doTT){
-                        GLepBarePtZinc1jet->Fill(genLep2.Pt(), genWeight);
-                        GLepBareEtaZinc1jet->Fill(genLep2.Eta(), genWeight);
-                    }
 //                    genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc1jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc1jet->Fill(genZ.Eta(), genWeight);
-                    
-                    genFirstJetEta_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
-                    genFirstJetEta_2_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
-                    genFirstJetAbsRapidity_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
-                    genFirstJetAbsRapidity_2_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
-                    genFirstJetRapidityFull_Zinc1jet->Fill(genNewLeadJ.Rapidity(), genWeight);
-                    genMeanNJetsHT_1D_Zinc1jet->Fill(genJetsHT, genWeight*nGoodGenJets);
-                    genMeanNJetsHT_Zinc1jet->Fill(genJetsHT, nGoodGenJets, genWeight);
-                    genFirstJetPtEta_Zinc1jet->Fill(genLeadJ.Pt(), fabs(genLeadJ.Eta()), genWeight);
-                    genFirstHighestJetPt_Zinc1jet->Fill(genLeadJ.Pt(), genWeight);
-                    genJetsHT_Zinc1jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_20_30_Zinc1jet->Fill(genJetsHT_20, genWeight);
-                    genJetsHT_1_Zinc1jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_2_Zinc1jet->Fill(genJetsHT, genWeight);
-                    
-					gendPhiLepJet1_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
-					gendPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+                genZRapidity_Zinc1jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc1jet->Fill(genZ.Eta(), genWeight);
+                
+                genFirstJetEta_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
+                genFirstJetEta_2_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
+                genFirstJetAbsRapidity_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+                genFirstJetAbsRapidity_2_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+                genFirstJetRapidityFull_Zinc1jet->Fill(genNewLeadJ.Rapidity(), genWeight);
+                genMeanNJetsHT_1D_Zinc1jet->Fill(genJetsHT, genWeight*nGoodGenJets);
+                genMeanNJetsHT_Zinc1jet->Fill(genJetsHT, nGoodGenJets, genWeight);
+                genFirstJetPtEta_Zinc1jet->Fill(genLeadJ.Pt(), fabs(genLeadJ.Eta()), genWeight);
+                genFirstHighestJetPt_Zinc1jet->Fill(genLeadJ.Pt(), genWeight);
+                genJetsHT_Zinc1jet->Fill(genJetsHT, genWeight);
+                genJetsHT_20_30_Zinc1jet->Fill(genJetsHT_20, genWeight);
+                genJetsHT_1_Zinc1jet->Fill(genJetsHT, genWeight);
+                genJetsHT_2_Zinc1jet->Fill(genJetsHT, genWeight);
+                
+                gendPhiLepJet1_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+                gendPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
 
-                    genMT_Zinc1jet->Fill(genMT, genWeight);
+                genMT_Zinc1jet->Fill(genMT, genWeight);
 
-                    for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
-                        if ( fabs(genLeadJ.Eta()) >= j_Y_range[i] &&  fabs(genLeadJ.Eta()) < j_Y_range[i+1] ) genFirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(genLeadJ.Pt()), genWeight);
+                for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
+                    if ( fabs(genLeadJ.Eta()) >= j_Y_range[i] &&  fabs(genLeadJ.Eta()) < j_Y_range[i+1] ) genFirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(genLeadJ.Pt()), genWeight);
+                }
+                if ( doW ) gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta() - genLep1.Eta()), genWeight);
+                else gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta()-genZ.Eta()), genWeight);
+                if (nGoodGenJets == 1){
+                    genFirstJetPt_Zexc1jet->Fill(genLeadJ.Pt(), genWeight);
+                    //    gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
+                    if ( doW ) gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta() - genLep1.Eta()), genWeight);
+                    else gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta()-genZ.Eta()), genWeight);
+
+                }
+            }
+            if (nGoodGenJets >= 2){
+                TLorentzVector genJet1Plus2PlusZ = genJet1Plus2 + genZ;
+                GENnEventsIncl2Jets++;
+                genZNGoodJets_Zinc->Fill(2., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(2., genWeight);
+                genZMass_Zinc2jet->Fill(genZ.M(), genWeight);
+                genTwoJetsPtDiff_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
+                genBestTwoJetsPtDiff_Zinc2jet->Fill(genBestJet1Minus2.Pt(), genWeight);
+                genJetsMass_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+                GLepBarePtZinc2jet->Fill(genLep1.Pt(), genWeight);
+                GLepBareEtaZinc2jet->Fill(genLep1.Eta(), genWeight);
+                if (doZ || doTT){
+                    GLepBarePtZinc2jet->Fill(genLep2.Pt(), genWeight);
+                    GLepBareEtaZinc2jet->Fill(genLep2.Eta(), genWeight);
+                }
+//                    genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                genZRapidity_Zinc2jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc2jet->Fill(genZ.Eta(), genWeight);
+                genFirstHighestJetPt_Zinc2jet->Fill(genLeadJ.Pt(), genWeight);
+                genSecondHighestJetPt_Zinc2jet->Fill(genSecondJ.Pt(), genWeight);
+
+
+                genSecondJetEta_Zinc2jet->Fill(fabs(genSecondJ.Eta()), genWeight);
+                genSecondJetEta_2_Zinc2jet->Fill(fabs(genSecondJ.Eta()), genWeight);
+                genSecondJetAbsRapidity_Zinc2jet->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
+                genSecondJetAbsRapidity_2_Zinc2jet->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
+                genSecondJetRapidityFull_Zinc2jet->Fill(genNewSecondJ.Rapidity(), genWeight);
+                gendRapidityJets_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                gendRapidityJets_2_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                
+                gendRapidityJetsFB_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                gendRapidityJetsFB_2_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                
+                gendiJetMass_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+                gendiJetMass_2_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+                
+                gendPhiJetsFB_Zinc2jet->Fill(deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), genWeight);
+                gendPhiJetsFB_2_Zinc2jet->Fill(deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), genWeight);
+                
+                gendRJets_Zinc2jet->Fill(deltaRYPhi(genNewLeadJ, genNewSecondJ), genWeight);
+                gendRJets_2_Zinc2jet->Fill(deltaRYPhi(genNewLeadJ, genNewSecondJ), genWeight);
+                
+                gendiJetPt_Zinc2jet->Fill(genJet1Plus2.Pt(), genWeight);
+                gendiJetPt_2_Zinc2jet->Fill(genJet1Plus2.Pt(), genWeight);
+                
+                gendPhiLepJet2_Zinc2jet->Fill(deltaPhi(genLep1, genNewSecondJ), genWeight);
+                gendPhiLepJet2_2_Zinc2jet->Fill(deltaPhi(genLep1, genNewSecondJ), genWeight);
+                
+                genMeanNJetsHT_1D_Zinc2jet->Fill(genJetsHT, genWeight*nGoodGenJets);
+                genMeanNJetsdRapidity_1D_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight*nGoodGenJets);
+                genMeanNJetsdRapidityFB_1D_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight*nGoodGenJets);
+                
+                genMeanNJetsHT_Zinc2jet->Fill(genJetsHT, nGoodGenJets, genWeight);
+                genMeanNJetsdRapidity_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), nGoodGenJets, genWeight);
+                genMeanNJetsdRapidityFB_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, nGoodGenJets, genWeight);
+                genSecondJetPtEta_Zinc2jet->Fill(genSecondJ.Pt(), fabs(genSecondJ.Eta()), genWeight);
+                genRatioJetPt21_Zinc2jet->Fill(genJets[1].pt/genJets[0].pt, genWeight);
+                genJetsHT_Zinc2jet->Fill(genJetsHT, genWeight);
+                genJetsHT_20_30_Zinc2jet->Fill(genJetsHT_20, genWeight);
+                genJetsHT_1_Zinc2jet->Fill(genJetsHT, genWeight);
+                genJetsHT_2_Zinc2jet->Fill(genJetsHT, genWeight);
+                
+                genptBal_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                
+                gendPhiJets_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                gendPhiJets_2_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                
+                genBestdPhiJets_Zinc2jet->Fill(deltaPhi(genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                gendEtaJets_Zinc2jet->Fill(genLeadJ.Eta() - genSecondJ.Eta(), genWeight);
+                gendEtaFirstJetZ_Zinc2jet->Fill(genLeadJ.Eta() - genZ.Eta(), genWeight);
+                gendEtaSecondJetZ_Zinc2jet->Fill(genSecondJ.Eta() - genZ.Eta(), genWeight);
+                gendEtaJet1Plus2Z_Zinc2jet->Fill(genJet1Plus2.Eta() - genZ.Eta(), genWeight);
+                genPHI_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                genBestPHI_Zinc2jet->Fill(PHI(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                genPHI_T_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                genBestPHI_T_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                genSpT_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                genBestSpT_Zinc2jet->Fill(SpT(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                genSpTJets_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                genBestSpTJets_Zinc2jet->Fill(SpTsub(genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                genSpTLeptons_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                genSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                genBestSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
+                    if ( fabs(genSecondJ.Eta()) >= j_Y_range[i] &&  fabs(genSecondJ.Eta()) < j_Y_range[i+1] )                                                genSecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(genSecondJ.Pt()), genWeight);
+                }
+
+    
+                //andrew -- turning off EWK histograms due to memory issues with ROOT
+                //they don't seem relevant for the alpha_s analysis, at least for the moment
+    //            //--- START EWK ---
+    //            if (passesGenEWKJetPt){
+    //                // met histos
+    //                //
+    //                //METEWK_Zinc2jet->Fill(METpt, weight);
+    //                //METphiEWK_Zinc2jet->Fill(METphi,  weight);
+    //                //MTEWK_Zinc2jet->Fill(MT,  weight);
+    //                //          
+    //                // jet histos
+    //                genZNGoodJetsEWK_Zexc->Fill(nGoodGenJets, genWeight);
+    //                genFirstJetPtEWK_Zinc2jet->Fill(genJets[0].pt, genWeight);
+    //                genFirstJetEtaEWK_Zinc2jet->Fill(genJets[0].eta, genWeight);
+    //                genFirstJetPhiEWK_Zinc2jet->Fill(genJets[0].phi, genWeight);
+
+
+    //                genSecondJetPtEWK_Zinc2jet->Fill(genJets[1].pt, genWeight);
+    //                genSecondJetEtaEWK_Zinc2jet->Fill(genJets[1].eta, genWeight);
+    //                genSecondJetPhiEWK_Zinc2jet->Fill(genJets[1].phi, genWeight);
+    //                int temIND(0), temIND1(1);
+    //                if (fabs(genJets[1].eta) > fabs(genJets[0].eta)){ 
+    //                    temIND = 1; 
+    //                    temIND1 = 0;
+    //                }
+    //                genForwardJetPtEWK_Zinc2jet->Fill(genJets[temIND].pt, genWeight);
+    //                genForwardJetEtaEWK_Zinc2jet->Fill(genJets[temIND].eta, genWeight);
+    //                genForwardJetPhiEWK_Zinc2jet->Fill(genJets[temIND].phi, genWeight);
+
+
+    //                genCentralJetPtEWK_Zinc2jet->Fill(genJets[temIND1].pt, genWeight);
+    //                genCentralJetEtaEWK_Zinc2jet->Fill(genJets[temIND1].eta, genWeight);
+    //                genCentralJetPhiEWK_Zinc2jet->Fill(genJets[temIND1].phi, genWeight);
+
+
+    //                genJetsHTEWK_Zinc2jet->Fill(genJetsHT, genWeight);
+    //                genJetsMassEWK_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+
+    //                // multi jet variables
+    //                genSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() + genSecondJ.Eta()),  genWeight);
+    //                genAbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta()) + fabs(genSecondJ.Eta()),  genWeight);
+    //                genTwoJetsPtDiffEWK_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
+    //                genptBalEWK_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+    //                gendEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() - genSecondJ.Eta()), genWeight);
+    //                genSpTJetsEWK_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+
+    //                // find jet properties of the third jet that is  between the two leading jets
+    //                int nGoodJetsBtw(0.);
+    //                double jetsHTBtw(0.);
+    //                if (nGenJetsAdd > 2){
+    //                    genThirdJetPtEWKadd_Zinc2jet->Fill(genJetsAdditional[2].pt, genWeight);
+    //                    genThirdJetEtaEWKadd_Zinc2jet->Fill(genJetsAdditional[2].eta, genWeight);
+    //                    genThirdJetPhiEWKadd_Zinc2jet->Fill(genJetsAdditional[2].phi, genWeight);
+    //                    for (unsigned short i(2); i < nGenJetsAdd; i++) {
+    //                        if (genJetsAdditional[i].eta < max(genJets[0].eta,genJets[1].eta) -0.5 && genJetsAdditional[i].eta > min(genJets[0].eta,genJets[1].eta) + 0.5){
+    //                            jetsHTBtw += genJetsAdditional[i].pt;
+    //                            nGoodJetsBtw++;
+    //                            genAllJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+    //                            genAllJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+    //                            genAllJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+    //                            if (nGoodJetsBtw == 1){
+    //                                genThirdJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+    //                                genThirdJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+    //                                genThirdJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+    //                            }
+    //                        }
+    //                    }
+    //                    genJetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, genWeight);
+    //                    genZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, genWeight);
+    //                }
+
+    //            }
+    //            //////////////////////// STOP EWK
+                
+                if (genZ.Pt() < 25){
+                    genptBal_LowPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                    gendPhiJets_LowPt_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                    genBestdPhiJets_LowPt_Zinc2jet->Fill(deltaPhi(genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    gendPhiLeptons_LowPt_Zinc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
+                    genPHI_T_LowPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genBestPHI_T_LowPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    genPHI_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genBestPHI_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    genSpTJets_LowPt_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                    genBestSpTJets_LowPt_Zinc2jet->Fill(SpTsub(genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    genSpTLeptons_LowPt_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                    genSpT_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genBestSpT_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    genSPhi_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genBestSPhi_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
+                    if (SpT(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5){ 
+                        genPHI_LowSpT_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSPhi_LowSpT_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                     }
-                    if ( doW ) gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta() - genLep1.Eta()), genWeight);
-                    else gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta()-genZ.Eta()), genWeight);
-                    if (nGoodGenJets == 1){
-                        genFirstJetPt_Zexc1jet->Fill(genLeadJ.Pt(), genWeight);
-                        //    gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
-                        if ( doW ) gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta() - genLep1.Eta()), genWeight);
-                        else gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta()-genZ.Eta()), genWeight);
-
+                    else {
+                        genPHI_HighSpT_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSPhi_HighSpT_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    }
+                    if (SPhi(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5){
+                        genSpT_LowSPhi_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    }
+                    else {
+                        genSpT_HighSPhi_LowPt_Zinc2jet ->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                     }
                 }
-                if (nGoodGenJets >= 2){
-                    TLorentzVector genJet1Plus2PlusZ = genJet1Plus2 + genZ;
-                    GENnEventsIncl2Jets++;
-                    genZNGoodJets_Zinc->Fill(2., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(2., genWeight);
-                    genZMass_Zinc2jet->Fill(genZ.M(), genWeight);
-                    genTwoJetsPtDiff_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
-                    genBestTwoJetsPtDiff_Zinc2jet->Fill(genBestJet1Minus2.Pt(), genWeight);
-                    genJetsMass_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
-                    GLepBarePtZinc2jet->Fill(genLep1.Pt(), genWeight);
-                    GLepBareEtaZinc2jet->Fill(genLep1.Eta(), genWeight);
-                    if (doZ || doTT){
-                        GLepBarePtZinc2jet->Fill(genLep2.Pt(), genWeight);
-                        GLepBareEtaZinc2jet->Fill(genLep2.Eta(), genWeight);
-                    }
-//                    genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc2jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc2jet->Fill(genZ.Eta(), genWeight);
-                    genFirstHighestJetPt_Zinc2jet->Fill(genLeadJ.Pt(), genWeight);
-                    genSecondHighestJetPt_Zinc2jet->Fill(genSecondJ.Pt(), genWeight);
+                else {
+                    genptBal_HighPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                    gendPhiJets_HighPt_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                    gendPhiLeptons_HighPt_Zinc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
+                    genPHI_HighPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genPHI_T_HighPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genSpTJets_HighPt_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                    genSpTLeptons_HighPt_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                    genSpT_HighPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genSPhi_HighPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                }
+                if (nGoodGenJets == 2){
+                    genTwoJetsPtDiff_Zexc2jet->Fill(genJet1Minus2.Pt(), genWeight);
+                    genJetsMass_Zexc2jet->Fill(genJet1Plus2.M(), genWeight);
+                    genSecondJetPt_Zexc2jet->Fill(genSecondJ.Pt(), genWeight);
+                    gendPhiJets_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                    genPHI_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genPHI_T_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    gendEtaJets_Zexc2jet->Fill(genLeadJ.Eta() - genSecondJ.Eta(), genWeight);
+                    gendEtaFirstJetZ_Zexc2jet->Fill(genLeadJ.Eta() - genZ.Eta(), genWeight);
+                    gendEtaSecondJetZ_Zexc2jet->Fill(genSecondJ.Eta() - genZ.Eta(), genWeight);
+                    gendEtaJet1Plus2Z_Zexc2jet->Fill(genJet1Plus2.Eta() - genZ.Eta(), genWeight);
+                    genSpT_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genSpTJets_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                    genSpTLeptons_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                    genSPhi_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                    genptBal_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
 
 
-                    genSecondJetEta_Zinc2jet->Fill(fabs(genSecondJ.Eta()), genWeight);
-                    genSecondJetEta_2_Zinc2jet->Fill(fabs(genSecondJ.Eta()), genWeight);
-                    genSecondJetAbsRapidity_Zinc2jet->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
-                    genSecondJetAbsRapidity_2_Zinc2jet->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
-                    genSecondJetRapidityFull_Zinc2jet->Fill(genNewSecondJ.Rapidity(), genWeight);
-                    gendRapidityJets_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    gendRapidityJets_2_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    
-                    gendRapidityJetsFB_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    gendRapidityJetsFB_2_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    
-                    gendiJetMass_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
-                    gendiJetMass_2_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
-                    
-                    gendPhiJetsFB_Zinc2jet->Fill(deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), genWeight);
-                    gendPhiJetsFB_2_Zinc2jet->Fill(deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), genWeight);
-                    
-                    gendRJets_Zinc2jet->Fill(deltaRYPhi(genNewLeadJ, genNewSecondJ), genWeight);
-                    gendRJets_2_Zinc2jet->Fill(deltaRYPhi(genNewLeadJ, genNewSecondJ), genWeight);
-                    
-                    gendiJetPt_Zinc2jet->Fill(genJet1Plus2.Pt(), genWeight);
-                    gendiJetPt_2_Zinc2jet->Fill(genJet1Plus2.Pt(), genWeight);
-                    
-		    gendPhiLepJet2_Zinc2jet->Fill(deltaPhi(genLep1, genNewSecondJ), genWeight);
-		    gendPhiLepJet2_2_Zinc2jet->Fill(deltaPhi(genLep1, genNewSecondJ), genWeight);
-                    
-                    genMeanNJetsHT_1D_Zinc2jet->Fill(genJetsHT, genWeight*nGoodGenJets);
-                    genMeanNJetsdRapidity_1D_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight*nGoodGenJets);
-                    genMeanNJetsdRapidityFB_1D_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight*nGoodGenJets);
-                    
-                    genMeanNJetsHT_Zinc2jet->Fill(genJetsHT, nGoodGenJets, genWeight);
-                    genMeanNJetsdRapidity_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), nGoodGenJets, genWeight);
-                    genMeanNJetsdRapidityFB_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, nGoodGenJets, genWeight);
-                    genSecondJetPtEta_Zinc2jet->Fill(genSecondJ.Pt(), fabs(genSecondJ.Eta()), genWeight);
-                    genRatioJetPt21_Zinc2jet->Fill(genJets[1].pt/genJets[0].pt, genWeight);
-                    genJetsHT_Zinc2jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_20_30_Zinc2jet->Fill(genJetsHT_20, genWeight);
-                    genJetsHT_1_Zinc2jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_2_Zinc2jet->Fill(genJetsHT, genWeight);
-                    
-                    genptBal_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-                    
-                    gendPhiJets_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                    gendPhiJets_2_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                    
-                    genBestdPhiJets_Zinc2jet->Fill(deltaPhi(genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    gendEtaJets_Zinc2jet->Fill(genLeadJ.Eta() - genSecondJ.Eta(), genWeight);
-                    gendEtaFirstJetZ_Zinc2jet->Fill(genLeadJ.Eta() - genZ.Eta(), genWeight);
-                    gendEtaSecondJetZ_Zinc2jet->Fill(genSecondJ.Eta() - genZ.Eta(), genWeight);
-                    gendEtaJet1Plus2Z_Zinc2jet->Fill(genJet1Plus2.Eta() - genZ.Eta(), genWeight);
-                    genPHI_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                    genBestPHI_Zinc2jet->Fill(PHI(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    genPHI_T_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                    genBestPHI_T_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    genSpT_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                    genBestSpT_Zinc2jet->Fill(SpT(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    genSpTJets_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                    genBestSpTJets_Zinc2jet->Fill(SpTsub(genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    genSpTLeptons_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                    genSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                    genBestSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                    for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
-                        if ( fabs(genSecondJ.Eta()) >= j_Y_range[i] &&  fabs(genSecondJ.Eta()) < j_Y_range[i+1] )                                                genSecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(genSecondJ.Pt()), genWeight);
-                    }
-
-      
-                    //andrew -- turning off EWK histograms due to memory issues with ROOT
-                    //they don't seem relevant for the alpha_s analysis, at least for the moment
-        //            //--- START EWK ---
-        //            if (passesGenEWKJetPt){
-        //                // met histos
-        //                //
-        //                //METEWK_Zinc2jet->Fill(METpt, weight);
-        //                //METphiEWK_Zinc2jet->Fill(METphi,  weight);
-        //                //MTEWK_Zinc2jet->Fill(MT,  weight);
-        //                //          
-        //                // jet histos
-        //                genZNGoodJetsEWK_Zexc->Fill(nGoodGenJets, genWeight);
-        //                genFirstJetPtEWK_Zinc2jet->Fill(genJets[0].pt, genWeight);
-        //                genFirstJetEtaEWK_Zinc2jet->Fill(genJets[0].eta, genWeight);
-        //                genFirstJetPhiEWK_Zinc2jet->Fill(genJets[0].phi, genWeight);
-
-
-        //                genSecondJetPtEWK_Zinc2jet->Fill(genJets[1].pt, genWeight);
-        //                genSecondJetEtaEWK_Zinc2jet->Fill(genJets[1].eta, genWeight);
-        //                genSecondJetPhiEWK_Zinc2jet->Fill(genJets[1].phi, genWeight);
-        //                int temIND(0), temIND1(1);
-        //                if (fabs(genJets[1].eta) > fabs(genJets[0].eta)){ 
-        //                    temIND = 1; 
-        //                    temIND1 = 0;
-        //                }
-        //                genForwardJetPtEWK_Zinc2jet->Fill(genJets[temIND].pt, genWeight);
-        //                genForwardJetEtaEWK_Zinc2jet->Fill(genJets[temIND].eta, genWeight);
-        //                genForwardJetPhiEWK_Zinc2jet->Fill(genJets[temIND].phi, genWeight);
-
-
-        //                genCentralJetPtEWK_Zinc2jet->Fill(genJets[temIND1].pt, genWeight);
-        //                genCentralJetEtaEWK_Zinc2jet->Fill(genJets[temIND1].eta, genWeight);
-        //                genCentralJetPhiEWK_Zinc2jet->Fill(genJets[temIND1].phi, genWeight);
-
-
-        //                genJetsHTEWK_Zinc2jet->Fill(genJetsHT, genWeight);
-        //                genJetsMassEWK_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
-
-        //                // multi jet variables
-        //                genSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() + genSecondJ.Eta()),  genWeight);
-        //                genAbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta()) + fabs(genSecondJ.Eta()),  genWeight);
-        //                genTwoJetsPtDiffEWK_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
-        //                genptBalEWK_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-        //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-        //                gendEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() - genSecondJ.Eta()), genWeight);
-        //                genSpTJetsEWK_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-        //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-
-        //                // find jet properties of the third jet that is  between the two leading jets
-        //                int nGoodJetsBtw(0.);
-        //                double jetsHTBtw(0.);
-        //                if (nGenJetsAdd > 2){
-        //                    genThirdJetPtEWKadd_Zinc2jet->Fill(genJetsAdditional[2].pt, genWeight);
-        //                    genThirdJetEtaEWKadd_Zinc2jet->Fill(genJetsAdditional[2].eta, genWeight);
-        //                    genThirdJetPhiEWKadd_Zinc2jet->Fill(genJetsAdditional[2].phi, genWeight);
-        //                    for (unsigned short i(2); i < nGenJetsAdd; i++) {
-        //                        if (genJetsAdditional[i].eta < max(genJets[0].eta,genJets[1].eta) -0.5 && genJetsAdditional[i].eta > min(genJets[0].eta,genJets[1].eta) + 0.5){
-        //                            jetsHTBtw += genJetsAdditional[i].pt;
-        //                            nGoodJetsBtw++;
-        //                            genAllJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
-        //                            genAllJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
-        //                            genAllJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
-        //                            if (nGoodJetsBtw == 1){
-        //                                genThirdJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
-        //                                genThirdJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
-        //                                genThirdJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
-        //                            }
-        //                        }
-        //                    }
-        //                    genJetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, genWeight);
-        //                    genZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, genWeight);
-        //                }
-
-        //            }
-        //            //////////////////////// STOP EWK
-                    
                     if (genZ.Pt() < 25){
-                        genptBal_LowPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-                        gendPhiJets_LowPt_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                        genBestdPhiJets_LowPt_Zinc2jet->Fill(deltaPhi(genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        gendPhiLeptons_LowPt_Zinc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
-                        genPHI_T_LowPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genBestPHI_T_LowPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        genPHI_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genBestPHI_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        genSpTJets_LowPt_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                        genBestSpTJets_LowPt_Zinc2jet->Fill(SpTsub(genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        genSpTLeptons_LowPt_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                        genSpT_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genBestSpT_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        genSPhi_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genBestSPhi_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
-                        if (SpT(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5){ 
-                            genPHI_LowSpT_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSPhi_LowSpT_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genptBal_LowPt_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                        gendPhiJets_LowPt_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                        gendPhiLeptons_LowPt_Zexc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
+                        genPHI_T_LowPt_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genPHI_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSpTJets_LowPt_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                        genSpTLeptons_LowPt_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                        genSpT_LowPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSPhi_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        if (SpT(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5) { 
+                            genPHI_LowSpT_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            genSPhi_LowSpT_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                         }
                         else {
-                            genPHI_HighSpT_LowPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSPhi_HighSpT_LowPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            genPHI_HighSpT_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            genSPhi_HighSpT_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                         }
-                        if (SPhi(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5){
-                            genSpT_LowSPhi_LowPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        if (SPhi(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5) {
+                            genSpT_LowSPhi_LowPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                         }
                         else {
-                            genSpT_HighSPhi_LowPt_Zinc2jet ->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            genSpT_HighSPhi_LowPt_Zexc2jet ->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                         }
                     }
                     else {
-                        genptBal_HighPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-                        gendPhiJets_HighPt_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                        gendPhiLeptons_HighPt_Zinc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
-                        genPHI_HighPt_Zinc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genPHI_T_HighPt_Zinc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genSpTJets_HighPt_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                        genSpTLeptons_HighPt_Zinc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                        genSpT_HighPt_Zinc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genSPhi_HighPt_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genptBal_HighPt_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                        gendPhiJets_HighPt_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                        gendPhiLeptons_HighPt_Zexc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
+                        genPHI_HighPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genPHI_T_HighPt_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSpTJets_HighPt_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                        genSpTLeptons_HighPt_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
+                        genSpT_HighPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                        genSPhi_HighPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                     }
-                    if (nGoodGenJets == 2){
-                        genTwoJetsPtDiff_Zexc2jet->Fill(genJet1Minus2.Pt(), genWeight);
-                        genJetsMass_Zexc2jet->Fill(genJet1Plus2.M(), genWeight);
-                        genSecondJetPt_Zexc2jet->Fill(genSecondJ.Pt(), genWeight);
-                        gendPhiJets_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                        genPHI_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genPHI_T_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        gendEtaJets_Zexc2jet->Fill(genLeadJ.Eta() - genSecondJ.Eta(), genWeight);
-                        gendEtaFirstJetZ_Zexc2jet->Fill(genLeadJ.Eta() - genZ.Eta(), genWeight);
-                        gendEtaSecondJetZ_Zexc2jet->Fill(genSecondJ.Eta() - genZ.Eta(), genWeight);
-                        gendEtaJet1Plus2Z_Zexc2jet->Fill(genJet1Plus2.Eta() - genZ.Eta(), genWeight);
-                        genSpT_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genSpTJets_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                        genSpTLeptons_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                        genSPhi_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        genptBal_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                }
 
-
-                        if (genZ.Pt() < 25){
-                            genptBal_LowPt_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-                            gendPhiJets_LowPt_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                            gendPhiLeptons_LowPt_Zexc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
-                            genPHI_T_LowPt_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genPHI_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSpTJets_LowPt_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                            genSpTLeptons_LowPt_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                            genSpT_LowPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSPhi_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            if (SpT(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5) { 
-                                genPHI_LowSpT_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                                genSPhi_LowSpT_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            }
-                            else {
-                                genPHI_HighSpT_LowPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                                genSPhi_HighSpT_LowPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            }
-                            if (SPhi(genLep1, genLep2, genLeadJ, genSecondJ) < 0.5) {
-                                genSpT_LowSPhi_LowPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            }
-                            else {
-                                genSpT_HighSPhi_LowPt_Zexc2jet ->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                if (hasPartonInfo){
+                    if (genDPSAndItsJets.size() == 2) {
+                        if ((deltaR(genDPSAndItsJets[0].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[0].first, genSecondJ) < 0.5) 
+                                && (deltaR(genDPSAndItsJets[1].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[1].first, genSecondJ) < 0.5)) {
+                            genSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                            gendPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                            genPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            genSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
+                            if (hasRecoInfo) {
+                                resSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ) - SpTsub(leadJ, secondJ) , genWeight);
+                                resdPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ) - deltaPhi(leadJ, secondJ), genWeight);
+                                resPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ) - PHI_T(lep1, lep2, leadJ, secondJ), genWeight);
+                                resSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ) - SpT(lep1, lep2, leadJ, secondJ), genWeight);
                             }
                         }
-                        else {
-                            genptBal_HighPt_Zexc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-                            gendPhiJets_HighPt_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                            gendPhiLeptons_HighPt_Zexc2jet->Fill(deltaPhi(genLep1, genLep2), genWeight);
-                            genPHI_HighPt_Zexc2jet->Fill(PHI(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genPHI_T_HighPt_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSpTJets_HighPt_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                            genSpTLeptons_HighPt_Zexc2jet->Fill(SpTsub(genLep1, genLep2), genWeight);
-                            genSpT_HighPt_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSPhi_HighPt_Zexc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                        }
-                    }
-
-                    if (hasPartonInfo){
-                        if (genDPSAndItsJets.size() == 2) {
-                            if ((deltaR(genDPSAndItsJets[0].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[0].first, genSecondJ) < 0.5) 
-                                    && (deltaR(genDPSAndItsJets[1].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[1].first, genSecondJ) < 0.5)) {
-                                genSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                                gendPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                                genPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                                genSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                                if (hasRecoInfo) {
-                                    resSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ) - SpTsub(leadJ, secondJ) , genWeight);
-                                    resdPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ) - deltaPhi(leadJ, secondJ), genWeight);
-                                    resPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ) - PHI_T(lep1, lep2, leadJ, secondJ), genWeight);
-                                    resSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ) - SpT(lep1, lep2, leadJ, secondJ), genWeight);
-                                }
-                            }
-                            gendPhiJetsDPS_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genPHI_TDPS_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genSpTDPSPartons_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].first, genDPSAndItsJets[1].first), genWeight);
-                            genSpTJetsDPS_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genSpTDPS_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            if (deltaR(genDPSAndItsJets[0].first, genDPSAndItsJets[0].second) < 0.5 && deltaR(genDPSAndItsJets[1].first, genDPSAndItsJets[1].second)) {
-                                gendPhiJetsDPSDeltaR_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                                genSpTJetsDPSDeltaR_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                                genSpTDPSDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                                genPHI_TDPSDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                                gendPhiJetsDPSDeltaR_ZpT_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genZ.Pt(), genWeight);
-                            }
+                        gendPhiJetsDPS_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                        genPHI_TDPS_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                        genSpTDPSPartons_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].first, genDPSAndItsJets[1].first), genWeight);
+                        genSpTJetsDPS_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                        genSpTDPS_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                        if (deltaR(genDPSAndItsJets[0].first, genDPSAndItsJets[0].second) < 0.5 && deltaR(genDPSAndItsJets[1].first, genDPSAndItsJets[1].second)) {
+                            gendPhiJetsDPSDeltaR_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                            genSpTJetsDPSDeltaR_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                            genSpTDPSDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                            genPHI_TDPSDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
+                            gendPhiJetsDPSDeltaR_ZpT_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genZ.Pt(), genWeight);
                         }
                     }
                 }
-                if (nGoodGenJets >= 3){
-                    GENnEventsIncl3Jets++;
-                    genZNGoodJets_Zinc->Fill(3., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(3., genWeight);
-                    genZMass_Zinc3jet->Fill(genZ.M(), genWeight);
-//                    genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc3jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc3jet->Fill(genZ.Eta(), genWeight);
-
-                    genThirdJetEta_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
-                    genThirdJetEta_2_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
-                    genThirdJetAbsRapidity_Zinc3jet->Fill(fabs(genNewThirdJ.Rapidity()), genWeight);
-                    genThirdJetAbsRapidity_2_Zinc3jet->Fill(fabs(genNewThirdJ.Rapidity()), genWeight);
-                    genThirdJetRapidityFull_Zinc3jet->Fill(genNewThirdJ.Rapidity(), genWeight);
-                    gendRapidityJets_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    gendRapidityJets_2_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    
-                    gendRapidityJets_First_Third_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
-                    gendRapidityJets_2_First_Third_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
-                    
-                    gendRapidityJets_Second_Third_Zinc3jet->Fill(fabs(genNewSecondJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
-                    gendRapidityJets_2_Second_Third_Zinc3jet->Fill(fabs(genNewSecondJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
-                    
-                    gendRapidityJetsFB_Zinc3jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    gendRapidityJetsFB_2_Zinc3jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    
-                    gendiJetMass_Zinc3jet->Fill(genJet1Plus2.M(), genWeight);
-                    gendiJetMass_2_Zinc3jet->Fill(genJet1Plus2.M(), genWeight);
-                    
-                    gendiJetPt_Zinc3jet->Fill(genJet1Plus2.Pt(), genWeight);
-                    gendiJetPt_2_Zinc3jet->Fill(genJet1Plus2.Pt(), genWeight);
-
-					gendPhiLepJet3_Zinc3jet->Fill(deltaPhi(genLep1, genNewThirdJ), genWeight);
-					gendPhiLepJet3_2_Zinc3jet->Fill(deltaPhi(genLep1, genNewThirdJ), genWeight);
-                    genThirdJetPtEta_Zinc3jet->Fill(genJets[2].pt, fabs(genJets[2].eta), genWeight);
-                    genRatioJetPt32_Zinc3jet->Fill(genJets[2].pt/genJets[1].pt, genWeight);
-                    genFirstHighestJetPt_Zinc3jet->Fill(genJets[0].pt, genWeight);
-                    genSecondHighestJetPt_Zinc3jet->Fill(genJets[1].pt, genWeight);
-                    genThirdHighestJetPt_Zinc3jet->Fill(genJets[2].pt, genWeight);
-                    genJetsHT_Zinc3jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_20_30_Zinc3jet->Fill(genJetsHT_20, genWeight);
-                    genJetsHT_1_Zinc3jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_2_Zinc3jet->Fill(genJetsHT, genWeight);
-                    
-                }
-                if (nGoodGenJets >= 4){
-                    genZNGoodJets_Zinc->Fill(4., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(4., genWeight);
-                    genZMass_Zinc4jet->Fill(genZ.M(), genWeight);
-//                    genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc4jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc4jet->Fill(genZ.Eta(), genWeight);
-                    
-                    genFourthJetEta_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
-                    genFourthJetEta_2_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
-                    genFourthJetAbsRapidity_Zinc4jet->Fill(fabs(genNewFourthJ.Rapidity()), genWeight);
-                    genFourthJetAbsRapidity_2_Zinc4jet->Fill(fabs(genNewFourthJ.Rapidity()), genWeight);
-                    genFourthJetRapidityFull_Zinc4jet->Fill(genNewFourthJ.Rapidity(), genWeight);
-                    gendRapidityJets_Zinc4jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    gendRapidityJets_2_Zinc4jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
-                    
-                    gendRapidityJetsFB_Zinc4jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    gendRapidityJetsFB_2_Zinc4jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
-                    
-                    gendiJetMass_Zinc4jet->Fill(genJet1Plus2.M(), genWeight);
-                    gendiJetMass_2_Zinc4jet->Fill(genJet1Plus2.M(), genWeight);
-                    
-                    gendiJetPt_Zinc4jet->Fill(genJet1Plus2.Pt(), genWeight);
-                    gendiJetPt_2_Zinc4jet->Fill(genJet1Plus2.Pt(), genWeight);
-
-		    gendPhiLepJet4_Zinc4jet->Fill(deltaPhi(genLep1, genNewFourthJ), genWeight);
-		    gendPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(genLep1, genNewFourthJ), genWeight);
-
-                    genFourthJetPtEta_Zinc4jet->Fill(genJets[3].pt, fabs(genJets[3].eta), genWeight);
-                    genFirstHighestJetPt_Zinc4jet->Fill(genJets[0].pt, genWeight);
-                    genSecondHighestJetPt_Zinc4jet->Fill(genJets[1].pt, genWeight);
-                    genThirdHighestJetPt_Zinc4jet->Fill(genJets[2].pt, genWeight);
-                    genJetsHT_Zinc4jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_1_Zinc4jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_2_Zinc4jet->Fill(genJetsHT, genWeight);
-
-
-                }
-                if (nGoodGenJets >= 5){
-                    genZNGoodJets_Zinc->Fill(5., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(5., genWeight);
-                    genZMass_Zinc5jet->Fill(genZ.M(), genWeight);
-                    genZPt_Zinc5jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc5jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc5jet->Fill(genZ.Eta(), genWeight);
-                    
-                    genFifthJetEta_Zinc5jet->Fill(fabs(genJets[4].eta), genWeight);
-                    genFifthJetEta_2_Zinc5jet->Fill(fabs(genJets[4].eta), genWeight);
-                    genFifthJetPtEta_Zinc5jet->Fill(genJets[4].pt, fabs(genJets[4].eta), genWeight);
-                    genFirstHighestJetPt_Zinc5jet->Fill(genJets[0].pt, genWeight);
-                    genSecondHighestJetPt_Zinc5jet->Fill(genJets[1].pt, genWeight);
-                    genThirdHighestJetPt_Zinc5jet->Fill(genJets[2].pt, genWeight);
-                    genJetsHT_Zinc5jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_1_Zinc5jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_2_Zinc5jet->Fill(genJetsHT, genWeight);
-
-					//gendPhiLepJet5_Zinc5jet->Fill(deltaPhi(genLep1, genNewFifthJ), genWeight);
-					//gendPhiLepJet5_2_Zinc5jet->Fill(deltaPhi(genLep1, genNewFifthJ), genWeight);
-                }
-                if (nGoodGenJets >= 6){
-                    genZNGoodJets_Zinc->Fill(6., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(6., genWeight);
-                    genZMass_Zinc6jet->Fill(genZ.M(), genWeight);
-                    genZPt_Zinc6jet->Fill(genZ.Pt(), genWeight);
-                    genZRapidity_Zinc6jet->Fill(genZ.Rapidity(), genWeight);
-                    genZEta_Zinc6jet->Fill(genZ.Eta(), genWeight);
-                    
-                    genSixthJetEta_Zinc6jet->Fill(fabs(genJets[5].eta), genWeight);
-                    genSixthJetPtEta_Zinc6jet->Fill(genJets[5].pt, fabs(genJets[5].eta), genWeight);
-                    genFirstHighestJetPt_Zinc6jet->Fill(genJets[0].pt, genWeight);
-                    genSecondHighestJetPt_Zinc6jet->Fill(genJets[1].pt, genWeight);
-                    genThirdHighestJetPt_Zinc6jet->Fill(genJets[2].pt, genWeight);
-                    genJetsHT_Zinc6jet->Fill(genJetsHT, genWeight);
-                    genJetsHT_1_Zinc6jet->Fill(genJetsHT, genWeight);
-                }
-                if (nGoodGenJets >= 7){
-                    genZNGoodJets_Zinc->Fill(7., genWeight);
-                    genZNGoodJetsFull_Zinc->Fill(7., genWeight);
-                }
-                
-                if (nGoodGenJets >= 8) genZNGoodJets_Zinc->Fill(8., genWeight);
-                if (doW && nGoodGenJets >= 9) genZNGoodJets_Zinc->Fill(9., genWeight);
-                if (doW && nGoodGenJets >= 10) genZNGoodJets_Zinc->Fill(10., genWeight);
             }
-        }
+            if (nGoodGenJets >= 3){
+                GENnEventsIncl3Jets++;
+                genZNGoodJets_Zinc->Fill(3., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(3., genWeight);
+                genZMass_Zinc3jet->Fill(genZ.M(), genWeight);
+//                    genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                genZRapidity_Zinc3jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc3jet->Fill(genZ.Eta(), genWeight);
+
+                genThirdJetEta_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
+                genThirdJetEta_2_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
+                genThirdJetAbsRapidity_Zinc3jet->Fill(fabs(genNewThirdJ.Rapidity()), genWeight);
+                genThirdJetAbsRapidity_2_Zinc3jet->Fill(fabs(genNewThirdJ.Rapidity()), genWeight);
+                genThirdJetRapidityFull_Zinc3jet->Fill(genNewThirdJ.Rapidity(), genWeight);
+                gendRapidityJets_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                gendRapidityJets_2_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                
+                gendRapidityJets_First_Third_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
+                gendRapidityJets_2_First_Third_Zinc3jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
+                
+                gendRapidityJets_Second_Third_Zinc3jet->Fill(fabs(genNewSecondJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
+                gendRapidityJets_2_Second_Third_Zinc3jet->Fill(fabs(genNewSecondJ.Rapidity() - genNewThirdJ.Rapidity()), genWeight);
+                
+                gendRapidityJetsFB_Zinc3jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                gendRapidityJetsFB_2_Zinc3jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                
+                gendiJetMass_Zinc3jet->Fill(genJet1Plus2.M(), genWeight);
+                gendiJetMass_2_Zinc3jet->Fill(genJet1Plus2.M(), genWeight);
+                
+                gendiJetPt_Zinc3jet->Fill(genJet1Plus2.Pt(), genWeight);
+                gendiJetPt_2_Zinc3jet->Fill(genJet1Plus2.Pt(), genWeight);
+
+                gendPhiLepJet3_Zinc3jet->Fill(deltaPhi(genLep1, genNewThirdJ), genWeight);
+                gendPhiLepJet3_2_Zinc3jet->Fill(deltaPhi(genLep1, genNewThirdJ), genWeight);
+                genThirdJetPtEta_Zinc3jet->Fill(genJets[2].pt, fabs(genJets[2].eta), genWeight);
+                genRatioJetPt32_Zinc3jet->Fill(genJets[2].pt/genJets[1].pt, genWeight);
+                genFirstHighestJetPt_Zinc3jet->Fill(genJets[0].pt, genWeight);
+                genSecondHighestJetPt_Zinc3jet->Fill(genJets[1].pt, genWeight);
+                genThirdHighestJetPt_Zinc3jet->Fill(genJets[2].pt, genWeight);
+                genJetsHT_Zinc3jet->Fill(genJetsHT, genWeight);
+                genJetsHT_20_30_Zinc3jet->Fill(genJetsHT_20, genWeight);
+                genJetsHT_1_Zinc3jet->Fill(genJetsHT, genWeight);
+                genJetsHT_2_Zinc3jet->Fill(genJetsHT, genWeight);
+                
+            }
+            if (nGoodGenJets >= 4){
+                genZNGoodJets_Zinc->Fill(4., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(4., genWeight);
+                genZMass_Zinc4jet->Fill(genZ.M(), genWeight);
+//                    genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                genZRapidity_Zinc4jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc4jet->Fill(genZ.Eta(), genWeight);
+                
+                genFourthJetEta_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
+                genFourthJetEta_2_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
+                genFourthJetAbsRapidity_Zinc4jet->Fill(fabs(genNewFourthJ.Rapidity()), genWeight);
+                genFourthJetAbsRapidity_2_Zinc4jet->Fill(fabs(genNewFourthJ.Rapidity()), genWeight);
+                genFourthJetRapidityFull_Zinc4jet->Fill(genNewFourthJ.Rapidity(), genWeight);
+                gendRapidityJets_Zinc4jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                gendRapidityJets_2_Zinc4jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                
+                gendRapidityJetsFB_Zinc4jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                gendRapidityJetsFB_2_Zinc4jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
+                
+                gendiJetMass_Zinc4jet->Fill(genJet1Plus2.M(), genWeight);
+                gendiJetMass_2_Zinc4jet->Fill(genJet1Plus2.M(), genWeight);
+                
+                gendiJetPt_Zinc4jet->Fill(genJet1Plus2.Pt(), genWeight);
+                gendiJetPt_2_Zinc4jet->Fill(genJet1Plus2.Pt(), genWeight);
+
+                gendPhiLepJet4_Zinc4jet->Fill(deltaPhi(genLep1, genNewFourthJ), genWeight);
+                gendPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(genLep1, genNewFourthJ), genWeight);
+
+                genFourthJetPtEta_Zinc4jet->Fill(genJets[3].pt, fabs(genJets[3].eta), genWeight);
+                genFirstHighestJetPt_Zinc4jet->Fill(genJets[0].pt, genWeight);
+                genSecondHighestJetPt_Zinc4jet->Fill(genJets[1].pt, genWeight);
+                genThirdHighestJetPt_Zinc4jet->Fill(genJets[2].pt, genWeight);
+                genJetsHT_Zinc4jet->Fill(genJetsHT, genWeight);
+                genJetsHT_1_Zinc4jet->Fill(genJetsHT, genWeight);
+                genJetsHT_2_Zinc4jet->Fill(genJetsHT, genWeight);
+
+
+            }
+            if (nGoodGenJets >= 5){
+                genZNGoodJets_Zinc->Fill(5., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(5., genWeight);
+                genZMass_Zinc5jet->Fill(genZ.M(), genWeight);
+                genZPt_Zinc5jet->Fill(genZ.Pt(), genWeight);
+                genZRapidity_Zinc5jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc5jet->Fill(genZ.Eta(), genWeight);
+                
+                genFifthJetEta_Zinc5jet->Fill(fabs(genJets[4].eta), genWeight);
+                genFifthJetEta_2_Zinc5jet->Fill(fabs(genJets[4].eta), genWeight);
+                genFifthJetPtEta_Zinc5jet->Fill(genJets[4].pt, fabs(genJets[4].eta), genWeight);
+                genFirstHighestJetPt_Zinc5jet->Fill(genJets[0].pt, genWeight);
+                genSecondHighestJetPt_Zinc5jet->Fill(genJets[1].pt, genWeight);
+                genThirdHighestJetPt_Zinc5jet->Fill(genJets[2].pt, genWeight);
+                genJetsHT_Zinc5jet->Fill(genJetsHT, genWeight);
+                genJetsHT_1_Zinc5jet->Fill(genJetsHT, genWeight);
+                genJetsHT_2_Zinc5jet->Fill(genJetsHT, genWeight);
+
+                //gendPhiLepJet5_Zinc5jet->Fill(deltaPhi(genLep1, genNewFifthJ), genWeight);
+                //gendPhiLepJet5_2_Zinc5jet->Fill(deltaPhi(genLep1, genNewFifthJ), genWeight);
+            }
+            if (nGoodGenJets >= 6){
+                genZNGoodJets_Zinc->Fill(6., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(6., genWeight);
+                genZMass_Zinc6jet->Fill(genZ.M(), genWeight);
+                genZPt_Zinc6jet->Fill(genZ.Pt(), genWeight);
+                genZRapidity_Zinc6jet->Fill(genZ.Rapidity(), genWeight);
+                genZEta_Zinc6jet->Fill(genZ.Eta(), genWeight);
+                
+                genSixthJetEta_Zinc6jet->Fill(fabs(genJets[5].eta), genWeight);
+                genSixthJetPtEta_Zinc6jet->Fill(genJets[5].pt, fabs(genJets[5].eta), genWeight);
+                genFirstHighestJetPt_Zinc6jet->Fill(genJets[0].pt, genWeight);
+                genSecondHighestJetPt_Zinc6jet->Fill(genJets[1].pt, genWeight);
+                genThirdHighestJetPt_Zinc6jet->Fill(genJets[2].pt, genWeight);
+                genJetsHT_Zinc6jet->Fill(genJetsHT, genWeight);
+                genJetsHT_1_Zinc6jet->Fill(genJetsHT, genWeight);
+            }
+            if (nGoodGenJets >= 7){
+                genZNGoodJets_Zinc->Fill(7., genWeight);
+                genZNGoodJetsFull_Zinc->Fill(7., genWeight);
+            }
+            
+            if (nGoodGenJets >= 8) genZNGoodJets_Zinc->Fill(8., genWeight);
+            if (doW && nGoodGenJets >= 9) genZNGoodJets_Zinc->Fill(9., genWeight);
+            if (doW && nGoodGenJets >= 10) genZNGoodJets_Zinc->Fill(10., genWeight);
+            
+        } //end filling gen histos
         
         //=======================================================================================================//
 
@@ -2455,7 +2491,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 if ( doW ) dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta - lepton1.eta), weight);
                 else dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta-Z.Eta()), weight);
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
-                    if ( fabs(jets[0].eta) >= j_Y_range[i] &&  fabs(jets[0].eta) < j_Y_range[i+1] )                                                FirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
+                    if ( fabs(jets[0].eta) >= j_Y_range[i] &&  fabs(jets[0].eta) < j_Y_range[i+1] ) FirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
                 }
 
 
@@ -2544,8 +2580,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 diJetPt_Zinc2jet->Fill(jet1Plus2.Pt(), weight);
                 diJetPt_2_Zinc2jet->Fill(jet1Plus2.Pt(), weight);
                 
-		dPhiLepJet2_Zinc2jet->Fill(deltaPhi(lep1, newSecondJ), weight);
-	        dPhiLepJet2_2_Zinc2jet->Fill(deltaPhi(lep1, newSecondJ), weight);
+                dPhiLepJet2_Zinc2jet->Fill(deltaPhi(lep1, newSecondJ), weight);
+                dPhiLepJet2_2_Zinc2jet->Fill(deltaPhi(lep1, newSecondJ), weight);
                 
                 MeanNJetsHT_1D_Zinc2jet->Fill(jetsHT, weight*nGoodJets);
                 MeanNJetsdRapidity_1D_Zinc2jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), weight*nGoodJets);
@@ -2983,8 +3019,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 diJetPt_Zinc3jet->Fill(jet1Plus2.Pt(), weight);
                 diJetPt_2_Zinc3jet->Fill(jet1Plus2.Pt(), weight);
 
-		dPhiLepJet3_Zinc3jet->Fill(deltaPhi(lep1, newThirdJ), weight);
-		dPhiLepJet3_2_Zinc3jet->Fill(deltaPhi(lep1, newThirdJ), weight);
+                dPhiLepJet3_Zinc3jet->Fill(deltaPhi(lep1, newThirdJ), weight);
+                dPhiLepJet3_2_Zinc3jet->Fill(deltaPhi(lep1, newThirdJ), weight);
 
                 ThirdJetPtEta_Zinc3jet->Fill(jets[2].pt, fabs(jets[2].eta), weight);
                 RatioJetPt32_Zinc3jet->Fill(jets[2].pt/jets[1].pt, weight);
@@ -3060,8 +3096,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 diJetPt_Zinc4jet->Fill(jet1Plus2.Pt(), weight);
                 diJetPt_2_Zinc4jet->Fill(jet1Plus2.Pt(), weight);
 
-		dPhiLepJet4_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), weight);
-		dPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), weight);
+                dPhiLepJet4_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), weight);
+                dPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), weight);
 
                 FourthJetPtEta_Zinc4jet->Fill(jets[3].pt, fabs(jets[3].eta), weight);
                 FourthJetPhi_Zinc4jet->Fill(jets[3].phi, weight);
@@ -3453,8 +3489,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 hresponsediJetPt_Zinc4jet->Fill(jet1Plus2.Pt(), genJet1Plus2.Pt(), weight);
                 hresponsediJetPt_2_Zinc4jet->Fill(jet1Plus2.Pt(), genJet1Plus2.Pt(), weight);
                 
-		hresponsedPhiLepJet4_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), deltaPhi(genLep1, genNewFourthJ), weight);
-		hresponsedPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), deltaPhi(genLep1, genNewFourthJ), weight);
+                hresponsedPhiLepJet4_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), deltaPhi(genLep1, genNewFourthJ), weight);
+                hresponsedPhiLepJet4_2_Zinc4jet->Fill(deltaPhi(lep1, newFourthJ), deltaPhi(genLep1, genNewFourthJ), weight);
                 
                 hresponseFourthJetAbsRapidity_Zinc4jet->Fill(fabs(newFourthJ.Rapidity()), fabs(genNewFourthJ.Rapidity()), weight);
                 hresponseFourthJetAbsRapidity_2_Zinc4jet->Fill(fabs(newFourthJ.Rapidity()), fabs(genNewFourthJ.Rapidity()), weight);
@@ -3580,17 +3616,26 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     //==========================================================================================================//
     //         Writing file             //
     //==================================//
-
     outputFile->cd();
 
     //--- Save all the histograms ---
     //listOfHistograms is defined in HistoSet.h
     unsigned short numbOfHistograms = listOfHistograms.size();
+
+    cout << "\nskimAccep_[0] = " << skimAccep_[0] << "\n";
+    cout << "sumEventW = " << sumEventW << "\n";
+    if (hasRecoInfo && !isData){
+        if (sumEventW > 0) {
+            cout << "Scaling histograms by skimAccep_[0]/sumEventW:"
+            cout << "skimAccep_[0]/sumEventW = " << skimAccep_[0]/sumEventW << "\n";
+        }
+    }
     
-    cout << "skimAccep_[0] = " << skimAccep_[0] << "\n";
     for (unsigned short i(0); i < numbOfHistograms; i++){
         string hName = listOfHistograms[i]->GetName();
         if ( (!hasGenInfo && hName.find("gen") != string::npos ) || (!hasRecoInfo && hName.find("gen") == string::npos )) continue; 
+
+        //global scaling of MC
         if (hasRecoInfo && !isData){
             if (sumEventW > 0) listOfHistograms[i]->Scale(skimAccep_[0]/sumEventW);
         }
@@ -3612,7 +3657,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             outputFile->WriteTObject(listOfResponses[i], savingName.c_str());
         }
     }
-    std::cout << "All response objects written! Woohoo!" << std::endl;
+    // std::cout << "All response objects written! Woohoo!" << std::endl;
     
     
     std::cout << "Writing the output file..." << std::endl;
@@ -3647,8 +3692,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     cout << "Number GEN Inclusif 1 jets                     : " << GENnEventsIncl1Jets << endl;
     cout << "Number GEN Inclusif 2 jets                     : " << GENnEventsIncl2Jets << endl;
     cout << "Number GEN Inclusif 3 jets                     : " << GENnEventsIncl3Jets << endl;
-    cout << "Sherpa weight                                  : " << sumSherpaW << endl;
-    cout << "MC weight                                      : " << sumEventW << endl;
+    //cout << "Sherpa weight                                  : " << sumSherpaW << endl;
+    cout << "MC weight (sumEventW)                          : " << sumEventW << endl;
     if (doTTreweighting)       cout << "We run to TTbar with reweighting :   " << weightSum << "  and the original weight is :" << weightSumNoTopRew << endl;
     cout << " Trigger summary"<< endl;
     for (unsigned short k(0); k < 4; k++) {
@@ -3664,6 +3709,8 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
     systematics(systematics_), direction(direction_), xsecfactor(xsecfactor_), jetPtCutMin(jetPtCutMin_), jetPtCutMax(jetPtCutMax_), jetEtaCutMin(jetEtaCutMin_), jetEtaCutMax(jetEtaCutMax_), ZPtCutMin(ZPtCutMin_), ZEtaCutMin(ZEtaCutMin_), ZEtaCutMax(ZEtaCutMax_), METcut(METcut_)
 {
 
+    //This function serves to get the correct filenames/locations, and then read in the files to the TChain
+
     // if parameter tree is not specified (or zero), connect the file
     // used to generate this class and read the Tree.
 
@@ -3677,7 +3724,6 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
     string storageElement = "/eos/cms";
     string dirPath = "/tupel";
     string treeName = "/EventTree";
-
 
     if (fileName.find("DMu_") == 0) leptonFlavor = "Muons";
     else if (fileName.find("DE_") == 0)  leptonFlavor = "Electrons"; 
@@ -3707,6 +3753,7 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
         }
     }
     else {
+        //assuming that the filename locations are listed in a text file, which are read off from EOS
         fullFileName += ".txt";
         ifstream infile(fullFileName.c_str());
         string line; 
@@ -3785,7 +3832,9 @@ Long64_t ZJetsAndDPS::LoadTree(Long64_t entry){
     Long64_t centry = fChain->LoadTree(entry);
     if (centry < 0) return centry;
     if (fChain->GetTreeNumber() != fCurrent) {
-        fCurrent = fChain->GetTreeNumber();Notify();  }
+        fCurrent = fChain->GetTreeNumber();
+        Notify();  
+    }
     return centry;
 }
 
@@ -3800,7 +3849,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
 
 
     // Set object pointer
-    
+
     EvtWeights = 0;
     mcSherpaWeights_ = 0 ;
     
@@ -3833,6 +3882,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     GJetAk04Eta = 0;
     GJetAk04Phi = 0;
     GJetAk04E = 0;
+
     dpsParton_Pt = 0;
     dpsParton_Eta = 0;
     dpsParton_Phi = 0;
@@ -3865,6 +3915,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     JetAk04Phi = 0;   
     JetAk04E = 0;   
     JetAk04Id = 0;   
+    JetAk04PuId = 0; 
     JetAk04PuMva = 0;   
     JetAk04BTagCsv = 0;   
     JetAk04BDiscCisvV2 = 0;
@@ -3888,7 +3939,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     if (fileName.find("WJets") != string::npos && fileName.find("FxFx") != string::npos){
         fChain->SetBranchAddress("GNup", &GNup, &b_GNup);
     }
-    
     if (hasRecoInfo){
         fChain->SetBranchAddress("EvtVtxCnt", &EvtVtxCnt, &b_EvtVtxCnt);
         fChain->SetBranchAddress("EvtRunNum", &EvtRunNum, &b_EvtRunNum); // not used
@@ -3899,11 +3949,13 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
         fChain->SetBranchAddress("JetAk04Eta", &JetAk04Eta, &b_JetAk04Eta);
         fChain->SetBranchAddress("JetAk04Phi", &JetAk04Phi, &b_JetAk04Phi);
         fChain->SetBranchAddress("JetAk04Id", &JetAk04Id, &b_JetAk04Id);
+        fChain->SetBranchAddress("JetAk04PuId", &JetAk04PuId, &b_JetAk04PuId);
         fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
         fChain->SetBranchAddress("JetAk04BTagCsv", &JetAk04BTagCsv, &b_JetAk04BTagCsv);
         fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
         fChain->SetBranchAddress("JetAk04PartFlav", &JetAk04PartFlav, &b_JetAk04PartFlav);
-	fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav);
+	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav);
+
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
         fChain->SetBranchAddress("METPy", &METPy, &b_METPy);
@@ -3941,6 +3993,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
         fChain->SetBranchAddress("GLepBareEta", &GLepBareEta, &b_GLepBareEta);
         fChain->SetBranchAddress("GLepBarePhi", &GLepBarePhi, &b_GLepBarePhi);
         fChain->SetBranchAddress("GLepBareE", &GLepBareE, &b_GLepBareE);
+
         fChain->SetBranchAddress("GJetAk04Pt", &GJetAk04Pt, &b_GJetAk04Pt);
         fChain->SetBranchAddress("GJetAk04Eta", &GJetAk04Eta, &b_GJetAk04Eta);
         fChain->SetBranchAddress("GJetAk04Phi", &GJetAk04Phi, &b_GJetAk04Phi);

@@ -15,7 +15,7 @@ void runMergeVV_BVeto(string lepSelection, int systematics, int jetPtCutMin, int
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
-    cout << __FILE__ << endl;
+    cout << "\n-----> Running runMergeVV_BVeto!" << endl;
     //--- Read in input arguments
     ostringstream strJetPtCutMin; strJetPtCutMin << jetPtCutMin;
     ostringstream doQCDStr;     doQCDStr << doQCD ;
@@ -59,7 +59,7 @@ void runMergeVV_BVeto(string lepSelection, int systematics, int jetPtCutMin, int
         sstrDY[1] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets10toInf3_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth_BVeto_QCD" + doQCDStr.str() + ".root";
     }
 
-    cout << "\nInput files: " << str1 << "\n" << str2 << "\n" << str3 << std::endl;
+    cout << "\nInput files:\n" << str1 << "\n" << str2 << "\n" << str3 << std::endl;
     cout << "Output file: " << strf << endl;
 
     //--- Open files

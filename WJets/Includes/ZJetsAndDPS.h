@@ -135,6 +135,7 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *JetAk04Eta;
     vector<float>  *JetAk04Phi;
     vector<float>  *JetAk04Id;
+    vector<int>  *JetAk04PuId;
     vector<float>  *JetAk04PuMva;
     vector<float>  *JetAk04BTagCsv;
     vector<float>  *JetAk04BDiscCisvV2;
@@ -244,6 +245,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04Phi;   //!
     TBranch        *b_JetAk04E;   //!
     TBranch        *b_JetAk04Id;   //!
+    TBranch        *b_JetAk04PuId;   //!
     TBranch        *b_JetAk04PuMva;   //!
     TBranch        *b_JetAk04BTagCsv;   //!
     TBranch        *b_JetAk04BDiscCisvV2;   //!

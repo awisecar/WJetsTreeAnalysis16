@@ -8,12 +8,12 @@ void runMergeTop_BVeto(string lepSelection = "DE", int systematics =0  , int jet
 
 void MergeTop_BVeto(){
     //central
-  //  runMergeTop_BVeto("SMu", 0, 30, 0);
+    runMergeTop_BVeto("SMu", 0, 30, 0);
     //systematics
-    runMergeTop_BVeto("SMu", 1, 30, 0);
-    runMergeTop_BVeto("SMu", -1, 30, 0);
-    runMergeTop_BVeto("SMu", 3, 30, 0);
-    runMergeTop_BVeto("SMu", -3, 30, 0);
+//    runMergeTop_BVeto("SMu", 1, 30, 0);
+//    runMergeTop_BVeto("SMu", -1, 30, 0);
+//    runMergeTop_BVeto("SMu", 3, 30, 0);
+//    runMergeTop_BVeto("SMu", -3, 30, 0);
   //  runMergeTop_BVeto("SMu", 5, 30, 0);
   //  runMergeTop_BVeto("SMu", -5, 30, 0);
   //  runMergeTop_BVeto("SMu", 6, 30, 0);
@@ -25,7 +25,7 @@ void runMergeTop_BVeto(string lepSelection, int systematics, int jetPtCutMin, in
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
-    cout << "\n-----> Running runMergeTop_BVeto!"
+    cout << "\n-----> Running runMergeTop_BVeto!" << endl;
     //--- Read in input arguments
     ostringstream strJetPtCutMin; strJetPtCutMin << jetPtCutMin;
     ostringstream doQCDStr;     doQCDStr << doQCD ;
@@ -75,7 +75,7 @@ void runMergeTop_BVeto(string lepSelection, int systematics, int jetPtCutMin, in
         sstrDY[1] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets10toInf3_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth_BVeto_QCD" + doQCDStr.str() + ".root";
     }
 
-    cout << "\nInput files: " << str1 << "\n" << str2 << "\n" << str3 << "\n" << str4 << "\n" << str5 << std::endl;
+    cout << "\nInput files:\n" << str1 << "\n" << str2 << "\n" << str3 << "\n" << str4 << "\n" << str5 << std::endl;
     cout << "Output file: " << strf << endl;
 
     //--- Open files
