@@ -3626,7 +3626,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     cout << "sumEventW = " << sumEventW << "\n";
     if (hasRecoInfo && !isData){
         if (sumEventW > 0) {
-            cout << "Scaling histograms by skimAccep_[0]/sumEventW:"
+            cout << "Scaling histograms by skimAccep_[0]/sumEventW:" << endl;
             cout << "skimAccep_[0]/sumEventW = " << skimAccep_[0]/sumEventW << "\n";
         }
     }
