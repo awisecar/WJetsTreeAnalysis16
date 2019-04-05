@@ -64,7 +64,7 @@ TFile* getFile(string histoFilesDirectory, string leptonFlavor, string energy, s
         if (Name.find("Data") == 0) effiCorr = "1";
         else effiCorr = "0";
     }
-    else { // for control plots: correct MC forefficiencies difference wrt Data
+    else { // for control plots: correct MC for efficiencies difference wrt Data
         if (Name.find("Data") == 0) effiCorr = "0";
         else effiCorr = "1";
     }
@@ -97,7 +97,7 @@ TFile* getFile(string histoFilesDirectory, string leptonFlavor, string energy, s
     //--- fileName is complete: just add the extension and open it ---
     fileName += ".root";
     TFile *File = new TFile(fileName.c_str(), "READ");
-    std::cout << "Opening: " << fileName << "   --->   Opened ? " << File->IsOpen() << std::endl;
+    std::cout << "Opening: " << fileName << "   --->   Opened? " << File->IsOpen() << std::endl;
     return File;
     //----------------------------------------------------------------
 }

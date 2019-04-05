@@ -59,7 +59,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
     int ZPtMin = 0;
     int ZEtaMin  = -999999;  // default value -999999  !!!!!!!  factor 100 to keep things integer .... eta 2.4  = eta Cut 240
     int ZEtaMax  = 999999;   // default value  999999
-    int METcut = 0;     // if you want to apply MET cut
+    int METcut = 0; 
     int jetEtaMin = -24;
     int jetEtaMax = 24;
 

@@ -20,7 +20,7 @@ const processInfoStruct ProcessInfo[] = {
     {"ZZ_dR_5311_List",	                          9799908.,   17.654,  1,         0.04,          kOrange,     " ZZ"},
     {"WZ_dR_5311_List",	                          10000283.,  33.21,   1,         0.05,          kRed+1,      " WZ"},	
     {"WW_dR_5311_List",	                          10000431.,  54.838,  1,         0.05,          kViolet+5,   " WW"},
-    {"VV_dR_5311_List",	                          10000431.,  54.838,  1,         0.05,          kRed+1,   " VV"},
+    {"VV_dR_5311_List",	                          10000431.,  54.838,  1,         0.05,          kRed+1,   " VV"}, //5
 
     {"ST_s_channel_dR_5311_List",	                  259961.,    3.79,    1,         0.10,          kMagenta,    " STs"},     // 6
     {"ST_tW_top_channel_dR_5311_List",	                  3758227.,   56.4,    1,         0.10,          kMagenta,    " STtWtop"},
@@ -39,7 +39,7 @@ const processInfoStruct ProcessInfo[] = {
     {"WZJets3LNu_dR_5311_List",		              1995334.,   33.21,   0.032887,  0.04,          kRed+1,      " WZJets3LNu"},
     {"WZJets2L2Q_dR_5311_List",		              3215990.,   33.21,   0.068258,  0.04,          kPink-6,     " WZJets2L2Q"},
     {"WWJets2L2Nu_dR_5311_List",		              1933235.,   54.838,  0.10608 ,  0.04,          kViolet+5,   " WWJets2L2Nu"},
-    {"Top_dR_5311_List",		                      1.,         1,       1,         0.04,          kMagenta,    " Single t"},  // 21
+    {"Top_dR_5311_List",		                      1.,         1,       1,         0.04,          kMagenta,    " Single top"},  // 21
 
     {"DYJets_FromTau_UNFOLDING_dR_5311_List_Inf3", 30459503.,  3531.8,  1,         0.033,         kAzure+4,    " DYtautau"},
     {"DYJets10toInf3_dR_5311_List",	              1.,         1,       1,         0.04,          kGreen-8,   " DY+jets"},          // 23

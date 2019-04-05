@@ -1,7 +1,3 @@
-// History
-//---- 2015_05_17
-// Add, as a commented line, the one to use if you do not want to plot QCD contribution in the Signal region.
-
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -24,14 +20,16 @@
 using namespace std;
 
 void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
-        int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int MET = 0 , int doBJets = -1 , 
+        int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1 , 
         int JetPtMax = 0, int ZEtaMin = -999999, int ZEtaMax = 999999, 
         bool doRoch = 0, bool doFlat = 0, bool doVarWidth = 1)
 {
-    string energy = getEnergy();
-    energy = "13TeV";
+    // string energy = getEnergy();
+    string energy = "13TeV";
 
-    cout << endl << "Running the Plotter with the following files as input: " <<doQCD << "   " << MET << "   " << doBJets << endl;
+    cout << endl << "\n-----> Running the Plotter with the following options as input: " << endl;
+    cout << "doQCD: " << doQCD << ", METcut: " << METcut << " doBJets: " << doBJets << endl;
+
     TH1::SetDefaultSumw2();
     gStyle->SetOptStat(0);
 
@@ -40,9 +38,8 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     ostringstream ZEtaMinStr;   ZEtaMinStr << abs(ZEtaMin); 
     ostringstream ZEtaMaxStr;   ZEtaMaxStr << abs(ZEtaMax); 
     ostringstream doQCDStr;     doQCDStr << doQCD ;
-    ostringstream METStr;   METStr << MET ; 
+    ostringstream METStr;   METStr << METcut ; 
     string year = "2016"; 
-    //if (energy == "13TeV") year = "2015";
     if (energy == "13TeV") year = "2016";
     int Colors[] = {kBlack, kSpring+5, kOrange, kOrange-3, kRed+1, kPink-6, kViolet+5, kPink, kAzure+4, kBlue, kCyan+1, kCyan+1, kCyan+1}; 
     string legendNames[] = {
@@ -56,11 +53,8 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     else if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = " #mu#nu ";
     else if  (leptonFlavor == "SE" || leptonFlavor == "Electron") legendNames[0] = " e#nu ";
 
-    //    legendNames[0] += "Data";
-
-    //int ColorsTTbar[] = {kBlack, kOrange,  kRed+1,  kViolet+5, kPink, kBlue, kCyan+1, kCyan+1, kCyan+1,kGreen};
-
-    //-- get the files ------------------------------------
+    //-----------------------------------------------------
+    // Getting files ---
     int nFiles = NFILESDYJETS;
     bool isDoubleLep(1);
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
@@ -71,15 +65,16 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     int countFiles = 0 ;
     for (unsigned short i = 0; i < nFiles; i++){
         int fileSelect = FilesDYJets[i] ;
-        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i] ;
-        if ( leptonFlavor == "SMuE"  ) fileSelect = FilesTTbar[i] ;
+        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i];
+        if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;
 
-        //if (!isDoubleLep) fileSelect = FilesTTbarWJets[i] ;
+        // FilesTTbarWJets will select the correct files for W+jets (defined in fileNames.h)
         string fileNameTemp =  ProcessInfo[fileSelect].filename ; 
-        cout << "Is double lepton:" << isDoubleLep << "   " << leptonFlavor <<"   " << fileNameTemp << endl;
+
+        cout << "isDoubleLep = " << isDoubleLep << ", leptonFlavor = " << leptonFlavor << ", fileNameTemp = " << fileNameTemp << endl;
         if ((doQCD > 0 || doInvMassCut || doSSign ) && fileNameTemp.find("QCD") != string::npos) continue;
         //if (fileNameTemp.find("QCD") != string::npos) continue; // use this line if you do not want to plot QCD
-        file[countFiles] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign,    doInvMassCut, MET, doBJets);
+        file[countFiles] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
 
         if ( i == 0 ){
             if (leptonFlavor == "Electrons") legendNames[0] = " ee ";
@@ -90,13 +85,15 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             else if  (leptonFlavor == "SE" || leptonFlavor == "Electron") legendNames[0] = " e#nu ";
             legendNames[0] += "Data";
         }
+        // for W+jets, if not Data, then grab the legend and color parts of the ProcessInfo struct for each file (in fileNames.h)
         else legendNames[countFiles] = ProcessInfo[fileSelect].legend; 
         Colors[countFiles] = ProcessInfo[fileSelect].color;    
         countFiles++;
     }
     nFiles = countFiles ;
-    //-----------------------------------------------------
 
+    //-----------------------------------------------------
+    // Creating output file ---
     string outputFileName = "PNGFiles/Comparison_" + leptonFlavor + "_" + energy + "_Data_All_MC_";
 
     outputFileName += "JetPtMin_" + JetPtMinStr.str();
@@ -112,40 +109,31 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     if (doSSign )   outputFileName += "_SS";
     if (doBJets > 0 ) outputFileName += "_BJets";
     if (doBJets < 0 ) outputFileName += "_BVeto";
-
-    if (doQCD>0) outputFileName += "_QCD" + doQCDStr.str();
-    if ( MET > 0 ) outputFileName += "_MET"+METStr.str();
-
-    //if (doBJets) nameStr << "_BJets";
-
-    /*    if (doQCD > 0 ){
-          if ( leptonFlavor == "SMuE") outputFileName +="_SS";
-          else  outputFileName += "_QCD" + doQCDStr.str();
-          }
-          */
+    if (doQCD > 0) outputFileName += "_QCD" + doQCDStr.str();
+    if ( METcut > 0 ) outputFileName += "_MET"+METStr.str();
     outputFileName += "_SFInvers";
     if (doInvMassCut) outputFileName += "_InvMass";
+
     // create the directory if it doesn't exist
     string command = "mkdir -p " + outputFileName;
     system(command.c_str());
     string outputFileRoot = outputFileName + ".root";
 
-    cout << "Output directory is: " << outputFileName << endl;
+    cout << "\nOutput directory is: " << outputFileName << endl;
     cout << "Output root file is: " << outputFileRoot << endl;
 
     TFile *outputFile = new TFile(outputFileRoot.c_str(), "RECREATE");
     outputFile->cd();
 
+    //-----------------------------------------------------
+    // Preparing to loop over all hists ---
     unsigned short nHist = file[0]->GetListOfKeys()->GetEntries();
-    //vector<string> histoName(nHist);
-    //vector<string> histoTitle(nHist);
     vector<string> histoName;
     vector<string> histoTitle;
     string histoNameTemp;
     TCanvas *canvas[nHist];
     TPad *pad1[nHist];
     TPad *pad2[nHist];
-
     TH1D *hist[25][nHist];
     TH1D *histTemp;
     THStack *histSumMC[nHist];
@@ -155,8 +143,10 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     TLatex *jetAlgo[nHist];
     TLatex *jetCuts[nHist];
     TLatex *intLumi[nHist];
+
     int nHistNoGen=0;
     for (unsigned short i(0); i < nHist; i++) {
+        // Doublechecking that this histo is useable
         histoNameTemp = file[0]->GetListOfKeys()->At(i)->GetName();
         //looks at all of the histograms without double-counting the gen ones
         if (histoNameTemp.find("gen") != string::npos) continue;
@@ -165,11 +155,10 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         //only TH1's considered
         if (!histTemp->InheritsFrom(TH1D::Class())) continue;
 
-        //        histoName[nHistNoGen] = file[0]->GetListOfKeys()->At(i)->GetName();
-        //        histoTitle[nHistNoGen] = file[0]->GetListOfKeys()->At(i)->GetTitle();
         histoName.push_back(file[0]->GetListOfKeys()->At(i)->GetName());
         histoTitle.push_back(file[0]->GetListOfKeys()->At(i)->GetTitle());
         histSumMC[nHistNoGen] = new THStack(histoName[nHistNoGen].c_str(), histoTitle[nHistNoGen].c_str());
+
         double xLowLeg(0.66), xHighLeg(0.78);
         legend[nHistNoGen] = new TLegend(xLowLeg, 0.54, xHighLeg, 0.91);
         legend[nHistNoGen]->SetFillStyle(0);
@@ -220,7 +209,8 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         nHistNoGen++;
     } 
     nHist=nHistNoGen; 
-    cout <<"Number of histograms:" << nHist << " and we plot :" << nHistNoGen << endl;
+    cout <<"\nNumber of histograms to plot: " << nHistNoGen << endl;
+
     //nHist=4;
     /*for (int i = 0; i < nFiles; i++) {
         cout << i <<"  "<<legendNames[i]  << "   "<<  endl;
@@ -263,20 +253,22 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
 	
     //looping over files
     for (int i = 0; i < nFiles; i++) {
-        cout << i <<"  "<<legendNames[i]  << "   "<<  endl;
-        //looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
+        cout << "File #" << i << ": " << legendNames[i] << endl;
+
+        //Looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
         for (int j = 0; j < nHistNoGen ; j++) {
-            // cout << i <<"  "<<legendNames[i]  << "   "<< j << "   " <<  histoName[j] << endl;
             hist[i][j] = getHisto(file[i], histoName[j]);
             hist[i][j]->SetTitle(histoTitle[j].c_str());
 			
             //need factors for exclusive and inclusive distributions
             //factors applied for jet multiplicities of 2 to 6
             //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions i.e. file[5]=ttbar (see fileNames.h)
-            //note: I believe the scaling of the histograms is actually not saved back into the original file; the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
-	    if (histoName[j].find("Zinc2jet")!= string::npos) SFttbar = 1.100549991;
-	    else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 1.016080563;
-	    else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.979844961;
+            //note: I believe the scaling of the histograms is actually not saved back into the original file; 
+            //the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
+
+            if (histoName[j].find("Zinc2jet")!= string::npos) SFttbar = 1.100549991;
+            else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 1.016080563;
+            else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.979844961;
             else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = 0.941202003;
             else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = 0.927091125;
             else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = 1.461640581;
@@ -286,7 +278,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = 0.92190308;
 			
             if ( i == 0) {
-                //don't need to do anything to the data, just plotting the points on top of the stacked MC
+                //Don't need to do anything to the data, just plotting the points on top of the stacked MC
                 hist[i][j]->SetMarkerStyle(20);
                 hist[i][j]->SetMarkerColor(Colors[i]);
                 hist[i][j]->SetLineColor(Colors[i]);
@@ -354,8 +346,8 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         }
     }
     
-    //here is where the THStack histSumMC is filled/stacked
-    //loop starts with i=1 here because hist[0] refers to the data file (see fileNames.h)
+    //Here is where the THStack histSumMC is filled/stacked ---
+    //Loop starts with i=1 here because hist[0] refers to the data file (see fileNames.h)
     for (int i = 1; i < nFiles; i++) {
         for (int j = 0; j < nHistNoGen ; j++) {
             if (doBJets <= 0 ){
@@ -374,11 +366,10 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
     ////////////////////this is where we end using ttbar rescaling option  
 
 
-    cout << " added all histograms " << endl;
+    cout << "\n >>> Summed all MC histograms to create stacks! " << endl;
 
     for (unsigned short i(0); i < nHistNoGen; i++) {
         if (!file[0]->Get(histoName[i].c_str())->InheritsFrom(TH1D::Class())) continue;
-        //cout << histoName[i] << endl;
         unsigned short nBins(hist[0][i]->GetNbinsX());
         legend[i]->AddEntry(hist[0][i], legendNames[0].c_str(), "ep");
         canvas[i] = new TCanvas(histoName[i].c_str(), histoName[i].c_str(), 700, 900);
@@ -419,29 +410,26 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
        //      }
 
 
-
-        //andrew -- x-axis titles are set in HistoSet.cc (?)
         hist[0][i]->SetTitle("");
         histSumMC[i]->SetTitle(""); 
         histSumMC[i]->GetYaxis()->SetLabelSize(0.048); //0.04
         histSumMC[i]->GetYaxis()->SetLabelOffset(0.002); 
         histSumMC[i]->GetYaxis()->SetLabelFont(42); 
-        histSumMC[i]->GetYaxis()->SetTitle("Number of events"); 
+        histSumMC[i]->GetYaxis()->SetTitle("Event count"); 
         histSumMC[i]->GetYaxis()->SetTitleFont(42); 
         histSumMC[i]->GetYaxis()->SetTitleSize(0.051); //0.04
         histSumMC[i]->GetYaxis()->SetTitleOffset(1.07); //1.2
         histSumMC[i]->SetMinimum(8);
         histSumMC[i]->SetMaximum(110*histSumMC[i]->GetMaximum()); 
-        //andrew -- setting special y-axis bounds for select plots(?)
         if (histoName[i].find("AbsRapidity") != string::npos){
         histSumMC[i]->SetMaximum(2100*histSumMC[i]->GetMaximum()); 
-            }
+        }
         if (histoName[i].find("dPhiLepJet") != string::npos){
         histSumMC[i]->SetMaximum(6300*histSumMC[i]->GetMaximum());  
-            }
+        }
         if (histoName[i].find("LepPtPlusHT") != string::npos){
          histSumMC[i]->SetMaximum(5000*histSumMC[i]->GetMaximum());
-            }
+        }
 
         /// first pad plots
         hist[0][i]->DrawCopy("e same");
@@ -450,7 +438,7 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
        
         //if (energy == "8TeV") intLumi[i]->DrawLatex(0.20,0.83, "#int L dt = 19.6 fb^{-1},  #sqrt{s} = 8 TeV");
-        //if (energy == "13TeV") intLumi[i]->DrawLatex(0.73,0.955, "2.2 fb^{-1} (13 TeV)");
+        if (energy == "13TeV") intLumi[i]->DrawLatex(0.73,0.955, "35.9 fb^{-1} (13 TeV)");
 
 
         if ( histoName[i].find("inc0") == string::npos){
@@ -488,9 +476,9 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
         hist[0][i]->GetXaxis()->SetLabelOffset(0.018);
         hist[0][i]->GetXaxis()->SetLabelFont(42); 
 
-            if (histoName[i].find("ZNGoodJets") != string::npos){
-                hist[0][i]->GetXaxis()->SetLabelSize(0.16);  //0.12
-            }
+        if (histoName[i].find("ZNGoodJets") != string::npos){
+            hist[0][i]->GetXaxis()->SetLabelSize(0.16);  //0.12
+        }
 
         hist[0][i]->GetYaxis()->SetRangeUser(0.51,1.49);
         hist[0][i]->GetYaxis()->SetNdivisions(5,5,0);
@@ -517,52 +505,44 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
                 //hist[0][i]->SetBinError(j, error*1./(binW));
             }
      */
-            //andrew -- these lines flip the bin content to Sim/Data
+            //These lines flip the bin content to Sim/Data ---
+            //reassign both bincontent and binerrors
             double content(hist[0][i]->GetBinContent(j));
             double contentError(hist[0][i]->GetBinError(j));
             if (content > 0){
                 hist[0][i]->SetBinContent(j, 1./content);
-                //need to also re-assign errors
-                hist[0][i]->SetBinError(j, pow(hist[0][i]->GetBinContent(j),2.)*contentError);
-       
+                // hist[0][i]->SetBinError(j, contentError*pow(hist[0][i]->GetBinContent(j),2.));
+                hist[0][i]->SetBinError(j, contentError/(content*content));
             }
         }
-
- 
 
         hist[0][i]->DrawCopy("EP");
         canvas[i]->cd();
 
-        //string outputFilePNG = outputFileName + "/" + histoName[i] + ".png";
         string outputFilePDF = outputFileName + "/" + histoName[i] + ".pdf";
-        //canvas[i]->Print(outputFilePNG.c_str());
         canvas[i]->Print(outputFilePDF.c_str());
         outputFile->cd();
         canvas[i]->Write();
 
-        histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
-        TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
-        tmpCanvas->cd();
-        tmpCanvas->Draw();
-        TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
-        tmpPad->SetLogy(0);
-        histoName[i] += "_Lin";
-        tmpCanvas->SetTitle(histoName[i].c_str());
-        tmpCanvas->SetName(histoName[i].c_str());
-        //string outputFileLinPNG = outputFileName + "/" + histoName[i] + ".png";
-        string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
-        //tmpCanvas->Print(outputFileLinPNG.c_str());
-        tmpCanvas->Print(outputFileLinPDF.c_str());
-        outputFile->cd();
-        tmpCanvas->Write();
+        // Next section prints out the same plots on a linear scale
+        // histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
+        // TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
+        // tmpCanvas->cd();
+        // tmpCanvas->Draw();
+        // TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
+        // tmpPad->SetLogy(0);
+        // histoName[i] += "_Lin";
+        // tmpCanvas->SetTitle(histoName[i].c_str());
+        // tmpCanvas->SetName(histoName[i].c_str());
+        // string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
+        // tmpCanvas->Print(outputFileLinPDF.c_str());
+        // outputFile->cd();
+        // tmpCanvas->Write();
     }
     outputFile->cd();
     outputFile->Close();
 
-    cout << "I m closing the files" << endl;
-    //-- Close all the files ------------------------------
+    cout << "\nClosing all files..." << endl;
     for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);
-    //-----------------------------------------------------
-    cout << "Everything went fine -- Plotting done" << endl;
-
+    cout << "\nPlotting finished!" << endl;
 }

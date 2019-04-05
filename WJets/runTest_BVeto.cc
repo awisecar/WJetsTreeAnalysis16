@@ -1,7 +1,3 @@
-// History
-//---- 2015_05_07
-// Add cases for plotting dist. in QCD1,2,3 regions.
-
 {
     string srcdir = "Sources/";
 
@@ -18,16 +14,12 @@
     }
 
     //Plotter("SMu",30);
-    Plotter("SMu", 30, 0, 0, 0, 0, -1);
-    //Plotter("SMu", 30, 0, 0, 0, 0, 0);
-    
-    //Plotter("SMu", 30, 1, 0, 0, 0, -1);
-    //Plotter("SMu", 30, 2, 0, 0, 0, -1);
-    //Plotter("SMu", 30, 3, 0, 0, 0, -1);
+    // Plotter("SMu", 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1);
+    Plotter("SMu", 30, 0, 0, 0, 30, -1, 0, -999999, 999999, 0, 0, 1); // METcut of 30 GeV
    
     //last option of function is doTTScale
     //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, true);
-    getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, false);
+    // getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, false);
 
     //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 0);
 
