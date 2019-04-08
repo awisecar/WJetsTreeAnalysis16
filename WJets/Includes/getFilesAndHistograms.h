@@ -21,6 +21,6 @@ void getHistos(TH1D *histograms[], TFile *Files[], string, bool isDoubleLep = tr
 void getResp(RooUnfoldResponse*, TFile*, string);
 RooUnfoldResponse* getResp(TFile*, string);
 void getResps(RooUnfoldResponse *responses[], TFile *Files[], string);
-void getStatistics(string leptonFlavor = "Muons",  int JetPtMin = 30, int JetPtMax = 0,  bool doFlat = false , bool doVarWidth = true, int doQCD = 0 , bool doSSign = false ,  bool doInvMassCut = false , int MET = 0 , int doBjets = 0 , bool doTTScale = false );
+void getStatistics(string leptonFlavor = "Muons",  int JetPtMin = 30, int JetPtMax = 0,  bool doFlat = false , bool doVarWidth = true, int doQCD = 0 , bool doSSign = false ,  bool doInvMassCut = false , int METcut = 0 , int doBjets = 0 , bool doTTScale = false );
 #endif
 

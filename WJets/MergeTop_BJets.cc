@@ -1,7 +1,3 @@
-// History
-//---- 2015_05_17
-// Also merge top and DY (and generate outputs) for the regions of QCD1,2,3.
-
 // Note: This script is for merging files with a requirement for BJets, as done for the ttbar SFs study.
 // A. Wisecarver, 4 December 2017
 
@@ -14,19 +10,7 @@
 void runMergeTop_BJets(string lepSelection = "DE", int systematics =0  , int jetPtCutMin = 30 , int doQCD = 0 );
 
 void MergeTop_BJets(){
-    
     runMergeTop_BJets("SMu",0,30,0);
-    //runMergeTop_BVeto("SMu",0,30,1);
-    //runMergeTop_BVeto("SMu",0,30,2);
-    //runMergeTop_BVeto("SMu",0,30,3);
-
-    //runMergeTop("DE",0,20,0);
-    //runMergeTop("DE",1,20,0);
-    //runMergeTop("DE",-1,20,0);
-    //runMergeTop("DE",3,20,0);
-    //runMergeTop("DE",-3,20,0);
-    
-
 }
 
 void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, int doQCD)
@@ -43,9 +27,6 @@ void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, in
     else if (systematics == -1) syst = "Syst_1_Down_"; 
     else if (systematics == 3) syst = "Syst_3_Up_"; 
     else if (systematics == -3) syst = "Syst_3_Down_"; 
-    cout << doQCD << endl;
-    //string str1, str2, str3, str4, str5, str6, strf;
-    //string str1, str2, str3, str4, strf;
     string str1, str2, str3, str4, str5, strf;
     int nDYfiles = 2 ;
     string sstrDY[10];
@@ -78,7 +59,7 @@ void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, in
         sstrDY[1] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets10toInf3_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth_BJets_QCD" + doQCDStr.str() + ".root";
     }
 
-    cout << "Output file: " << strf << endl;
+    cout << "\nOutput file: " << strf << endl;
     TFile *f1 = new TFile(str1.c_str(), "read");
     TFile *f2 = new TFile(str2.c_str(), "read");
     TFile *f3 = new TFile(str3.c_str(), "read");
@@ -93,25 +74,9 @@ void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, in
 
         if (hName.find("hresponse") != string::npos){
             continue;
-            /*
-            TH2D *hr1 = (TH2D*) f1->Get(hName.c_str());
-            TH2D *hr2 = (TH2D*) f2->Get(hName.c_str());
-            TH2D *hr3 = (TH2D*) f3->Get(hName.c_str());
-            TH2D *hr4 = (TH2D*) f4->Get(hName.c_str());
-            TH2D *hr5 = (TH2D*) f5->Get(hName.c_str());
-            TH2D *hr6 = (TH2D*) f6->Get(hName.c_str());
-
-            TH2D *hrSum = (TH2D*) hr1->Clone();
-            hrSum->Add(*hr2);
-            hrSum->Add(*hr3);
-            hrSum->Add(*hr4);
-            hrSum->Add(*hr5);
-            hrSum->Add(*hr6);
-            ff->cd();
-            hrSum->Write(hName.c_str());
-             */
         }
         else {
+            cout << "Doing histo " << hName << endl;
             TH1D *h1 = (TH1D*) f1->Get(hName.c_str()); 
             TH1D *h2 = (TH1D*) f2->Get(hName.c_str()); 
             TH1D *h3 = (TH1D*) f3->Get(hName.c_str()); 
@@ -128,7 +93,7 @@ void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, in
             hSum->Write();
         }
     }
-    cout << "closing single top files" << endl;
+    cout << "\nClosing single top files!" << endl;
     f1->Close();
     f2->Close();
     f3->Close();
@@ -136,52 +101,52 @@ void runMergeTop_BJets(string lepSelection, int systematics, int jetPtCutMin, in
     f5->Close();
     ff->Close();
 
-    //--- merge DY files
-    int countHist(0);
-    if (lepSelection == "SMu"){
-        TFile *fDY[10] = {NULL};
-        for ( int i = 0 ; i < nDYfiles ; i++){
-            if ( i == nDYfiles - 1 )  fDY[i] =  new TFile(sstrDY[i].c_str(), "recreate");
-            else fDY[i] =  new TFile(sstrDY[i].c_str(), "read");
-        }
-        cout << "Output file: " << sstrDY[nDYfiles - 1] << endl;
-
-        nHist = fDY[0]->GetListOfKeys()->GetEntries();
-        for (int i(0); i < nHist; i++){
-            
-            string hName = fDY[0]->GetListOfKeys()->At(i)->GetName();
-            if (hName.find("hresponse") != string::npos){
-                continue;
-                /*
-                cout << i << " TH2D " << hName << "  " << nHist << endl;
-                TH2D* hrSum = NULL; TH2D* hrDY[10] = {NULL};
-                for ( int j = 0 ; j < nDYfiles -1 ; j++){
-                    hrDY[j] = (TH2D*) fDY[j]->Get(hName.c_str());
-                    if ( j == 0 ) hrSum = (TH2D*) hrDY[j]->Clone();
-                    else hrSum->Add(hrDY[j]);
-                }
-                fDY[nDYfiles -1]->cd();
-                hrSum->Write();
-                */
-            }
-            else {
-                countHist++;
-                cout << countHist << " " << i << " TH1D " << hName << "  " << nHist << endl;
-                TH1D* hSum = NULL; TH1D* hDY[10] = {NULL};
-                for ( int j = 0 ; j < nDYfiles -1 ; j++){
-                    hDY[j] = (TH1D*) fDY[j]->Get(hName.c_str());
-                    if ( j == 0 ) hSum = (TH1D*) hDY[j]->Clone();
-                    else hSum->Add(hDY[j]);
-                }
-                fDY[nDYfiles -1]->cd();
-                hSum->Write();
-            }
-        }
-        
-        cout << "closing DY files" << endl;
-        for ( int i = 0 ; i < nDYfiles ; i++){
-            fDY[i] ->Close();
-        }
-    }
-    
+//    //--- merge DY files
+//    int countHist(0);
+//    if (lepSelection == "SMu"){
+//        TFile *fDY[10] = {NULL};
+//        for ( int i = 0 ; i < nDYfiles ; i++){
+//            if ( i == nDYfiles - 1 )  fDY[i] =  new TFile(sstrDY[i].c_str(), "recreate");
+//            else fDY[i] =  new TFile(sstrDY[i].c_str(), "read");
+//        }
+//        cout << "Output file: " << sstrDY[nDYfiles - 1] << endl;
+//
+//        nHist = fDY[0]->GetListOfKeys()->GetEntries();
+//        for (int i(0); i < nHist; i++){
+//            
+//            string hName = fDY[0]->GetListOfKeys()->At(i)->GetName();
+//            if (hName.find("hresponse") != string::npos){
+//                continue;
+//                /*
+//                cout << i << " TH2D " << hName << "  " << nHist << endl;
+//                TH2D* hrSum = NULL; TH2D* hrDY[10] = {NULL};
+//                for ( int j = 0 ; j < nDYfiles -1 ; j++){
+//                    hrDY[j] = (TH2D*) fDY[j]->Get(hName.c_str());
+//                    if ( j == 0 ) hrSum = (TH2D*) hrDY[j]->Clone();
+//                    else hrSum->Add(hrDY[j]);
+//                }
+//                fDY[nDYfiles -1]->cd();
+//                hrSum->Write();
+//                */
+//            }
+//            else {
+//                countHist++;
+//                cout << countHist << " " << i << " TH1D " << hName << "  " << nHist << endl;
+//                TH1D* hSum = NULL; TH1D* hDY[10] = {NULL};
+//                for ( int j = 0 ; j < nDYfiles -1 ; j++){
+//                    hDY[j] = (TH1D*) fDY[j]->Get(hName.c_str());
+//                    if ( j == 0 ) hSum = (TH1D*) hDY[j]->Clone();
+//                    else hSum->Add(hDY[j]);
+//                }
+//                fDY[nDYfiles -1]->cd();
+//                hSum->Write();
+//            }
+//        }
+//        
+//        cout << "closing DY files" << endl;
+//        for ( int i = 0 ; i < nDYfiles ; i++){
+//            fDY[i] ->Close();
+//        }
+//    }
+//    
 }
