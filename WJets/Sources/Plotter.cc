@@ -388,10 +388,10 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
             }
         }
 
-         //   if (histoName[i].find("ZNGoodJets") != string::npos){
-         //       hist[0][i]->GetXaxis()->SetRangeUser(0,6);
-         //       histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
-         //   }
+            if (histoName[i].find("ZNGoodJets") != string::npos){
+                hist[0][i]->GetXaxis()->SetRangeUser(0,6);
+                histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
+            }
             
         //andrew -- use the below option if plotting the ttbar control region
 //        if (histoName[i].find("ZNGoodJets_") != string::npos){

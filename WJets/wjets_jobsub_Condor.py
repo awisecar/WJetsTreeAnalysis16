@@ -9,7 +9,7 @@ import datetime
 cwd = os.getcwd()
 print 'Current working directory: ' + cwd + '\n'
 
-os.system('root -b -q wjets_compileCode.cc')
+os.system('root -l -b -q wjets_compileCode.cc')
 
 ####################################################################
 
@@ -27,7 +27,8 @@ submit += 'arguments = "$(argument)"\n'
 submit += 'output = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).out\n'
 submit += 'error = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).err\n'
 submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
-submit += '+JobFlavour = "testmatch"\n\n'
+##submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
+submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
 submit += 'queue argument in 1'
 
 submitName = mtmpdir+'_Submit.sub'
@@ -88,12 +89,25 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 #doWhat = [21, 22, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
 #doQCD = [0]
 #doSysRunning = [5]
+
+########### BTagSF Syst
+#doWhat = [21, 22, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
+#doQCD = [0]
+#doSysRunning = [6]
+
+##############################
+## Migrations Study
+doWhat = [41, 51, 52, 53, 54]
+doQCD = [0]
+doSysRunning = [0]
+##############################
+
 ##############################
 ## ttbar SFs (remember to turn doBJets to 2)
 ## we do not run QCD BG for this control region study
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54]
-doQCD = [0]
-doSysRunning = [0]
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54]
+#doQCD = [0]
+#doSysRunning = [0]
 ##############################
 
 for what in doWhat:
@@ -113,7 +127,7 @@ for what in doWhat:
 			job += 'printf "CMSSW version: %s'+str(r'\n\n')+'" "$CMSSW_VERSION"\n\n'
 			job += 'printf "Running code! ------------------------------- '+str(r'\n\n')+'"'
 			
-			com = 'root -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + '\) 2>&1\n'
+			com = 'root -l -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + '\) 2>&1\n'
 
 			jobName = mtmpdir+'/job_' + 'do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.sh'
 			jobScript = open(jobName,'w')

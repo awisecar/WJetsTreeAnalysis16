@@ -30,7 +30,7 @@ using namespace std;
 
 ClassImp(ZJetsAndDPS);
 
-void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
+void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
 
     //--- Initialize PDF from LHAPDF if needed ---
@@ -99,26 +99,48 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     //==========================================================================================================//
     //       Load efficiency tables        //
     //====================================//
-    table LeptIso, LeptID, LeptTrig, Ele_Rec;
-    table TableJESunc("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+    table LeptIso, LeptID, LeptTrig, Ele_Rec, TableJESunc;
+
     if (energy == "13TeV"){
-        if (leptonFlavor == "Electrons" || leptonFlavor == "SingleElectron"){
-            /// electron SF
-            table Ele_Rec_8TeV("EfficiencyTables/Ele_SF_Reconstruction_2012.txt");
-            table SC_Ele_2012EA("EfficiencyTables/Ele_SF_EA2012.txt");
-            
-            Ele_Rec = Ele_Rec_8TeV ;
-            LeptID = SC_Ele_2012EA;
+
+        if (year == 2016){
+            table TableJESUncertainties("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            TableJESunc = TableJESUncertainties;
+            // if (leptonFlavor == "Electrons" || leptonFlavor == "SingleElectron"){
+            //     /// electron SF
+            //     table Ele_Rec_8TeV("EfficiencyTables/Ele_SF_Reconstruction_2012.txt");
+            //     table SC_Ele_2012EA("EfficiencyTables/Ele_SF_EA2012.txt");
+                
+            //     Ele_Rec = Ele_Rec_8TeV ;
+            //     LeptID = SC_Ele_2012EA;
+            // }
+            if (leptonFlavor == "SingleMuon")  {
+                table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
+                table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
+                
+                LeptID = SF_Muon_TightID_ReReco;
+                LeptIso = SF_Muon_TightISO_ReReco;
+                LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
+            }
         }
-        if (leptonFlavor == "SingleMuon")  {
-            table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
-            table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
-            table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
-            
-            LeptID = SF_Muon_TightID_ReReco;
-            LeptIso = SF_Muon_TightISO_ReReco;
-            LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
+
+        if (year == 2017){
+            // just use 2016 for now
+            table TableJESUncertainties("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            TableJESunc = TableJESUncertainties;
+
+            if (leptonFlavor == "SingleMuon")  {
+                table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
+                table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
+                
+                LeptID = SF_Muon_TightID_ReReco;
+                LeptIso = SF_Muon_TightISO_ReReco;
+                LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
+            }
         }
+
     }
     std::cout << std::endl;
     //==========================================================================================================//
@@ -127,8 +149,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     //==========================================================================================================//
     //     Systematics: jec, pu, xsec     //
     //====================================//
-    int puYear(2016); 
-    if (energy == "13TeV") puYear = 2016;
+    int puYear(0); 
+    if (energy == "13TeV") {
+        if (year == 2016) puYear = 2016;
+        else if (year == 2017) puYear = 2017; //just use 2016 in code for now
+    }
     int mode = (systematics == 1) ? direction : 0; // PU
     cout << "Pile Up Distribution: " << puYear << ", Mode: " << mode << endl;
     standalone_LumiReWeighting puWeight(puYear, mode);
@@ -210,6 +235,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "lumiScale: " << lumiScale << std::endl;
     std::cout << "puScale: " << puScale << std::endl;
 
+    std::cout << "year: " << year << std::endl;
+
     std::cout << "doW: " << doW << std::endl;
     std::cout << "doZ: " << doZ << std::endl;
     std::cout << "doTT: " << doTT << std::endl;
@@ -260,7 +287,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     Long64_t nentries = fChain->GetEntries();
     if (nEvents_10000) {
         nentries = 10000;
-        std::cout << "We plane to run on 100000 events" << std::endl;
+        std::cout << "We plan to run on 100000 events" << std::endl;
     }
     //------------------------------------
     
@@ -284,9 +311,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 
     //--- Begin Loop All Entries --
     std::cout << "-----> Begin loop on all entries! " << std::endl;
-    std::cout << "-----> We will run on " << nentries << " events!" << std::endl;
+    std::cout << "-----> Total number of entries: " << nentries << std::endl;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-     //for (Long64_t jentry(0); jentry < 500000; jentry++){
+    // for (Long64_t jentry(0); jentry < 300000; jentry++){
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
@@ -322,6 +349,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         weight = weight * lumiScale * xsec;
         
         if (hasRecoInfo && !isData){
+            // 0th element of EvtWeights should return
+            // main event weight from GenEventInfoProduct
             weight *= EvtWeights->at(0);
             sumEventW += EvtWeights->at(0);
         }
@@ -362,7 +391,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         //---
 	
         if (hasRecoInfo){
-            if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) countEventpassTrig++;
+            if (energy == "13TeV" && doW) {
+                if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) countEventpassTrig++;
+                else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) countEventpassTrig++;
+            }
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
         }
         //==========================================================================================================//
@@ -372,30 +404,44 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         bool passMETFILTER(true);
         // MET filters for data
         if (hasRecoInfo && isData && doMETFiltering){
-            passMETFILTER = (
-                        (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                        && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                        && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                        && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                        && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                        && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
-                        && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                        && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            );
-            if (passMETFILTER) nEventsPassMETFilter++ ;
-        }
-        // MET filters for reco MC
-        if (hasRecoInfo && !isData && doMETFiltering){
-            passMETFILTER = (
-                                (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+            if (year == 2016){
+                passMETFILTER = (
+                            (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
                             && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
                             && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
                             && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
                             && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                            && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
                             && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
                             && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            );
-            if (passMETFILTER) nEventsPassMETFilter++ ;
+                );
+                if (passMETFILTER) nEventsPassMETFilter++ ;
+            }
+            if (year == 2017){
+                // MET filters not yet implemented for 2017
+                passMETFILTER = true;
+                if (passMETFILTER) nEventsPassMETFilter++ ;
+            }
+        }
+        // MET filters for reco MC
+        if (hasRecoInfo && !isData && doMETFiltering){
+            if (year == 2016){
+                passMETFILTER = (
+                                    (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+                                && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+                                && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+                                && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+                                && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+                                && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+                                && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+                );
+                if (passMETFILTER) nEventsPassMETFilter++ ;
+            }
+            if (year == 2017){
+                std::cout << "MET filters not yet implemented for 2017!" << std::endl;
+                passMETFILTER = true;
+                if (passMETFILTER) nEventsPassMETFilter++ ;
+            }
         }
 
 		//=======================================================================================================//
@@ -403,7 +449,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         // Reweighting MC for pileup discrepancy
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
-            puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth));
+            puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
+            // puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
             //cout << " puWeightFact " << puWeightFact << endl;
             if (puWeightFact > 10000 || puWeightFact < 0) puWeightFact = 1;
             weight *= puWeightFact;
@@ -426,7 +473,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         //         Retrieving leptons           //
         //====================================//
         bool doMuons(leptonFlavor == "Muons" || doW || doTT);
-        bool doElectrons(leptonFlavor == "Electrons" || doW || doTT);
+        bool doElectrons(leptonFlavor == "Electrons" || (doW && leptonFlavor == "SingleElectron") || doTT);
         bool passesLeptonCut(0);
         bool passesLeptonReq(0), passesLeptonAndMT(0), passesBtagReq(1);
         unsigned short nTotLeptons(0), nLeptons(0), nMuons(0), nElectrons(0);
@@ -445,8 +492,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
             if (doMuons){
                 nTotLeptons = MuEta->size();
                 
-                // trigger cut - for WJets 13 TeV, triggers should be HLTIsoMu24 || HLTIsoTkMu24
-                if ( energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
+                // Trigger requirement ---
+                if (energy == "13TeV" && doW) {
+                    // Trigger labeling listed in the trigger2016.h, trigger2017.h fiels in the Baobabs/src dir (?)
+                    // for WJets 13 TeV 2016, triggers should be HLTIsoMu24 || HLTIsoTkMu24
+                    if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
+                    // for WJets 13 TeV 2017, trigger should be HLT_IsoMu27
+                    else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) eventTrigger = true;
+                }
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
@@ -454,14 +507,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                     //grabbing reco muon information as a leptonStruct
                     leptonStruct mu = {(MuPt->at(i) * muScale) + merUncer, MuEta->at(i), MuPhi->at(i), MuE->at(i) * (((MuPt->at(i) * muScale) + merUncer)/MuPt->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
                     // pT cut for muon
-                    bool muPassesPtCut( ((doZ || doTT) && mu.pt >= 20.) || (doW && mu.pt >= 26.) );
+                    bool muPassesPtCut(false);
+                    if ((year == 2016) && (doW && mu.pt >= 26.)) muPassesPtCut = true;
+                    else if ((year == 2017) && (doW && mu.pt >= 29.)) muPassesPtCut = true;
                     // eta cut for muon
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
-                    bool muPassesEtaCut( ((doZ || doTT) && muPassesEtaLooseCut) || (doW && fabs(mu.eta) <= 2.4) );
+                    bool muPassesEtaCut(doW && fabs(mu.eta) <= 2.4);
                     // ID cut for muon
                     bool muPassesIdCut((MuIdTight->at(i) & 1)); // this is for tight ID --> odd number
                     // Iso cut for muon
-                    bool muPassesIsoCut( (!doW && MuPfIso->at(i) < 0.2) || (doW && MuPfIso->at(i) < 0.15) );  
+                    bool muPassesIsoCut(doW && MuPfIso->at(i) < 0.15);  
                     // Iso cut for muon (for doing QCD background)
                     bool muPassesQCDIsoCut(doW && MuPfIso->at(i) >= 0.2); // use 0.15 if you want to cover full Iso space
                     
@@ -486,30 +541,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 
             //------ DO ELECTRONS -------
             if (doElectrons) {
-                nTotLeptons = 0;
-                nTotLeptons = ElEta->size();
-                // if we don't really care to match both leptons to trigger
-                if (doW) eventTrigger = false;
-                
-                for (unsigned short i(0); i < nTotLeptons; i++){
-                    leptonStruct ele = {ElPt->at(i), ElEta->at(i), ElPhi->at(i), ElE->at(i),  ElCh->at(i), 0., ElEtaSc->at(i)};
-                    bool elePassesPtCut( ( !doW && ele.pt >= 20.)  || ( doW && ele.pt >= 30.));
-                    bool elePassesEtaLooseCut(fabs(ElEtaSc->at(i)) <= 1.4442 || (fabs(ElEtaSc->at(i)) >= 1.566 && fabs(ElEtaSc->at(i)) <= 2.4));
-                    bool elePassesEtaCut( ((doZ || doTT) && elePassesEtaLooseCut) || (doW && elePassesEtaLooseCut && fabs(ElEtaSc->at(i)) <= 2.1) );
-                    bool elePassesIdCut((ElId->at(i) & 1<<2)); ///// APICHART: medium ID
-                    bool elePassesIsoCut(ElPfIsoRho->at(i) < 0.15 );
-
-                    if (doW && fabs(ElEtaSc->at(i)) > 2.1) elePassesEtaCut = false ;
-                    
-                    if (elePassesPtCut && elePassesEtaCut && elePassesIdCut){
-                        //-- isolation Cut
-                        if (doQCD > 1  && !elePassesIsoCut && leptonFlavor != "SingleMuon") leptons.push_back(ele);
-                        if ( elePassesIsoCut ) {
-                            if (doQCD < 2 && leptonFlavor != "SingleMuon") leptons.push_back(ele);
-                            if (doTT) electrons.push_back(ele);
-                        }
-                    }
-                }//End of loop over all the electrons
+                std::cout << " >>>>> doElectrons is selected, but we only care about muons" << std::endl;
+                std::cout << " >>>>> we turn off this section" << std::endl;
             }
 
             nMuons = muons.size();
@@ -673,7 +706,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         // andrew - For WJets, passesLeptonReq is true if there is only one muon that passes analysis cuts
         // and no second muon that passes at least 15 GeV and abs(eta) cut of 2.4 (nMuons and nLeptons must be 1 and refer to the same lepton)
         // this secondary muon event veto is done to reduce DYJets BG
-        if (doW && ( (leptonFlavor == "SingleMuon" && nMuons == 1 && nLeptons == 1 && nElectrons == 0) || (leptonFlavor == "SingleElectron" && nMuons == 0 && nLeptons == 1 && nElectrons == 1) )) {
+        // if (doW && ( (leptonFlavor == "SingleMuon" && nMuons == 1 && nLeptons == 1 && nElectrons == 0) || (leptonFlavor == "SingleElectron" && nMuons == 0 && nLeptons == 1 && nElectrons == 1) )) {
+        if (doW && ( leptonFlavor == "SingleMuon" && nMuons == 1 && nLeptons == 1 && nElectrons == 0 )) {
             passesLeptonReq = true;
             countEventpassLepReq++;
         }
@@ -714,225 +748,233 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 
                 //btagging criterion
                 //nominal btagging criterion
-                if (JetAk04BDiscCisvV2->at(i) >= 0.8484) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
+                if ( (year == 2016) && (JetAk04BDiscCisvV2->at(i) >= 0.8484)) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
+                else if ( (year == 2017) && (JetAk04BDiscCisvV2->at(i) >= 0.8838)) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
 
                 //************************* B-tag Veto Correction *******************************//
                 float this_rand = RandGen->Rndm(); // Get a random number.
                 float pt= JetAk04Pt->at(i);
                 float eta= JetAk04Eta->at(i);
-                // --------- Begin emulating btagging efficiencies in MC (MC only)
+
+                //************************* Begin emulating btagging efficiencies in MC (MC only)********//
                 if (isData == false){
+                    if (year == 2016){
                     
-                    bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                    bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                    
-                    int jetflavour= JetAk04HadFlav->at(i);
-                    
-                    // ---------------- For Real B-jets --------------- //
-                    if (abs(jetflavour)==5){
-                        float effb = 0.67298;
-                        float effb_corr = 1;
-                        if (false) {
+                        bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                        bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                        
+                        int jetflavour= JetAk04HadFlav->at(i);
+                        
+                        // ---------------- For Real B-jets --------------- //
+                        if (abs(jetflavour)==5){
+                            float effb = 0.67298;
+                            float effb_corr = 1;
+                            if (false) {
+                            }
+                            else{
+                                if (pt < 30.)                 effb = 0.67298  * effb_corr;
+                                if (pt >= 30.  && pt < 50.)   effb = 0.67298  * effb_corr;
+                                if (pt >= 50.  && pt < 70.)   effb = 0.70732  * effb_corr;
+                                if (pt >= 70.  && pt < 100.)  effb = 0.715349 * effb_corr;
+                                if (pt >= 100. && pt < 140.)  effb = 0.712663 * effb_corr;
+                                if (pt >= 140. && pt < 200.)  effb = 0.694916 * effb_corr;
+                                if (pt >= 200. && pt < 300.)  effb = 0.667261 * effb_corr;
+                                if (pt >= 300. && pt < 600.)  effb = 0.607964 * effb_corr;
+                                if (pt >= 600. && pt < 1000.) effb = 0.489927 * effb_corr;
+                                if (pt >= 1000.)              effb = 0.489927 * effb_corr;
+                            }
+                            
+                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
+                            float           SFb = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
+                            if (pt < 20.)   SFb = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
+                            if (pt > 1000.) SFb = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                            
+                            float SFb_error = 0.0;
+                            if (pt < 20.)                 SFb_error = 0.040213499218225479*2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.040213499218225479;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.014046305790543556;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.012372690252959728;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.012274007312953472;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.011465910822153091;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.012079551815986633;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.014995276927947998;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.021414462476968765;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.032377112656831741;
+                            if (pt >= 1000.)              SFb_error = 0.032377112656831741*2.;
+                            
+                            float SFb_up = SFb + SFb_error;
+                            float SFb_down = SFb - SFb_error;
+                            
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
+                            
+                            if (SFb <1.0) f = (1.0 - SFb);
+                            if (SFb_up <1.0) f_up = (1.0 - SFb_up);
+                            if (SFb_down <1.0) f_down = (1.0 - SFb_down);
+                            
+                            if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                            if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                            if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                            
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            
+                            
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            
                         }
-                        else{
-                            if (pt < 30.)                 effb = 0.67298  * effb_corr;
-                            if (pt >= 30.  && pt < 50.)   effb = 0.67298  * effb_corr;
-                            if (pt >= 50.  && pt < 70.)   effb = 0.70732  * effb_corr;
-                            if (pt >= 70.  && pt < 100.)  effb = 0.715349 * effb_corr;
-                            if (pt >= 100. && pt < 140.)  effb = 0.712663 * effb_corr;
-                            if (pt >= 140. && pt < 200.)  effb = 0.694916 * effb_corr;
-                            if (pt >= 200. && pt < 300.)  effb = 0.667261 * effb_corr;
-                            if (pt >= 300. && pt < 600.)  effb = 0.607964 * effb_corr;
-                            if (pt >= 600. && pt < 1000.) effb = 0.489927 * effb_corr;
-                            if (pt >= 1000.)              effb = 0.489927 * effb_corr;
+                        
+                        // ---------------- For Real C-jets--------------- //
+                        if (abs(jetflavour)==4){
+                            float effc = 0.185922;
+                            float effc_corr = 1;
+                            if (false) {
+                            }
+                            else{
+                                if (pt < 30.)                 effc = 0.185922 * effc_corr;
+                                if (pt >= 30.  && pt < 50.)   effc = 0.185922 * effc_corr;
+                                if (pt >= 50.  && pt < 70.)   effc = 0.182578 * effc_corr;
+                                if (pt >= 70.  && pt < 100.)  effc = 0.18893 * effc_corr;
+                                if (pt >= 100. && pt < 140.)  effc = 0.189251 * effc_corr;
+                                if (pt >= 140. && pt < 200.)  effc = 0.186575 * effc_corr;
+                                if (pt >= 200. && pt < 300.)  effc = 0.194419 * effc_corr;
+                                if (pt >= 300. && pt < 600.)  effc = 0.171999 * effc_corr;
+                                if (pt >= 600. && pt < 1000.) effc = 0.143033 * effc_corr;
+                                if (pt >= 1000.)              effc = 0.143033 * effc_corr;
+                            }
+                            
+                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
+                            float           SFc = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
+                            if (pt < 20.)   SFc = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
+                            if (pt > 1000.) SFc = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                            
+                            float SFc_error = 0.0;
+                            if (pt < 20.)                 SFc_error = 0.12064050137996674*2.;
+                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.12064050137996674;
+                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.042138919234275818;
+                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.03711806982755661;
+                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.036822021007537842;
+                            if (pt >= 100. && pt < 140.)  SFc_error = 0.034397732466459274;
+                            if (pt >= 140. && pt < 200.)  SFc_error = 0.0362386554479599;
+                            if (pt >= 200. && pt < 300.)  SFc_error = 0.044985830783843994;
+                            if (pt >= 300. && pt < 600.)  SFc_error = 0.064243391156196594;
+                            if (pt >= 600. && pt < 1000.) SFc_error = 0.097131341695785522;
+                            if (pt >= 1000.)              SFc_error = 0.097131341695785522*2.;
+                            
+                            float SFc_up = SFc + SFc_error;
+                            float SFc_down = SFc - SFc_error;
+                            
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
+                            
+                            if (SFc <1.0) f = (1.0 - SFc);
+                            if (SFc_up <1.0) f_up = (1.0 - SFc_up);
+                            if (SFc_down <1.0) f_down = (1.0 - SFc_down);
+                            
+                            if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                            if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                            if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                            
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            
                         }
                         
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFb = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFb = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFb = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                        // ---------------- For REAL Light-jets --------------- //
+                        if (abs(jetflavour)<4){
+                            float eff_l = 0.0200484;
+                            float eff_l_corr = 1;
+                            //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
+                            if (false) {
+                            }
+                            else{
+                                if (pt < 30.)                 eff_l = 0.0200484 * eff_l_corr;
+                                if (pt >= 30.  && pt < 50.)   eff_l = 0.0200484 * eff_l_corr;
+                                if (pt >= 50.  && pt < 70.)   eff_l = 0.0171176 * eff_l_corr;
+                                if (pt >= 70.  && pt < 100.)  eff_l = 0.0158081 * eff_l_corr;
+                                if (pt >= 100. && pt < 140.)  eff_l = 0.0155987 * eff_l_corr;
+                                if (pt >= 140. && pt < 200.)  eff_l = 0.0211239 * eff_l_corr;
+                                if (pt >= 200. && pt < 300.)  eff_l = 0.0223319 * eff_l_corr;
+                                if (pt >= 300. && pt < 600.)  eff_l = 0.030051  * eff_l_corr;
+                                if (pt >= 600. && pt < 1000.) eff_l = 0.0427809 * eff_l_corr;
+                                if (pt >= 1000.)              eff_l = 0.0427809 * eff_l_corr;
+                            }
+                            
+                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
+                            float           SFlight = 1.0589+(0.000382569*pt)+(-2.4252e-07*(pt*pt))+(2.20966e-10*(pt*pt*pt));
+                            if (pt < 20.)   SFlight = 1.0589+(0.000382569*20)+(-2.4252e-07*(20*20))+(2.20966e-10*(20*20*20));
+                            if (pt > 1000.) SFlight = 1.0589+(0.000382569*1000)+(-2.4252e-07*(1000*1000))+(2.20966e-10*(1000*1000*1000));
+                            
+                            float           SFlight_up = SFlight * (1+(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
+                            if (pt < 20.)   SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
+                            if (pt > 1000.) SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
+                            
+                            float           SFlight_down = SFlight * (1-(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
+                            if (pt < 20.)   SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
+                            if (pt > 1000.) SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
+                            
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
+                            
+                            if (SFlight <1.0) f = (1.0 - SFlight);
+                            if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
+                            if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
+                            
+                            if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
+                            if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
+                            if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
+                            
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                        }   ////////flavour lop
                         
-                        float SFb_error = 0.0;
-                        if (pt < 20.)                 SFb_error = 0.040213499218225479*2.;
-                        if (pt >= 20.  && pt < 30.)   SFb_error = 0.040213499218225479;
-                        if (pt >= 30.  && pt < 50.)   SFb_error = 0.014046305790543556;
-                        if (pt >= 50.  && pt < 70.)   SFb_error = 0.012372690252959728;
-                        if (pt >= 70.  && pt < 100.)  SFb_error = 0.012274007312953472;
-                        if (pt >= 100. && pt < 140.)  SFb_error = 0.011465910822153091;
-                        if (pt >= 140. && pt < 200.)  SFb_error = 0.012079551815986633;
-                        if (pt >= 200. && pt < 300.)  SFb_error = 0.014995276927947998;
-                        if (pt >= 300. && pt < 600.)  SFb_error = 0.021414462476968765;
-                        if (pt >= 600. && pt < 1000.) SFb_error = 0.032377112656831741;
-                        if (pt >= 1000.)              SFb_error = 0.032377112656831741*2.;
+                        // for btagging SF systematics
+                        if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                        if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
-                        float SFb_up = SFb + SFb_error;
-                        float SFb_down = SFb - SFb_error;
-                        
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
-                        
-                        if (SFb <1.0) f = (1.0 - SFb);
-                        if (SFb_up <1.0) f_up = (1.0 - SFb_up);
-                        if (SFb_down <1.0) f_down = (1.0 - SFb_down);
-                        
-                        if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
-                        if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
-                        if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
-                        
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                        
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
-                        
-                        
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                        
+                        // Wb study
+                        if (abs(jetflavour)==5) countWbBjets++ ;
                     }
-                    
-                    // ---------------- For Real C-jets--------------- //
-                    if (abs(jetflavour)==4){
-                        float effc = 0.185922;
-                        float effc_corr = 1;
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 effc = 0.185922 * effc_corr;
-                            if (pt >= 30.  && pt < 50.)   effc = 0.185922 * effc_corr;
-                            if (pt >= 50.  && pt < 70.)   effc = 0.182578 * effc_corr;
-                            if (pt >= 70.  && pt < 100.)  effc = 0.18893 * effc_corr;
-                            if (pt >= 100. && pt < 140.)  effc = 0.189251 * effc_corr;
-                            if (pt >= 140. && pt < 200.)  effc = 0.186575 * effc_corr;
-                            if (pt >= 200. && pt < 300.)  effc = 0.194419 * effc_corr;
-                            if (pt >= 300. && pt < 600.)  effc = 0.171999 * effc_corr;
-                            if (pt >= 600. && pt < 1000.) effc = 0.143033 * effc_corr;
-                            if (pt >= 1000.)              effc = 0.143033 * effc_corr;
-                        }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFc = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFc = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFc = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
-                        
-                        float SFc_error = 0.0;
-                        if (pt < 20.)                 SFc_error = 0.12064050137996674*2.;
-                        if (pt >= 20.  && pt < 30.)   SFc_error = 0.12064050137996674;
-                        if (pt >= 30.  && pt < 50.)   SFc_error = 0.042138919234275818;
-                        if (pt >= 50.  && pt < 70.)   SFc_error = 0.03711806982755661;
-                        if (pt >= 70.  && pt < 100.)  SFc_error = 0.036822021007537842;
-                        if (pt >= 100. && pt < 140.)  SFc_error = 0.034397732466459274;
-                        if (pt >= 140. && pt < 200.)  SFc_error = 0.0362386554479599;
-                        if (pt >= 200. && pt < 300.)  SFc_error = 0.044985830783843994;
-                        if (pt >= 300. && pt < 600.)  SFc_error = 0.064243391156196594;
-                        if (pt >= 600. && pt < 1000.) SFc_error = 0.097131341695785522;
-                        if (pt >= 1000.)              SFc_error = 0.097131341695785522*2.;
-                        
-                        float SFc_up = SFc + SFc_error;
-                        float SFc_down = SFc - SFc_error;
-                        
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
-                        
-                        if (SFc <1.0) f = (1.0 - SFc);
-                        if (SFc_up <1.0) f_up = (1.0 - SFc_up);
-                        if (SFc_down <1.0) f_down = (1.0 - SFc_down);
-                        
-                        if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
-                        if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
-                        if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
-                        
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                        
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
-                        
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                        
+
+                    else if (year == 2017){
+                        passBJets = true; // do btag MC SFs for 2017
                     }
-                    
-                    // ---------------- For REAL Light-jets --------------- //
-                    if (abs(jetflavour)<4){
-                        float eff_l = 0.0200484;
-                        float eff_l_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 30.  && pt < 50.)   eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 50.  && pt < 70.)   eff_l = 0.0171176 * eff_l_corr;
-                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0158081 * eff_l_corr;
-                            if (pt >= 100. && pt < 140.)  eff_l = 0.0155987 * eff_l_corr;
-                            if (pt >= 140. && pt < 200.)  eff_l = 0.0211239 * eff_l_corr;
-                            if (pt >= 200. && pt < 300.)  eff_l = 0.0223319 * eff_l_corr;
-                            if (pt >= 300. && pt < 600.)  eff_l = 0.030051  * eff_l_corr;
-                            if (pt >= 600. && pt < 1000.) eff_l = 0.0427809 * eff_l_corr;
-                            if (pt >= 1000.)              eff_l = 0.0427809 * eff_l_corr;
-                        }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFlight = 1.0589+(0.000382569*pt)+(-2.4252e-07*(pt*pt))+(2.20966e-10*(pt*pt*pt));
-                        if (pt < 20.)   SFlight = 1.0589+(0.000382569*20)+(-2.4252e-07*(20*20))+(2.20966e-10*(20*20*20));
-                        if (pt > 1000.) SFlight = 1.0589+(0.000382569*1000)+(-2.4252e-07*(1000*1000))+(2.20966e-10*(1000*1000*1000));
-                        
-                        float           SFlight_up = SFlight * (1+(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
-                        float           SFlight_down = SFlight * (1-(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
-                        
-                        if (SFlight <1.0) f = (1.0 - SFlight);
-                        if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
-                        if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
-                        
-                        if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
-                        if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
-                        if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
-                        
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                        
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
-                        
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                    }   ////////flavour lop
-                    
-                    // for btagging SF systematics
-                    if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
-                    if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
-                    
-                    // Wb study
-                    if (abs(jetflavour)==5) countWbBjets++ ;
                 } // --------- End MC-only
-                //************************* End B-tag Veto Correction *******************************//
+                //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
                 jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0};
@@ -1200,11 +1242,11 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         effWeight *= LeptIso.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(fabs(lepton1.pt), fabs(lepton1.eta), sysLepSF);
                     }
-                    else if (leptonFlavor == "SingleElectron") {
-                        effWeight *= LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
-                        effWeight *= Ele_Rec.getEfficiency(lepton1.pt, fabs(lepton1.scEta), sysLepSF);
+                    // else if (leptonFlavor == "SingleElectron") {
+                    //     effWeight *= LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                    //     effWeight *= Ele_Rec.getEfficiency(lepton1.pt, fabs(lepton1.scEta), sysLepSF);
                         
-                    }
+                    // }
                     if (isData) weight /= effWeight;
                     // The following line should give the emulation of the ID, Iso, Trig efficiencies seen in data to the MC
                     else weight *= effWeight; 
@@ -1487,34 +1529,6 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         }
         //=======================================================================================================//
 
-
-        //=======================================================================================================//
-        //   Retrieving DPS partons and jets  //
-        //====================================//
-        bool passesDPSPartonCut(1); 
-        unsigned short nTotDPSPartons(0);
-        vector<pair<TLorentzVector, TLorentzVector> > genDPSAndItsJets;
-        if (hasPartonInfo){
-            nTotDPSPartons = dpsParton_Eta->size();
-            short jetInd(0);
-            for (unsigned short i(0); i < nTotDPSPartons; i++){
-                TLorentzVector genDPSParton, genDPSJet;
-                genDPSParton.SetPtEtaPhiE(dpsParton_Pt->at(i), dpsParton_Eta->at(i), dpsParton_Phi->at(i), dpsParton_E->at(i));
-                jetInd = genMatchDPSpar->at(i); 
-                if (jetInd >= 0){
-                    genDPSJet.SetPtEtaPhiE(GJetAk04Pt->at(jetInd), GJetAk04Eta->at(jetInd), GJetAk04Phi->at(jetInd), GJetAk04E->at(jetInd));
-                    pair<TLorentzVector, TLorentzVector> genDPSAndItsJet(genDPSParton, genDPSJet);
-                    genDPSAndItsJets.push_back(genDPSAndItsJet);
-                }
-            }
-            // remove DPS from inclusive sample
-            if (fileName.find("PartonInfo") != string::npos && fileName.find("enriched") != string::npos &&
-                    (nTotDPSPartons < 2 || fabs(dpsParton_Eta->at(0)) > 2.4 || fabs(dpsParton_Eta->at(1)) > 2.4)){
-                passesDPSPartonCut = 0;
-            }
-        }
-        //=======================================================================================================//
-
         // Wb study
         if ( doWbsyst && countWbBjets == 1 && hasGenInfo) {
             weight = weight * WbSystSF;
@@ -1587,7 +1601,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //   Filling gen and parton histos    //
         //====================================//
-        if (hasGenInfo && passesGenLeptonCut && passesGenJetCut && passesDPSPartonCut){
+        if (hasGenInfo && passesGenLeptonCut && passesGenJetCut){
             GENnEventsIncl0Jets++;
             genZNGoodJets_Zexc->Fill(nGoodGenJets, genWeight);
             genZNGoodJetsFull_Zexc->Fill(nGoodGenJets, genWeight);
@@ -1612,17 +1626,24 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 genLeadingJetPt_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                genLeadingJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                // genLeadingJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 genLepPtPlusLeadingJetPt_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // genLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
-                genZPt_1_Zinc1jet->Fill(genZ.Pt(), genWeight);
+                // genZPt_1_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 genZPt_2_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 genZPtPlusLeadingJetPt_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                genZPtPlusLeadingJetPt_1_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                // genZPtPlusLeadingJetPt_1_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusLeadingJetPt_2_Zinc1jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+
+                if (nGoodGenJets_20 == 1){
+                    genLeadingJetPt_Zexc1jet->Fill(genJets_20[0].pt, genWeight);
+                    genLeadingJetPt_2_Zexc1jet->Fill(genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_Zexc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_2_Zexc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
             }
             if (nGoodGenJets_20 >= 2){
                 genSecondJetPt_Zinc2jet  ->Fill(genJets_20[1].pt, genWeight);
@@ -1632,26 +1653,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 genLeadingJetPt_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
-                genLeadingJetPt_1_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                // genLeadingJetPt_1_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
                 genHTover2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genHTover2_1_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                // genHTover2_1_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genLepPtPlusLeadingJetPt_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // genLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusHTover2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genLepPtPlusHTover2_1_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genLepPtPlusHTover2_1_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
-                genZPt_1_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                // genZPt_1_Zinc2jet->Fill(genZ.Pt(), genWeight);
                 genZPt_2_Zinc2jet->Fill(genZ.Pt(), genWeight);
                 genZPtPlusLeadingJetPt_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                genZPtPlusLeadingJetPt_1_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                // genZPtPlusLeadingJetPt_1_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusLeadingJetPt_2_Zinc2jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusHTover2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genZPtPlusHTover2_1_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genZPtPlusHTover2_1_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPtPlusHTover2_2_Zinc2jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+
+                if (nGoodGenJets_20 == 2){
+                    genLeadingJetPt_Zexc2jet->Fill(genJets_20[0].pt, genWeight);
+                    genLeadingJetPt_2_Zexc2jet->Fill(genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_Zexc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_2_Zexc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
             }
             if (nGoodGenJets_20 >= 3){
                 genThirdJetPt_Zinc3jet  ->Fill(genJets_20[2].pt, genWeight);
@@ -1661,26 +1689,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 genLeadingJetPt_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
-                genLeadingJetPt_1_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                // genLeadingJetPt_1_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
                 genHTover2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genHTover2_1_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                // genHTover2_1_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genLepPtPlusLeadingJetPt_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // genLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusHTover2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genLepPtPlusHTover2_1_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genLepPtPlusHTover2_1_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
-                genZPt_1_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                // genZPt_1_Zinc3jet->Fill(genZ.Pt(), genWeight);
                 genZPt_2_Zinc3jet->Fill(genZ.Pt(), genWeight);
                 genZPtPlusLeadingJetPt_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                genZPtPlusLeadingJetPt_1_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                // genZPtPlusLeadingJetPt_1_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusLeadingJetPt_2_Zinc3jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusHTover2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genZPtPlusHTover2_1_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genZPtPlusHTover2_1_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPtPlusHTover2_2_Zinc3jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+
+                if (nGoodGenJets_20 == 3){
+                    genLeadingJetPt_Zexc3jet->Fill(genJets_20[0].pt, genWeight);
+                    genLeadingJetPt_2_Zexc3jet->Fill(genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_Zexc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                    genLepPtPlusLeadingJetPt_2_Zexc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
             }
             if (nGoodGenJets_20 >= 4){
                 genFourthJetPt_Zinc4jet  ->Fill(genJets_20[3].pt, genWeight);
@@ -1689,26 +1724,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 genLeadingJetPt_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
-                genLeadingJetPt_1_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
+                // genLeadingJetPt_1_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
                 genHTover2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genHTover2_1_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
+                // genHTover2_1_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genLepPtPlusLeadingJetPt_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // genLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 genLepPtPlusHTover2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genLepPtPlusHTover2_1_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genLepPtPlusHTover2_1_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
-                genZPt_1_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                // genZPt_1_Zinc4jet->Fill(genZ.Pt(), genWeight);
                 genZPt_2_Zinc4jet->Fill(genZ.Pt(), genWeight);
                 genZPtPlusLeadingJetPt_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
-                genZPtPlusLeadingJetPt_1_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
+                // genZPtPlusLeadingJetPt_1_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusLeadingJetPt_2_Zinc4jet->Fill(genZ.Pt()+genJets_20[0].pt, genWeight);
                 genZPtPlusHTover2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
-                genZPtPlusHTover2_1_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+                // genZPtPlusHTover2_1_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genZPtPlusHTover2_2_Zinc4jet->Fill(genZ.Pt()+ (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
+
+                // if (nGoodGenJets_20 == 4){
+                //     genLeadingJetPt_Zexc4jet->Fill(genJets_20[0].pt, genWeight);
+                //     genLeadingJetPt_2_Zexc4jet->Fill(genJets_20[0].pt, genWeight);
+                //     genLepPtPlusLeadingJetPt_Zexc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                //     genLepPtPlusLeadingJetPt_2_Zexc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // }
             }
             if (nGoodGenJets_20 >= 5){
                 genFifthJetPt_Zinc5jet  ->Fill(genJets_20[4].pt, genWeight);
@@ -2044,35 +2086,6 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     }
                 }
 
-                if (hasPartonInfo){
-                    if (genDPSAndItsJets.size() == 2) {
-                        if ((deltaR(genDPSAndItsJets[0].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[0].first, genSecondJ) < 0.5) 
-                                && (deltaR(genDPSAndItsJets[1].first, genLeadJ) < 0.5 || deltaR(genDPSAndItsJets[1].first, genSecondJ) < 0.5)) {
-                            genSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-                            gendPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-                            genPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            genSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
-                            if (hasRecoInfo) {
-                                resSpTJetsDeltaR_Zexc2jet->Fill(SpTsub(genLeadJ, genSecondJ) - SpTsub(leadJ, secondJ) , genWeight);
-                                resdPhiJetsDeltaR_Zexc2jet->Fill(deltaPhi(genLeadJ, genSecondJ) - deltaPhi(leadJ, secondJ), genWeight);
-                                resPHI_TDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genLeadJ, genSecondJ) - PHI_T(lep1, lep2, leadJ, secondJ), genWeight);
-                                resSpTDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genLeadJ, genSecondJ) - SpT(lep1, lep2, leadJ, secondJ), genWeight);
-                            }
-                        }
-                        gendPhiJetsDPS_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                        genPHI_TDPS_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                        genSpTDPSPartons_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].first, genDPSAndItsJets[1].first), genWeight);
-                        genSpTJetsDPS_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                        genSpTDPS_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                        if (deltaR(genDPSAndItsJets[0].first, genDPSAndItsJets[0].second) < 0.5 && deltaR(genDPSAndItsJets[1].first, genDPSAndItsJets[1].second)) {
-                            gendPhiJetsDPSDeltaR_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genSpTJetsDPSDeltaR_Zexc2jet->Fill(SpTsub(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genSpTDPSDeltaR_Zexc2jet->Fill(SpT(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            genPHI_TDPSDeltaR_Zexc2jet->Fill(PHI_T(genLep1, genLep2, genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genWeight);
-                            gendPhiJetsDPSDeltaR_ZpT_Zexc2jet->Fill(deltaPhi(genDPSAndItsJets[0].second, genDPSAndItsJets[1].second), genZ.Pt(), genWeight);
-                        }
-                    }
-                }
             }
             if (nGoodGenJets >= 3){
                 GENnEventsIncl3Jets++;
@@ -2210,7 +2223,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //      Selection for Reco Histos      //
         //====================================//
-        if (hasRecoInfo && passesLeptonCut && passesJetCut && passesDPSPartonCut) {
+        if (hasRecoInfo && passesLeptonCut && passesJetCut) {
             //=======================================================================================================//
             
             if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
@@ -2311,17 +2324,24 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 LeadingJetPt_Zinc1jet->Fill(jets_20[0].pt, weight);
-                LeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, weight);
+                // LeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc1jet->Fill(jets_20[0].pt, weight);
                 LepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // LepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusLeadingJetPt_2_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 ZPt_Zinc1jet->Fill(Z.Pt(), weight);
-                ZPt_1_Zinc1jet->Fill(Z.Pt(), weight);
+                // ZPt_1_Zinc1jet->Fill(Z.Pt(), weight);
                 ZPt_2_Zinc1jet->Fill(Z.Pt(), weight);
                 ZPtPlusLeadingJetPt_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, weight);
-                ZPtPlusLeadingJetPt_1_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, weight);
+                // ZPtPlusLeadingJetPt_1_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusLeadingJetPt_2_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, weight);
+
+                if (nGoodJets_20 == 1){
+                    LeadingJetPt_Zexc1jet->Fill(jets_20[0].pt, weight);
+                    LeadingJetPt_2_Zexc1jet->Fill(jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_Zexc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_2_Zexc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
 
             }
             if (nGoodJets_20 >= 2){
@@ -2332,26 +2352,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 LeadingJetPt_Zinc2jet->Fill(jets_20[0].pt, weight);
-                LeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, weight);
+                // LeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc2jet->Fill(jets_20[0].pt, weight);
                 HTover2_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
-                HTover2_1_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
+                // HTover2_1_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 LepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // LepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusLeadingJetPt_2_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusHTover2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
-                LepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
+                // LepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 ZPt_Zinc2jet->Fill(Z.Pt(), weight);
-                ZPt_1_Zinc2jet->Fill(Z.Pt(), weight);
+                // ZPt_1_Zinc2jet->Fill(Z.Pt(), weight);
                 ZPt_2_Zinc2jet->Fill(Z.Pt(), weight);
                 ZPtPlusLeadingJetPt_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, weight);
-                ZPtPlusLeadingJetPt_1_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, weight);
+                // ZPtPlusLeadingJetPt_1_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusLeadingJetPt_2_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusHTover2_Zinc2jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
-                ZPtPlusHTover2_1_Zinc2jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
+                // ZPtPlusHTover2_1_Zinc2jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 ZPtPlusHTover2_2_Zinc2jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
+
+                if (nGoodJets_20 == 2){
+                    LeadingJetPt_Zexc2jet->Fill(jets_20[0].pt, weight);
+                    LeadingJetPt_2_Zexc2jet->Fill(jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_Zexc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_2_Zexc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
             }
             if (nGoodJets_20 >= 3){
                 ThirdJetPt_Zinc3jet  ->Fill(jets_20[2].pt, weight);
@@ -2361,26 +2388,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 LeadingJetPt_Zinc3jet->Fill(jets_20[0].pt, weight);
-                LeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, weight);
+                // LeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc3jet->Fill(jets_20[0].pt, weight);
                 HTover2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
-                HTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
+                // HTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
                 LepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // LepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusLeadingJetPt_2_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusHTover2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
-                LepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
+                // LepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
                 ZPt_Zinc3jet->Fill(Z.Pt(), weight);
-                ZPt_1_Zinc3jet->Fill(Z.Pt(), weight);
+                // ZPt_1_Zinc3jet->Fill(Z.Pt(), weight);
                 ZPt_2_Zinc3jet->Fill(Z.Pt(), weight);
                 ZPtPlusLeadingJetPt_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, weight);
-                ZPtPlusLeadingJetPt_1_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, weight);
+                // ZPtPlusLeadingJetPt_1_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusLeadingJetPt_2_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusHTover2_Zinc3jet->Fill(Z.Pt()+ (jets_20[0].pt+jets_20[1].pt)/2., weight);
-                ZPtPlusHTover2_1_Zinc3jet->Fill(Z.Pt()+ (jets_20[0].pt+jets_20[1].pt)/2., weight);
+                // ZPtPlusHTover2_1_Zinc3jet->Fill(Z.Pt()+ (jets_20[0].pt+jets_20[1].pt)/2., weight);
                 ZPtPlusHTover2_2_Zinc3jet->Fill(Z.Pt()+ (jets_20[0].pt+jets_20[1].pt)/2., weight);
+
+                if (nGoodJets_20 == 3){
+                    LeadingJetPt_Zexc3jet->Fill(jets_20[0].pt, weight);
+                    LeadingJetPt_2_Zexc3jet->Fill(jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_Zexc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                    LepPtPlusLeadingJetPt_2_Zexc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
             }
             if (nGoodJets_20 >= 4){
                 FourthJetPt_Zinc4jet  ->Fill(jets_20[3].pt, weight);
@@ -2389,26 +2423,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 LeadingJetPt_Zinc4jet->Fill(jets_20[0].pt, weight);
-                LeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, weight);
+                // LeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc4jet->Fill(jets_20[0].pt, weight);
                 HTover2_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
-                HTover2_1_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
+                // HTover2_1_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 LepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // LepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusLeadingJetPt_2_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 LepPtPlusHTover2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
-                LepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
+                // LepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 ZPt_Zinc4jet->Fill(Z.Pt(), weight);
-                ZPt_1_Zinc4jet->Fill(Z.Pt(), weight);
+                // ZPt_1_Zinc4jet->Fill(Z.Pt(), weight);
                 ZPt_2_Zinc4jet->Fill(Z.Pt(), weight);
                 ZPtPlusLeadingJetPt_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, weight);
-                ZPtPlusLeadingJetPt_1_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, weight);
+                // ZPtPlusLeadingJetPt_1_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusLeadingJetPt_2_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, weight);
                 ZPtPlusHTover2_Zinc4jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
-                ZPtPlusHTover2_1_Zinc4jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
+                // ZPtPlusHTover2_1_Zinc4jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 ZPtPlusHTover2_2_Zinc4jet->Fill(Z.Pt()+ (jets_20[0].pt + jets_20[1].pt)/2., weight);
+
+                // if (nGoodJets_20 == 4){
+                //     LeadingJetPt_Zexc4jet->Fill(jets_20[0].pt, weight);
+                //     LeadingJetPt_2_Zexc4jet->Fill(jets_20[0].pt, weight);
+                //     LepPtPlusLeadingJetPt_Zexc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                //     LepPtPlusLeadingJetPt_2_Zexc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // }
             }
             if (nGoodJets_20 >= 5){
                 FifthJetPt_Zinc5jet  ->Fill(jets_20[4].pt, weight);
@@ -3236,17 +3277,30 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 hresponseLeadingJetPt_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
-                hresponseLeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                // hresponseLeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                // hresponseLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseZPt_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
-                hresponseZPt_1_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
+                // hresponseZPt_1_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPt_2_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPtPlusLeadingJetPt_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
-                hresponseZPtPlusLeadingJetPt_1_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
+                // hresponseZPtPlusLeadingJetPt_1_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusLeadingJetPt_2_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
+
+                // looking to study particle-level corrections of ratios
+                LeadingJetPt_MIGRATIONS_Zinc1jet->Fill(jets_20[0].pt, weight);
+                genLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                if (nGoodGenJets_20 == 1 && nGoodJets_20 == 1){
+                    hresponseLeadingJetPt_Zexc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLeadingJetPt_2_Zexc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_Zexc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_2_Zexc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                }
             }
             if (nGoodGenJets_20 >= 2 && nGoodJets_20 >= 2){
                 hresponseSecondJetPt_Zinc2jet  ->Fill(jets_20[1].pt, genJets_20[1].pt, weight);
@@ -3256,26 +3310,39 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 hresponseLeadingJetPt_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
-                hresponseLeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                // hresponseLeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseHTover2_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseHTover2_1_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseHTover2_1_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                // hresponseLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusHTover2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseLepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseZPt_Zinc2jet->Fill(Z.Pt(), genZ.Pt(), weight);
-                hresponseZPt_1_Zinc2jet->Fill(Z.Pt(), genZ.Pt(), weight);
+                // hresponseZPt_1_Zinc2jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPt_2_Zinc2jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPtPlusLeadingJetPt_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
-                hresponseZPtPlusLeadingJetPt_1_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
+                // hresponseZPtPlusLeadingJetPt_1_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusLeadingJetPt_2_Zinc2jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusHTover2_Zinc2jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseZPtPlusHTover2_1_Zinc2jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseZPtPlusHTover2_1_Zinc2jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseZPtPlusHTover2_2_Zinc2jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+
+                // looking to study particle-level corrections of ratios
+                LeadingJetPt_MIGRATIONS_Zinc2jet->Fill(jets_20[0].pt, weight);
+                genLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                if (nGoodGenJets_20 == 2 && nGoodJets_20 == 2){
+                    hresponseLeadingJetPt_Zexc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLeadingJetPt_2_Zexc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_Zexc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_2_Zexc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                }
             }
             if (nGoodGenJets_20 >= 3 && nGoodJets_20 >= 3){
                 hresponseThirdJetPt_Zinc3jet  ->Fill(jets_20[2].pt, genJets_20[2].pt, weight);
@@ -3285,26 +3352,39 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 hresponseLeadingJetPt_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
-                hresponseLeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                // hresponseLeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseHTover2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseHTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseHTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                // hresponseLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusHTover2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseLepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseZPt_Zinc3jet->Fill(Z.Pt(), genZ.Pt(), weight);
-                hresponseZPt_1_Zinc3jet->Fill(Z.Pt(), genZ.Pt(), weight);
+                // hresponseZPt_1_Zinc3jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPt_2_Zinc3jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPtPlusLeadingJetPt_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
-                hresponseZPtPlusLeadingJetPt_1_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
+                // hresponseZPtPlusLeadingJetPt_1_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusLeadingJetPt_2_Zinc3jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusHTover2_Zinc3jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseZPtPlusHTover2_1_Zinc3jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseZPtPlusHTover2_1_Zinc3jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseZPtPlusHTover2_2_Zinc3jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+
+                // looking to study particle-level corrections of ratios
+                LeadingJetPt_MIGRATIONS_Zinc3jet->Fill(jets_20[0].pt, weight);
+                genLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                if (nGoodGenJets_20 == 3 && nGoodJets_20 == 3){
+                    hresponseLeadingJetPt_Zexc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLeadingJetPt_2_Zexc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_Zexc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                    hresponseLepPtPlusLeadingJetPt_2_Zexc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                }
             }
             if (nGoodGenJets_20 >= 4 && nGoodJets_20 >= 4){
                 hresponseFourthJetPt_Zinc4jet  ->Fill(jets_20[3].pt, genJets_20[3].pt, weight);
@@ -3313,26 +3393,33 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 //andrew - alpha-s
                 hresponseLeadingJetPt_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
-                hresponseLeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                // hresponseLeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseHTover2_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseHTover2_1_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
+                // hresponseHTover2_1_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                // hresponseLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 hresponseLepPtPlusHTover2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
+                // hresponseLepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
                 hresponseZPt_Zinc4jet->Fill(Z.Pt(), genZ.Pt(), weight);
-                hresponseZPt_1_Zinc4jet->Fill(Z.Pt(), genZ.Pt(), weight);
+                // hresponseZPt_1_Zinc4jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPt_2_Zinc4jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPtPlusLeadingJetPt_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
-                hresponseZPtPlusLeadingJetPt_1_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
+                // hresponseZPtPlusLeadingJetPt_1_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusLeadingJetPt_2_Zinc4jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
                 hresponseZPtPlusHTover2_Zinc4jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
-                hresponseZPtPlusHTover2_1_Zinc4jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
+                // hresponseZPtPlusHTover2_1_Zinc4jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
                 hresponseZPtPlusHTover2_2_Zinc4jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
+
+                // if (nGoodGenJets_20 == 4 && nGoodJets_20 == 4){
+                //     hresponseLeadingJetPt_Zexc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                //     hresponseLeadingJetPt_2_Zexc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                //     hresponseLepPtPlusLeadingJetPt_Zexc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                //     hresponseLepPtPlusLeadingJetPt_2_Zexc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                // }
             }
             if (nGoodGenJets_20 >= 5 && nGoodJets_20 >= 5){
                 hresponseFifthJetPt_Zinc5jet  ->Fill(jets_20[4].pt, genJets_20[4].pt, weight);
@@ -3639,10 +3726,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         if (hasRecoInfo && !isData){
             if (sumEventW > 0) listOfHistograms[i]->Scale(skimAccep_[0]/sumEventW);
         }
-   
-        //std::cout << "Writing histogram " << hName << "... " << std::endl;
         listOfHistograms[i]->Write();
-        //std::cout << "Deleting histogram " << hName << "... " << std::endl;
         delete listOfHistograms[i];
     }
     std::cout << "\nAll histograms written! Yay!" << std::endl;
@@ -3702,10 +3786,10 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 }
 
 
-ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, bool useTriggerCorrection_, bool useEfficiencyCorrection_, 
+ZJetsAndDPS::ZJetsAndDPS(string fileName_, int year_, float lumiScale_, float puScale_, bool useTriggerCorrection_, bool useEfficiencyCorrection_, 
         int systematics_, int direction_, float xsecfactor_, int jetPtCutMin_, int jetPtCutMax_, int ZPtCutMin_, int ZEtaCutMin_, int ZEtaCutMax_, int METcut_, bool nEvents_10000_, int jetEtaCutMin_, int jetEtaCutMax_): 
     HistoSet(fileName_.substr(0, fileName_.find("_"))), nEvents_10000(nEvents_10000_), outputDirectory("HistoFiles/"),
-    fileName(fileName_), lumiScale(lumiScale_), puScale(puScale_), useTriggerCorrection(useTriggerCorrection_), useEfficiencyCorrection(useEfficiencyCorrection_), 
+    fileName(fileName_), year(year_), lumiScale(lumiScale_), puScale(puScale_), useTriggerCorrection(useTriggerCorrection_), useEfficiencyCorrection(useEfficiencyCorrection_), 
     systematics(systematics_), direction(direction_), xsecfactor(xsecfactor_), jetPtCutMin(jetPtCutMin_), jetPtCutMax(jetPtCutMax_), jetEtaCutMin(jetEtaCutMin_), jetEtaCutMax(jetEtaCutMax_), ZPtCutMin(ZPtCutMin_), ZEtaCutMin(ZEtaCutMin_), ZEtaCutMax(ZEtaCutMax_), METcut(METcut_)
 {
 
@@ -3720,10 +3804,14 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
     isData = false;
     string fullFileName =  "../Data_Z_5311_New/" + fileName;
     
-    //string storageElement = "root://eoscms//eos/cms";
     string storageElement = "/eos/cms";
     string dirPath = "/tupel";
     string treeName = "/EventTree";
+
+    std::string yearStr;
+    std::stringstream yearSStr;
+    yearSStr << year;
+    yearStr = yearSStr.str();
 
     if (fileName.find("DMu_") == 0) leptonFlavor = "Muons";
     else if (fileName.find("DE_") == 0)  leptonFlavor = "Electrons"; 
@@ -3734,9 +3822,7 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
         fullFileName =  "../DataTTbarEMu/" + fileName;
     }
     if (fileName.find("Data") != string::npos ) isData = true;
-    if ( fileName.find("SMu_") == 0 || fileName.find("SE_") == 0 ) fullFileName =  "DataW_txt/" + fileName;
-    //if ( fileName.find("SMu_") == 0 || fileName.find("SE_") == 0 ) fullFileName =  "/afs/cern.ch/work/o/ocalan/" + fileName;
-    //if ( fileName.find("SMu_") == 0 || fileName.find("SE_") == 0 ) fullFileName =  "/afs/cern.ch/user/o/ocalan/13TeV/CMSSW_5_3_11/src/WJETS/TreeAnalysis2012/DataW/" + fileName;
+    if (fileName.find("SMu_") == 0 || fileName.find("SE_") == 0 ) fullFileName =  "DataW_txt_" + yearStr + "/" + fileName;
     if (fileName.find("Sherpa2") != string::npos) fullFileName =  "../DataSherpa2/" + fileName;
     if (fileName.find("List") == string::npos){
         if (fileName.find("Sherpa2") != string::npos){
@@ -3755,13 +3841,15 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
     else {
         //assuming that the filename locations are listed in a text file, which are read off from EOS
         fullFileName += ".txt";
+        std::cout << "Reading in .txt file: \n" << fullFileName << std::endl;
         ifstream infile(fullFileName.c_str());
         string line; 
         int countFiles(0);
-        std::cout << "\n\nNow working on .txt file " << fileName << std::endl;
+        // std::cout << __LINE__ << std::endl;
+        std::cout << std::endl;
         while (getline(infile, line)){
             countFiles++;
-            //string treePath =  line + "/tree/tree";
+
             string treePath = storageElement + line + dirPath + treeName;
             chain->Add(treePath.c_str());
             cout << "Loading file: " << line << endl;
@@ -3853,6 +3941,9 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     EvtWeights = 0;
     mcSherpaWeights_ = 0 ;
     
+    /////////////////////////////
+    // GENERATOR VARIABLES
+
     GLepBarePt = 0;
     GLepBareEta = 0;
     GLepBarePhi = 0;
@@ -3860,7 +3951,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     GLepBareId = 0;
     GLepBareSt = 0;
     GLepBarePrompt = 0;
-    GLepBareTauProd = 0;
     
     GPhotPt = 0;
     GPhotEta = 0;
@@ -3869,35 +3959,13 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     GPhotMotherId = 0;
     GPhotSt = 0;
 
-    GLepClosePhotPt = 0;
-    GLepClosePhotEta = 0;
-    GLepClosePhotPhi = 0;
-    GLepClosePhotE = 0;
-    GLepClosePhotId = 0;
-    GLepClosePhotMother0Id = 0;
-    GLepClosePhotMotherCnt = 0;
-    GLepClosePhotSt = 0;
-
     GJetAk04Pt = 0;
     GJetAk04Eta = 0;
     GJetAk04Phi = 0;
     GJetAk04E = 0;
 
-    dpsParton_Pt = 0;
-    dpsParton_Eta = 0;
-    dpsParton_Phi = 0;
-    dpsParton_E = 0;
-    genMatchDPSpar = 0;
-    dpsParton_dR = 0;
-
-    ElPt = 0;
-    ElEta = 0;
-    ElPhi = 0;
-    ElE = 0;
-    ElCh = 0;
-    ElId = 0;
-    ElPfIsoRho = 0;
-    ElEtaSc = 0;
+    /////////////////////////////
+    // RECO VARIABLES
 
     MuPt = 0;
     MuEta = 0;
@@ -3905,23 +3973,10 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     MuVtxZ = 0;
     MuE = 0;
     MuCh = 0;
-    MuDxy = 0;
     MuIdTight = 0;
     TrigHltMu = 0;
     MuPfIso = 0;
 
-    JetAk04Pt = 0;   
-    JetAk04Eta = 0;   
-    JetAk04Phi = 0;   
-    JetAk04E = 0;   
-    JetAk04Id = 0;   
-    JetAk04PuId = 0; 
-    JetAk04PuMva = 0;   
-    JetAk04BTagCsv = 0;   
-    JetAk04BDiscCisvV2 = 0;
-    JetAk04PartFlav = 0;
-    JetAk04HadFlav = 0;
-     
     METPt = 0 ;
     METPx = 0 ;
     METPy = 0 ;
@@ -3930,31 +3985,42 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     TrigMET = 0;
     TrigMETBit = 0;
 
+    JetAk04Pt = 0;   
+    JetAk04Eta = 0;   
+    JetAk04Phi = 0;   
+    JetAk04E = 0;   
+    JetAk04Id = 0;   
+    JetAk04PuId = 0; 
+    JetAk04PuMva = 0;   
+    JetAk04BDiscCisvV2 = 0;
+    JetAk04HadFlav = 0;
+     
+
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     // Set branch addresses and branch pointers
     fCurrent = -1;
     fChain->SetMakeClass(1);
     
-    fChain->SetBranchAddress("EvtPuCntTruth", &EvtPuCntTruth, &b_EvtPuCntTruth);
     if (fileName.find("WJets") != string::npos && fileName.find("FxFx") != string::npos){
         fChain->SetBranchAddress("GNup", &GNup, &b_GNup);
     }
+
     if (hasRecoInfo){
         fChain->SetBranchAddress("EvtVtxCnt", &EvtVtxCnt, &b_EvtVtxCnt);
-        fChain->SetBranchAddress("EvtRunNum", &EvtRunNum, &b_EvtRunNum); // not used
-        fChain->SetBranchAddress("EvtNum", &EvtNum, &b_EvtNum); // not used
+        fChain->SetBranchAddress("EvtPuCntTruth", &EvtPuCntTruth, &b_EvtPuCntTruth);
+        fChain->SetBranchAddress("EvtPuCntObs", &EvtPuCntObs, &b_EvtPuCntObs);
 
-        fChain->SetBranchAddress("JetAk04E", &JetAk04E, &b_JetAk04E);
-        fChain->SetBranchAddress("JetAk04Pt", &JetAk04Pt, &b_JetAk04Pt);
-        fChain->SetBranchAddress("JetAk04Eta", &JetAk04Eta, &b_JetAk04Eta);
-        fChain->SetBranchAddress("JetAk04Phi", &JetAk04Phi, &b_JetAk04Phi);
-        fChain->SetBranchAddress("JetAk04Id", &JetAk04Id, &b_JetAk04Id);
-        fChain->SetBranchAddress("JetAk04PuId", &JetAk04PuId, &b_JetAk04PuId);
-        fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
-        fChain->SetBranchAddress("JetAk04BTagCsv", &JetAk04BTagCsv, &b_JetAk04BTagCsv);
-        fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
-        fChain->SetBranchAddress("JetAk04PartFlav", &JetAk04PartFlav, &b_JetAk04PartFlav);
-	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav);
+        if (leptonFlavor != "Electrons"){
+            fChain->SetBranchAddress("MuPt", &MuPt, &b_MuPt);
+            fChain->SetBranchAddress("MuEta", &MuEta, &b_MuEta);
+            fChain->SetBranchAddress("MuPhi", &MuPhi, &b_MuPhi);
+            fChain->SetBranchAddress("MuE", &MuE, &b_MuE);
+            fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
+            fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
+            fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
+            fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
+            fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
+        }
 
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
@@ -3963,31 +4029,18 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
         fChain->SetBranchAddress("METE", &METE, &b_METE);
         fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
         fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
-  
-        if (leptonFlavor != "Muons"){
-            fChain->SetBranchAddress("ElPt", &ElPt, &b_ElPt);
-            fChain->SetBranchAddress("ElEta", &ElEta, &b_ElEta);
-            fChain->SetBranchAddress("ElPhi", &ElPhi, &b_ElPhi);
-            fChain->SetBranchAddress("ElE", &ElE, &b_ElE);
-            fChain->SetBranchAddress("ElCh", &ElCh, &b_ElCh);
-            fChain->SetBranchAddress("ElId", &ElId, &b_ElId);
-            fChain->SetBranchAddress("ElPfIsoRho", &ElPfIsoRho, &b_ElPfIsoRho); 
-            fChain->SetBranchAddress("ElEtaSc", &ElEtaSc, &b_ElEtaSc);
 
-        }
-        if (leptonFlavor != "Electrons"){
-            fChain->SetBranchAddress("MuPt", &MuPt, &b_MuPt);
-            fChain->SetBranchAddress("MuEta", &MuEta, &b_MuEta);
-            fChain->SetBranchAddress("MuPhi", &MuPhi, &b_MuPhi);
-            fChain->SetBranchAddress("MuE", &MuE, &b_MuE);
-            fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
-            fChain->SetBranchAddress("MuDxy", &MuDxy, &b_MuDxy);
-            fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
-            fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
-            fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
-            fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
-        }
+        fChain->SetBranchAddress("JetAk04E", &JetAk04E, &b_JetAk04E);
+        fChain->SetBranchAddress("JetAk04Pt", &JetAk04Pt, &b_JetAk04Pt);
+        fChain->SetBranchAddress("JetAk04Eta", &JetAk04Eta, &b_JetAk04Eta);
+        fChain->SetBranchAddress("JetAk04Phi", &JetAk04Phi, &b_JetAk04Phi);
+        fChain->SetBranchAddress("JetAk04Id", &JetAk04Id, &b_JetAk04Id);
+        fChain->SetBranchAddress("JetAk04PuId", &JetAk04PuId, &b_JetAk04PuId);
+        fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
+        fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
+	fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
     }
+
     if (hasGenInfo){
         fChain->SetBranchAddress("GLepBarePt", &GLepBarePt, &b_GLepBarePt);
         fChain->SetBranchAddress("GLepBareEta", &GLepBareEta, &b_GLepBareEta);
@@ -4009,7 +4062,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
             fChain->SetBranchAddress("GLepBareId", &GLepBareId, &b_GLepBareId);
             fChain->SetBranchAddress("GLepBareSt", &GLepBareSt, &b_GLepBareSt);
             fChain->SetBranchAddress("GLepBarePrompt", &GLepBarePrompt, &b_GLepBarePrompt);
-            fChain->SetBranchAddress("GLepBareTauProd", &GLepBareTauProd, &b_GLepBareTauProd);
             
             fChain->SetBranchAddress("GPhotPt", &GPhotPt, &b_GPhotPt);
             fChain->SetBranchAddress("GPhotEta", &GPhotEta, &b_GPhotEta);
@@ -4018,12 +4070,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
             fChain->SetBranchAddress("GPhotMotherId", &GPhotMotherId, &b_GPhotMotherId);
             fChain->SetBranchAddress("GPhotSt", &GPhotSt, &b_GPhotSt);
             
-            fChain->SetBranchAddress("GLepClosePhotPt", &GLepClosePhotPt, &b_GLepClosePhotPt);
-            fChain->SetBranchAddress("GLepClosePhotEta", &GLepClosePhotEta, &b_GLepClosePhotEta);
-            fChain->SetBranchAddress("GLepClosePhotPhi", &GLepClosePhotPhi, &b_GLepClosePhotPhi);
-            fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
-            fChain->SetBranchAddress("GLepClosePhotSt", &GLepClosePhotSt, &b_GLepClosePhotSt);
-
             if (fileName.find("MiNLO") != string::npos || 
                     fileName.find("mcEveWeight") != string::npos || 
                     fileName.find("HepMC") != string::npos){
@@ -4040,14 +4086,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
             }
 
         }
-    }
-    if (hasPartonInfo){
-        fChain->SetBranchAddress("dpsParton_Pt", &dpsParton_Pt, &b_dpsParton_Pt);
-        fChain->SetBranchAddress("dpsParton_Eta", &dpsParton_Eta, &b_dpsParton_Eta);
-        fChain->SetBranchAddress("dpsParton_Phi", &dpsParton_Phi, &b_dpsParton_Phi);
-        fChain->SetBranchAddress("dpsParton_E", &dpsParton_E, &b_dpsParton_E);
-        fChain->SetBranchAddress("genMatchDPSpar", &genMatchDPSpar, &b_genMatchDPSpar);
-        fChain->SetBranchAddress("dpsParton_dR", &dpsParton_dR, &b_dpsParton_dR);
     }
     Notify();
     cout << "Branches are properly initialized." << endl;

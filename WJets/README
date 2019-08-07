@@ -69,7 +69,7 @@ Systematics:
 ./wjets_Merge_Data_Syst.sh
 ./wjets_Merge_Wpt_Syst.sh
 //Note: for single top, go in and change the syst switches as needed, but it's the same file to merge them
-root -b -q -l MergeTop_BVeto.cc
+root -b -q -l MergeTop_BVeto.cc++
 
 ----------------------------------
 

@@ -9,17 +9,17 @@ void runMergeTop_BVeto(TString lepSelection = "DE", int systematics = 0, int jet
 
 void MergeTop_BVeto(){
     //central
-    runMergeTop_BVeto("SMu", 0, 30, 0, 0);
+//    runMergeTop_BVeto("SMu", 0, 30, 0, 0);
 //    runMergeTop_BVeto("SMu", 0, 30, 0, 30); // METcut of 30 GeV
     //systematics
-//    runMergeTop_BVeto("SMu", 1, 30, 0, 0);
-//    runMergeTop_BVeto("SMu", -1, 30, 0, 0);
-//    runMergeTop_BVeto("SMu", 3, 30, 0, 0);
-//    runMergeTop_BVeto("SMu", -3, 30, 0, 0);
+    runMergeTop_BVeto("SMu", 1, 30, 0, 0);
+    runMergeTop_BVeto("SMu", -1, 30, 0, 0);
+    runMergeTop_BVeto("SMu", 3, 30, 0, 0);
+    runMergeTop_BVeto("SMu", -3, 30, 0, 0);
   //  runMergeTop_BVeto("SMu", 5, 30, 0, 0);
   //  runMergeTop_BVeto("SMu", -5, 30, 0, 0);
-  //  runMergeTop_BVeto("SMu", 6, 30, 0, 0);
-  //  runMergeTop_BVeto("SMu", -6, 30, 0, 0);
+    runMergeTop_BVeto("SMu", 6, 30, 0, 0);
+    runMergeTop_BVeto("SMu", -6, 30, 0, 0);
 }
 
 void runMergeTop_BVeto(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut)
@@ -105,7 +105,7 @@ void runMergeTop_BVeto(TString lepSelection, int systematics, int jetPtCutMin, i
             continue;
         }
         else {
-            std::cout << "Doing histogram: " << hName << std::endl;
+         //   std::cout << "Doing histogram: " << hName << std::endl;
             TH1D *h1 = (TH1D*) f1->Get(hName.c_str()); 
             TH1D *h2 = (TH1D*) f2->Get(hName.c_str()); 
             TH1D *h3 = (TH1D*) f3->Get(hName.c_str()); 
