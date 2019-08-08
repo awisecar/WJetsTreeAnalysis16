@@ -266,12 +266,12 @@ class ZJetsAndDPS: public HistoSet {
     ~ZJetsAndDPS();
 
     // Other functions
-    string   CreateOutputFileName(bool, bool, int, bool, int, int, bool, bool , string pdfSet = "", int aa = -1);
+    string   CreateOutputFileName(bool, bool, int, bool, int, int, bool, bool);
     Int_t    Cut(Long64_t entry);
     Int_t    GetEntry(Long64_t entry);
     Long64_t LoadTree(Long64_t entry);
     void     Init(bool hasRecoInfo, bool hasGenInfo);
-    void     Loop(bool hasRecoInfo = 1, bool hasGenInfo = 0, int year = 2017, int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 1 ,   int doBJets = 0, int doPUStudy = -10,bool doFlat = 0, bool useRoch = 0, bool doVarWidth = 1, string pdfSet = "", int pdfMember = 0);
+    void     Loop(bool hasRecoInfo = 1, bool hasGenInfo = 0, int year = 2017, int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 1 ,   int doBJets = 0, int doPUStudy = -10,bool doFlat = 0, bool useRoch = 0, bool doVarWidth = 1);
     Bool_t   Notify();
     void     Show(Long64_t entry = -1);
     
