@@ -30,7 +30,7 @@ using namespace std;
 
 ClassImp(ZJetsAndDPS);
 
-void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth, string pdfSet, int pdfMember)
+void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth,  bool hasPartonInfo, string pdfSet, int pdfMember)
 {
 
     //--- Initialize PDF from LHAPDF if needed ---
@@ -230,6 +230,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     std::cout << "---> Switches -- " << std::endl;
     std::cout << "hasRecoInfo: " << hasRecoInfo << std::endl;
     std::cout << "hasGenInfo: " << hasGenInfo << std::endl;
+    std::cout << "hasPartonInfo: " << hasPartonInfo << std::endl;
     std::cout << "isData: " << isData << std::endl;
     std::cout << "lumiScale: " << lumiScale << std::endl;
     std::cout << "puScale: " << puScale << std::endl;
@@ -280,7 +281,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     double weightSum(0.), weightSumNoTopRew(0.);
 
     //--- Initialize the tree branches ---
-    Init(hasRecoInfo, hasGenInfo);
+    Init(hasRecoInfo, hasGenInfo, hasPartonInfo);
     if (fChain == 0) return;
     Long64_t nbytes(0), nb(0);
     Long64_t nentries = fChain->GetEntries();
@@ -448,8 +449,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // Reweighting MC for pileup discrepancy
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
-            // puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
-            puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
+            puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
+            // puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
             //cout << " puWeightFact " << puWeightFact << endl;
             if (puWeightFact > 10000 || puWeightFact < 0) puWeightFact = 1;
             weight *= puWeightFact;
@@ -578,7 +579,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         if (hasGenInfo) {
             
-            nTotGenPhotons = GLepClosePhotEta->size();
+            nTotGenPhotons = GPhotEta->size();
             nTotGenLeptons = GLepBareEta->size();
             
             // getting PDG ID for the neutrino
@@ -589,7 +590,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 // allow gen lepton to pass only if satisfies the necessary PDG ID
                 bool lepSelector( 
-                        doW && (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID)
+                        (doZ && abs(GLepBareId->at(i)) == LeptonID) || 
+                        ( doW && (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID) ) 
                     );
                 if (!lepSelector) continue ;
                 if (!GLepBarePrompt->at(i)) continue ;
@@ -616,9 +618,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                          // loop over all photons
                         for (unsigned short j(0); j < nTotGenPhotons; j++){
-                            if( abs(GLepClosePhotSt->at(j)) != 1 || GLepClosePhotPt->at(j) < 0.000001 ) continue;
+                            if( abs(GPhotSt->at(j)) != 1 || GPhotPt->at(j) < 0.000001 ) continue;
                             TLorentzVector tmpGenPho;
-                            tmpGenPho.SetPtEtaPhiM(GLepClosePhotPt->at(j), GLepClosePhotEta->at(j), GLepClosePhotPhi->at(j), 0.);
+                            tmpGenPho.SetPtEtaPhiM(GPhotPt->at(j), GPhotEta->at(j), GPhotPhi->at(j), 0.);
                             int used(0);
                             for (unsigned short k(0); k < usedGenPho.size(); k++){
                                 if (j == usedGenPho[k]) used = 1;
@@ -713,7 +715,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //          Retrieving jets           //
         //====================================//
-        bool passesJetCut(1); 
+        bool passesJetCut(1), passesEWKJetPt(0), passesEWKJetFwdEta(0);
         unsigned short nGoodJets(0),nGoodJets_20(0), nTotJets(0), nJetsAdd(0), nJetsNoDRCut(0), nJetsDR02Cut(0), nJetsPt100DR04(0);
         double jetsHT(0); 
         double jetsHT_20(0);
@@ -1044,6 +1046,10 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut) jetsNoDRCut.push_back(jet);
                     // PU MVA cut and dR 0.4 cut
 					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut && jetPassesdRCut) jets.push_back(jet);
+					
+					if ( jet.pt >= 50 && jetPassesdRCut) passesEWKJetPt = true ;
+					if ( fabs(jet.eta) > 2.4 && jetPassesdRCut) passesEWKJetFwdEta = true ;
+					
                 }
                 // for jetsPuMva
                 // rapidity, PF ID, PU ID, dR 0.4 cut, analysis pT cut (30 GeV)
@@ -1071,7 +1077,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //        Retrieving gen jets         //
         //====================================//
-        bool passesGenJetCut(1);
+        bool passesGenJetCut(1), passesGenEWKJetPt(0), passesGenEWKJetFwdEta(0);
         unsigned short nGoodGenJets(0), nGenJetsAdd(0), nGoodGenJets_20(0), nTotGenJets(0), nGenJetsNoDRCut(0), nGenJetsDR02Cut(0), nGenJetsPt100DR04(0);
         double genJetsHT(0);
         double genJetsHT_20(0);
@@ -1110,6 +1116,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 				if (genJetPassesdR02Cut) genJet.passDR02 = true;
 
                 if (genJetPassesdRCut && genJet.pt >= 10 && fabs(genJet.eta) <= 4.7){ // Apichart Z+jets uses 5.0
+                    passesGenEWKJetPt = (genJet.pt >= 50);
+                    passesGenEWKJetFwdEta = (fabs(genJet.eta) > 2.4);
                     genJets.push_back(genJet);                  
                     if (genJet.pt >=  15.) genJetsAdditional.push_back(genJet);
                 }		
@@ -1183,7 +1191,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             
             METpt = METPt->at(whichMet);
             TLorentzVector tmpVecMet;
-            tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), 0., METE->at(whichMet));
+            tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), METPz->at(whichMet), METE->at(whichMet));
             METphi = tmpVecMet.Phi();
 
             if (passesLeptonReq) {
@@ -1902,6 +1910,83 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
                     if ( fabs(genSecondJ.Eta()) >= j_Y_range[i] &&  fabs(genSecondJ.Eta()) < j_Y_range[i+1] )                                                genSecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(genSecondJ.Pt()), genWeight);
                 }
+
+    
+                //andrew -- turning off EWK histograms due to memory issues with ROOT
+                //they don't seem relevant for the alpha_s analysis, at least for the moment
+    //            //--- START EWK ---
+    //            if (passesGenEWKJetPt){
+    //                // met histos
+    //                //
+    //                //METEWK_Zinc2jet->Fill(METpt, weight);
+    //                //METphiEWK_Zinc2jet->Fill(METphi,  weight);
+    //                //MTEWK_Zinc2jet->Fill(MT,  weight);
+    //                //          
+    //                // jet histos
+    //                genZNGoodJetsEWK_Zexc->Fill(nGoodGenJets, genWeight);
+    //                genFirstJetPtEWK_Zinc2jet->Fill(genJets[0].pt, genWeight);
+    //                genFirstJetEtaEWK_Zinc2jet->Fill(genJets[0].eta, genWeight);
+    //                genFirstJetPhiEWK_Zinc2jet->Fill(genJets[0].phi, genWeight);
+
+
+    //                genSecondJetPtEWK_Zinc2jet->Fill(genJets[1].pt, genWeight);
+    //                genSecondJetEtaEWK_Zinc2jet->Fill(genJets[1].eta, genWeight);
+    //                genSecondJetPhiEWK_Zinc2jet->Fill(genJets[1].phi, genWeight);
+    //                int temIND(0), temIND1(1);
+    //                if (fabs(genJets[1].eta) > fabs(genJets[0].eta)){ 
+    //                    temIND = 1; 
+    //                    temIND1 = 0;
+    //                }
+    //                genForwardJetPtEWK_Zinc2jet->Fill(genJets[temIND].pt, genWeight);
+    //                genForwardJetEtaEWK_Zinc2jet->Fill(genJets[temIND].eta, genWeight);
+    //                genForwardJetPhiEWK_Zinc2jet->Fill(genJets[temIND].phi, genWeight);
+
+
+    //                genCentralJetPtEWK_Zinc2jet->Fill(genJets[temIND1].pt, genWeight);
+    //                genCentralJetEtaEWK_Zinc2jet->Fill(genJets[temIND1].eta, genWeight);
+    //                genCentralJetPhiEWK_Zinc2jet->Fill(genJets[temIND1].phi, genWeight);
+
+
+    //                genJetsHTEWK_Zinc2jet->Fill(genJetsHT, genWeight);
+    //                genJetsMassEWK_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+
+    //                // multi jet variables
+    //                genSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() + genSecondJ.Eta()),  genWeight);
+    //                genAbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta()) + fabs(genSecondJ.Eta()),  genWeight);
+    //                genTwoJetsPtDiffEWK_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
+    //                genptBalEWK_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+    //                gendEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() - genSecondJ.Eta()), genWeight);
+    //                genSpTJetsEWK_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+
+    //                // find jet properties of the third jet that is  between the two leading jets
+    //                int nGoodJetsBtw(0.);
+    //                double jetsHTBtw(0.);
+    //                if (nGenJetsAdd > 2){
+    //                    genThirdJetPtEWKadd_Zinc2jet->Fill(genJetsAdditional[2].pt, genWeight);
+    //                    genThirdJetEtaEWKadd_Zinc2jet->Fill(genJetsAdditional[2].eta, genWeight);
+    //                    genThirdJetPhiEWKadd_Zinc2jet->Fill(genJetsAdditional[2].phi, genWeight);
+    //                    for (unsigned short i(2); i < nGenJetsAdd; i++) {
+    //                        if (genJetsAdditional[i].eta < max(genJets[0].eta,genJets[1].eta) -0.5 && genJetsAdditional[i].eta > min(genJets[0].eta,genJets[1].eta) + 0.5){
+    //                            jetsHTBtw += genJetsAdditional[i].pt;
+    //                            nGoodJetsBtw++;
+    //                            genAllJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+    //                            genAllJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+    //                            genAllJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+    //                            if (nGoodJetsBtw == 1){
+    //                                genThirdJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+    //                                genThirdJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+    //                                genThirdJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+    //                            }
+    //                        }
+    //                    }
+    //                    genJetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, genWeight);
+    //                    genZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, genWeight);
+    //                }
+
+    //            }
+    //            //////////////////////// STOP EWK
                 
                 if (genZ.Pt() < 25){
                     genptBal_LowPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
@@ -2152,8 +2237,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             NVtx->Fill(EvtVtxCnt, weight);
 
             //NVtx->Fill(EvtInfo_NumVtx + 1000 , weight);
-            // if (fileName.find("Sherpa") != string::npos && fileName.find("UNFOL") == string::npos ) PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting * mcEveWeight_, 1);
-            if (fileName.find("Sherpa") != string::npos && fileName.find("UNFOL") == string::npos ) PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
+            if (fileName.find("Sherpa") != string::npos && fileName.find("UNFOL") == string::npos ) PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting * mcEveWeight_, 1);
             //Kadirelse PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
             else PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)), 1);
             if (nGoodJets == 0){
@@ -2579,6 +2663,175 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
                     if ( fabs(jets[1].eta) >= j_Y_range[i] &&  fabs(jets[1].eta) < j_Y_range[i+1]) SecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
                 }
+
+     //           //andrew -- see explanation for turning off EWK histos above
+     //           //--- V + 2 jets EWK histograms
+     //           if (passesEWKJetPt){
+     //               // met histos
+     //               METEWK_Zinc2jet->Fill(METpt, weight);
+     //               //koMETphiEWK_Zinc2jet->Fill(METphi,  weight);
+     //               MTEWK_Zinc2jet->Fill(MT,  weight);
+     //               
+     //               // jet histos
+     //               ZNGoodJetsEWK_Zexc->Fill(nGoodJets, weight);
+     //               FirstJetPtEWK_Zinc2jet->Fill(jets[0].pt, weight);
+     //               FirstJetEtaEWK_Zinc2jet->Fill(jets[0].eta, weight);
+     //               FirstJetPhiEWK_Zinc2jet->Fill(jets[0].phi, weight);
+     //               
+     //               
+     //               SecondJetPtEWK_Zinc2jet->Fill(jets[1].pt, weight);
+     //               SecondJetEtaEWK_Zinc2jet->Fill(jets[1].eta, weight);
+     //               SecondJetPhiEWK_Zinc2jet->Fill(jets[1].phi, weight);
+     //               
+     //               int temIND (0), temIND1(1);
+     //               if (fabs(jets[1].eta) > fabs(jets[0].eta)){
+     //                   temIND = 1;
+     //                   temIND1 = 0;
+     //               }
+     //               ForwardJetPtEWK_Zinc2jet->Fill(jets[temIND].pt, weight);
+     //               ForwardJetEtaEWK_Zinc2jet->Fill(jets[temIND].eta, weight);
+     //               ForwardJetPhiEWK_Zinc2jet->Fill(jets[temIND].phi, weight);
+     //               
+     //               CentralJetPtEWK_Zinc2jet->Fill(jets[temIND1].pt, weight);
+     //               CentralJetEtaEWK_Zinc2jet->Fill(jets[temIND1].eta, weight);
+     //               CentralJetPhiEWK_Zinc2jet->Fill(jets[temIND1].phi, weight);
+     //               
+     //               JetsHTEWK_Zinc2jet->Fill(jetsHT, weight);
+     //               JetsMassEWK_Zinc2jet->Fill(jet1Plus2.M(), weight);
+     //               
+     //               // multi jet variables
+     //               SumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() + secondJ.Eta()),  weight);
+     //               AbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta()) + fabs(secondJ.Eta()),  weight);
+     //               TwoJetsPtDiffEWK_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+     //               ptBalEWK_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+     //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //               dEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
+     //               SpTJetsEWK_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+     //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //               
+     //               // find jet properties of the third jet that is between the two leading jets
+     //               int nGoodJetsBtw(0.);
+     //               double jetsHTBtw(0.);
+     //               if (nJetsAdd > 2){
+     //                   ThirdJetPtEWKadd_Zinc2jet->Fill(jetsAdditional[2].pt, weight);
+     //                   ThirdJetEtaEWKadd_Zinc2jet->Fill(jetsAdditional[2].eta, weight);
+     //                   ThirdJetPhiEWKadd_Zinc2jet->Fill(jetsAdditional[2].phi, weight);
+     //                   
+     //                   for (unsigned short i(2); i < nJetsAdd; i++){
+     //                       int coutBtw = 0 ;
+     //                       if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
+     //                           && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5){
+     //                           jetsHTBtw += jetsAdditional[i].pt ;
+     //                           nGoodJetsBtw++;
+     //                           AllJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
+     //                           AllJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
+     //                           AllJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
+     //                           if (coutBtw == 0){
+     //                               ThirdJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
+     //                               ThirdJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
+     //                               ThirdJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
+     //                               coutBtw = 1;
+     //                           }
+     //                       }
+     //                   }
+     //               }
+     //               ZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, weight);
+     //               JetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, weight);
+     //               
+     //               // at least one forward jet
+     //               if (passesEWKJetFwdEta){
+     //                   METEWKfwd_Zinc2jet->Fill(METpt,  weight);
+     //                   //KoMETphiEWKfwd_Zinc2jet->Fill(METphi,  weight);
+     //                   MTEWKfwd_Zinc2jet->Fill(MT,  weight);
+     //                   
+     //                   // jet histos
+     //                   ZNGoodJetsEWKfwd_Zexc->Fill(nGoodJets, weight);
+     //                   FirstJetPtEWKfwd_Zinc2jet->Fill(jets[0].pt, weight);
+     //                   FirstJetEtaEWKfwd_Zinc2jet->Fill(jets[0].eta, weight);
+     //                   FirstJetPhiEWKfwd_Zinc2jet->Fill(jets[0].phi, weight);
+     //                   
+     //                   SecondJetPtEWKfwd_Zinc2jet->Fill(jets[1].pt, weight);
+     //                   SecondJetEtaEWKfwd_Zinc2jet->Fill(jets[1].eta, weight);
+     //                   SecondJetPhiEWKfwd_Zinc2jet->Fill(jets[1].phi, weight);
+     //                   
+     //                   JetsHTEWKfwd_Zinc2jet->Fill(jetsHT, weight);
+     //                   JetsMassEWKfwd_Zinc2jet->Fill(jet1Plus2.M(), weight);
+     //                   
+     //                   // multi jet variables
+     //                   SumEtaJetsEWKfwd_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(), weight);
+     //                   TwoJetsPtDiffEWKfwd_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+     //                   ptBalEWKfwd_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+     //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //                   dEtaJetsEWKfwd_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
+     //                   SpTJetsEWKfwd_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+     //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //                   
+     //                   
+     //               }//--- end at least one forward jet
+     //               
+     //               if (jet1Plus2.M() > 1000.){
+     //                   METEWKmjj_Zinc2jet->Fill(METpt,  weight);
+     //                   //KoMETphiEWKmjj_Zinc2jet->Fill(METphi,  weight);
+     //                   MTEWKmjj_Zinc2jet->Fill(MT,  weight);
+     //                   short nGoodJetsAdd(nJetsAdd-2);
+     //                   double jetsHTAdd(0);
+     //                   // jet histos
+     //                   ZNGoodJetsEWKmjj_Zexc->Fill(nGoodJetsAdd, weight);
+     //                   FirstJetPtEWKmjj_Zinc2jet->Fill(jets[0].pt, weight);
+     //                   FirstJetEtaEWKmjj_Zinc2jet->Fill(jets[0].eta, weight);
+     //                   FirstJetPhiEWKmjj_Zinc2jet->Fill(jets[0].phi, weight);
+     //                   
+     //                   
+     //                   SecondJetPtEWKmjj_Zinc2jet->Fill(jets[1].pt, weight);
+     //                   SecondJetEtaEWKmjj_Zinc2jet->Fill(jets[1].eta, weight);
+     //                   SecondJetPhiEWKmjj_Zinc2jet->Fill(jets[1].phi, weight);
+     //                   
+     //                   JetsHTEWKmjj_Zinc2jet->Fill(jetsHT, weight);
+     //                   JetsMassEWKmjj_Zinc2jet->Fill(jet1Plus2.M(), weight);
+     //                   
+     //                   // multi jet variables
+     //                   SumEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(),  weight);
+     //                   TwoJetsPtDiffEWKmjj_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+     //                   ptBalEWKmjj_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+     //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //                   dEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() - secondJ.Eta(), weight);
+     //                   SpTJetsEWKmjj_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+     //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+     //                   
+     //                   // find jet properties of the third jet that is  between the two leading jets
+     //                   int nGoodJetsmjjBtw(0.);
+     //                   if (nJetsAdd > 2){
+     //                       double jetsHTmjjBtw(0.);
+     //                       for (unsigned short i(2); i < nJetsAdd; i++){
+     //                           if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
+     //                               && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5 ){
+     //                               jetsHTmjjBtw += jetsAdditional[i].pt ;
+     //                               nGoodJetsmjjBtw++;
+     //                           }
+     //                           jetsHTAdd += jetsAdditional[i].pt ;
+     //                       }
+     //                       
+     //                       ThirdJetPtEWKmjj_Zinc3jet->Fill(jetsAdditional[2].pt, weight);
+     //                       JetsHTEWKmjjAdd_Zinc2jet->Fill(jetsHTAdd, weight);
+     //                       TLorentzVector thirdJAdd;
+     //                       thirdJAdd.SetPtEtaPhiE(jetsAdditional[2].pt, jetsAdditional[2].eta, jetsAdditional[2].phi, jetsAdditional[2].energy);
+     //                       double tempRapidiy3Jet = thirdJAdd.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
+     //                       ThirdJetEtaEWKmjj_Zinc3jet->Fill(tempRapidiy3Jet, weight);
+     //                   }
+     //               }//--- end dijet mass > 1000
+     //               
+     //               //--- higher jet properties
+     //               if (nGoodJets > 2){
+     //                   METEWK_Zinc3jet->Fill(METpt, weight);
+     //                   //koMETphiEWK_Zinc3jet->Fill(METphi, weight);
+     //                   MTEWK_Zinc3jet->Fill(MT, weight);
+     //                   
+     //                   TLorentzVector thirdJ;
+     //                   thirdJ.SetPtEtaPhiE(jets[2].pt, jets[2].eta, jets[2].phi, jets[2].energy);
+     //                   double tempRapidiy3Jet = thirdJ.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
+     //                   EtaThirdJetsEWK_Zinc3jet->Fill(tempRapidiy3Jet, weight);
+     //               }
+     //           } ///END (passesEWKJetPt) loop
                 
                 for (unsigned short j(0); j < nGoodJets; j++){
                     AllJetPt_Zinc2jet->Fill(jets[j].pt, weight);
@@ -3673,7 +3926,7 @@ Long64_t ZJetsAndDPS::LoadTree(Long64_t entry){
     return centry;
 }
 
-void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
+void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     // The Init() function is called when the selector needs to initialize
     // a new tree or chain. Typically here the branch addresses and branch
     // pointers of the tree will be set.
@@ -3683,14 +3936,10 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     // (once per file to be processed).
 
 
-    // Set object pointers -----
+    // Set object pointer
 
     EvtWeights = 0;
     mcSherpaWeights_ = 0 ;
-
-    TrigHltMu = 0;
-    TrigMET = 0;
-    TrigMETBit = 0;
     
     /////////////////////////////
     // GENERATOR VARIABLES
@@ -3702,32 +3951,18 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     GLepBareId = 0;
     GLepBareSt = 0;
     GLepBarePrompt = 0;
-
-    GLepClosePhotPt = 0;
-    GLepClosePhotEta = 0;
-    GLepClosePhotPhi = 0;
-    GLepClosePhotE = 0;
-    GLepClosePhotM = 0;
-    GLepClosePhotId = 0;
-    GLepClosePhotMother0Id = 0;
-    GLepClosePhotMotherCnt = 0;
-    GLepClosePhotSt = 0;
-
-    GMETPt = 0;
-    GMETPx = 0;
-    GMETPy = 0;
-    GMETE = 0;
-    GMETPhi = 0;
+    
+    GPhotPt = 0;
+    GPhotEta = 0;
+    GPhotPhi = 0;
+    GPhotE = 0;
+    GPhotMotherId = 0;
+    GPhotSt = 0;
 
     GJetAk04Pt = 0;
     GJetAk04Eta = 0;
     GJetAk04Phi = 0;
     GJetAk04E = 0;
-
-    GJetAk08Pt = 0;
-    GJetAk08Eta = 0;
-    GJetAk08Phi = 0;
-    GJetAk08E = 0;
 
     /////////////////////////////
     // RECO VARIABLES
@@ -3735,203 +3970,123 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     MuPt = 0;
     MuEta = 0;
     MuPhi = 0;
-    MuE = 0;
-    MuIdLoose = 0;
-    MuIdMedium = 0;
-    MuIdTight = 0;
-    MuCh = 0;
     MuVtxZ = 0;
-    MuDxy = 0;
+    MuE = 0;
+    MuCh = 0;
+    MuIdTight = 0;
+    TrigHltMu = 0;
     MuPfIso = 0;
-    MuDz = 0;
-    MuHltTrgPath1 = 0;
-    MuHltTrgPath2 = 0;
-    
-    METPt = 0;
-    METPx = 0;
-    METPy = 0;
-    METE = 0;
-    METPhi = 0;
-    METFilterPath1 = 0;
-    METFilterPath2 = 0;
-    METFilterPath3 = 0;
-    METFilterPath4 = 0;
-    METFilterPath5 = 0;
-    METFilterPath6 = 0;
-    METFilterPath7 = 0;
-    
+
+    METPt = 0 ;
+    METPx = 0 ;
+    METPy = 0 ;
+    METPz = 0 ;
+    METE = 0 ;
+    TrigMET = 0;
+    TrigMETBit = 0;
+
     JetAk04Pt = 0;   
     JetAk04Eta = 0;   
     JetAk04Phi = 0;   
     JetAk04E = 0;   
     JetAk04Id = 0;   
     JetAk04PuId = 0; 
-    JetAk04PuIdLoose = 0; 
-    JetAk04PuIdMedium = 0; 
-    JetAk04PuIdTight = 0; 
     JetAk04PuMva = 0;   
     JetAk04BDiscCisvV2 = 0;
     JetAk04HadFlav = 0;
-    JetAk04JecUncUp = 0;
-    JetAk04JecUncDwn = 0;
+     
 
-    JetAk08Pt = 0;   
-    JetAk08Eta = 0;   
-    JetAk08Phi = 0;   
-    JetAk08E = 0;   
-    JetAk08Id = 0;     
-    JetAk08BDiscCisvV2 = 0;
-    JetAk08HadFlav = 0;
-    JetAk08JecUncUp = 0;
-    JetAk08JecUncDwn = 0;
-
-    // Set branch addresses and branch pointers -----
-
-    if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+    // Set branch addresses and branch pointers
     fCurrent = -1;
     fChain->SetMakeClass(1);
+    
+    if (fileName.find("WJets") != string::npos && fileName.find("FxFx") != string::npos){
+        fChain->SetBranchAddress("GNup", &GNup, &b_GNup);
+    }
 
     if (hasRecoInfo){
-
-        // General variables
-        // used for pileup, pileup reweighting for MC, etc.
         fChain->SetBranchAddress("EvtVtxCnt", &EvtVtxCnt, &b_EvtVtxCnt);
-        fChain->SetBranchAddress("EvtPuCntObs", &EvtPuCntObs, &b_EvtPuCntObs);
         fChain->SetBranchAddress("EvtPuCntTruth", &EvtPuCntTruth, &b_EvtPuCntTruth);
-        // contains main weights for MC
-        fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
-        // old method for storing trigger bit information
-        fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
-        fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
-        fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
-        
-        // Muons, Muon HLT Trigger Paths
-        fChain->SetBranchAddress("MuPt", &MuPt, &b_MuPt);
-        fChain->SetBranchAddress("MuEta", &MuEta, &b_MuEta);
-        fChain->SetBranchAddress("MuPhi", &MuPhi, &b_MuPhi);
-        fChain->SetBranchAddress("MuE", &MuE, &b_MuE);
-        fChain->SetBranchAddress("MuIdLoose", &MuIdLoose, &b_MuIdLoose);
-        fChain->SetBranchAddress("MuIdMedium", &MuIdMedium, &b_MuIdMedium);
-        fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
-        fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
-        fChain->SetBranchAddress("MuVtxZ", &MuVtxZ, &b_MuVtxZ);
-        fChain->SetBranchAddress("MuDxy", &MuDxy, &b_MuDxy);
-        fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
-        fChain->SetBranchAddress("MuDz", &MuDz, &b_MuDz);
-        fChain->SetBranchAddress("MuHltTrgPath1", &MuHltTrgPath1, &b_MuHltTrgPath1);
-        fChain->SetBranchAddress("MuHltTrgPath2", &MuHltTrgPath2, &b_MuHltTrgPath2);
-        
-        //MET, MET filters
+        fChain->SetBranchAddress("EvtPuCntObs", &EvtPuCntObs, &b_EvtPuCntObs);
+
+        if (leptonFlavor != "Electrons"){
+            fChain->SetBranchAddress("MuPt", &MuPt, &b_MuPt);
+            fChain->SetBranchAddress("MuEta", &MuEta, &b_MuEta);
+            fChain->SetBranchAddress("MuPhi", &MuPhi, &b_MuPhi);
+            fChain->SetBranchAddress("MuE", &MuE, &b_MuE);
+            fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
+            fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
+            fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
+            fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
+            fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
+        }
+
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
         fChain->SetBranchAddress("METPy", &METPy, &b_METPy);
+        fChain->SetBranchAddress("METPz", &METPz, &b_METPz);
         fChain->SetBranchAddress("METE", &METE, &b_METE);
-        fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
-        fChain->SetBranchAddress("METFilterPath1", &METFilterPath1, &b_METFilterPath1);
-        fChain->SetBranchAddress("METFilterPath2", &METFilterPath2, &b_METFilterPath2);
-        fChain->SetBranchAddress("METFilterPath3", &METFilterPath3, &b_METFilterPath3);
-        fChain->SetBranchAddress("METFilterPath4", &METFilterPath4, &b_METFilterPath4);
-        fChain->SetBranchAddress("METFilterPath5", &METFilterPath5, &b_METFilterPath5);
-        fChain->SetBranchAddress("METFilterPath6", &METFilterPath6, &b_METFilterPath6);
-        fChain->SetBranchAddress("METFilterPath7", &METFilterPath7, &b_METFilterPath7);
-        
-        //PF Jets - AK4
+        fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
+        fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
+
+        fChain->SetBranchAddress("JetAk04E", &JetAk04E, &b_JetAk04E);
         fChain->SetBranchAddress("JetAk04Pt", &JetAk04Pt, &b_JetAk04Pt);
         fChain->SetBranchAddress("JetAk04Eta", &JetAk04Eta, &b_JetAk04Eta);
         fChain->SetBranchAddress("JetAk04Phi", &JetAk04Phi, &b_JetAk04Phi);
-        fChain->SetBranchAddress("JetAk04E", &JetAk04E, &b_JetAk04E);
         fChain->SetBranchAddress("JetAk04Id", &JetAk04Id, &b_JetAk04Id);
         fChain->SetBranchAddress("JetAk04PuId", &JetAk04PuId, &b_JetAk04PuId);
-        fChain->SetBranchAddress("JetAk04PuIdLoose", &JetAk04PuIdLoose, &b_JetAk04PuIdLoose);
-        fChain->SetBranchAddress("JetAk04PuIdMedium", &JetAk04PuIdMedium, &b_JetAk04PuIdMedium);
-        fChain->SetBranchAddress("JetAk04PuIdTight", &JetAk04PuIdTight, &b_JetAk04PuIdTight);
         fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
         fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
-	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
-        fChain->SetBranchAddress("JetAk04JecUncUp", &JetAk04JecUncUp, &b_JetAk04JecUncUp); 
-        fChain->SetBranchAddress("JetAk04JecUncDwn", &JetAk04JecUncDwn, &b_JetAk04JecUncDwn); 
-
-        //PF Jets - AK8
-        fChain->SetBranchAddress("JetAk08Pt", &JetAk08Pt, &b_JetAk08Pt);
-        fChain->SetBranchAddress("JetAk08Eta", &JetAk08Eta, &b_JetAk08Eta);
-        fChain->SetBranchAddress("JetAk08Phi", &JetAk08Phi, &b_JetAk08Phi);
-        fChain->SetBranchAddress("JetAk08E", &JetAk08E, &b_JetAk08E);
-        fChain->SetBranchAddress("JetAk08Id", &JetAk08Id, &b_JetAk08Id);
-        fChain->SetBranchAddress("JetAk08BDiscCisvV2", &JetAk08BDiscCisvV2, &b_JetAk08BDiscCisvV2); 
-	    fChain->SetBranchAddress("JetAk08HadFlav", &JetAk08HadFlav, &b_JetAk08HadFlav); 
-        fChain->SetBranchAddress("JetAk08JecUncUp", &JetAk08JecUncUp, &b_JetAk08JecUncUp); 
-        fChain->SetBranchAddress("JetAk08JecUncDwn", &JetAk08JecUncDwn, &b_JetAk08JecUncDwn); 
-
-    } //end hasRecoInfo
+	fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
+    }
 
     if (hasGenInfo){
-
-        //Generator level leptons, not-dressed
         fChain->SetBranchAddress("GLepBarePt", &GLepBarePt, &b_GLepBarePt);
         fChain->SetBranchAddress("GLepBareEta", &GLepBareEta, &b_GLepBareEta);
         fChain->SetBranchAddress("GLepBarePhi", &GLepBarePhi, &b_GLepBarePhi);
         fChain->SetBranchAddress("GLepBareE", &GLepBareE, &b_GLepBareE);
-        fChain->SetBranchAddress("GLepBareId", &GLepBareId, &b_GLepBareId);
-        fChain->SetBranchAddress("GLepBareSt", &GLepBareSt, &b_GLepBareSt);
-        fChain->SetBranchAddress("GLepBarePrompt", &GLepBarePrompt, &b_GLepBarePrompt);
 
-        //Photons in the vicinity of the leptons
-        fChain->SetBranchAddress("GLepClosePhotPt", &GLepClosePhotPt, &b_GLepClosePhotPt);
-        fChain->SetBranchAddress("GLepClosePhotEta", &GLepClosePhotEta, &b_GLepClosePhotEta);
-        fChain->SetBranchAddress("GLepClosePhotPhi", &GLepClosePhotPhi, &b_GLepClosePhotPhi);
-        fChain->SetBranchAddress("GLepClosePhotE", &GLepClosePhotE, &b_GLepClosePhotE);
-        fChain->SetBranchAddress("GLepClosePhotM", &GLepClosePhotM, &b_GLepClosePhotM);
-        fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
-        fChain->SetBranchAddress("GLepClosePhotMother0Id", &GLepClosePhotMother0Id, &b_GLepClosePhotMother0Id);
-        fChain->SetBranchAddress("GLepClosePhotMotherCnt", &GLepClosePhotMotherCnt, &b_GLepClosePhotMotherCnt);
-        fChain->SetBranchAddress("GLepClosePhotSt", &GLepClosePhotSt, &b_GLepClosePhotSt);
-
-        //GEN-level MET
-        fChain->SetBranchAddress("GMETPt", &GMETPt, &b_GMETPt);
-        fChain->SetBranchAddress("GMETPx", &GMETPx, &b_GMETPx);
-        fChain->SetBranchAddress("GMETPy", &GMETPy, &b_GMETPy);
-        fChain->SetBranchAddress("GMETE", &GMETE, &b_GMETE);
-        fChain->SetBranchAddress("GMETPhi", &GMETPhi, &b_GMETPhi);
-
-        //Gen Jets, AK4
         fChain->SetBranchAddress("GJetAk04Pt", &GJetAk04Pt, &b_GJetAk04Pt);
         fChain->SetBranchAddress("GJetAk04Eta", &GJetAk04Eta, &b_GJetAk04Eta);
         fChain->SetBranchAddress("GJetAk04Phi", &GJetAk04Phi, &b_GJetAk04Phi);
         fChain->SetBranchAddress("GJetAk04E", &GJetAk04E, &b_GJetAk04E);
 
-        //Gen Jets, AK8
-        fChain->SetBranchAddress("GJetAk08Pt", &GJetAk08Pt, &b_GJetAk08Pt);
-        fChain->SetBranchAddress("GJetAk08Eta", &GJetAk08Eta, &b_GJetAk08Eta);
-        fChain->SetBranchAddress("GJetAk08Phi", &GJetAk08Phi, &b_GJetAk08Phi);
-        fChain->SetBranchAddress("GJetAk08E", &GJetAk08E, &b_GJetAk08E);
+        if (fileName.find("Sherpa") != string::npos || 
+                (fileName.find("WJets") != string::npos && hasGenInfo ) || 
+                fileName.find("Powheg") != string::npos || 
+                fileName.find("P8") != string::npos || 
+                fileName.find("TopReweighting") != string::npos ||
+                fileName.find("Z2") != string::npos){
 
-        // Other stuff
-        // if (fileName.find("WJets") != string::npos && fileName.find("FxFx") != string::npos){
-        //  fChain->SetBranchAddress("GNup", &GNup, &b_GNup);
-        // }
-        // if (fileName.find("Sherpa") != string::npos || 
-        //         (fileName.find("WJets") != string::npos && hasGenInfo ) || 
-        //         fileName.find("Powheg") != string::npos || 
-        //         fileName.find("P8") != string::npos || 
-        //         fileName.find("TopReweighting") != string::npos ||
-        //         fileName.find("Z2") != string::npos){
+            fChain->SetBranchAddress("GLepBareId", &GLepBareId, &b_GLepBareId);
+            fChain->SetBranchAddress("GLepBareSt", &GLepBareSt, &b_GLepBareSt);
+            fChain->SetBranchAddress("GLepBarePrompt", &GLepBarePrompt, &b_GLepBarePrompt);
             
-        //     if (fileName.find("MiNLO") != string::npos || 
-        //             fileName.find("mcEveWeight") != string::npos || 
-        //             fileName.find("HepMC") != string::npos){
-        //         fChain->SetBranchAddress("mcEveWeight_", &mcEveWeight_, &b_mcEveWeight_);
-        //     }
-        //     if (fileName.find("HepMC") != string::npos){
-        //         fChain->SetBranchAddress("mcSherpaSumWeight3_", &mcSherpaSumWeight3_, &b_mcSherpaSumWeight3_);
-        //         fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
-        //     }
-        //     if (fileName.find("Sherpa2") != string::npos){
-        //         fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
-        //     }
-        // }
+            fChain->SetBranchAddress("GPhotPt", &GPhotPt, &b_GPhotPt);
+            fChain->SetBranchAddress("GPhotEta", &GPhotEta, &b_GPhotEta);
+            fChain->SetBranchAddress("GPhotPhi", &GPhotPhi, &b_GPhotPhi);
+            fChain->SetBranchAddress("GPhotE", &GPhotE, &b_GPhotE);
+            fChain->SetBranchAddress("GPhotMotherId", &GPhotMotherId, &b_GPhotMotherId);
+            fChain->SetBranchAddress("GPhotSt", &GPhotSt, &b_GPhotSt);
+            
+            if (fileName.find("MiNLO") != string::npos || 
+                    fileName.find("mcEveWeight") != string::npos || 
+                    fileName.find("HepMC") != string::npos){
+                fChain->SetBranchAddress("mcEveWeight_", &mcEveWeight_, &b_mcEveWeight_);
+            }
 
-    } //end hasGenInfo
+            if (fileName.find("HepMC") != string::npos){
+                fChain->SetBranchAddress("mcSherpaSumWeight3_", &mcSherpaSumWeight3_, &b_mcSherpaSumWeight3_);
+                fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
+            }
+            
+            if (fileName.find("Sherpa2") != string::npos){
+                fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
+            }
 
+        }
+    }
     Notify();
     cout << "Branches are properly initialized." << endl;
 }
