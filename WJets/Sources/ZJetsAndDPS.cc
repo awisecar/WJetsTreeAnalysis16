@@ -1,7 +1,6 @@
 #define PI 3.14159265359
-#define BARREDEPROGRESSION 0
 #define DEBUG 0
-#define PRINTEVENT 0
+#define PRINTEVENTINFO 1
 
 #include <TH2.h>
 #include <TStyle.h>
@@ -98,13 +97,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
                 table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
-                
                 LeptID = SF_Muon_TightID_ReReco;
                 LeptIso = SF_Muon_TightISO_ReReco;
                 LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
             }
         }
-
         if (year == 2017){
             // just use 2016 for now
             table TableJESUncertainties("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
@@ -114,7 +111,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
                 table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
-                
                 LeptID = SF_Muon_TightID_ReReco;
                 LeptIso = SF_Muon_TightISO_ReReco;
                 LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
@@ -182,7 +178,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
 
 
- if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+    if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     //---  Retreive the NVtx comparison histogram to have the exact weight to re-weight for pile-up
     // and have a flat NVtx distribution
     if (doFlat){
@@ -259,31 +255,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         nentries = 10000;
         std::cout << "We plan to run on 100000 events" << std::endl;
     }
-    //------------------------------------
-    
-    //--- get weight and bin edges for systematic for reweighted response
-    // vector<double> vecFwHT1; vector<double> binEdgeHT1;
-    // vector<double> vecFwHT2; vector<double> binEdgeHT2;
-    // vector<double> vecFwRap12; vector<double> binEdgeRap12;
-    // vector<double> vecFwRapFB; vector<double> binEdgeRapFB;
-    // if (doRespSyst){
-    //     vecFwHT1     = getFW("MeanNJetsHT_Zinc1jet");
-    //     binEdgeHT1   = getXBin("MeanNJetsHT_Zinc1jet");
-    //     vecFwHT2     = getFW("MeanNJetsHT_Zinc2jet");
-    //     binEdgeHT2   = getXBin("MeanNJetsHT_Zinc2jet");
-    //     vecFwRap12   = getFW("MeanNJetsdRapidity_Zinc2jet");
-    //     binEdgeRap12 = getXBin("MeanNJetsdRapidity_Zinc2jet");
-    //     vecFwRapFB   = getFW("MeanNJetsdRapidityFB_Zinc2jet");
-    //     binEdgeRapFB = getXBin("MeanNJetsdRapidityFB_Zinc2jet");
-    // }
-   
-    //------------------------------------
 
-    //--- Begin Loop All Entries --
+    // --- Begin Loop All Entries ---
     std::cout << "-----> Begin loop on all entries! " << std::endl;
     std::cout << "-----> Total number of entries: " << nentries << std::endl;
+    // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
+    int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
     // for (Long64_t jentry(0); jentry < 300000; jentry++){
+
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << ", PRINTEVENTINFO: Printing event info for jentry == 1001!" << endl;
+
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
@@ -292,14 +274,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         nbytes += nb;
         nEvents++;
 
-        if (BARREDEPROGRESSION && !DEBUG) barre_de_progression((int) 100*(jentry+1)/nentries);
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //         Continue Statements        //
         //====================================//
         //if (jentry % 2 == 0) continue;
         //if (EvtInfo_NumVtx <= 14) continue;
-        //if (PRINTEVENT && EvtInfo_RunNum != 190733) continue ;
 
         //=======================================================================================================//
 
@@ -332,12 +312,24 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //---
 	
         if (hasRecoInfo){
+
+            // old way to do trigger requirements
+            // if (energy == "13TeV" && doW) {
+            //     if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) countEventpassTrig++;
+            //     else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) countEventpassTrig++;
+            // }
+
+            // new way
             if (energy == "13TeV" && doW) {
-                if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) countEventpassTrig++;
-                else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) countEventpassTrig++;
+                // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
+                if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
+                // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27_v9
+                if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
             }
+
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
         }
+
         //==========================================================================================================//
         //--- MET FILTERING ---
         //--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
@@ -345,45 +337,65 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         bool passMETFILTER(true);
         // MET filters for data
         if (hasRecoInfo && isData && doMETFiltering){
-            if (year == 2016){
+            // if (year == 2016){
+            //     // old way
+            //     passMETFILTER = (
+            //                 (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+            //                 && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+            //                 && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+            //                 && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+            //                 && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+            //                 && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
+            //                 && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+            //                 && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+            //     );
+            //     if (passMETFILTER) nEventsPassMETFilter++ ;
+            // }
+            if (year == 2017){
+                // new way
                 passMETFILTER = (
-                            (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                            && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                            && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                            && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                            && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                            && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
-                            && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                            && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+                    (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
+                    && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
+                    && (METFilterPath3->at(0) == 1)  //Flag_globalSuperTightHalo2016Filter
+                    && (METFilterPath4->at(0) == 1)  //Flag_EcalDeadCellTriggerPrimitiveFilter
+                    && (METFilterPath5->at(0) == 1)  //Flag_goodVertices
+                    && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
+                    && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                 );
                 if (passMETFILTER) nEventsPassMETFilter++ ;
             }
-            if (year == 2017){
-                // MET filters not yet implemented for 2017
-                passMETFILTER = true;
-                if (passMETFILTER) nEventsPassMETFilter++ ;
-            }
         }
+
         // MET filters for reco MC
         if (hasRecoInfo && !isData && doMETFiltering){
-            if (year == 2016){
+            // if (year == 2016){
+            //     // old way
+            //     passMETFILTER = (
+            //                         (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+            //                     && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+            //                     && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+            //                     && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+            //                     && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+            //                     && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+            //                     && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+            //     );
+            //     if (passMETFILTER) nEventsPassMETFilter++ ;
+            // }
+            if (year == 2017){
+                // new way
                 passMETFILTER = (
-                                    (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                                && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                                && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                                && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                                && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                                && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                                && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+                    (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
+                    && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
+                    && (METFilterPath3->at(0) == 1)  //Flag_globalSuperTightHalo2016Filter
+                    && (METFilterPath4->at(0) == 1)  //Flag_EcalDeadCellTriggerPrimitiveFilter
+                    && (METFilterPath5->at(0) == 1)  //Flag_goodVertices
+                    && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
+                    && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                 );
                 if (passMETFILTER) nEventsPassMETFilter++ ;
             }
-            if (year == 2017){
-                std::cout << "MET filters not yet implemented for 2017!" << std::endl;
-                passMETFILTER = true;
-                if (passMETFILTER) nEventsPassMETFilter++ ;
-            }
         }
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: Passed MET Filter? " <<  passMETFILTER << endl;
 
 		//=======================================================================================================//
 
@@ -432,15 +444,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // Reco muon cuts here!
             if (doMuons){
                 nTotLeptons = MuEta->size();
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: MuEta->size() = " << MuEta->size() << endl;
                 
                 // Trigger requirement ---
                 if (energy == "13TeV" && doW) {
-                    // Trigger labeling listed in the trigger2016.h, trigger2017.h fiels in the Baobabs/src dir (?)
-                    // for WJets 13 TeV 2016, triggers should be HLTIsoMu24 || HLTIsoTkMu24
-                    if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
-                    // for WJets 13 TeV 2017, trigger should be HLT_IsoMu27
-                    else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) eventTrigger = true;
+                    // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
+                    if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
+                    // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27_v9
+                    if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
                 }
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: eventTrigger = " << eventTrigger << endl;
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
@@ -455,7 +468,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
                     bool muPassesEtaCut(doW && fabs(mu.eta) <= 2.4);
                     // ID cut for muon
-                    bool muPassesIdCut((MuIdTight->at(i) & 1)); // this is for tight ID --> odd number
+                    bool muPassesIdCut( MuIdTight->at(i) == 1 ); // muon tight ID
                     // Iso cut for muon
                     bool muPassesIsoCut(doW && MuPfIso->at(i) < 0.15);  
                     // Iso cut for muon (for doing QCD background)
@@ -478,7 +491,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }//End of loop over all the muons
             }
             
- if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
             //------ DO ELECTRONS -------
             if (doElectrons) {
@@ -501,10 +514,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             }
             selLeptons = tempVec ;
 
- if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         }// end has reco info for leptons
 
- if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
         //=======================================================================================================//
         //       Retrieving gen leptons        //
@@ -520,9 +533,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         if (hasGenInfo) {
             
-            nTotGenPhotons = GLepClosePhotEta->size();
             nTotGenLeptons = GLepBareEta->size();
-            
+            nTotGenPhotons = GLepClosePhotEta->size();
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GLepBareEta->size() = " << GLepBareEta->size() << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GLepClosePhotEta->size() = " << GLepClosePhotEta->size() << endl;
+
             // getting PDG ID for the neutrino
             if (doW) nuID = 14;
             else if (doW && LeptonID == 11) nuID = 12;
@@ -589,7 +605,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             } //end loop over gen leptons
             nGenLeptons = genLeptons.size();
             
-if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             //-- determine if the event passes the leptons requirements
             // for WJets, should have a muon and a neutrino, for ZJets, should have two muons or two electrons
             if (nGenLeptons >= 2){
@@ -618,6 +634,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     
                     //MT cut and MET cut on the neutrino
                     if (genMT >= MTCut && genLepton2.pt >= METcut) passesGenLeptonCut = 1;
+
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: genMT = " << genMT << endl;
                 }
 
                 //----- For Z+jets -------
@@ -652,6 +670,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             countEventpassLepReq++;
         }
 
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: passesLeptonReq = " << passesLeptonReq << endl;
+
         //=======================================================================================================//
         //          Retrieving jets           //
         //====================================//
@@ -678,8 +698,10 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         if (hasRecoInfo) {
             int countNJetsVSBeta[10] = {0};
             nTotJets = JetAk04Eta->size();
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: JetAk04Eta->size() = " << JetAk04Eta->size() << endl;
             
-if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             
             //--- loop over all the jets ----------
             for (unsigned short i(0); i < nTotJets; i++) {
@@ -913,7 +935,11 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     else if (year == 2017){
                         passBJets = true; // do btag MC SFs for 2017
                     }
+
                 } // --------- End MC-only
+
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: For jet #" << i << ", passBJets? " << passBJets << endl;
+
                 //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
@@ -943,10 +969,11 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 jetr.SetPtEtaPhiE(jet.pt, jet.eta, jet.phi, jet.energy);
                 // abs(rap) cut
                 bool jetPassesEtaCut( (jetr.Rapidity() >= jetEtaCutMin/10.) && (jetr.Rapidity() <= jetEtaCutMax/10.) );
-                // PF jet ID? (should be loose)
-                bool jetPassesIdCut(JetAk04Id->at(i) > 0);
+                // PF jet ID: 2017 jet ID is by default tight ID
+                bool jetPassesIdCut(JetAk04Id->at(i) > 1);
                 // PU ID cut to help mitigate pileup jets
-                bool jetPassesPuIdCut((JetAk04PuId->at(i) & 1<<2));  //Kadir: jet loose pu ID
+                // Loose ID used here
+                bool jetPassesPuIdCut(JetAk04PuIdLoose->at(i) == 1);
                 // PU MVA cut (only jets with pT below 100 GeV have to explicitly pass)
                 double tempMVA = JetAk04PuMva->at(i);
                 bool jetPassesMVACut(0);
@@ -958,10 +985,12 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                         if (tempMVA > -0.3) jetPassesMVACut = true ; 
                     }
                 }
+
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+
                 // jet dR cut (wrt to muons)
                 bool jetPassesdRCut(1), jetPassesdR02Cut(1);
                 unsigned short nRemovedLep = min(int(nLeptons), doW ? 1:2);
-// if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 for (unsigned short j(0); j < nRemovedLep; j++) {
                     // determine if passes dRCut
                     // wrt to the leptons that have passed the event selection cuts (should just be the one muon for W+jets)
@@ -972,7 +1001,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 				if (jetPassesdRCut)   jet.passDR04 = true;
 				if (jetPassesdR02Cut) jet.passDR02 = true;
 				
-if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
                 // rapidity, PF ID, PU ID, and Pt Cut (lower than analysis cut at 10 GeV)
                 if ( jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesPtCut) {
@@ -995,7 +1024,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 				}
                 if (jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut && jet.pt >=  15.) jetsAdditional.push_back(jet);
 				
-// if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             } //--- End of loop over all the jets ---
             
             for ( int k = 0 ; k < 10 ; k++){
@@ -1028,6 +1057,9 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
         if (hasGenInfo){
             nTotGenJets = GJetAk04Eta->size();
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GJetAk04Eta->size() = " << GJetAk04Eta->size() << endl;
+
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
                 // getting getJet info in the form of a jetStruct
@@ -1186,6 +1218,9 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
                     nEventsWithTwoGoodLeptons++;
+
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: METpt = " << METpt << endl;
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: MT = " << MT << endl;
                 }
             }
         } // END IF RECO FOR MET
@@ -1226,6 +1261,9 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             // in the lower part of the spectrum
             nGoodJets = jets.size();
             nGoodJets_20 = jets_20.size();
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodJets_20 = " << nGoodJets_20 << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodJets = " << nGoodJets << endl;
 
 			nJetsDR02Cut = jetsDR02.size();
 			nJetsPt100DR04 = jetsPt100DR04.size();
@@ -1339,6 +1377,9 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             // in the lower part of the spectrum
             nGoodGenJets = genJets.size();
             nGoodGenJets_20 = genJets_20.size();
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodGenJets_20 = " << nGoodGenJets_20 << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodGenJets = " << nGoodGenJets << endl;
 
 			nGenJetsDR02Cut = genJetsDR02.size();
 			nGenJetsPt100DR04 = genJetsPt100DR04.size();
@@ -1523,6 +1564,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 passesLeptonCut = 0;
                 passesBtagReq = false;
             }
+
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: passesBtagReq = " << passesBtagReq << endl;
         }
         //=================================
 
@@ -3543,9 +3586,9 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     EvtWeights = 0;
     mcSherpaWeights_ = 0 ;
 
-    TrigHltMu = 0;
-    TrigMET = 0;
-    TrigMETBit = 0;
+    // TrigHltMu = 0;
+    // TrigMET = 0;
+    // TrigMETBit = 0;
     
     /////////////////////////////
     // GENERATOR VARIABLES
@@ -3561,18 +3604,18 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     GLepClosePhotPt = 0;
     GLepClosePhotEta = 0;
     GLepClosePhotPhi = 0;
-    GLepClosePhotE = 0;
-    GLepClosePhotM = 0;
-    GLepClosePhotId = 0;
-    GLepClosePhotMother0Id = 0;
-    GLepClosePhotMotherCnt = 0;
+    // GLepClosePhotE = 0;
+    // GLepClosePhotM = 0;
+    // GLepClosePhotId = 0;
+    // GLepClosePhotMother0Id = 0;
+    // GLepClosePhotMotherCnt = 0;
     GLepClosePhotSt = 0;
 
-    GMETPt = 0;
-    GMETPx = 0;
-    GMETPy = 0;
-    GMETE = 0;
-    GMETPhi = 0;
+    // GMETPt = 0;
+    // GMETPx = 0;
+    // GMETPy = 0;
+    // GMETE = 0;
+    // GMETPhi = 0;
 
     GJetAk04Pt = 0;
     GJetAk04Eta = 0;
@@ -3591,14 +3634,14 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     MuEta = 0;
     MuPhi = 0;
     MuE = 0;
-    MuIdLoose = 0;
-    MuIdMedium = 0;
+    // MuIdLoose = 0;
+    // MuIdMedium = 0;
     MuIdTight = 0;
     MuCh = 0;
-    MuVtxZ = 0;
-    MuDxy = 0;
+    // MuVtxZ = 0;
+    // MuDxy = 0;
     MuPfIso = 0;
-    MuDz = 0;
+    // MuDz = 0;
     MuHltTrgPath1 = 0;
     MuHltTrgPath2 = 0;
     
@@ -3606,7 +3649,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     METPx = 0;
     METPy = 0;
     METE = 0;
-    METPhi = 0;
+    // METPhi = 0;
     METFilterPath1 = 0;
     METFilterPath2 = 0;
     METFilterPath3 = 0;
@@ -3656,23 +3699,23 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         // contains main weights for MC
         fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
         // old method for storing trigger bit information
-        fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
-        fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
-        fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
+        // fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
+        // fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
+        // fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
         
         // Muons, Muon HLT Trigger Paths
         fChain->SetBranchAddress("MuPt", &MuPt, &b_MuPt);
         fChain->SetBranchAddress("MuEta", &MuEta, &b_MuEta);
         fChain->SetBranchAddress("MuPhi", &MuPhi, &b_MuPhi);
         fChain->SetBranchAddress("MuE", &MuE, &b_MuE);
-        fChain->SetBranchAddress("MuIdLoose", &MuIdLoose, &b_MuIdLoose);
-        fChain->SetBranchAddress("MuIdMedium", &MuIdMedium, &b_MuIdMedium);
+        // fChain->SetBranchAddress("MuIdLoose", &MuIdLoose, &b_MuIdLoose);
+        // fChain->SetBranchAddress("MuIdMedium", &MuIdMedium, &b_MuIdMedium);
         fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
         fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
-        fChain->SetBranchAddress("MuVtxZ", &MuVtxZ, &b_MuVtxZ);
-        fChain->SetBranchAddress("MuDxy", &MuDxy, &b_MuDxy);
+        // fChain->SetBranchAddress("MuVtxZ", &MuVtxZ, &b_MuVtxZ);
+        // fChain->SetBranchAddress("MuDxy", &MuDxy, &b_MuDxy);
         fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
-        fChain->SetBranchAddress("MuDz", &MuDz, &b_MuDz);
+        // fChain->SetBranchAddress("MuDz", &MuDz, &b_MuDz);
         fChain->SetBranchAddress("MuHltTrgPath1", &MuHltTrgPath1, &b_MuHltTrgPath1);
         fChain->SetBranchAddress("MuHltTrgPath2", &MuHltTrgPath2, &b_MuHltTrgPath2);
         
@@ -3681,7 +3724,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
         fChain->SetBranchAddress("METPy", &METPy, &b_METPy);
         fChain->SetBranchAddress("METE", &METE, &b_METE);
-        fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
+        // fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
         fChain->SetBranchAddress("METFilterPath1", &METFilterPath1, &b_METFilterPath1);
         fChain->SetBranchAddress("METFilterPath2", &METFilterPath2, &b_METFilterPath2);
         fChain->SetBranchAddress("METFilterPath3", &METFilterPath3, &b_METFilterPath3);
@@ -3734,19 +3777,19 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("GLepClosePhotPt", &GLepClosePhotPt, &b_GLepClosePhotPt);
         fChain->SetBranchAddress("GLepClosePhotEta", &GLepClosePhotEta, &b_GLepClosePhotEta);
         fChain->SetBranchAddress("GLepClosePhotPhi", &GLepClosePhotPhi, &b_GLepClosePhotPhi);
-        fChain->SetBranchAddress("GLepClosePhotE", &GLepClosePhotE, &b_GLepClosePhotE);
-        fChain->SetBranchAddress("GLepClosePhotM", &GLepClosePhotM, &b_GLepClosePhotM);
-        fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
-        fChain->SetBranchAddress("GLepClosePhotMother0Id", &GLepClosePhotMother0Id, &b_GLepClosePhotMother0Id);
-        fChain->SetBranchAddress("GLepClosePhotMotherCnt", &GLepClosePhotMotherCnt, &b_GLepClosePhotMotherCnt);
+        // fChain->SetBranchAddress("GLepClosePhotE", &GLepClosePhotE, &b_GLepClosePhotE);
+        // fChain->SetBranchAddress("GLepClosePhotM", &GLepClosePhotM, &b_GLepClosePhotM);
+        // fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
+        // fChain->SetBranchAddress("GLepClosePhotMother0Id", &GLepClosePhotMother0Id, &b_GLepClosePhotMother0Id);
+        // fChain->SetBranchAddress("GLepClosePhotMotherCnt", &GLepClosePhotMotherCnt, &b_GLepClosePhotMotherCnt);
         fChain->SetBranchAddress("GLepClosePhotSt", &GLepClosePhotSt, &b_GLepClosePhotSt);
 
         //GEN-level MET
-        fChain->SetBranchAddress("GMETPt", &GMETPt, &b_GMETPt);
-        fChain->SetBranchAddress("GMETPx", &GMETPx, &b_GMETPx);
-        fChain->SetBranchAddress("GMETPy", &GMETPy, &b_GMETPy);
-        fChain->SetBranchAddress("GMETE", &GMETE, &b_GMETE);
-        fChain->SetBranchAddress("GMETPhi", &GMETPhi, &b_GMETPhi);
+        // fChain->SetBranchAddress("GMETPt", &GMETPt, &b_GMETPt);
+        // fChain->SetBranchAddress("GMETPx", &GMETPx, &b_GMETPx);
+        // fChain->SetBranchAddress("GMETPy", &GMETPy, &b_GMETPy);
+        // fChain->SetBranchAddress("GMETE", &GMETE, &b_GMETE);
+        // fChain->SetBranchAddress("GMETPhi", &GMETPhi, &b_GMETPhi);
 
         //Gen Jets, AK4
         fChain->SetBranchAddress("GJetAk04Pt", &GJetAk04Pt, &b_GJetAk04Pt);
