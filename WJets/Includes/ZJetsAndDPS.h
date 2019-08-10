@@ -262,7 +262,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk08JecUncDwn;
     
     // Constructor and destructor --------------------
-    ZJetsAndDPS(string fileName_, int year_ = 2017, float lumiScale_ = 1., float puScale_ = 1., bool useTriggerCorrection_ = 0, bool useEfficiencyCorrection_ = 0, int systematics_ = 0, int direction_ = 0, float xsecfactor_ = 1., int jetPtCutMin_ = 20, int jetPtCutMax_ = 0, int ZPtCutMin_ = 0 , int ZEtaCutMin_ = -999999, int ZEtaCutMax_ = 999999, int METcut_ = -30, bool nEvents_10000_ = 0, int jetEtaCutMin_ = -24, int jetEtaCutMax_ = 24) ; 
+    ZJetsAndDPS(string fileName_, int year_ = 2017, float lumiScale_ = 1., float puScale_ = 1., bool useTriggerCorrection_ = 0, bool useEfficiencyCorrection_ = 0, int systematics_ = 0, int direction_ = 0, float xsecfactor_ = 1., int jetPtCutMin_ = 20, int jetPtCutMax_ = 0, int ZPtCutMin_ = 0 , int ZEtaCutMin_ = -999999, int ZEtaCutMax_ = 999999, int METcut_ = -30, int jetEtaCutMin_ = -24, int jetEtaCutMax_ = 24) ; 
     ~ZJetsAndDPS();
 
     // Other functions

@@ -38,7 +38,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //--------------------------------------
     if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     //--- Counters to check the yields ---
-    unsigned int nEvents(0), nEventsIncl0Jets(0), nEventsUNFOLDIncl0Jets(0);
+    unsigned int nEvents(0), nEventsIncl0Jets(0);
     unsigned int countEventpassTrig(0), countEvtpassHasMET(0), nEventsPassMETFilter(0), countEventpassLepReq(0), countEventpassBveto(0);
     unsigned int nEventsWithTwoGoodLeptons(0);
     unsigned int nEventsExcl0Jets(0), nEventsExcl1Jets(0), nEventsExcl2Jets(0), nEventsExcl3Jets(0),nEventsIncBJets(0);
@@ -244,27 +244,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // Start looping over all the events //
     //===================================//
     printf("\nProcessing : %s    -->   %s \n", fileName.c_str(), outputFileName.c_str()); 
-    double weightSum(0.), weightSumNoTopRew(0.);
 
     //--- Initialize the tree branches ---
     Init(hasRecoInfo, hasGenInfo);
     if (fChain == 0) return;
     Long64_t nbytes(0), nb(0);
     Long64_t nentries = fChain->GetEntries();
-    if (nEvents_10000) {
-        nentries = 10000;
-        std::cout << "We plan to run on 100000 events" << std::endl;
-    }
 
     // --- Begin Loop All Entries ---
     std::cout << "-----> Begin loop on all entries! " << std::endl;
     std::cout << "-----> Total number of entries: " << nentries << std::endl;
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
-    int eventOfInterest = 1001;
+    int eventOfInterest = 4005;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 300000; jentry++){
-
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << ", PRINTEVENTINFO: Printing event info for jentry == 1001!" << endl;
+    //for (Long64_t jentry(0); jentry < 3000000; jentry++){
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
@@ -310,7 +304,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         double genWeightBackup(genWeight);
         TotalGenWeight += genWeightBackup;
         //---
-	
+        
         if (hasRecoInfo){
 
             // old way to do trigger requirements
@@ -318,14 +312,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //     if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) countEventpassTrig++;
             //     else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) countEventpassTrig++;
             // }
-
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             // new way
-            if (energy == "13TeV" && doW) {
-                // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
-                if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
-                // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27_v9
-                if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
-            }
+             if (energy == "13TeV" && doW) {
+                 // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
+                 if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
+                 // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
+                 if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
+             }
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
         }
@@ -334,25 +329,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //--- MET FILTERING ---
         //--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
         //===================================//
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         bool passMETFILTER(true);
+
         // MET filters for data
         if (hasRecoInfo && isData && doMETFiltering){
-            // if (year == 2016){
-            //     // old way
-            //     passMETFILTER = (
-            //                 (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-            //                 && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-            //                 && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-            //                 && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-            //                 && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-            //                 && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
-            //                 && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-            //                 && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            //     );
-            //     if (passMETFILTER) nEventsPassMETFilter++ ;
-            // }
             if (year == 2017){
-                // new way
                 passMETFILTER = (
                     (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
                     && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
@@ -368,21 +350,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         // MET filters for reco MC
         if (hasRecoInfo && !isData && doMETFiltering){
-            // if (year == 2016){
-            //     // old way
-            //     passMETFILTER = (
-            //                         (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-            //                     && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-            //                     && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-            //                     && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-            //                     && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-            //                     && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-            //                     && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            //     );
-            //     if (passMETFILTER) nEventsPassMETFilter++ ;
-            // }
             if (year == 2017){
-                // new way
                 passMETFILTER = (
                     (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
                     && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
@@ -395,7 +363,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (passMETFILTER) nEventsPassMETFilter++ ;
             }
         }
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: Passed MET Filter? " <<  passMETFILTER << endl;
+
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath1->at(0) = " << METFilterPath1->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath2->at(0) = " << METFilterPath2->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath3->at(0) = " << METFilterPath3->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath4->at(0) = " << METFilterPath4->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath5->at(0) = " << METFilterPath5->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath6->at(0) = " << METFilterPath6->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath7->at(0) = " << METFilterPath7->at(0) << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: passMETFILTER = " <<  passMETFILTER << endl;
 
 		//=======================================================================================================//
 
@@ -443,23 +419,29 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //--- DO MUONS ---
             // Reco muon cuts here!
             if (doMuons){
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 nTotLeptons = MuEta->size();
-                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: MuEta->size() = " << MuEta->size() << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: ==================== RECO MUONS ==================== " << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuEta->size() = " << MuEta->size() << endl;
                 
                 // Trigger requirement ---
-                if (energy == "13TeV" && doW) {
-                    // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
-                    if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
-                    // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27_v9
-                    if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
-                }
-                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: eventTrigger = " << eventTrigger << endl;
+                 if (energy == "13TeV" && doW) {
+                     // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
+                     if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
+                     // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
+                     if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
+                 }
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath1->at(0) = " << MuHltTrgPath1->at(0) << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath2->at(0) = " << MuHltTrgPath2->at(0) << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: eventTrigger = " << eventTrigger << endl;
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
 
                     //grabbing reco muon information as a leptonStruct
                     leptonStruct mu = {(MuPt->at(i) * muScale) + merUncer, MuEta->at(i), MuPhi->at(i), MuE->at(i) * (((MuPt->at(i) * muScale) + merUncer)/MuPt->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ": pT, eta = " << MuPt->at(i) << ", " << MuEta->at(i) << endl;
+
                     // pT cut for muon
                     bool muPassesPtCut(false);
                     if ((year == 2016) && (doW && mu.pt >= 26.)) muPassesPtCut = true;
@@ -469,8 +451,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     bool muPassesEtaCut(doW && fabs(mu.eta) <= 2.4);
                     // ID cut for muon
                     bool muPassesIdCut( MuIdTight->at(i) == 1 ); // muon tight ID
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << " MuIdTight->at(i) = " << MuIdTight->at(i) << endl;
                     // Iso cut for muon
                     bool muPassesIsoCut(doW && MuPfIso->at(i) < 0.15);  
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << " MuPfIso->at(i) = " << MuPfIso->at(i) << endl;
                     // Iso cut for muon (for doing QCD background)
                     bool muPassesQCDIsoCut(doW && MuPfIso->at(i) >= 0.2); // use 0.15 if you want to cover full Iso space
                     
@@ -478,12 +462,23 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // all muons that survive eta cut of 2.4 and pT cut of 15
                     if (!doTT && muPassesEtaLooseCut && mu.pt >= 15) muons.push_back(mu);
                     
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) {
+                        cout << __LINE__ << " PRINTEVENTINFO: Muon analysis cuts --- " << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesPtCut = " << muPassesPtCut << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesEtaCut = " << muPassesEtaCut << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesIdCut = " << muPassesIdCut << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", eventTrigger = " << eventTrigger << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesIsoCut = " << muPassesIsoCut << endl;
+                        cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesQCDIsoCut = " << muPassesQCDIsoCut << endl;
+                    }
                     // check if muon passes all required event cuts
                     if (muPassesPtCut && muPassesEtaCut && muPassesIdCut && (!useTriggerCorrection || eventTrigger)){
                         // analysis iso cut
                         if (muPassesIsoCut){  
-                            if (doQCD < 2 && leptonFlavor != "SingleElectron") leptons.push_back(mu); 
-                            if (doTT && fabs(mu.eta) < 2.4) muons.push_back(mu); 
+                            if (doQCD < 2 && leptonFlavor != "SingleElectron") {
+                                leptons.push_back(mu); 
+                                // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: Mu #" << i << " passed analysis cuts!" << endl;
+                            }
                         } 
                         // QCD isolation cut
                         if (doQCD > 1 && muPassesQCDIsoCut && leptonFlavor != "SingleElectron") leptons.push_back(mu);                        
@@ -536,8 +531,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             nTotGenLeptons = GLepBareEta->size();
             nTotGenPhotons = GLepClosePhotEta->size();
 
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GLepBareEta->size() = " << GLepBareEta->size() << endl;
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GLepClosePhotEta->size() = " << GLepClosePhotEta->size() << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: GLepBareEta->size() = " << GLepBareEta->size() << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: GLepClosePhotEta->size() = " << GLepClosePhotEta->size() << endl;
 
             // getting PDG ID for the neutrino
             if (doW) nuID = 14;
@@ -600,6 +595,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     //For WJets, pT and eta cut on the muon, MET cut on the neutrino
                     if (doW && ( (fabs(genLep.charge) > 0 && genLep.pt >= 26 && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut) ) ){
                         genLeptons.push_back(genLep); 
+                        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: genLep #" << i << " passed analysis cuts!" << endl;
                     }
                 }
             } //end loop over gen leptons
@@ -635,7 +631,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     //MT cut and MET cut on the neutrino
                     if (genMT >= MTCut && genLepton2.pt >= METcut) passesGenLeptonCut = 1;
 
-                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: genMT = " << genMT << endl;
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: genMT = " << genMT << endl;
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MET from neutrino = " << genLepton2.pt << endl;
                 }
 
                 //----- For Z+jets -------
@@ -670,7 +667,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             countEventpassLepReq++;
         }
 
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: passesLeptonReq = " << passesLeptonReq << endl;
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: passesLeptonReq = " << passesLeptonReq << endl;
 
         //=======================================================================================================//
         //          Retrieving jets           //
@@ -698,8 +695,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (hasRecoInfo) {
             int countNJetsVSBeta[10] = {0};
             nTotJets = JetAk04Eta->size();
-
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: JetAk04Eta->size() = " << JetAk04Eta->size() << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: ==================== AK4 JETS ==================== " << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: JetAk04Eta->size() = " << JetAk04Eta->size() << endl;
             
             if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             
@@ -712,6 +709,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //nominal btagging criterion
                 if ( (year == 2016) && (JetAk04BDiscCisvV2->at(i) >= 0.8484)) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
                 else if ( (year == 2017) && (JetAk04BDiscCisvV2->at(i) >= 0.8838)) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscCisvV2->at(i) = " << JetAk04BDiscCisvV2->at(i) << endl;
 
                 //************************* B-tag Veto Correction *******************************//
                 float this_rand = RandGen->Rndm(); // Get a random number.
@@ -938,12 +936,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 } // --------- End MC-only
 
-                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: For jet #" << i << ", passBJets? " << passBJets << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
+                // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << " MAKING IT PASS ANYWAY " << endl;
+                // // andrew -- remove later
+                // passBJets = true;
 
                 //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
                 jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0};
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk04Pt->at(i) << ", " << JetAk04Eta->at(i) << endl;
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
                 double jetEnergyCorr = 0.; 
@@ -970,10 +972,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // abs(rap) cut
                 bool jetPassesEtaCut( (jetr.Rapidity() >= jetEtaCutMin/10.) && (jetr.Rapidity() <= jetEtaCutMax/10.) );
                 // PF jet ID: 2017 jet ID is by default tight ID
-                bool jetPassesIdCut(JetAk04Id->at(i) > 1);
+                bool jetPassesIdCut(JetAk04Id->at(i) > 0);
+                // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesIdCut = " << jetPassesIdCut << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04Id->at(i) = " << JetAk04Id->at(i) << endl;
                 // PU ID cut to help mitigate pileup jets
                 // Loose ID used here
                 bool jetPassesPuIdCut(JetAk04PuIdLoose->at(i) == 1);
+                // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPuIdCut = " << jetPassesPuIdCut << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04PuIdLoose->at(i) = " << JetAk04PuIdLoose->at(i) << endl;
                 // PU MVA cut (only jets with pT below 100 GeV have to explicitly pass)
                 double tempMVA = JetAk04PuMva->at(i);
                 bool jetPassesMVACut(0);
@@ -1003,6 +1009,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 				
                 if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
+                if (PRINTEVENTINFO && jentry == eventOfInterest) {
+                    cout << __LINE__ << " PRINTEVENTINFO: Jet analysis cuts --- " << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesEtaCut = " << jetPassesEtaCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesIdCut = " << jetPassesIdCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPuIdCut = " << jetPassesPuIdCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPtCut = " << jetPassesPtCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesMVACut = " << jetPassesMVACut << endl;
+                }
                 // rapidity, PF ID, PU ID, and Pt Cut (lower than analysis cut at 10 GeV)
                 if ( jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesPtCut) {
                     // getting information about Bjets if doBJets is not 0
@@ -1058,12 +1072,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (hasGenInfo){
             nTotGenJets = GJetAk04Eta->size();
 
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: GJetAk04Eta->size() = " << GJetAk04Eta->size() << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: GJetAk04Eta->size() = " << GJetAk04Eta->size() << endl;
 
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
                 // getting getJet info in the form of a jetStruct
                 jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0};
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For genJet #" << i << ": pT, eta = " << GJetAk04Pt->at(i) << ", " << GJetAk04Eta->at(i) << endl;
                 // genJet dR information (wrt lepton)
                 bool genJetPassesdRCut(1), genJetPassesdR02Cut(1);
                 for (unsigned short j(0); j < nGenLeptons; j++){ 
@@ -1158,7 +1173,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             METpt = METPt->at(whichMet);
             TLorentzVector tmpVecMet;
             tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), 0., METE->at(whichMet));
-            METphi = tmpVecMet.Phi();
+            //METphi = tmpVecMet.Phi();
+            METphi = METPhi->at(whichMet); //grabbing MET Phi value directly from tree rather than calculating it
 
             if (passesLeptonReq) {
                 
@@ -1213,14 +1229,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     else weight *= effWeight; 
                 }
 
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METpt = " << METpt << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MT = " << MT << endl;
+
                 // Apply transverse mass and MET cut
                 if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
                     nEventsWithTwoGoodLeptons++;
-
-                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: METpt = " << METpt << endl;
-                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: MT = " << MT << endl;
                 }
             }
         } // END IF RECO FOR MET
@@ -1245,7 +1261,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (hasRecoInfo){
             vector<jetStruct> tmpJets;
             for (unsigned short i(0); i < nJetsNoDRCut; i++){
+                
                 // the jetsNoDRCut collection are the jets that have been smeared for JER
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: Final reco jet selections --- " << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jetsNoDRCut #" << i << ", jetsNoDRCut[i].pt = " << jetsNoDRCut[i].pt << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jetsNoDRCut #" << i << ", jetsNoDRCut[i].passDR04 = " << jetsNoDRCut[i].passDR04 << endl;
                 if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR04) tmpJets.push_back(jetsNoDRCut[i]);
                 if (jetsNoDRCut[i].pt >= 20          && jetsNoDRCut[i].passDR04) jets_20.push_back(jetsNoDRCut[i]);
 				if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR02) jetsDR02.push_back(jetsNoDRCut[i]);
@@ -1262,8 +1282,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             nGoodJets = jets.size();
             nGoodJets_20 = jets_20.size();
 
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodJets_20 = " << nGoodJets_20 << endl;
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodJets = " << nGoodJets << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: nGoodJets_20 = " << nGoodJets_20 << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: nGoodJets = " << nGoodJets << endl;
 
 			nJetsDR02Cut = jetsDR02.size();
 			nJetsPt100DR04 = jetsPt100DR04.size();
@@ -1378,8 +1398,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             nGoodGenJets = genJets.size();
             nGoodGenJets_20 = genJets_20.size();
 
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodGenJets_20 = " << nGoodGenJets_20 << endl;
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: nGoodGenJets = " << nGoodGenJets << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: nGoodGenJets_20 = " << nGoodGenJets_20 << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: nGoodGenJets = " << nGoodGenJets << endl;
 
 			nGenJetsDR02Cut = genJetsDR02.size();
 			nGenJetsPt100DR04 = genJetsPt100DR04.size();
@@ -1565,14 +1585,22 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 passesBtagReq = false;
             }
 
-            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << "PRINTEVENTINFO: passesBtagReq = " << passesBtagReq << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: passesBtagReq = " << passesBtagReq << endl;
         }
         //=================================
+
+        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: ==================== HISTOGRAM FILLING ==================== " << endl;
 
         if (DEBUG) cout << "Stop after line " << __LINE__ << "   " << hasGenInfo <<"    gen Wgh = " << genWeight << "  pass gen cuts = " << passesGenLeptonCut <<"  nGenJets = " << nGoodGenJets <<  endl;
         //=======================================================================================================//
         //   Filling gen and parton histos    //
         //====================================//
+        if (hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+            cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling gen histos --- " << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: hasGenInfo = " << hasGenInfo << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesGenLeptonCut = " << passesGenLeptonCut << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesGenJetCut = " << passesGenJetCut << endl;
+        }
         if (hasGenInfo && passesGenLeptonCut && passesGenJetCut){
             GENnEventsIncl0Jets++;
             genZNGoodJets_Zexc->Fill(nGoodGenJets, genWeight);
@@ -2118,6 +2146,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
         //      Selection for Reco Histos      //
         //====================================//
+        if (hasRecoInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+            cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling reco histos --- " << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: hasRecoInfo = " << hasRecoInfo << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesLeptonCut = " << passesLeptonCut << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesJetCut = " << passesJetCut << "\n" << endl;
+        }
         if (hasRecoInfo && passesLeptonCut && passesJetCut) {
             //=======================================================================================================//
             
@@ -2171,7 +2205,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             ZMass_Zinc0jet->Fill(Z.M(), weight);
             MET_Zinc0jet->Fill(METpt, weight);
             //MET_1_Zinc0jet->Fill(METpt, weight);
-            //METphi_Zinc0jet->Fill(METphi, weight);
+            METphi_Zinc0jet->Fill(METphi, weight);
             MT_Zinc0jet->Fill(MT, weight);
             
             MuPFIso_Zinc0jet->Fill(lepton1.iso, weight);
@@ -2381,7 +2415,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 ZMass_Zinc1jet->Fill(Z.M(), weight);
                 MET_Zinc1jet->Fill(METpt, weight);
                 //MET_1_Zinc1jet->Fill(METpt, weight);
-                //METphi_Zinc1jet->Fill(METphi, weight);
+                METphi_Zinc1jet->Fill(METphi, weight);
                 MT_Zinc1jet->Fill(MT, weight);
 //                ZPt_Zinc1jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc1jet->Fill(Z.Rapidity(), weight);
@@ -2469,7 +2503,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 ZNGoodJets_Zinc_NoWeight->Fill(2.);
                 ZMass_Zinc2jet->Fill(Z.M(), weight);
                 MET_Zinc2jet->Fill(METpt, weight);
-                //METphi_Zinc2jet->Fill(METphi, weight);
+                METphi_Zinc2jet->Fill(METphi, weight);
                 MT_Zinc2jet->Fill(MT, weight);
                 TwoJetsPtDiff_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
                 BestTwoJetsPtDiff_Zinc2jet->Fill(bestJet1Minus2.Pt(), weight);
@@ -2741,7 +2775,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 ZNGoodJets_Zinc_NoWeight->Fill(3.);
                 ZMass_Zinc3jet->Fill(Z.M(), weight);
                 MET_Zinc3jet->Fill(METpt, weight);
-                //METphi_Zinc3jet->Fill(METphi, weight);
+                METphi_Zinc3jet->Fill(METphi, weight);
                 MT_Zinc3jet->Fill(MT, weight);
 //                ZPt_Zinc3jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc3jet->Fill(Z.Rapidity(), weight);
@@ -2989,6 +3023,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
         //             Unfolding              //
         //====================================//
+        if (hasRecoInfo && hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+            cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling hresponse histos --- " << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: hasRecoInfo = " << hasRecoInfo << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: hasGenInfo = " << hasGenInfo << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesGenLeptonCut = " << passesGenLeptonCut << endl;
+            cout << __LINE__ << " PRINTEVENTINFO: passesLeptonCut = " << passesLeptonCut << endl;
+        }
         if (hasRecoInfo && hasGenInfo && passesGenLeptonCut && passesLeptonCut){
             //-- jet multiplicity exc
             hresponseZNGoodJets_Zexc->Fill(nGoodJets, nGoodGenJets, weight);
@@ -3405,18 +3446,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
     std::cout << "\nPrinting events' information:" << std::endl;
     cout << "Number of events                               : " << nEvents << endl;
-    cout << "Total GEN weight of all events                 : " << TotalGenWeight << endl;
     cout << "Number of events pass HasMET                   : " << countEvtpassHasMET << endl;
-    cout << "Number of events pass trigger                  : " << countEventpassTrig << endl;
     cout << "Number of events pass MET Filter               : " << nEventsPassMETFilter << endl;
+    cout << "Number of events pass trigger                  : " << countEventpassTrig << endl;
     cout << "Number of events pass Lepton requirements      : " << countEventpassLepReq << endl;
     cout << "Number of events pass MT cut                   : " << nEventsWithTwoGoodLeptons << endl;
     cout << "Number of events pass Btag veto                : " << countEventpassBveto << endl;
+    cout << "Total GEN weight of all events                 : " << TotalGenWeight << endl;
     cout << "Total GEN pass: RECO weight of all events      : " << TotalGenWeightPassGENPU << endl;
     cout << "Total GEN pass: GEN weight of all events       : " << TotalGenWeightPassGEN << endl;
     cout << "Total RECO pass: RECO weight of all events     : " << TotalRecoWeightPassRECO << endl;
     cout << "Total RECO pass: GEN weight of all events      : " << TotalGenWeightPassRECO << endl;
-    cout << "How many times do we visit unfolding 0 jets    : " << nEventsUNFOLDIncl0Jets << endl;
     cout << "Number Inclusif 0 jets                         : " << nEventsIncl0Jets << endl;
     cout << "Number Exclusif 0 jets                         : " << nEventsExcl0Jets << endl;
     cout << "Number Exclusif 1 jets                         : " << nEventsExcl1Jets << endl;
@@ -3428,13 +3468,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     cout << "Number GEN Inclusif 2 jets                     : " << GENnEventsIncl2Jets << endl;
     cout << "Number GEN Inclusif 3 jets                     : " << GENnEventsIncl3Jets << endl;
     cout << "MC weight (sumEventW)                          : " << sumEventW << endl;
-    if (doTTreweighting)       cout << "We run to TTbar with reweighting :   " << weightSum << "  and the original weight is :" << weightSumNoTopRew << endl;
 }
 
 
 ZJetsAndDPS::ZJetsAndDPS(string fileName_, int year_, float lumiScale_, float puScale_, bool useTriggerCorrection_, bool useEfficiencyCorrection_, 
-        int systematics_, int direction_, float xsecfactor_, int jetPtCutMin_, int jetPtCutMax_, int ZPtCutMin_, int ZEtaCutMin_, int ZEtaCutMax_, int METcut_, bool nEvents_10000_, int jetEtaCutMin_, int jetEtaCutMax_): 
-    HistoSet(fileName_.substr(0, fileName_.find("_"))), nEvents_10000(nEvents_10000_), outputDirectory("HistoFiles/"),
+        int systematics_, int direction_, float xsecfactor_, int jetPtCutMin_, int jetPtCutMax_, int ZPtCutMin_, int ZEtaCutMin_, int ZEtaCutMax_, int METcut_, int jetEtaCutMin_, int jetEtaCutMax_): 
+    HistoSet(fileName_.substr(0, fileName_.find("_"))), outputDirectory("HistoFiles/"),
     fileName(fileName_), year(year_), lumiScale(lumiScale_), puScale(puScale_), useTriggerCorrection(useTriggerCorrection_), useEfficiencyCorrection(useEfficiencyCorrection_), 
     systematics(systematics_), direction(direction_), xsecfactor(xsecfactor_), jetPtCutMin(jetPtCutMin_), jetPtCutMax(jetPtCutMax_), jetEtaCutMin(jetEtaCutMin_), jetEtaCutMax(jetEtaCutMax_), ZPtCutMin(ZPtCutMin_), ZEtaCutMin(ZEtaCutMin_), ZEtaCutMax(ZEtaCutMax_), METcut(METcut_)
 {
@@ -3649,7 +3688,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     METPx = 0;
     METPy = 0;
     METE = 0;
-    // METPhi = 0;
+    METPhi = 0;
     METFilterPath1 = 0;
     METFilterPath2 = 0;
     METFilterPath3 = 0;
@@ -3724,7 +3763,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
         fChain->SetBranchAddress("METPy", &METPy, &b_METPy);
         fChain->SetBranchAddress("METE", &METE, &b_METE);
-        // fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
+        fChain->SetBranchAddress("METPhi", &METPhi, &b_METPhi);
         fChain->SetBranchAddress("METFilterPath1", &METFilterPath1, &b_METFilterPath1);
         fChain->SetBranchAddress("METFilterPath2", &METFilterPath2, &b_METFilterPath2);
         fChain->SetBranchAddress("METFilterPath3", &METFilterPath3, &b_METFilterPath3);
