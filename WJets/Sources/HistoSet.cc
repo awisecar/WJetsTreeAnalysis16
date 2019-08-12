@@ -312,6 +312,8 @@ HistoSet::HistoSet(string leptonFlavor)
     //the _1_ binnings are for the gen distributions that need to have fewer bins for the unfolding <-- but this is wrong
     //the _2_ binnings are for the reco distributions that need to have more bins for the unfolding <-- this is correct
 
+    // ----------- AK4 Jet based distributions -----------
+
     //use for LJ pt and HT,2/2
     int nJetPt_ZRatios(14);
     double jetPt_ZRatios[15] = {20, 25, 30, 40, 50, 65, 80, 105, 140, 185, 235, 300, 400, 550, 900};
@@ -349,6 +351,26 @@ HistoSet::HistoSet(string leptonFlavor)
     int nWBosonJetPt_2_ZRatios(18);
     double wBosonJetPt_2_ZRatios[19] = {40, 50, 60, 75, 90, 110, 130, 152.5, 175, 202.5, 230, 265, 300, 350, 400, 475, 550, 725, 900};
 
+
+    // ----------- AK8 Jet based distributions -----------
+
+    //use for LJ pt and HT,2/2
+    int nJetAK8Pt_ZRatios(5);
+    double jetAK8Pt_ZRatios[6] = {200, 235, 300, 400, 550, 900};
+    int nJetAK8Pt_2_ZRatios(10);
+    double jetAK8Pt_2_ZRatios[11] = {200, 217.5, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+
+    //use for lep pt + LJ pt, and lep pt + HT,2/2
+    int nLepJetAK8Pt_ZRatios(5);
+    double lepJetAK8Pt_ZRatios[6] = {225, 260, 300, 400, 550, 900};
+    int nLepJetAK8Pt_2_ZRatios(10);
+    double lepJetAK8Pt_2_ZRatios[11] = {225, 242.5, 260, 280, 300, 350, 400, 475, 550, 725, 900};
+
+    //use for W pt based things
+    int nWBosonJetAK8Pt_ZRatios(4);
+    double wBosonJetAK8Pt_ZRatios[5] = {235, 300, 400, 550, 900};
+    int nWBosonJetAK8Pt_2_ZRatios(8);
+    double wBosonJetAK8Pt_2_ZRatios[9] = {235, 267.5, 300, 350, 400, 475, 550, 725, 900};
 
 
     //***************************** Basic plots for Wjets *****************************//
@@ -445,6 +467,7 @@ HistoSet::HistoSet(string leptonFlavor)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ------ W+jets alpha-s histograms ------ 
+    // AK4 Jet distributions ////////////////
     // --- Leading Jet Pt
     LeadingJetPt_Zinc1jet = newTH1D("LeadingJetPt_Zinc1jet", "leading j_pt for 1 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
     LeadingJetPt_Zinc2jet = newTH1D("LeadingJetPt_Zinc2jet", "leading j_pt for 2 inc jet", "p_{T}(j_{leading}) [GeV]", nJetPt_ZRatios, jetPt_ZRatios);
@@ -683,6 +706,94 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseZPtPlusHTover2_2_Zinc3jet = newTH2D("hresponseZPtPlusHTover2_2_Zinc3jet", "hresponse W p_{T} + H_{T,2}/2 (N_{jets} #geq 3)", nWBosonJetPt_2_ZRatios, wBosonJetPt_2_ZRatios, nWBosonJetPt_ZRatios, wBosonJetPt_ZRatios);
     hresponseZPtPlusHTover2_2_Zinc4jet = newTH2D("hresponseZPtPlusHTover2_2_Zinc4jet", "hresponse W p_{T} + H_{T,2}/2 (N_{jets} #geq 4)", nWBosonJetPt_2_ZRatios, wBosonJetPt_2_ZRatios, nWBosonJetPt_ZRatios, wBosonJetPt_ZRatios);
 
+    // AK8 Jet distributions ////////////////
+    // --- Leading AK8 Jet pT
+    LeadingJetAK8Pt_Zinc1jet = newTH1D("LeadingJetAK8Pt_Zinc1jet", "leading j_pt for 1 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_Zinc2jet = newTH1D("LeadingJetAK8Pt_Zinc2jet", "leading j_pt for 2 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_Zinc3jet = newTH1D("LeadingJetAK8Pt_Zinc3jet", "leading j_pt for 3 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_2_Zinc1jet = newTH1D("LeadingJetAK8Pt_2_Zinc1jet", "leading j_pt for 1 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+    LeadingJetAK8Pt_2_Zinc2jet = newTH1D("LeadingJetAK8Pt_2_Zinc2jet", "leading j_pt for 2 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+    LeadingJetAK8Pt_2_Zinc3jet = newTH1D("LeadingJetAK8Pt_2_Zinc3jet", "leading j_pt for 3 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+
+    genLeadingJetAK8Pt_Zinc1jet = newTH1D("genLeadingJetAK8Pt_Zinc1jet", "gen leading j_pt for 1 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_Zinc2jet = newTH1D("genLeadingJetAK8Pt_Zinc2jet", "gen leading j_pt for 2 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_Zinc3jet = newTH1D("genLeadingJetAK8Pt_Zinc3jet", "gen leading j_pt for 3 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zinc1jet = newTH1D("genLeadingJetAK8Pt_2_Zinc1jet", "gen leading j_pt for 1 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zinc2jet = newTH1D("genLeadingJetAK8Pt_2_Zinc2jet", "gen leading j_pt for 2 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zinc3jet = newTH1D("genLeadingJetAK8Pt_2_Zinc3jet", "gen leading j_pt for 3 inc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+
+    hresponseLeadingJetAK8Pt_Zinc1jet     = newTH2D("hresponseLeadingJetAK8Pt_Zinc1jet", "hresp 1st leading inc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_Zinc2jet     = newTH2D("hresponseLeadingJetAK8Pt_Zinc2jet", "hresp 2nd leading inc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_Zinc3jet     = newTH2D("hresponseLeadingJetAK8Pt_Zinc3jet", "hresp 3rd leading inc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zinc1jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zinc1jet", "hresp 1st leading inc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zinc2jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zinc2jet", "hresp 2nd leading inc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zinc3jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zinc3jet", "hresp 3rd leading inc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+
+    // exclusive jet requirements
+    LeadingJetAK8Pt_Zexc1jet = newTH1D("LeadingJetAK8Pt_Zexc1jet", "leading j_pt for 1 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_Zexc2jet = newTH1D("LeadingJetAK8Pt_Zexc2jet", "leading j_pt for 2 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_Zexc3jet = newTH1D("LeadingJetAK8Pt_Zexc3jet", "leading j_pt for 3 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    LeadingJetAK8Pt_2_Zexc1jet = newTH1D("LeadingJetAK8Pt_2_Zexc1jet", "leading j_pt for 1 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+    LeadingJetAK8Pt_2_Zexc2jet = newTH1D("LeadingJetAK8Pt_2_Zexc2jet", "leading j_pt for 2 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+    LeadingJetAK8Pt_2_Zexc3jet = newTH1D("LeadingJetAK8Pt_2_Zexc3jet", "leading j_pt for 3 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios);
+
+    genLeadingJetAK8Pt_Zexc1jet = newTH1D("genLeadingJetAK8Pt_Zexc1jet", "gen leading j_pt for 1 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_Zexc2jet = newTH1D("genLeadingJetAK8Pt_Zexc2jet", "gen leading j_pt for 2 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_Zexc3jet = newTH1D("genLeadingJetAK8Pt_Zexc3jet", "gen leading j_pt for 3 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zexc1jet = newTH1D("genLeadingJetAK8Pt_2_Zexc1jet", "gen leading j_pt for 1 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zexc2jet = newTH1D("genLeadingJetAK8Pt_2_Zexc2jet", "gen leading j_pt for 2 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    genLeadingJetAK8Pt_2_Zexc3jet = newTH1D("genLeadingJetAK8Pt_2_Zexc3jet", "gen leading j_pt for 3 exc AK8 jet", "p_{T}(j_{leading}) [GeV]", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+
+    hresponseLeadingJetAK8Pt_Zexc1jet     = newTH2D("hresponseLeadingJetAK8Pt_Zexc1jet", "hresp 1st leading exc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_Zexc2jet     = newTH2D("hresponseLeadingJetAK8Pt_Zexc2jet", "hresp 2nd leading exc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_Zexc3jet     = newTH2D("hresponseLeadingJetAK8Pt_Zexc3jet", "hresp 3rd leading exc AK8 jet pt", nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zexc1jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zexc1jet", "hresp 1st leading exc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zexc2jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zexc2jet", "hresp 2nd leading exc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+    hresponseLeadingJetAK8Pt_2_Zexc3jet     = newTH2D("hresponseLeadingJetAK8Pt_2_Zexc3jet", "hresp 3rd leading exc AK8 jet pt", nJetAK8Pt_2_ZRatios, jetAK8Pt_2_ZRatios, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
+
+    // --- Lep pT + Leading AK8 Jet pT
+    LepPtPlusLeadingJetAK8Pt_Zinc1jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc1jet", "lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_Zinc2jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc2jet", "lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_Zinc3jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc3jet", "lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zinc1jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zinc1jet", "lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zinc2jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zinc2jet", "lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zinc3jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zinc3jet", "lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+
+    genLepPtPlusLeadingJetAK8Pt_Zinc1jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc1jet", "gen lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_Zinc2jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc2jet", "gen lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_Zinc3jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc3jet", "gen lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zinc1jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zinc1jet", "gen lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zinc2jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zinc2jet", "gen lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zinc3jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zinc3jet", "gen lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet", "hresp lepton pt plus LJ pt for 3 AK8 inc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc1jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc1jet", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc2jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc2jet", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc3jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc3jet", "hresp lepton pt plus LJ pt for 3 AK8 inc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+
+    // exclusive jet requirement
+    LepPtPlusLeadingJetAK8Pt_Zexc1jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zexc1jet", "lepton pt plus LJ pt for 1 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_Zexc2jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zexc2jet", "lepton pt plus LJ pt for 2 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_Zexc3jet = newTH1D("LepPtPlusLeadingJetAK8Pt_Zexc3jet", "lepton pt plus LJ pt for 3 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zexc1jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zexc1jet", "lepton pt plus LJ pt for 1 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zexc2jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zexc2jet", "lepton pt plus LJ pt for 2 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+    LepPtPlusLeadingJetAK8Pt_2_Zexc3jet = newTH1D("LepPtPlusLeadingJetAK8Pt_2_Zexc3jet", "lepton pt plus LJ pt for 3 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios);
+
+    genLepPtPlusLeadingJetAK8Pt_Zexc1jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zexc1jet", "gen lepton pt plus LJ pt for 1 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_Zexc2jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zexc2jet", "gen lepton pt plus LJ pt for 2 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_Zexc3jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zexc3jet", "gen lepton pt plus LJ pt for 3 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zexc1jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zexc1jet", "gen lepton pt plus LJ pt for 1 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zexc2jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zexc2jet", "gen lepton pt plus LJ pt for 2 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    genLepPtPlusLeadingJetAK8Pt_2_Zexc3jet = newTH1D("genLepPtPlusLeadingJetAK8Pt_2_Zexc3jet", "gen lepton pt plus LJ pt for 3 AK8 exc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+
+    hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet", "hresp lepton pt plus LJ pt for 1 AK8 exc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet", "hresp lepton pt plus LJ pt for 2 AK8 exc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet", "hresp lepton pt plus LJ pt for 3 AK8 exc jet", nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc1jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc1jet", "hresp lepton pt plus LJ pt for 1 AK8 exc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc2jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc2jet", "hresp lepton pt plus LJ pt for 2 AK8 exc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc3jet = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc3jet", "hresp lepton pt plus LJ pt for 3 AK8 exc jet", nLepJetAK8Pt_2_ZRatios, lepJetAK8Pt_2_ZRatios, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     

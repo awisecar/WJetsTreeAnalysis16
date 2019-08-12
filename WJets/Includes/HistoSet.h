@@ -130,6 +130,8 @@ public:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    ///////// AK4 Jet Distributions
+
     //leading jet pt -- alpha-s
     TH1D *LeadingJetPt_Zinc1jet;
     TH1D *LeadingJetPt_Zinc2jet;
@@ -442,6 +444,97 @@ public:
     TH2D *hresponseZPtPlusHTover2_2_Zinc2jet;
     TH2D *hresponseZPtPlusHTover2_2_Zinc3jet;
     TH2D *hresponseZPtPlusHTover2_2_Zinc4jet;
+
+
+    ///////// AK8 Jet Distributions
+
+    // Leading AK8 Jet Pt -- alpha-s
+    TH1D *LeadingJetAK8Pt_Zinc1jet;
+    TH1D *LeadingJetAK8Pt_Zinc2jet;
+    TH1D *LeadingJetAK8Pt_Zinc3jet;
+    TH1D *LeadingJetAK8Pt_2_Zinc1jet;
+    TH1D *LeadingJetAK8Pt_2_Zinc2jet;
+    TH1D *LeadingJetAK8Pt_2_Zinc3jet;
+
+    TH1D *genLeadingJetAK8Pt_Zinc1jet;
+    TH1D *genLeadingJetAK8Pt_Zinc2jet;
+    TH1D *genLeadingJetAK8Pt_Zinc3jet;
+    TH1D *genLeadingJetAK8Pt_2_Zinc1jet;
+    TH1D *genLeadingJetAK8Pt_2_Zinc2jet;
+    TH1D *genLeadingJetAK8Pt_2_Zinc3jet;
+
+    TH2D *hresponseLeadingJetAK8Pt_Zinc1jet;
+    TH2D *hresponseLeadingJetAK8Pt_Zinc2jet;
+    TH2D *hresponseLeadingJetAK8Pt_Zinc3jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zinc1jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zinc2jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zinc3jet;
+
+    // exclusive jet requirement
+    TH1D *LeadingJetAK8Pt_Zexc1jet;
+    TH1D *LeadingJetAK8Pt_Zexc2jet;
+    TH1D *LeadingJetAK8Pt_Zexc3jet;
+    TH1D *LeadingJetAK8Pt_2_Zexc1jet;
+    TH1D *LeadingJetAK8Pt_2_Zexc2jet;
+    TH1D *LeadingJetAK8Pt_2_Zexc3jet;
+
+    TH1D *genLeadingJetAK8Pt_Zexc1jet;
+    TH1D *genLeadingJetAK8Pt_Zexc2jet;
+    TH1D *genLeadingJetAK8Pt_Zexc3jet;
+    TH1D *genLeadingJetAK8Pt_2_Zexc1jet;
+    TH1D *genLeadingJetAK8Pt_2_Zexc2jet;
+    TH1D *genLeadingJetAK8Pt_2_Zexc3jet;
+
+    TH2D *hresponseLeadingJetAK8Pt_Zexc1jet;
+    TH2D *hresponseLeadingJetAK8Pt_Zexc2jet;
+    TH2D *hresponseLeadingJetAK8Pt_Zexc3jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zexc1jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zexc2jet;
+    TH2D *hresponseLeadingJetAK8Pt_2_Zexc3jet;
+
+    // Lepton Pt + Leading AK8 Jet Pt -- alpha-s
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zinc1jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zinc2jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zinc3jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zinc1jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zinc2jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zinc3jet;
+
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zinc1jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zinc2jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zinc3jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zinc1jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zinc2jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zinc3jet;
+
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc3jet;
+
+    // exclusive jet requirement
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zexc1jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zexc2jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_Zexc3jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zexc1jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zexc2jet;
+    TH1D *LepPtPlusLeadingJetAK8Pt_2_Zexc3jet;
+
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zexc1jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zexc2jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_Zexc3jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zexc1jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zexc2jet;
+    TH1D *genLepPtPlusLeadingJetAK8Pt_2_Zexc3jet;
+
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc3jet;
 
     ///////////////////////////////////////////////////////////////////////////
 
