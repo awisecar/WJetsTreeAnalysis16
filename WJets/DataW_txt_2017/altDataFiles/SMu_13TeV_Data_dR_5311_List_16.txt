@@ -1,0 +1,10 @@
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_271.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_272.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_273.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_274.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_275.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_276.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_277.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_278.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_279.root 
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_28.root 

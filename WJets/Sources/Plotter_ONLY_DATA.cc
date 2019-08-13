@@ -19,11 +19,12 @@
 
 using namespace std;
 
-void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
+void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1 , 
     int JetPtMax = 0, int ZEtaMin = -999999, int ZEtaMax = 999999, 
     bool doRoch = 0, bool doFlat = 0, bool doVarWidth = 1)
 {
+
     std::string yearStr;
     std::stringstream yearSStr;
     yearSStr << year;
@@ -65,13 +66,15 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     bool isDoubleLep(1);
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
         isDoubleLep = 0;
-        nFiles = NFILESTTBARWJETS; 
+        // nFiles = NFILESTTBARWJETS; 
+        nFiles = 1; //setting just to one file for only data
     }
     TFile *file[nFiles];
     int countFiles = 0 ;
     for (unsigned short i = 0; i < nFiles; i++){
         int fileSelect = FilesDYJets[i] ;
-        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i];
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets[i];
+        if (!isDoubleLep) fileSelect = 0; //setting just to one file for only data
         if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;
 
         // FilesTTbarWJets will select the correct files for W+jets (defined in fileNames.h)
@@ -217,40 +220,6 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     nHist=nHistNoGen; 
     cout <<"\nNumber of histograms to plot: " << nHistNoGen << endl;
 
-    //nHist=4;
-    /*for (int i = 0; i < nFiles; i++) {
-        cout << i <<"  "<<legendNames[i]  << "   "<<  endl;
-        for (int j = 0; j < nHistNoGen ; j++) {
-            // cout << i <<"  "<<legendNames[i]  << "   "<< j << "   " <<  histoName[j] << endl;
-            hist[i][j] = getHisto(file[i], histoName[j]);
-            hist[i][j]->SetTitle(histoTitle[j].c_str());
-            if ( i == 0) {
-                hist[i][j]->SetMarkerStyle(20);
-                hist[i][j]->SetMarkerColor(Colors[i]);
-                hist[i][j]->SetLineColor(Colors[i]);
-            }
-            else {
-                hist[i][j]->SetFillColor(Colors[i]);
-                hist[i][j]->SetLineColor(Colors[i]);
-                legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
-            }
-        }
-    }
-    
-    for (int i = 1; i < nFiles; i++) {
-        for (int j = 0; j < nHistNoGen ; j++) {
-            if (doBJets <= 0 ){
-                histSumMC[j]->Add(hist[i][j]);
-            }
-            else {
-                if (i == nFiles - 2) histSumMC[j]->Add(hist[nFiles - 1][j]);
-                else if (i == nFiles - 1) histSumMC[j]->Add(hist[nFiles - 2][j]);
-                else histSumMC[j]->Add(hist[i][j]);
-            }
-        }
-    } */  //use this part if you do not want to rescale ttbar 
-	
-
     ////////////////////this is where we start using ttbar rescaling option
 
 
@@ -258,7 +227,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     double SFttbar(1);
 	
     //looping over files
-    for (int i = 0; i < nFiles; i++) {
+    // for (int i = 0; i < nFiles; i++) { // all input files
+    for (int i = 0; i < 1; i++) { // just loop over data
         cout << "File #" << i << ": " << legendNames[i] << endl;
 
         //Looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
@@ -344,33 +314,16 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         }
     }
     
-    //Here is where the THStack histSumMC is filled/stacked ---
-    //Loop starts with i=1 here because hist[0] refers to the data file (see fileNames.h)
-    for (int i = 1; i < nFiles; i++) {
-        for (int j = 0; j < nHistNoGen ; j++) {
-            if (doBJets <= 0 ){
-                histSumMC[j]->Add(hist[i][j]);
-            }
-            else {
-                //if no bveto, then the ttbar background changes in size
-                //the following lines switch the order in which ttbar and dy+jets is stacked
-                if (i == nFiles - 2) histSumMC[j]->Add(hist[nFiles - 1][j]);
-                else if (i == nFiles - 1) histSumMC[j]->Add(hist[nFiles - 2][j]);
-                else histSumMC[j]->Add(hist[i][j]);
-            }
-        }
-    }
-    
     ////////////////////this is where we end using ttbar rescaling option  
 
-
-    cout << "\n >>> Summed all MC histograms to create stacks! " << endl;
-
     for (unsigned short i(0); i < nHistNoGen; i++) {
+
         if (!file[0]->Get(histoName[i].c_str())->InheritsFrom(TH1D::Class())) continue;
         unsigned short nBins(hist[0][i]->GetNbinsX());
         legend[i]->AddEntry(hist[0][i], legendNames[0].c_str(), "ep");
         canvas[i] = new TCanvas(histoName[i].c_str(), histoName[i].c_str(), 700, 900);
+
+        // PAD 1 ------------------------------------------------------
         pad1[i] = new TPad("pad1", "pad1", 0, 0.3, 1, 1);
         pad1[i]->SetTopMargin(0.055);
         pad1[i]->SetBottomMargin(0.);
@@ -383,22 +336,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
         // Need to draw MC Stack first other wise
         // cannot access Xaxis !!!
-        histSumMC[i]->Draw("HIST"); 
-        if ( (leptonFlavor == "Muons" || leptonFlavor == "DMu" || leptonFlavor == "Electrons" ) && !doInvMassCut ) {  
-            if (histoName[i].find("ZMass_Z") != string::npos){
-                hist[0][i]->GetXaxis()->SetRangeUser(71,111);
-                histSumMC[i]->GetXaxis()->SetRangeUser(71,111);
-            }
-            if (histoName[i].find("JetEta") != string::npos){
-                hist[0][i]->GetXaxis()->SetRangeUser(-2.4,2.4);
-                histSumMC[i]->GetXaxis()->SetRangeUser(-2.4,2.4);
-
-            }
-        }
+        // histSumMC[i]->Draw("HIST"); 
+        hist[0][i]->Draw("e"); // Drawing here instead!!!!
 
         if (histoName[i].find("ZNGoodJets") != string::npos){
             hist[0][i]->GetXaxis()->SetRangeUser(0,6);
-            histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
+            // histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
         }
             
         //andrew -- use the below option if plotting the ttbar control region
@@ -407,37 +350,37 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         //     histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
         // }
 
-
         hist[0][i]->SetTitle("");
-        histSumMC[i]->SetTitle(""); 
-        histSumMC[i]->GetYaxis()->SetLabelSize(0.048); //0.04
-        histSumMC[i]->GetYaxis()->SetLabelOffset(0.002); 
-        histSumMC[i]->GetYaxis()->SetLabelFont(42); 
-        histSumMC[i]->GetYaxis()->SetTitle("Event count"); 
-        histSumMC[i]->GetYaxis()->SetTitleFont(42); 
-        histSumMC[i]->GetYaxis()->SetTitleSize(0.051); //0.04
-        histSumMC[i]->GetYaxis()->SetTitleOffset(1.07); //1.2
-        histSumMC[i]->SetMinimum(8);
-        histSumMC[i]->SetMaximum(110*histSumMC[i]->GetMaximum()); 
+        hist[0][i]->SetTitle(""); 
+        hist[0][i]->GetYaxis()->SetLabelSize(0.048); //0.04
+        hist[0][i]->GetYaxis()->SetLabelOffset(0.002); 
+        hist[0][i]->GetYaxis()->SetLabelFont(42); 
+        hist[0][i]->GetYaxis()->SetTitle("Event count"); 
+        hist[0][i]->GetYaxis()->SetTitleFont(42); 
+        hist[0][i]->GetYaxis()->SetTitleSize(0.051); //0.04
+        hist[0][i]->GetYaxis()->SetTitleOffset(1.07); //1.2
+        // hist[0][i]->SetMinimum(8);
+        hist[0][i]->SetMinimum(20);
+        hist[0][i]->SetMaximum(110*hist[0][i]->GetMaximum()); 
         if (histoName[i].find("AbsRapidity") != string::npos){
-        histSumMC[i]->SetMaximum(2100*histSumMC[i]->GetMaximum()); 
+        hist[0][i]->SetMaximum(2100*hist[0][i]->GetMaximum()); 
         }
         if (histoName[i].find("dPhiLepJet") != string::npos){
-        histSumMC[i]->SetMaximum(6300*histSumMC[i]->GetMaximum());  
+        hist[0][i]->SetMaximum(6300*hist[0][i]->GetMaximum());  
         }
         if (histoName[i].find("LepPtPlusHT") != string::npos){
-         histSumMC[i]->SetMaximum(5000*histSumMC[i]->GetMaximum());
+         hist[0][i]->SetMaximum(5000*hist[0][i]->GetMaximum());
         }
 
         /// first pad plots
-        hist[0][i]->DrawCopy("e same");
+        // hist[0][i]->DrawCopy("e same");
         legend[i]->Draw();
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
         cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
        
-        if (yearStr == "2016") intLumi[i]->DrawLatex(0.73,0.955, "35.9 fb^{-1} (13 TeV)");
-        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.73,0.955, "41.5 fb^{-1} (13 TeV)");
-        else intLumi[i]->DrawLatex(0.73,0.955, "? fb^{-1} (13 TeV)");
+        if (yearStr == "2016") intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
+        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71,0.955, "41.5 fb^{-1} (13 TeV)");
+        else intLumi[i]->DrawLatex(0.71,0.955, "? fb^{-1} (13 TeV)");
 
 
         if ( histoName[i].find("inc0") == string::npos){
@@ -450,6 +393,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
             pad1[i]->Draw();
         }  
    
+        // PAD 2 ------------------------------------------------------
         //Drawing the data-to-MC ratio plot on the bottom of the canvas
         canvas[i]->cd();
         pad2[i] = new TPad("pad2", "pad2", 0, 0, 1, 0.3);
@@ -462,81 +406,48 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         pad2[i]->Draw();
         pad2[i]->cd();
 
-        //andrew -- remember, the loop over i here is a loop over nHistNoGen
-        //hist[0][i] means the ith histogram from the data file
-        hist[0][i]->SetStats(0);
-        hist[0][i]->SetTitle("");
+        TH1D* hDataTemp = (TH1D *) hist[0][i]->Clone();
 
-        hist[0][i]->GetXaxis()->SetTickLength(0.03);
-        hist[0][i]->GetXaxis()->SetTitleSize(0.126);  //0.11
-        hist[0][i]->GetXaxis()->SetTitleOffset(1.11); //1.05
-        hist[0][i]->GetXaxis()->SetTitleFont(42); 
-        hist[0][i]->GetXaxis()->SetLabelSize(0.113);  //0.12
-        hist[0][i]->GetXaxis()->SetLabelOffset(0.018);
-        hist[0][i]->GetXaxis()->SetLabelFont(42); 
+        hDataTemp->SetStats(0);
+        hDataTemp->SetTitle("");
+
+        hDataTemp->GetXaxis()->SetTickLength(0.03);
+        hDataTemp->GetXaxis()->SetTitleSize(0.126);  //0.11
+        hDataTemp->GetXaxis()->SetTitleOffset(1.11); //1.05
+        hDataTemp->GetXaxis()->SetTitleFont(42); 
+        hDataTemp->GetXaxis()->SetLabelSize(0.113);  //0.12
+        hDataTemp->GetXaxis()->SetLabelOffset(0.018);
+        hDataTemp->GetXaxis()->SetLabelFont(42); 
 
         if (histoName[i].find("ZNGoodJets") != string::npos){
-            hist[0][i]->GetXaxis()->SetLabelSize(0.16);  //0.12
+            hDataTemp->GetXaxis()->SetLabelSize(0.16);  //0.12
         }
 
-        hist[0][i]->GetYaxis()->SetRangeUser(0.51,1.49);
-        hist[0][i]->GetYaxis()->SetNdivisions(5,5,0);
-        hist[0][i]->GetYaxis()->SetTitle("Simulation/Data");
-        hist[0][i]->GetYaxis()->SetTitleFont(42);
-        hist[0][i]->GetYaxis()->SetTitleSize(0.104); //0.1
-        hist[0][i]->GetYaxis()->SetTitleOffset(0.48); //0.5
-        hist[0][i]->GetYaxis()->CenterTitle();
-        hist[0][i]->GetYaxis()->SetLabelSize(0.09);  //0.08
-        hist[0][i]->GetYaxis()->SetLabelFont(42); 
+        hDataTemp->GetYaxis()->SetRangeUser(0.51,1.49);
+        hDataTemp->GetYaxis()->SetNdivisions(5,5,0);
+        hDataTemp->GetYaxis()->SetTitle("Simulation/Data");
+        hDataTemp->GetYaxis()->SetTitleFont(42);
+        hDataTemp->GetYaxis()->SetTitleSize(0.104); //0.1
+        hDataTemp->GetYaxis()->SetTitleOffset(0.48); //0.5
+        hDataTemp->GetYaxis()->CenterTitle();
+        hDataTemp->GetYaxis()->SetLabelSize(0.09);  //0.08
+        hDataTemp->GetYaxis()->SetLabelFont(42); 
 
-        //andrew -- dividing data (hist[0]) by stacked MC (histSumMC)
-        hist[0][i]->Divide((TH1D*) histSumMC[i]->GetStack()->Last());
         for (unsigned short j(1); j <= nBins; j++){
-
-
-        //     double content(hist[0][i]->GetBinContent(j));
-        //     double error(hist[0][i]->GetBinError(j));
-
-        //    double binW(hist[0][i]->GetBinWidth(j));
-
-        //     if (content > 0){
-        //         hist[0][i]->SetBinContent(j, content*1./(binW));
-        //         //hist[0][i]->SetBinError(j, error*1./(binW));
-        //     }
-     
-            //These lines flip the bin content to Sim/Data ---
-            //reassign both bincontent and binerrors
-            double content(hist[0][i]->GetBinContent(j));
-            double contentError(hist[0][i]->GetBinError(j));
-            if (content > 0){
-                hist[0][i]->SetBinContent(j, 1./content);
-                // hist[0][i]->SetBinError(j, contentError*pow(hist[0][i]->GetBinContent(j),2.));
-                hist[0][i]->SetBinError(j, contentError/(content*content));
-            }
+            hDataTemp->SetBinContent(j, 1.);
+            hDataTemp->SetBinError(j, 0.);
         }
 
-        hist[0][i]->DrawCopy("EP");
-        canvas[i]->cd();
+        hDataTemp->SetMarkerSize(0); 
 
+        hDataTemp->Draw("EP");
+
+        canvas[i]->cd();
         string outputFilePDF = outputFileName + "/" + histoName[i] + ".pdf";
         canvas[i]->Print(outputFilePDF.c_str());
         outputFile->cd();
         canvas[i]->Write();
 
-        // Next section prints out the same plots on a linear scale
-        // histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
-        // TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
-        // tmpCanvas->cd();
-        // tmpCanvas->Draw();
-        // TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
-        // tmpPad->SetLogy(0);
-        // histoName[i] += "_Lin";
-        // tmpCanvas->SetTitle(histoName[i].c_str());
-        // tmpCanvas->SetName(histoName[i].c_str());
-        // string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
-        // tmpCanvas->Print(outputFileLinPDF.c_str());
-        // outputFile->cd();
-        // tmpCanvas->Write();
     }
     outputFile->cd();
     outputFile->Close();
