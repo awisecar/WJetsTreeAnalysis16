@@ -581,8 +581,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if (doZ && genLep.pt >= 20 && fabs(genLep.eta) <= 2.4 && fabs(genLep.charge) > 0){
                         genLeptons.push_back(genLep);
                     }
+             
+                    // Make gen Muon pT cut match that of reco Muon
+                    double genLepPtCut = 25.;
+                    if (year == 2016) genLepPtCut = 26.;
+                    if (year == 2017) genLepPtCut = 29.;
                     //For WJets, pT and eta cut on the muon, MET cut on the neutrino
-                    if (doW && ( (fabs(genLep.charge) > 0 && genLep.pt >= 26 && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut) ) ){
+                    if (doW && ( (fabs(genLep.charge) > 0 && genLep.pt >= genLepPtCut && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut) ) ){
                         genLeptons.push_back(genLep); 
                         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: genLep #" << i << " passed analysis cuts!" << endl;
                     }
@@ -1161,8 +1166,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // determine if passes dRCut
                     // wrt to the leptons that have passed the event selection cuts (should just be the one muon for W+jets)
                     // if the jet and muon are within a dR cone of < 0.4, then jetPassesdRCut turned to 0
-                    if ( (doDR) && deltaR(jetAK8.phi, jetAK8.eta, selLeptons[j].phi, selLeptons[j].eta) < 0.4 ) jetAK8PassesdRCut = 0;
+                    if ( (doDR) && deltaR(jetAK8.phi, jetAK8.eta, selLeptons[j].phi, selLeptons[j].eta) < 0.8 ) jetAK8PassesdRCut = 0;
                 }
+                // the dR(mu, j) cut for AK8 jets is 0.8
 				if (jetAK8PassesdRCut) jetAK8.passDR04 = true;
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) {
@@ -1215,9 +1221,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     //regardless, our topology suggests that the jets kick off of the W-system, so they should be well seprated from all gen leptonic activity
 					if ( (genLeptons[j].charge != 0) && (doDR) ){
                         //ah, it's here that we demand our genLepton to be a muon
-						if (deltaR(genJetAK8.phi, genJetAK8.eta, genLeptons[j].phi, genLeptons[j].eta) < 0.4) genJetAK8PassesdRCut = 0;
+						if (deltaR(genJetAK8.phi, genJetAK8.eta, genLeptons[j].phi, genLeptons[j].eta) < 0.8) genJetAK8PassesdRCut = 0;
                     }
                 }
+                // the dR(mu, j) cut for AK8 jets is 0.8
 				if (genJetAK8PassesdRCut) genJetAK8.passDR04 = true;
 	
 				if (genJetAK8.pt >= 170. && fabs(genJetAK8.eta) <= 4.7){
@@ -2658,6 +2665,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 ZNGoodJets_Zinc->Fill(1., weight);
                 ZNGoodJetsFull_Zinc->Fill(1., weight);
                 ZNGoodJets_Zinc_NoWeight->Fill(1.);
+
                 ZMass_Zinc1jet->Fill(Z.M(), weight);
                 MET_Zinc1jet->Fill(METpt, weight);
                 //MET_1_Zinc1jet->Fill(METpt, weight);
@@ -2666,14 +2674,26 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //                ZPt_Zinc1jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc1jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc1jet->Fill(Z.Eta(), weight);
+
                 lepPt_Zinc1jet->Fill(lepton1.pt, weight);
                 lepEta_Zinc1jet->Fill(lepton1.eta, weight);
                 lepPhi_Zinc1jet->Fill(lepton1.phi, weight);
+                if (lepton1.charge > 0){
+                    lepChargePlusPt_Zinc1jet->Fill(lepton1.pt, weight);
+                    lepChargePlusEta_Zinc1jet->Fill(lepton1.eta, weight);
+                    lepChargePlusPhi_Zinc1jet->Fill(lepton1.phi, weight);
+                }
+                if (lepton1.charge < 0){
+                    lepChargeMinusPt_Zinc1jet->Fill(lepton1.pt, weight);
+                    lepChargeMinusEta_Zinc1jet->Fill(lepton1.eta, weight);
+                    lepChargeMinusPhi_Zinc1jet->Fill(lepton1.phi, weight);
+                }
                 if (doZ || doTT){
                     lepPt_Zinc1jet->Fill(lepton2.pt, weight);
                     lepEta_Zinc1jet->Fill(lepton2.eta, weight);
                     lepPhi_Zinc1jet->Fill(lepton2.phi, weight);
                 }
+
                 dPhiLeptons_Zinc1jet->Fill(deltaPhi(lep1, lep2), weight);
                 dEtaLeptons_Zinc1jet->Fill(lepton1.eta - lepton2.eta, weight);
                 dRLeptons_Zinc1jet->Fill(deltaR(lepton1.phi, lepton1.eta, lepton2.phi, lepton2.eta), weight);
@@ -2711,7 +2731,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if ( fabs(jets[0].eta) >= j_Y_range[i] &&  fabs(jets[0].eta) < j_Y_range[i+1] ) FirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
                 }
 
-
                 if (nGoodJets == 1){
                     // compute Delta pt between Z and jets
                     if (Z.Pt() > 0.8 * jetPtCutMin  && jets[0].pt/Z.Pt() < 1.2 && jets[0].pt/Z.Pt() > 0.8 && deltaPhi(leadJ, Z) > 2.7){
@@ -2743,6 +2762,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }
             }
             if (nGoodJetsAK8 >= 1){
+                for (unsigned short j(0); j < nGoodJetsAK8; j++){
+                    AllJetAK8Pt_Zinc1jet->Fill(jetsAK8[j].pt, weight);
+                    AllJetAK8Eta_Zinc1jet->Fill(jetsAK8[j].eta, weight);
+                    AllJetAK8Phi_Zinc1jet->Fill(jetsAK8[j].phi, weight);
+                }
                 LeadingJetAK8Pt_Zinc1jet->Fill(jetsAK8[0].pt, weight);
                 LeadingJetAK8Pt_2_Zinc1jet->Fill(jetsAK8[0].pt, weight);
                 LepPtPlusLeadingJetAK8Pt_Zinc1jet->Fill(lepton1.pt + jetsAK8[0].pt, weight);

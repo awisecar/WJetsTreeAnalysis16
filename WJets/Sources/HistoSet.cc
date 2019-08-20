@@ -400,9 +400,8 @@ HistoSet::HistoSet(string leptonFlavor)
 	
     
     //--- Jet multiplicity -----------
-    if ( doWJets ) ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 8, -0.5, 7.5);
-    //if ( doWJets ) ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
-    else ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 8, -0.5, 7.5);
+    ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 9, -0.5, 8.5);
+    //ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
@@ -411,14 +410,13 @@ HistoSet::HistoSet(string leptonFlavor)
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    /*if ( doWJets ){
-        ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+    ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+    /*
         ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
         ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-    }*/
+    */
     
-    if ( doWJets )  genZNGoodJets_Zexc = newTH1D("genZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 8, -0.5, 7.5);
-    else genZNGoodJets_Zexc = newTH1D("genZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 8, -0.5, 7.5);
+    genZNGoodJets_Zexc = newTH1D("genZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 9, -0.5, 8.5);
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(1,"= 0");
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(2,"= 1");
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(3,"= 2");
@@ -427,13 +425,13 @@ HistoSet::HistoSet(string leptonFlavor)
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(6,"= 5");
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(7,"= 6");
     genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(8,"= 7");
-   /* if ( doWJets ){
-        genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+    genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+   /*
         genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
         genZNGoodJets_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
-    }*/
+    */
     
-    ZNGoodJets_Zinc = newTH1D("ZNGoodJets_Zinc","Jet Counter (incl.)", "N_{jets}", 8, -0.5, 7.5);
+    ZNGoodJets_Zinc = newTH1D("ZNGoodJets_Zinc","Jet Counter (incl.)", "N_{jets}", 9, -0.5, 8.5);
     //ZNGoodJets_Zinc = newTH1D("ZNGoodJets_Zinc","Jet Counter (incl.)", "N_{jets}", 11, -0.5, 10.5);
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(1, "#geq 0");
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(2, "#geq 1");
@@ -443,12 +441,13 @@ HistoSet::HistoSet(string leptonFlavor)
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(6, "#geq 5");
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(7, "#geq 6");
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(8, "#geq 7");
-    /*
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(9, "#geq 8");
+    /*
     ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(10,"#geq 9");
-    ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10");*/
+    ZNGoodJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10");
+    */
     
-    genZNGoodJets_Zinc = newTH1D("genZNGoodJets_Zinc","Jet Counter (incl.)", "N_{jets}", 8, -0.5, 7.5);
+    genZNGoodJets_Zinc = newTH1D("genZNGoodJets_Zinc","Jet Counter (incl.)", "N_{jets}", 9, -0.5, 8.5);
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(1,"#geq 0");
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(2,"#geq 1");
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(3,"#geq 2");
@@ -457,13 +456,14 @@ HistoSet::HistoSet(string leptonFlavor)
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(6,"#geq 5");
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(7,"#geq 6");
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(8,"#geq 7");
-    /*genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(9,"#geq 8");
+    genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(9,"#geq 8");
+    /*
     genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(10,"#geq 9");
-    genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10"); */
+    genZNGoodJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10"); 
+    */
     
-    if ( doWJets ) hresponseZNGoodJets_Zexc = newTH2D("hresponseZNGoodJets_Zexc", "hresp ZNGoodJets_Zexc", 8, -0.5, 7.5, 8, -0.5, 7.5);
-    else hresponseZNGoodJets_Zexc = newTH2D("hresponseZNGoodJets_Zexc", "hresp ZNGoodJets_Zexc", 8, -0.5, 7.5, 8, -0.5, 7.5);
-    hresponseZNGoodJets_Zinc = newTH2D("hresponseZNGoodJets_Zinc", "hresp ZNGoodJets_Zinc", 8, -0.5, 7.5, 8, -0.5, 7.5);
+    hresponseZNGoodJets_Zexc = newTH2D("hresponseZNGoodJets_Zexc", "hresp ZNGoodJets_Zexc", 9, -0.5, 8.5, 9, -0.5, 8.5);
+    hresponseZNGoodJets_Zinc = newTH2D("hresponseZNGoodJets_Zinc", "hresp ZNGoodJets_Zinc", 9, -0.5, 8.5, 9, -0.5, 8.5);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ------ W+jets alpha-s histograms ------ 
@@ -1549,6 +1549,14 @@ HistoSet::HistoSet(string leptonFlavor)
     
     
     lepEtaEta_Zinc0jet                  = newTH2D("lepEtaEta_Zinc0jet",                  "#eta #eta (N_{jets} #geq 0)",                  12, -2.4, 2.4, 12,-2.4, 2.4);
+
+    // lepton + and - charge Eta
+    lepChargePlusEta_Zinc1jet  = newTH1D("lepChargePlusEta_Zinc1jet", "lep+ #eta (N_{jets} #geq 1)", "#eta(#mu^{+})",   24, -2.4, 2.4);
+    lepChargeMinusEta_Zinc1jet  = newTH1D("lepChargeMinusEta_Zinc1jet", "lep- #eta (N_{jets} #geq 1)", "#eta(#mu^{-})",   24, -2.4, 2.4);
+
+    // lepton + and - charge Phi
+    lepChargePlusPhi_Zinc1jet  = newTH1D("lepChargePlusPhi_Zinc1jet", "lep+ #phi (N_{jets} #geq 1)", "#phi(#mu^{+})",   24, -PI, PI);
+    lepChargeMinusPhi_Zinc1jet  = newTH1D("lepChargeMinusPhi_Zinc1jet", "lep- #phi (N_{jets} #geq 1)", "#phi(#mu^{-})",   24, -PI, PI);
     
     FirstJetEtaFull_Zinc1jet                = newTH1D("FirstJetEtaFull_Zinc1jet",                "1st jet #eta (N_{jets} #geq 1)",              "#eta(j_{1})",  48,-2.4, 2.4);
     SecondJetEtaFull_Zinc2jet               = newTH1D("SecondJetEtaFull_Zinc2jet",               "2nd jet #eta (N_{jets} #geq 2)",              "#eta(j_{2})",  48,-2.4, 2.4);
@@ -1564,6 +1572,8 @@ HistoSet::HistoSet(string leptonFlavor)
     AllJetEta_Zinc2jet                  = newTH1D("AllJetEta_Zinc2jet",                  "All jets #eta (N_{jets} #geq 2)",             "#eta(jets)",   47,-4.7, 4.7);
     AllJetEta_Zinc3jet                  = newTH1D("AllJetEta_Zinc3jet",                  "All jets #eta (N_{jets} #geq 3)",             "#eta(jets)",   47,-4.7, 4.7);
     AllJetEta_Zinc4jet                  = newTH1D("AllJetEta_Zinc4jet",                  "All jets #eta (N_{jets} #geq 4)",             "#eta(jets)",   47,-4.7, 4.7);
+
+    AllJetAK8Eta_Zinc1jet = newTH1D("AllJetAK8Eta_Zinc1jet", "All AK8 jets #eta (N_{jets_{AK8}} #geq 1)", "#eta(jets_{AK8})",   47,-4.7, 4.7);
     
     //--------
     FirstJetPhi_Zinc1jet                = newTH1D("FirstJetPhi_Zinc1jet",                "1st jet #phi (N_{jets} #geq 1)",              "#phi(j_{1})",  30,-PI, PI );
@@ -1581,12 +1591,14 @@ HistoSet::HistoSet(string leptonFlavor)
     AllJetPhi_Zinc3jet                  = newTH1D("AllJetPhi_Zinc3jet",                  "All jets #phi (N_{jets} #geq 3)",             "#phi(jets)",   30,-PI, PI );
     AllJetPhi_Zinc4jet                  = newTH1D("AllJetPhi_Zinc4jet",                  "All jets #phi (N_{jets} #geq 4)",             "#phi(jets)",   30,-PI, PI );
 
-    lepPt_Zinc0jet                      = newTH1D("lepPt_Zinc0jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 0)",       lpT,     40, 0, 200);
-    lepPt_Zinc1jet                      = newTH1D("lepPt_Zinc1jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 1)",       lpT,     40, 0, 200);
-    lepPt_Zinc2jet                      = newTH1D("lepPt_Zinc2jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 2)",       lpT,     40, 0, 200);
-    lepPt_Zinc3jet                      = newTH1D("lepPt_Zinc3jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 3)",       lpT,     40, 0, 200);
-    lepPt_Zinc4jet                      = newTH1D("lepPt_Zinc4jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 4)",       lpT,     40, 0, 200);
-    lepPt_Zinc5jet                      = newTH1D("lepPt_Zinc5jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 5)",       lpT,     40, 0, 200);
+    AllJetAK8Phi_Zinc1jet = newTH1D("AllJetAK8Phi_Zinc1jet",  "All AK8 jets #phi (N_{jets_{AK8}} #geq 1)", "#phi(jets_{AK8})",   30,-PI, PI );
+
+    lepPt_Zinc0jet                      = newTH1D("lepPt_Zinc0jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 0)",       lpT,     200, 0, 1000);
+    lepPt_Zinc1jet                      = newTH1D("lepPt_Zinc1jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 1)",       lpT,     200, 0, 1000);
+    lepPt_Zinc2jet                      = newTH1D("lepPt_Zinc2jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 2)",       lpT,     200, 0, 1000);
+    lepPt_Zinc3jet                      = newTH1D("lepPt_Zinc3jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 3)",       lpT,     200, 0, 1000);
+    lepPt_Zinc4jet                      = newTH1D("lepPt_Zinc4jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 4)",       lpT,     200, 0, 1000);
+    lepPt_Zinc5jet                      = newTH1D("lepPt_Zinc5jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 5)",       lpT,     200, 0, 1000);
 
     GLepBarePtZinc0jet                   = newTH1D("GLepBarePtZinc0jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 0)",   lpT,     40, 0, 200);
     GLepBarePtZinc1jet                   = newTH1D("GLepBarePtZinc1jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 1)",   lpT,     40, 0, 200);
@@ -1598,6 +1610,10 @@ HistoSet::HistoSet(string leptonFlavor)
     lepPt_Zexc3jet                      = newTH1D("lepPt_Zexc3jet",                      "1st & 2nd lep p_{T} (N_{jets} = 3)",          lpT,     40, 0, 200);
     lepPt_Zexc4jet                      = newTH1D("lepPt_Zexc4jet",                      "1st & 2nd lep p_{T} (N_{jets} = 4)",          lpT,     40, 0, 200);
     lepPt_Zexc5jet                      = newTH1D("lepPt_Zexc5jet",                      "1st & 2nd lep p_{T} (N_{jets} = 5)",          lpT,     40, 0, 200);
+
+    // lepton + and - charge Pt
+    lepChargePlusPt_Zinc1jet    = newTH1D("lepChargePlusPt_Zinc1jet",  "lep+ p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{+}) [GeV]", 200, 0, 1000);
+    lepChargeMinusPt_Zinc1jet    = newTH1D("lepChargeMinusPt_Zinc1jet",  "lep- p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{-}) [GeV]", 200, 0, 1000);
     
     //andrew
     genMT_Zinc1jet = newTH1D("genMT_Zinc1jet", "gen MT_Zinc1jet", "MT", 200, 0., 400.);
@@ -1710,11 +1726,12 @@ HistoSet::HistoSet(string leptonFlavor)
     genThirdHighestJetPt_Zinc5jet       = newTH1D("genThirdHighestJetPt_Zinc5jet",       "gen 3rd Highest jet p_{T} (N_{jets} #geq 5)", "p_{T}(j_{3}) [GeV]",     nJetPt_Zinc3jet, jetPt_Zinc3jet); 
     genThirdHighestJetPt_Zinc6jet       = newTH1D("genThirdHighestJetPt_Zinc6jet",       "gen 3rd Highest jet p_{T} (N_{jets} #geq 6)", "p_{T}(j_{3}) [GeV]",     nJetPt_Zinc3jet, jetPt_Zinc3jet); 
 
-    AllJetPt_Zinc1jet                   = newTH1D("AllJetPt_Zinc1jet",                   "All jets (N_{jets} #geq 1)",                  "p_{T}(jets) [GeV]",     80, 0, 400);
-    AllJetPt_Zinc2jet                   = newTH1D("AllJetPt_Zinc2jet",                   "All jets (N_{jets} #geq 2)",                  "p_{T}(jets) [GeV]",     80, 0, 400);
-    AllJetPt_Zinc3jet                   = newTH1D("AllJetPt_Zinc3jet",                   "All jets (N_{jets} #geq 3)",                  "p_{T}(jets) [GeV]",     80, 0, 400);
-    AllJetPt_Zinc4jet                   = newTH1D("AllJetPt_Zinc4jet",                   "All jets (N_{jets} #geq 4)",                  "p_{T}(jets) [GeV]",     80, 0, 400);
+    AllJetPt_Zinc1jet                   = newTH1D("AllJetPt_Zinc1jet",                   "All jets (N_{jets} #geq 1)",                  "p_{T}(jets) [GeV]",     200, 0, 1000);
+    AllJetPt_Zinc2jet                   = newTH1D("AllJetPt_Zinc2jet",                   "All jets (N_{jets} #geq 2)",                  "p_{T}(jets) [GeV]",     200, 0, 1000);
+    AllJetPt_Zinc3jet                   = newTH1D("AllJetPt_Zinc3jet",                   "All jets (N_{jets} #geq 3)",                  "p_{T}(jets) [GeV]",     200, 0, 1000);
+    AllJetPt_Zinc4jet                   = newTH1D("AllJetPt_Zinc4jet",                   "All jets (N_{jets} #geq 4)",                  "p_{T}(jets) [GeV]",     200, 0, 1000);
 
+    AllJetAK8Pt_Zinc1jet = newTH1D("AllJetAK8Pt_Zinc1jet",    "All AK8 jets pT (N_{jets_{AK8}} #geq 1)",     "p_{T}(jets_{AK8}) [GeV]",     200, 0, 1000);
 
     hPtEtaBackJet_Zexc1jet              = newTH2D("PtEtaBackJet_Zexc1jet",              "p_{T} #eta (N_{jets} = 1)",       nJetPtEta_Zinc1jet, jetPtEta_Zinc1jet   ,      12  ,  0., 2.4);
     hPtEtaBackJetMVA_Zexc1jet           = newTH2D("PtEtaBackJetMVA_Zexc1jet",           "p_{T} #eta (N_{jets} = 1)",       nJetPtEta_Zinc1jet, jetPtEta_Zinc1jet   ,      12  ,  0., 2.4);
@@ -2080,7 +2097,9 @@ HistoSet::HistoSet(string leptonFlavor)
     deltaPtjetMu               = newTH1D("deltaPtjetMu", "delta Pt btwn jet and muon if dR<0.5", "#R", 150, -75., 75.);
 
     //TH2D* jecVspt=newTH1D("jecVspt","jec Vs pt","jec","pt",80,0.,400,100,0,0.5);
-    NVtx                          = newTH1D("NVtx","Number of vertices","#Vtx",45,0.5,45.5);
+    
+    NVtx                          = newTH1D("NVtx","Number of vertices","#Vtx",80,0.5,80.5);
+
     ZNGoodJetsBeta_Zexc = newTH2D("ZNGoodJetsBeta_Zexc","Beta cut vs Jet Counter (excl.) ", 11, -0.5, 10.5, 10, -0.5, 9.5);
     ZNGoodJetsBeta_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
     ZNGoodJetsBeta_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
@@ -2129,20 +2148,20 @@ HistoSet::HistoSet(string leptonFlavor)
     METvslepIso     = newTH2D("MET vs lep Iso" ,"MET vs leptons Iso for all passing lepton",100,0.,300.,100, 0., 1 );
     MTvslepIso      = newTH2D("MT vs lep Iso" ,"MT vs leptons Iso for all passing lepton",100,0.,300.,100, 0., 1 );
     
-    MET_Zinc0jet                      = newTH1D("MET_Zinc0jet",                      "MET (N_{jets} #geq 0)",  "MET [GeV]",      200,0.,400 );
-    MET_Zinc1jet                      = newTH1D("MET_Zinc1jet",                      "MET (N_{jets} #geq 1)",  "MET [GeV]",      200,0.,400 );
-    MET_Zinc2jet                      = newTH1D("MET_Zinc2jet",                      "MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,400 );
-    MET_Zinc3jet                      = newTH1D("MET_Zinc3jet",                      "MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,400 );
+    MET_Zinc0jet                      = newTH1D("MET_Zinc0jet",                      "MET (N_{jets} #geq 0)",  "MET [GeV]",      200,0.,1000 );
+    MET_Zinc1jet                      = newTH1D("MET_Zinc1jet",                      "MET (N_{jets} #geq 1)",  "MET [GeV]",      200,0.,1000 );
+    MET_Zinc2jet                      = newTH1D("MET_Zinc2jet",                      "MET (N_{jets} #geq 2)",  "MET [GeV]",      200,0.,1000 );
+    MET_Zinc3jet                      = newTH1D("MET_Zinc3jet",                      "MET (N_{jets} #geq 3)",  "MET [GeV]",      200,0.,1000 );
 
     METphi_Zinc0jet                      = newTH1D("METphi_Zinc0jet",                      "MET #phi (N_{jets} #geq 0)",  "#phi(MET)",      100,-PI ,PI );
     METphi_Zinc1jet                      = newTH1D("METphi_Zinc1jet",                      "MET #phi (N_{jets} #geq 1)",  "#phi(MET)",      100,-PI ,PI );
     METphi_Zinc2jet                      = newTH1D("METphi_Zinc2jet",                      "MET #phi (N_{jets} #geq 2)",  "#phi(MET)",      100,-PI ,PI );
     METphi_Zinc3jet                      = newTH1D("METphi_Zinc3jet",                      "MET #phi (N_{jets} #geq 3)",  "#phi(MET)",      100,-PI ,PI );
 
-    MT_Zinc0jet                      = newTH1D("MT_Zinc0jet",                      "MT (N_{jets} #geq 0)",    "MT [GeV]",    200,0.,400 );
-    MT_Zinc1jet                      = newTH1D("MT_Zinc1jet",                      "MT (N_{jets} #geq 1)",    "MT [GeV]",    200,0.,400 );
-    MT_Zinc2jet                      = newTH1D("MT_Zinc2jet",                      "MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,400 );
-    MT_Zinc3jet                      = newTH1D("MT_Zinc3jet",                      "MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,400 );
+    MT_Zinc0jet                      = newTH1D("MT_Zinc0jet",                      "MT (N_{jets} #geq 0)",    "MT [GeV]",    200,0.,1000 );
+    MT_Zinc1jet                      = newTH1D("MT_Zinc1jet",                      "MT (N_{jets} #geq 1)",    "MT [GeV]",    200,0.,1000 );
+    MT_Zinc2jet                      = newTH1D("MT_Zinc2jet",                      "MT (N_{jets} #geq 2)",    "MT [GeV]",    200,0.,1000 );
+    MT_Zinc3jet                      = newTH1D("MT_Zinc3jet",                      "MT (N_{jets} #geq 3)",    "MT [GeV]",    200,0.,1000 );
 
     partonsN          = newTH1D("partonsN","Number of ME partons ", "N_{partons}", 16, -0.5, 15.5);
     partonsNWeighted  = newTH1D("partonsNWeighted","Number of ME partons: weighted ", "N_{partons}", 16, -0.5, 15.5);

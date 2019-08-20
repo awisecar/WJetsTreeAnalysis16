@@ -31,14 +31,14 @@
 
 
     //--- clean the *_cc.d and *_cc.so files ---
-//    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
-//    system(cmd.c_str());
-//    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
-//    system(cmd.c_str());
-//    system("rm .ls_tmp.list");
+    string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
+    system(cmd.c_str());
+    cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
+    system(cmd.c_str());
+    cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
+    system(cmd.c_str());
+    cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
+    system(cmd.c_str());
+    system("rm .ls_tmp.list");
 
 }
