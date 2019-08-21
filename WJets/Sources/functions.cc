@@ -122,18 +122,6 @@ TH2D* newTH2D(string name, string title, int nBinsX, double xLow, double xUp, in
     return hist;
 }
 
-RooUnfoldResponse* newResp(TH1D* reco, TH1D* gen)
-{
-    RooUnfoldResponse *response = new RooUnfoldResponse(reco, gen);
-    return response;
-}
-
-RooUnfoldResponse* newResp(TH2D* reco, TH2D* gen)
-{
-    RooUnfoldResponse *response = new RooUnfoldResponse(reco, gen);
-    return response;
-}
-
 double phi0to2pi(double phi){
     double pi = 3.141592653589793238;
     while (phi >= 2.*pi) phi -= 2.*pi;
@@ -454,3 +442,19 @@ void bestTwoJetsCandidatesPhi(vector<jetStruct> jets, pair<TLorentzVector, TLore
         } 
     }
 }
+
+vector<double> buildVecFineBin( int nStdBin, double arrStdBin[], int factChop)
+{
+    vector<double> vecTemp;
+    for (int i = 0; i < nStdBin; i++){
+        double binWidth = (arrStdBin[i+1] - arrStdBin[i])/5;
+        for (int j = 0; j < factChop; j++){
+            double element(0.);
+            element = arrStdBin[i] + (j * binWidth);
+            vecTemp.push_back(element);
+        }
+    }
+    vecTemp.push_back(arrStdBin[nStdBin]);
+    return vecTemp;
+}
+

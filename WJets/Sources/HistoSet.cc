@@ -2,7 +2,6 @@
 #include <iostream>
 #include <TH1.h>
 #include <TH2.h>
-#include <RooUnfoldResponse.h>
 #include "HistoSet.h"
 
 using namespace std;
@@ -217,7 +216,7 @@ HistoSet::HistoSet(string leptonFlavor)
     double jetPt_1_Zinc4jet[11] = {20, 24, 30, 39, 49, 62, 78, 96, 120, 160, 250};
     int nJetPt_1_Zinc5jet(7);
     double jetPt_1_Zinc5jet[8] = {20, 24, 30, 39, 49, 62, 90, 140};
-    
+
     vector<double> jetPt_2_Zinc1jet;
     vector<double> jetPt_2_Zinc2jet;
     vector<double> jetPt_2_Zinc3jet;
@@ -228,7 +227,6 @@ HistoSet::HistoSet(string leptonFlavor)
     jetPt_2_Zinc3jet = buildVecFineBin(nJetPt_Zinc3jet, jetPt_Zinc3jet, 5);
     jetPt_2_Zinc4jet = buildVecFineBin(nJetPt_Zinc4jet, jetPt_Zinc4jet, 5);
     jetPt_2_Zinc5jet = buildVecFineBin(nJetPt_Zinc5jet, jetPt_Zinc5jet, 5);
-    
     
     //int nJetHT_Zinc1jet(17);
     //double jetHT_Zinc1jet[18] = {30, 39, 49, 62, 78, 96, 118, 150, 190, 240, 300, 370, 450, 540, 650, 800, 1000, 1500};
@@ -285,7 +283,6 @@ HistoSet::HistoSet(string leptonFlavor)
     jetHT_2_Zinc3jet = buildVecFineBin(nJetHT_Zinc3jet, jetHT_Zinc3jet, 5);
     jetHT_2_Zinc4jet = buildVecFineBin(nJetHT_Zinc4jet, jetHT_Zinc4jet, 5);
     jetHT_2_Zinc5jet = buildVecFineBin(nJetHT_Zinc5jet, jetHT_Zinc5jet, 5);
-    
 
     int nJetMass_Zinc2jet(17);
     double ArrJetmass_Zinc2jet[18] = {0, 25, 52, 81, 112, 145, 180, 217, 256, 297, 340, 385, 432, 481, 532, 585, 640, 700};
@@ -293,14 +290,13 @@ HistoSet::HistoSet(string leptonFlavor)
     double ArrJetmass_Zinc3jet[16] = {0, 30, 62, 96, 132, 170, 210, 252, 296, 342, 390, 440, 492, 546, 602, 660};
     int nJetMass_Zinc4jet(14);
     double ArrJetmass_Zinc4jet[15] = {0, 34, 70, 108, 148, 190, 234, 280, 328, 378, 430, 484, 540, 598, 660};
-    
+
     vector<double> vJetmass_2_Zinc2jet;
     vJetmass_2_Zinc2jet = buildVecFineBin(nJetMass_Zinc2jet, ArrJetmass_Zinc2jet, 5);
     vector<double> vJetmass_2_Zinc3jet;
     vJetmass_2_Zinc3jet = buildVecFineBin(nJetMass_Zinc3jet, ArrJetmass_Zinc3jet, 5);
     vector<double> vJetmass_2_Zinc4jet;
     vJetmass_2_Zinc4jet = buildVecFineBin(nJetMass_Zinc4jet, ArrJetmass_Zinc4jet, 5);
-    
     
     int nJetPtEta_Zinc1jet(8);
     double jetPtEta_Zinc1jet[9] = {30, 40, 52, 68, 88, 113, 144, 184, 480};

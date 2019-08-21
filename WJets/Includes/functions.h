@@ -5,7 +5,6 @@
 #include <cstdarg>
 #include <vector>
 #include <TLorentzVector.h>
-#include <RooUnfoldResponse.h>
 
 using namespace std;
 
@@ -41,8 +40,6 @@ TH2D* newTH2D(string, string, int, double*, int, double, double);
 TH2D* newTH2D(string, string, int, double, double, int, double*);
 TH2D* newTH2D(string, string, int, double, double, int, double, double);
 
-RooUnfoldResponse* newResp(TH1D*, TH1D*);
-RooUnfoldResponse* newResp(TH2D*, TH2D*);
 
 double phi0to2pi(double);
 
@@ -82,5 +79,7 @@ double SmearJetPt(double, double, double, int);
 void normalizeTH2D(TH2D*);
 void bestTwoJetsCandidatesPt(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
 void bestTwoJetsCandidatesPhi(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
+
+vector<double> buildVecFineBin(int nStdBin, double arrStdBin[], int factChop);
 
 #endif

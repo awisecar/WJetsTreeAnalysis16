@@ -1,6 +1,5 @@
 #include <iostream>
 #include <sstream>
-#include <RooUnfoldResponse.h>
 #include <TFile.h>
 #include "fileNames.h"
 #include "getFilesAndHistograms.h"
@@ -216,34 +215,6 @@ void getHistos(TH1D *histograms[], TFile *Files[], string variable, bool isDoubl
         histograms[i] = (TH1D*) Files[i]->Get(variable.c_str());
     } 
 }
-
-void getResp(RooUnfoldResponse *response, TFile *File, string variable)
-{
-    response = (RooUnfoldResponse*) File->Get(variable.c_str());
-    if (!response) std::cout << "Couldn't load response" << std::endl;
-}
-
-RooUnfoldResponse* getResp(TFile *File, string variable)
-{
-    std::cout << "fetching: "<< variable <<" from " << File->GetName() << "   --->   Opened ? " << File->IsOpen() << std::endl;
-    RooUnfoldResponse *response = (RooUnfoldResponse*) File->Get(variable.c_str());
-    return response;
-}
-
-void getResps(RooUnfoldResponse *responses[], TFile *Files[], string variable)
-{
-    string fileName = Files[0]->GetName();
-    int nFiles;
-    //if (fileName.find("Data") != string::npos) nFiles = 3;
-    if ((fileName.find("Data") != string::npos) && (fileName.find("QCD") == string::npos)) nFiles = 3;
-    else if (fileName.find("UNFOLDING") != string::npos) nFiles = 4; 
-    else nFiles = 5;
-
-    for (int i(0); i < nFiles; i++){
-        responses[i] = (RooUnfoldResponse*) Files[i]->Get(variable.c_str());
-    } 
-}
-
 
 void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int METcut, int doBJets, bool doTTScale)
 {
