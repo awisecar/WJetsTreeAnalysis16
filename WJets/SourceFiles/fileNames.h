@@ -1,5 +1,5 @@
-#ifndef __fileNames__
-#define __fileNames__
+#ifndef __fileNames_H___
+#define __fileNames_H___
 
 //-- directory of input root files --------------------
 const string FILESDIRECTORY("HistoFiles/");

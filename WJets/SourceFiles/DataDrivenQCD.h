@@ -1,5 +1,5 @@
-#ifndef _DataDrivenQCD_h_
-#define _DataDrivenQCD_h_
+#ifndef _DataDrivenQCD_H_
+#define _DataDrivenQCD_H_
 
 #include <iostream>
 

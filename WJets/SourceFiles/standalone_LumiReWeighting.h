@@ -9,8 +9,9 @@
    \author Salvatore Rappoccio, modified by Mike Hildreth
   
 */
-#ifndef standalone_LumiReWeighting_h
-#define standalone_LumiReWeighting_h
+#ifndef _standalone_LumiReWeighting_H_
+#define _standalone_LumiReWeighting_H_
+
 #include "TH1.h"
 #include "TFile.h"
 #include <string>

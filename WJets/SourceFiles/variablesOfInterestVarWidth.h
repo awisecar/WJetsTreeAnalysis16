@@ -1,5 +1,5 @@
-#ifndef __variablesOfInterest__
-#define __variablesOfInterest__
+#ifndef __variablesOfInterest_H__
+#define __variablesOfInterest_H__
 
 #include <TObject.h>
 #include <TObjString.h>

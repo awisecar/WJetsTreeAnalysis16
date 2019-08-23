@@ -1,5 +1,9 @@
 # WJetsTreeAnalysis16
 
+#########################################
+### Note: THIS README NEEDS TO BE UPDATED
+#########################################
+
 The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for CMS Run 2 data.
 
 If you are interested in 2015 data/MC, please see Apichart's repository here:

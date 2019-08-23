@@ -1,4 +1,5 @@
 //void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2017)
+// ^^^turn on above line if doing the job submission with wjets_jobsub_Condor.py
 {
     string srcdir = "SourceFiles/";
     vector<string> sources;
@@ -501,11 +502,11 @@
                 ZJetsAndDPS DMudata0(lepSelection+"_13TeV_Data_dR_5311_List_0", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                 DMudata0.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
 
-                ZJetsAndDPS DMudata10(lepSelection+"_13TeV_Data_dR_5311_List_10", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-                DMudata10.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+                // ZJetsAndDPS DMudata10(lepSelection+"_13TeV_Data_dR_5311_List_10", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                // DMudata10.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
 
-                ZJetsAndDPS DMudata20(lepSelection+"_13TeV_Data_dR_5311_List_20", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-                DMudata20.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+                // ZJetsAndDPS DMudata20(lepSelection+"_13TeV_Data_dR_5311_List_20", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                // DMudata20.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
             }
         }
 

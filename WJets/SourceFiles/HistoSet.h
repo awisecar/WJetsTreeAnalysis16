@@ -1,6 +1,6 @@
 
-#ifndef _HistoSet_h_
-#define _HistoSet_h_
+#ifndef _HistoSet_H_
+#define _HistoSet_H_
 
 #include <iostream>
 #include <TObject.h>

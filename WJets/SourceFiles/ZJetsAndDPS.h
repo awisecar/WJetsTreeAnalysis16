@@ -4,8 +4,8 @@
 // from TTree tree/tree
 //////////////////////////////////////////////////////////
 
-#ifndef ZJetsAndDPS_h
-#define ZJetsAndDPS_h
+#ifndef _ZJetsAndDPS_H_
+#define _ZJetsAndDPS_H_
 
 #include <iostream>
 #include <fstream>

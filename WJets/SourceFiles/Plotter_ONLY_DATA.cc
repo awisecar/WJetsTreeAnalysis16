@@ -340,7 +340,7 @@ void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
         hist[0][i]->Draw("e"); // Drawing here instead!!!!
 
         if (histoName[i].find("ZNGoodJets") != string::npos){
-            hist[0][i]->GetXaxis()->SetRangeUser(0,7);
+            hist[0][i]->GetXaxis()->SetRangeUser(0,8);
             // histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
         }
             

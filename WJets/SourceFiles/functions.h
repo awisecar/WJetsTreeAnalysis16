@@ -1,5 +1,5 @@
-#ifndef _functions_h_
-#define _functions_h_
+#ifndef _functions_H_
+#define _functions_H_
 
 #include <iostream>
 #include <cstdarg>

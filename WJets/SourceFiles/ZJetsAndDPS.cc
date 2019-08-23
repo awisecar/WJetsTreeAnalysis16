@@ -3770,6 +3770,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         }
         listOfHistograms[i]->Write();
         delete listOfHistograms[i];
+
+        // need to make sure we don't skip over the deleting of the gen histos (for the reco files)
     }
     std::cout << "\nAll histograms written! Yay!" << std::endl;
     

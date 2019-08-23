@@ -1,5 +1,5 @@
-#ifndef _getFilesAndhistograms_h_
-#define _getFilesAndhistograms_h_
+#ifndef _getFilesAndhistograms_H_
+#define _getFilesAndhistograms_H_
 
 #include <iostream>
 #include <TH1.h>
