@@ -353,24 +353,36 @@ HistoSet::HistoSet(string leptonFlavor)
 
     // ----------- AK8 Jet based distributions -----------
 
-    //use for LJ pt and HT,2/2
-    int nJetAK8Pt_ZRatios(5);
-    double jetAK8Pt_ZRatios[6] = {200, 235, 300, 400, 550, 900};
-    int nJetAK8Pt_2_ZRatios(10);
-    double jetAK8Pt_2_ZRatios[11] = {200, 217.5, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    //use for LJ pt and HT,2/2 -----
+    // int nJetAK8Pt_ZRatios(5);
+    // double jetAK8Pt_ZRatios[6] = {200, 235, 300, 400, 550, 900};
+    // int nJetAK8Pt_2_ZRatios(10);
+    // double jetAK8Pt_2_ZRatios[11] = {200, 217.5, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
 
-    //use for lep pt + LJ pt, and lep pt + HT,2/2
-    int nLepJetAK8Pt_ZRatios(5);
-    double lepJetAK8Pt_ZRatios[6] = {225, 260, 300, 400, 550, 900};
-    int nLepJetAK8Pt_2_ZRatios(10);
-    double lepJetAK8Pt_2_ZRatios[11] = {225, 242.5, 260, 280, 300, 350, 400, 475, 550, 725, 900};
+    // change the binning a little
+    int nJetAK8Pt_ZRatios(12);
+    double jetAK8Pt_ZRatios[13] = {200, 210, 220, 235, 250, 275, 310, 355, 405, 470, 570, 720, 1000};
+    int nJetAK8Pt_2_ZRatios(24);
+    double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
-    //use for W pt based things
-    int nWBosonJetAK8Pt_ZRatios(4);
-    double wBosonJetAK8Pt_ZRatios[5] = {235, 300, 400, 550, 900};
-    int nWBosonJetAK8Pt_2_ZRatios(8);
-    double wBosonJetAK8Pt_2_ZRatios[9] = {235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    //use for lep pt + LJ pt, and lep pt + HT,2/2 -----
+    // int nLepJetAK8Pt_ZRatios(5);
+    // double lepJetAK8Pt_ZRatios[6] = {225, 260, 300, 400, 550, 900};
+    // int nLepJetAK8Pt_2_ZRatios(10);
+    // double lepJetAK8Pt_2_ZRatios[11] = {225, 242.5, 260, 280, 300, 350, 400, 475, 550, 725, 900};
+    
+    // change the binning a little
+    int nLepJetAK8Pt_ZRatios(10);
+    double lepJetAK8Pt_ZRatios[11] = {225, 235, 250, 275, 310, 355, 405, 470, 570, 720, 1000};
+    int nLepJetAK8Pt_2_ZRatios(20);
+    double lepJetAK8Pt_2_ZRatios[21] = {225, 230, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
+    //use for W pt based things -----
+    // int nWBosonJetAK8Pt_ZRatios(4);
+    // double wBosonJetAK8Pt_ZRatios[5] = {235, 300, 400, 550, 900};
+    // int nWBosonJetAK8Pt_2_ZRatios(8);
+    // double wBosonJetAK8Pt_2_ZRatios[9] = {235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    
 
     //***************************** Basic plots for Wjets *****************************//
     //--- For calculateing b-tagging efficiency---
