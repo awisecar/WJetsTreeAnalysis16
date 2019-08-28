@@ -1,6 +1,6 @@
 #define PI 3.14159265359
 #define DEBUG 0
-#define PRINTEVENTINFO 1
+#define PRINTEVENTINFO 0
 
 #include <TH2.h>
 #include <TStyle.h>
@@ -74,7 +74,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     TFile *outputFile = new TFile(outputFileName.c_str(), "RECREATE");
     //==========================================================================================================//
 
-    
     if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     std::cout << std::endl;
     //==========================================================================================================//
@@ -83,27 +82,26 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     table TableJESunc, LeptIso, LeptID, LeptTrig;
 
     if (energy == "13TeV"){
-
         if (year == 2016){
-            table TableJESUncertainties("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            table TableJESUncertainties("EfficiencyTables/2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
             TableJESunc = TableJESUncertainties;
             if (leptonFlavor == "SingleMuon")  {
-                table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
-                table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
-                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
+                table SF_Muon_TightID_ReReco("EfficiencyTables/2016_SMu_SFs_TightId_13TeV_EtaPt.txt");
+                table SF_Muon_TightISO_ReReco("EfficiencyTables/2016_SMu_SFs_TightISO_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/2016_SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
                 LeptID = SF_Muon_TightID_ReReco;
                 LeptIso = SF_Muon_TightISO_ReReco;
                 LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
             }
         }
         if (year == 2017){
-            // just use 2016 for now
-            table TableJESUncertainties("EfficiencyTables/JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            // using 2016 JES uncertainties for now
+            table TableJESUncertainties("EfficiencyTables/2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
             TableJESunc = TableJESUncertainties;
             if (leptonFlavor == "SingleMuon")  {
-                table SF_Muon_TightID_ReReco("EfficiencyTables/SMu_SFs_TightId_13TeV_EtaPt.txt");
-                table SF_Muon_TightISO_ReReco("EfficiencyTables/SMu_SFs_TightISO_13TeV_EtaPt.txt");
-                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
+                table SF_Muon_TightID_ReReco("EfficiencyTables/2017_SMu_SFs_TightId_13TeV_EtaPt.txt");
+                table SF_Muon_TightISO_ReReco("EfficiencyTables/2017_SMu_SFs_TightISO_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/2017_SMu_SFs_HLTIsoMu27_13TeV_EtaPt.txt");
                 LeptID = SF_Muon_TightID_ReReco;
                 LeptIso = SF_Muon_TightISO_ReReco;
                 LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
@@ -120,7 +118,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     int puYear(0); 
     if (energy == "13TeV") {
         if (year == 2016) puYear = 2016;
-        if (year == 2017) puYear = 2017; //just use 2016 in code for now
+        if (year == 2017) puYear = 2017;
     }
     int mode = (systematics == 1) ? direction : 0; // PU
     cout << "Pile Up Distribution: " << puYear << ", Mode: " << mode << endl;
@@ -168,20 +166,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     
     TRandom3* Rand_MER_Gen = new TRandom3();
     //==========================================================================================================//
-
-
-    if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-    //---  Retreive the NVtx comparison histogram to have the exact weight to re-weight for pile-up
-    // and have a flat NVtx distribution
-    // if (doFlat){
-    //     string nVtxFileName = "Includes/";
-    //     if (leptonFlavor == "Muons") nVtxFileName += "DMu_NVtx.root";
-    //     else if (leptonFlavor == "Electrons") nVtxFileName += "DE_NVtx.root";
-    //     TFile *DataMCRawComparison = new TFile(nVtxFileName.c_str());
-    //     TCanvas *can = (TCanvas*) DataMCRawComparison->Get("NVtx");
-    //     TPad *pad = (TPad*) can->FindObject("pad2");
-    //     FlatNVtxWeight = (TH1D*) pad->FindObject("NVtx");
-    // }
 
     double sumEventW = 0. ;
     cout << " MC initial weight :  " << sumEventW <<endl;
@@ -269,8 +253,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         double genWeight(1.);
         double weightNoSF(1.);
         //-----------------------
-        // line below is to see distributions as provided with default MC PU distribution
-        double reweighting(1);
         
         weight = weight * lumiScale * xsec;
         
@@ -364,17 +346,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (hasRecoInfo && !isData){
             // puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
             puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
-            //cout << " puWeightFact " << puWeightFact << endl;
-            if (puWeightFact > 10000 || puWeightFact < 0) puWeightFact = 1;
             weight *= puWeightFact;
-            
-            //-- reweight again to IMPOSE FLAT #VTX DATA/MC RATIO
-            /*Kadir if (doFlat){
-             reweighting = FlatNVtxWeight->GetBinContent(EvtVtxCnt + 1);
-             //-- for safety check the value of the weight...
-             if (reweighting <= 0 || reweighting > 1000) reweighting = 1;
-             weight *= reweighting;
-             }*/ //Need to check later if the argument (EvtVtxCnt + 1) is correct
         }
 
 	    weightNoSF = weight;
@@ -386,7 +358,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //         Retrieving leptons          //
         //====================================//
         bool doMuons(leptonFlavor == "Muons" || doW || doTT);
-        bool doElectrons(leptonFlavor == "Electrons" || (doW && leptonFlavor == "SingleElectron") || doTT);
         bool passesLeptonCut(0);
         bool passesLeptonReq(0), passesLeptonAndMT(0), passesBtagReq(1);
         unsigned short nTotLeptons(0), nLeptons(0), nMuons(0), nElectrons(0);
@@ -472,12 +443,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             
             if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
-            //------ DO ELECTRONS -------
-            if (doElectrons) {
-                std::cout << " >>>>> doElectrons is selected, but we only care about muons" << std::endl;
-                std::cout << " >>>>> we turn off this section" << std::endl;
-            }
-
             nMuons = muons.size();
             nElectrons = electrons.size();
             nLeptons = leptons.size();
@@ -526,7 +491,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 // allow gen lepton to pass only if satisfies the necessary PDG ID
                 bool lepSelector( 
-                        doW && (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID)
+                        doW && 
+                        (abs(GLepBareId->at(i)) == LeptonID || abs(GLepBareId->at(i)) == nuID)
                     );
                 if (!lepSelector) continue ;
                 if (!GLepBarePrompt->at(i)) continue ;
@@ -924,9 +890,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 } // --------- End MC-only
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
-                // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << " MAKING IT PASS ANYWAY " << endl;
-                // // andrew -- remove later
-                // passBJets = true;
 
                 //************************* End B-tag Veto Correction ***********************************//
                
@@ -1309,10 +1272,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     
                     // jetsAK8Eta_AK8JetsMatchGenJets->Fill(JetAk08Eta->at(jetsAK8NoDRCut[i].patIndex), weight);
                 }
-                // else {
-                //     // if no match found within dR 0.5 cone, then index == -1
-                //     jetsAK8Eta_AK8JetsNoMatchGenJets->Fill(JetAk08Eta->at(jetsAK8NoDRCut[i].patIndex), weight);
-                // }
             }
 
         } //end if hasRecoInfo and hasGenInfo for reco jet smearing
@@ -1695,33 +1654,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }
             }
         } //end if hasGenInfo
-        //=======================================================================================================//
-
-
-        //=======================================================================================================//
-        // Select the best pair of jets for DPS  //
-        //=======================================//
-        // pair<TLorentzVector, TLorentzVector> bestTwoJets;
-        // TLorentzVector bestJet1Plus2, bestJet1Minus2;
-        // if (hasRecoInfo){
-        //     bestTwoJetsCandidatesPt(jets, bestTwoJets);
-        //     bestTwoJetsCandidatesPhi(jets, bestTwoJets);
-        //     if (nGoodJets >= 2){
-        //         bestJet1Plus2 = bestTwoJets.first + bestTwoJets.second;
-        //         bestJet1Minus2 = bestTwoJets.first - bestTwoJets.second;
-        //     }
-        // }
-
-        // pair<TLorentzVector, TLorentzVector> genBestTwoJets;
-        // TLorentzVector genBestJet1Plus2, genBestJet1Minus2;
-        // if (hasGenInfo){
-        //     bestTwoJetsCandidatesPt(genJets, genBestTwoJets);
-        //     bestTwoJetsCandidatesPhi(genJets, genBestTwoJets);
-        //     if (nGoodGenJets >= 2){
-        //         genBestJet1Plus2 = genBestTwoJets.first + genBestTwoJets.second; 
-        //         genBestJet1Minus2 = genBestTwoJets.first - genBestTwoJets.second; 
-        //     }
-        // }
         //=======================================================================================================//
 
         // Wb study
@@ -2414,17 +2346,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             TotalGenWeightPassRECO+=genWeightBackup;
             NVtx->Fill(EvtVtxCnt, weight);
 
-            // if (fileName.find("Sherpa") != string::npos && fileName.find("UNFOL") == string::npos ) PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting * mcEveWeight_, 1);
-            if (fileName.find("Sherpa") != string::npos && fileName.find("UNFOL") == string::npos ) PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
-            //Kadirelse PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
-            else PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)), 1);
+            PUWeight->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
             if (nGoodJets == 0){
-                //KadirPUWeight0->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
-                PUWeight0->Fill(puWeight.weight(int(EvtPuCntTruth)), 1);
+                PUWeight0->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
             }
             else {
-                //KadirPUWeight1->Fill(puWeight.weight(int(EvtPuCntTruth)) * reweighting, 1);
-                PUWeight1->Fill(puWeight.weight(int(EvtPuCntTruth)), 1);
+                PUWeight1->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
             }
             
             if (lepton1.charge > 0){
@@ -2444,7 +2371,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }
             }
             nEventsIncl0Jets++;
-            ZNGoodJetsNVtx_Zexc->Fill(nGoodJets, EvtVtxCnt  , weight);
+            ZNGoodJetsNVtx_Zexc->Fill(nGoodJets, EvtVtxCnt, weight);
             ZNGoodJets_Zinc->Fill(0., weight);
             ZNGoodJetsFull_Zinc->Fill(0., weight);
             ZNGoodJets_Zexc->Fill(nGoodJets, weight);
@@ -3923,11 +3850,6 @@ string ZJetsAndDPS::CreateOutputFileName(bool useRoch, bool doFlat, int doPUStud
     if (doBJets < 0) result << "_BVeto";
     if (doQCD>0) result << "_QCD" << doQCD;
     if (METcut > 0) result << "_MET" << METcut;
-
-    //--- Add your test names here ---
-    //result << "_NoPUCut";
-    //result << "_LooseID";
-    //result << "_SRANJE";
 
     result << ".root";
     return result.str();

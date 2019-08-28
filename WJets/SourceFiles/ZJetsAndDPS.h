@@ -304,8 +304,6 @@ class ZJetsAndDPS: public HistoSet {
     int METcut;
     string leptonFlavor;
 
-    TH1D *FlatNVtxWeight;
-
     ClassDef(ZJetsAndDPS,2)
 };
 

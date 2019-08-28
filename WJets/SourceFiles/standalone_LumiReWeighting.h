@@ -1,14 +1,3 @@
-/**
-   \class    standalone_LumiReWeighting standalone_LumiReWeighting.h "PhysicsTools/Utilities/interface/standalone_LumiReWeighting.h"
-   \brief    Class to provide lumi weighting for analyzers to weight "flat-to-N" MC samples to data
-   This class will trivially take two histograms:
-   1. The generated "flat-to-N" distributions from a given processing (or any other generated input)
-   2. A histogram generated from the "estimatePileup" macro here:
-   https://twiki.cern.ch/twiki/bin/view/CMS/LumiCalc#How_to_use_script_estimatePileup
-   and produce weights to convert the input distribution (1) to the latter (2).
-   \author Salvatore Rappoccio, modified by Mike Hildreth
-  
-*/
 #ifndef _standalone_LumiReWeighting_H_
 #define _standalone_LumiReWeighting_H_
 
@@ -55,12 +44,11 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year,int mode) {
   Lumi_distr.clear();
 
   if (year != 2016 && year != 2017){
-      std::cout << "Select a compatible year for PU reweighting." << std::endl;
-      std::cout << "Setting year to 2016." << std::endl;
-      year = 2016;
-}
-  switch (mode)
-    {
+    std::cout << "Select a compatible year for PU reweighting." << std::endl;
+    std::cout << "Setting year to 2016." << std::endl;
+    year = 2016;
+  }
+  switch (mode){
     case 0:
       std::cout << "Using central value " << std::endl;
       break;
@@ -73,11 +61,11 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year,int mode) {
     default:
       std::cout << "Using central value " << std::endl;
       break;
-    } // end of switch
+  } // end of switch
 
-  Int_t NBins = 60;
-  if(year == 2016) NBins = 125;
-  else if (year == 2017) NBins = 125;
+  Int_t NBins = 80;
+  if (year == 2016) NBins = 125;
+  if (year == 2017) NBins = 125;
 
   for(int i=0; i< NBins; ++i) {
     // ----------------------- 2016 -----------------------
