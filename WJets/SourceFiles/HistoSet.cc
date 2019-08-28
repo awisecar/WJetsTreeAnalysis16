@@ -386,8 +386,9 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //***************************** Basic plots for Wjets *****************************//
     //--- For calculateing b-tagging efficiency---
-    int npt_b_range(7);
-    double pt_b_range[8] = {30,50,70,100,140,200,300,670};
+    int npt_b_range(8);
+    double pt_b_range[9] = {30, 50, 70, 100, 140, 200, 300, 600, 1000};
+
     h_pt_eta_b           = newTH2D("h_pt_eta_b",             "h_pt_eta_b",           npt_b_range,  pt_b_range,   10,-2.4,2.4);
     h_pt_eta_b_tagged    = newTH2D("h_pt_eta_b_tagged",      "h_pt_eta_b_tagged",    npt_b_range,  pt_b_range,   10,-2.4,2.4);
     h_pt_eta_c           = newTH2D("h_pt_eta_c",             "h_pt_eta_c",           npt_b_range,  pt_b_range,   10,-2.4,2.4);
@@ -395,10 +396,12 @@ HistoSet::HistoSet(string leptonFlavor)
     h_pt_eta_udsg        = newTH2D("h_pt_eta_udsg",          "h_pt_eta_udsg",        npt_b_range,  pt_b_range,   10,-2.4,2.4);
     h_pt_eta_udsg_tagged = newTH2D("h_pt_eta_udsg_tagged",   "h_pt_eta_udsg_tagged", npt_b_range,  pt_b_range,   10,-2.4,2.4);
     
-    h_pt_b              = newTH1D("h_pt_b",             "h_pt_b",           "p_{T} [GeV]",  20,   0., 200.);
-    h_pt_b_tagged       = newTH1D("h_pt_b_tagged",      "h_pt_b_tagged",    "p_{T} [GeV]",  20,   0., 200.);
-    h_pt_udsg           = newTH1D("h_pt_udsg",          "h_pt_udsg",        "p_{T} [GeV]",  20,   0., 200.);
-    h_pt_udsg_tagged    = newTH1D("h_pt_udsg_tagged",   "h_pt_udsg_tagged", "p_{T} [GeV]",  20,   0., 200.);
+    h_pt_b              = newTH1D("h_pt_b",             "h_pt_b",           "p_{T} [GeV]",  npt_b_range, pt_b_range);
+    h_pt_b_tagged       = newTH1D("h_pt_b_tagged",      "h_pt_b_tagged",    "p_{T} [GeV]",  npt_b_range, pt_b_range);
+    h_pt_c              = newTH1D("h_pt_c",             "h_pt_c",           "p_{T} [GeV]",  npt_b_range, pt_b_range);
+    h_pt_c_tagged       = newTH1D("h_pt_c_tagged",      "h_pt_c_tagged",    "p_{T} [GeV]",  npt_b_range, pt_b_range);
+    h_pt_udsg           = newTH1D("h_pt_udsg",          "h_pt_udsg",        "p_{T} [GeV]",  npt_b_range, pt_b_range);
+    h_pt_udsg_tagged    = newTH1D("h_pt_udsg_tagged",   "h_pt_udsg_tagged", "p_{T} [GeV]",  npt_b_range, pt_b_range);
     
 	
 	NEventsPassCuts = newTH1D("NEventsPassCuts","Events Passing Cuts", "Cuts", 6, -0.5, 5.5);

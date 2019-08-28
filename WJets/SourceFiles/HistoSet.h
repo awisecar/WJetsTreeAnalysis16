@@ -49,6 +49,8 @@ public:
     
     TH1D *h_pt_b;
     TH1D *h_pt_b_tagged;
+    TH1D *h_pt_c;
+    TH1D *h_pt_c_tagged;
     TH1D *h_pt_udsg;
     TH1D *h_pt_udsg_tagged;
 

@@ -297,6 +297,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         
         bool passMETFILTER(true);
         if (hasRecoInfo && doMETFiltering){
+
             // MET filters for data
             if (isData){
                 if (year == 2017){
@@ -312,6 +313,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if (passMETFILTER) nEventsPassMETFilter++ ;
                 }
             }
+
             // MET filters for reco MC
             if (!isData){
                 if (year == 2017){
@@ -327,16 +329,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if (passMETFILTER) nEventsPassMETFilter++ ;
                 }
             }
-        }
 
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath1->at(0) = " << METFilterPath1->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath2->at(0) = " << METFilterPath2->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath3->at(0) = " << METFilterPath3->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath4->at(0) = " << METFilterPath4->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath5->at(0) = " << METFilterPath5->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath6->at(0) = " << METFilterPath6->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath7->at(0) = " << METFilterPath7->at(0) << endl;
-        if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: passMETFILTER = " <<  passMETFILTER << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath1->at(0) = " << METFilterPath1->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath2->at(0) = " << METFilterPath2->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath3->at(0) = " << METFilterPath3->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath4->at(0) = " << METFilterPath4->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath5->at(0) = " << METFilterPath5->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath6->at(0) = " << METFilterPath6->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METFilterPath7->at(0) = " << METFilterPath7->at(0) << endl;
+            if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: passMETFILTER = " <<  passMETFILTER << endl;
+        }
 
 		//=======================================================================================================//
         //     Reweighting MC for pileup discrepancy    //
@@ -344,8 +346,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
+
             // puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
-            puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
+
+            // andrew -- turning off PU reweighting for now!!! - 28 August 2019
+            // puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
+
             weight *= puWeightFact;
         }
 
@@ -676,6 +682,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
                         bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
                         
+                        // Get jet flavor (hadron definition)
                         int jetflavour= JetAk04HadFlav->at(i);
                         
                         // ---------------- For Real B-jets --------------- //
@@ -745,7 +752,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
                             if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                             
-                        }
+                        } // end b-jet section
                         
                         // ---------------- For Real C-jets--------------- //
                         if (abs(jetflavour)==4){
@@ -813,13 +820,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
                             if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                             
-                        }
+                        } // end c-jet section
                         
                         // ---------------- For REAL Light-jets --------------- //
                         if (abs(jetflavour)<4){
                             float eff_l = 0.0200484;
                             float eff_l_corr = 1;
-                            //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
+
                             if (false) {
                             }
                             else{
@@ -873,7 +880,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
                             if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
                             if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                        }   ////////flavour lop
+                        }   // end light jet section
                         
                         // for btagging SF systematics
                         if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
@@ -881,13 +888,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         
                         // Wb study
                         if (abs(jetflavour)==5) countWbBjets++ ;
-                    }
+                    } // end b-tag efficiency SFs for 2016 MC
 
-                    else if (year == 2017){
-                        passBJets = true; // do btag MC SFs for 2017
-                    }
+                    // andrew - no btag SFs yet for MC!!! - 28 August 2019
+                    // if (year == 2017){
+                    //     passBJets = true; // do btag MC SFs for 2017
+                    // } // end b-tag efficiency SFs for 2017 MC
 
-                } // --------- End MC-only
+                } // --------- End MC-only b-tag efficiency SF section
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
 
@@ -899,7 +907,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
                 double jetEnergyCorr = 0.; 
-                bool jetPassesPtCut(jet.pt >= 10); // for MET uncertainty should the cut be before or aftes adding unc.?????
+                bool jetPassesPtCut(jet.pt >= 20); // for MET uncertainty should the cut be before or aftes adding unc.?????
                 jetEnergyCorr = TableJESunc.getEfficiency(jet.pt, jet.eta);
 
                 jetPtTemp = jet.pt; // for calculating METscale
@@ -1150,7 +1158,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             nJetsAK8NoDRCut = jetsAK8NoDRCut.size();
 
-        } // END IF HAS RECO
+        } // END IF HAS RECO FOR AK8 JETS
 
         //=======================================================================================================//
 
@@ -1190,7 +1198,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 				}
             }
 			nGenJetsAK8NoDRCut = genJetsAK8NoDRCut.size();
-        }
+
+        } // END IF HAS GEN FOR AK8 JETS
 
         // if (DEBUG) cout << "Stop after line " << __LINE__ << "   " << hasGenInfo <<"    gen Wgh = " << genWeight << "  pass gen cuts = " << passesGenLeptonCut <<"  nGenJets = " << nGoodGenJets <<  endl;
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
@@ -1213,21 +1222,27 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 int index(-1);
                 double mindR(0.5);
                 double dR(9999);
+
+                //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                 for (unsigned short j(0); j < nGenJetsNoDRCut; j++){
                     dR = deltaR(genJetsNoDRCut[j].phi, genJetsNoDRCut[j].eta, jetsNoDRCut[i].phi, jetsNoDRCut[i].eta);
-                    //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                     if (dR < mindR){
                         mindR = dR;
                         index = j;
                     }
                 } 
+
                 if (index > -1 ){
                     // if a gen-reco jet match found
                     // matchingTable keeps track of which reco-gen jet pairs were matched
                     matchingTable[i][index] = 1;
-                    double oldJetPt = jetsNoDRCut[i].pt;
+                    
                     // Smearing of reco MC jets to match jet energy resolution seen in data
-                    double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet);
+                    // andrew -- no JER smearing factors yet! -- 28 august 2019
+                    double oldJetPt = jetsNoDRCut[i].pt;
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet);
+                    double newJetPt = oldJetPt;
+
                     // Smearing done for both reco jet pT and energy
                     jetsNoDRCut[i].pt = newJetPt;
                     jetsNoDRCut[i].energy = jetsNoDRCut[i].energy * (newJetPt / oldJetPt);
@@ -1239,11 +1254,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     puMVA_JetsMatchGenJets->Fill(JetAk04PuMva->at(jetsNoDRCut[i].patIndex), weight);
                     jetsEta_JetsMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
                 }
+
                 else {
                     // if no match found within dR 0.5 cone, then index == -1
                     puMVA_JetsNoMatchGenJets->Fill(JetAk04PuMva->at(jetsNoDRCut[i].patIndex), weight);
                     jetsEta_JetsNoMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
                 }
+
             }
 
             // AK8 jets -------------------------------------------------------------------------------------------------------------------
@@ -1251,29 +1268,35 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 int index(-1);
                 double mindR(0.5);
                 double dR(9999);
+
+                //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                 for (unsigned short j(0); j < nGenJetsAK8NoDRCut; j++){
                     dR = deltaR(genJetsAK8NoDRCut[j].phi, genJetsAK8NoDRCut[j].eta, jetsAK8NoDRCut[i].phi, jetsAK8NoDRCut[i].eta);
-                    //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                     if (dR < mindR){
                         mindR = dR;
                         index = j;
                     }
                 } 
+
                 if (index > -1 ){
                     // if a gen-reco jet match found
                     // matchingTableAK8 keeps track of which reco-gen jet pairs were matched
                     matchingTableAK8[i][index] = 1;
-                    double oldJetPt = jetsAK8NoDRCut[i].pt;
+
                     // Smearing of reco MC jets to match jet energy resolution seen in data
-                    double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet);
+                    // andrew -- no JER smearing factors yet! -- 28 august 2019
+                    double oldJetPt = jetsAK8NoDRCut[i].pt;
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet);
+                    double newJetPt = oldJetPt;
+
                     // Smearing done for both reco jet pT and energy
                     jetsAK8NoDRCut[i].pt = newJetPt;
                     jetsAK8NoDRCut[i].energy = jetsAK8NoDRCut[i].energy * (newJetPt / oldJetPt);
                     
                     // jetsAK8Eta_AK8JetsMatchGenJets->Fill(JetAk08Eta->at(jetsAK8NoDRCut[i].patIndex), weight);
                 }
-            }
 
+            }
         } //end if hasRecoInfo and hasGenInfo for reco jet smearing
         
         //=======================================================================================================//
@@ -1289,7 +1312,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             METphi = METPhi->at(whichMet); //grabbing MET Phi value directly from tree rather than calculating it
 
             if (passesLeptonReq) {
-                
                 // recalculate METpt and METphi
                 // basically either in the case for JES uncertainties (data), for JER (done for W+jets signal)
                 if ( (fabs(scale) > 0.) || (hasRecoInfo && hasGenInfo) ){
@@ -1351,6 +1373,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     nEventsWithTwoGoodLeptons++;
                 }
             }
+            
         } // END IF RECO FOR MET
         
         if (passesGenLeptonCut) {
@@ -1662,44 +1685,64 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             genWeight = genWeight * WbSystSF;
         }
         
-        //--- Fill puMVA ---
+        // Filling puMVA, btag eff histograms before 
+        // final event selection for filling analysis histograms
         if (hasRecoInfo) {
+
+            //--- Fill puMVA ---
             for (unsigned short i(0); i < jetsPuMva.size() ; i++){
                 if (passesLeptonCut) puMVA->Fill(JetAk04PuMva->at(jetsPuMva[i].patIndex), weight);
             }
           
-            //--- For calculating b-tagging efficiency---
+            //--- For calculating b-tagging efficiency-------------------------
+            float btagWP(1.);
+            if (year == 2016) btagWP = 0.8484;
+            if (year == 2017) btagWP = 0.8838;
+
+            // advantage of using analysis-cuts jets is that we
+            // cut out many jets from pileup
             for (unsigned short i(0); i < nGoodJets; i++){
                 int jet_ind = jets[i].patIndex;
+
+                // b-flavor jet
                 if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
                     h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                     h_pt_b->Fill(jets[i].pt, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    // track which reco b-jets pass the btag score requirement
+                    if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
                         h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                         h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
                     }
                 }
+
+                // c-flavor jet
                 else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
                     h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    h_pt_c->Fill(jets[i].pt, weightNoSF);
+                    // track which reco c-jets pass the btag score requirement
+                    if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
                         h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                        h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
                     }
                 }
+
+                // light jet (up, down, strange, gluon)
                 else {
                     h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                     h_pt_udsg->Fill(jets[i].pt, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    // track which reco light jets pass the btag score requirement
+                    if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
                         h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                         h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
                     }
                 }
             }
-            //--- End for calculating b-tagging efficiency---
+            //--- End for calculating b-tagging efficiency-------------------------
         }
         //---
         
         //======= Final Selections: =======
-        // B-tagging event selection
+        // B-tagging veto/acceptance for event selection
         if (hasRecoInfo){
 
             // Note: if doBJets == 0, then we're agnostic to btags in terms of event selection
