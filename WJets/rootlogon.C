@@ -3,6 +3,7 @@ void rootlogon(void) {
   string currentFile =  __FILE__;
   string currentWorkingDir = currentFile.substr(0, currentFile.find("./rootlogon.C"));
   cout << "Current working directory is:\n\t" << currentWorkingDir << endl;
+  std::cout << std::endl;
 
   // gErrorIgnoreLevel = kError;
   
@@ -24,4 +25,5 @@ void rootlogon(void) {
     // gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc+").c_str());
     gROOT->LoadMacro(string(srcDir + sources[i] + ".cc+").c_str());
   }
+  std::cout << "\n=======================================================================================================\n" << std::endl;
 }

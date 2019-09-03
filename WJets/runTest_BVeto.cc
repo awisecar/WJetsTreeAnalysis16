@@ -3,8 +3,8 @@
     vector<string> sources;
     sources.push_back("getFilesAndHistograms");
     sources.push_back("functions");
-    // sources.push_back("Plotter");
-    sources.push_back("Plotter_ONLY_DATA");
+    sources.push_back("Plotter");
+    // sources.push_back("Plotter_ONLY_DATA");
     //--- Load shared libraries ---
     unsigned int nSources = sources.size();
     for (unsigned int i(0); i < nSources; i++){
@@ -12,11 +12,15 @@
         gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc+").c_str());
     }
 
-    // andrew -- commenting out this block for now, until we have MC to plot
-    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
+    // dit bonjour
+    welcomeMessage();
+
+    // plot data and MC -----
+    Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
     // //Plotter("SMu", 2017, 30, 0, 0, 0, 30, -1, 0, -999999, 999999, 0, 0, 1); // METcut of 30 GeV
 
-    Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
+    // plot only data -----
+    // Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
    
     // andrew - commenting this block out for now, until we fix it for 2017 data
     // //last option of function is doTTScale

@@ -35,7 +35,7 @@ void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
     // string energy = getEnergy();
     string energy = "13TeV";
 
-    cout << endl << "\n-----> Running the Plotter with the following options as input: " << endl;
+    cout << endl << "-----> Running the Plotter with the following options as input: " << endl;
     cout << "doQCD: " << doQCD << ", METcut: " << METcut << " doBJets: " << doBJets << endl;
 
     TH1::SetDefaultSumw2();
@@ -340,7 +340,7 @@ void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
         hist[0][i]->Draw("e"); // Drawing here instead!!!!
 
         if (histoName[i].find("ZNGoodJets") != string::npos){
-            hist[0][i]->GetXaxis()->SetRangeUser(0,8);
+            hist[0][i]->GetXaxis()->SetRangeUser(0,10);
             // histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
         }
             
@@ -360,7 +360,7 @@ void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
         hist[0][i]->GetYaxis()->SetTitleSize(0.051); //0.04
         hist[0][i]->GetYaxis()->SetTitleOffset(1.07); //1.2
         // hist[0][i]->SetMinimum(8);
-        hist[0][i]->SetMinimum(20);
+        hist[0][i]->SetMinimum(0.2);
         hist[0][i]->SetMaximum(300*hist[0][i]->GetMaximum()); 
         if (histoName[i].find("AbsRapidity") != string::npos){
         hist[0][i]->SetMaximum(2100*hist[0][i]->GetMaximum()); 
@@ -383,8 +383,8 @@ void Plotter_ONLY_DATA(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
         else intLumi[i]->DrawLatex(0.71,0.955, "? fb^{-1} (13 TeV)");
 
 
-        if ( histoName[i].find("inc0") == string::npos ){
-            if ( histoName[i].find("AK8") != string::npos ){
+        if (histoName[i].find("inc0") == string::npos){
+            if (histoName[i].find("AK8") != string::npos){
                 ostringstream ptLegend;
                 ptLegend << "p_{T}^{jet} > 200 GeV,  |y^{jet}| < 2.4";
                 jetCuts[i]->DrawLatex(0.17,0.73, ptLegend.str().c_str());

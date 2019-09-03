@@ -1,19 +1,16 @@
 #! /usr/bin/env python2
 import os
 import sys
-#from ROOT import *
 import random
 import time
 import datetime
 
 cwd = os.getcwd()
-print 'Current working directory: ' + cwd + '\n'
-
-os.system('root -l -b -q wjets_compileCode.cc')
+print '\nCurrent working directory: ' + cwd
 
 ####################################################################
 
-print '\nCode finished compiling, writing Condor submit script!'
+print '\nWriting Condor submit script!'
 
 dateTo = datetime.datetime.now().strftime("%Y_%m_%d_%H%M%S")
 mtmpdir = 'wjetsCondor_' + dateTo
@@ -27,7 +24,8 @@ submit += 'output = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).out\n'
 submit += 'error = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).err\n'
 submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
 ##submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
-submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
+# submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
+submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 submit += 'queue argument in 1'
 
@@ -41,7 +39,8 @@ os.system('chmod 755 '+submitName)
 ####################################################################
 
 print 'Submit script finished, writing individual job scripts!'
-cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
+### need to be able to grab cmsswdir automatically
+cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0/src'
 # os.system('cd '+mtmpdir)
 
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 51, 52, 53, 54] #important files
@@ -63,8 +62,11 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 #doSysRunning = [0]
 
 ### First time running over 2017 data!
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 61, 62, 63] # full set of files
-doQCD = [0, 1, 2, 3]
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 61, 62, 63] # full set of files
+doWhat = [30]
+# doWhat = [22]
+# doQCD = [0, 1, 2, 3]
+doQCD = [0]
 doSysRunning = [0]
 years = [2017]
 

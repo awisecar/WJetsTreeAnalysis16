@@ -1,5 +1,6 @@
-//void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2017)
+// void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2017)
 // ^^^turn on above line if doing the job submission with wjets_jobsub_Condor.py
+// and comment out the below lines defining doWhat, doQCD, doSysRunning, year
 {
     string srcdir = "SourceFiles/";
     vector<string> sources;
@@ -13,9 +14,12 @@
         std::cout << "Compiling " << srcdir + sources[i] << ".cc" << std::endl;
         gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc+").c_str());
     }
+
+    // dit bonjour
+    welcomeMessage();
         
     //------------------
-     int doWhat       = 10;
+     int doWhat       = 21;
                               // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
@@ -122,7 +126,7 @@
         
     //------------------------------------
     //if (year == 2016){
-    //    std::cout << "\n>>>>>>>>> Doing 2016 data/MC! >>>>>>>>>" << std::endl;
+    //    std::cout << " >>>>>>>>> Doing 2016 data/MC! >>>>>>>>>" << std::endl;
     //    // Data
     //    if (doWhat == 10 || doWhat == 100) {
     //        for (unsigned int i(0); i < NSystData; i++) {
@@ -492,7 +496,7 @@
 
     //else if (year == 2017){
     if (year == 2017){
-        std::cout << "\n>>>>>>>>> Doing 2017 data/MC! >>>>>>>>>" << std::endl;
+        std::cout << " >>>>>>>>> Doing 2017 data/MC! >>>>>>>>>" << std::endl;
 
         // Data
         if (doWhat == 10 || doWhat == 100) {

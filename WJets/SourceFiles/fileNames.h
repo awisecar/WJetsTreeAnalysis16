@@ -44,11 +44,12 @@ const processInfoStruct ProcessInfo[] = {
     {"DYJets_FromTau_UNFOLDING_dR_5311_List_Inf3", 30459503.,  3531.8,  1,         0.033,         kAzure+4,    " DYtautau"},
     {"DYJets10toInf3_dR_5311_List",	              1.,         1,       1,         0.04,          kGreen-8,   " DY+jets"},          // 23
     {"DataQCD_dR_5311_List",	                      1.,         1,       1,         0.04,          kGreen+3,     " QCD multijet"},         // 24
+
     //{"WJetsALL_MIX_UNFOLDING_dR_5311_List",        76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
     //andrew -- 2016 update (from MIX to FxFx), these xsec numbers don't matter?
     //{"WJets_FxFx_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
-    //{"WJets_FxFx_012J_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
-    {"WJets_FxFx_Wpt_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    {"WJets_FxFx_012J_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    // {"WJets_FxFx_Wpt_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
 
     {"WJetsALL_MIX_dR_5311_List",                  76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},  // relative weight for mixed DY and WJ files are set inthe code
     {"WJetsALL_dR_5311_List",                      76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},
@@ -63,16 +64,21 @@ const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11,
 
 const int NFILESTTBAR(7);
 
-///////////////
-//andrew -- 2016 W+jets
+//////////////////////////////////////////////////////////////////////////////////////////
+// andrew -- for Run II W+jets
+// main event selection, signal & backgrounds
 const int NFILESTTBARWJETS(7);
 const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
-//
-//use the pair of lines below to turn off qcd background in plotting
-//used for ttbar study
-//const int NFILESTTBARWJETS(6);
-//const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 21, 10, 9, 25};
-///////////////
+
+// QCD BG turned off here
+// used for ttbar, btag efficiencies studies
+const int NFILESTTBARWJETS_NOQCD(6);
+const int FilesTTbarWJets_NoQCD[NFILESTTBARWJETS_NOQCD] = {0, 5, 21, 10, 9, 25};
+
+// some testing - 2 sept 2019 - andrew
+const int NFILESTTBARWJETS_NOQCD_NOTTBAR(5);
+const int FilesTTbarWJets_NoQCD_NoTTBar[NFILESTTBARWJETS_NOQCD_NOTTBAR] = {0, 5, 21, 10, 25};
+//////////////////////////////////////////////////////////////////////////////////////////
 
 const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
 const int NFILESWJETS_M(11);

@@ -31,9 +31,6 @@
 
 using namespace std;
 
-// andrew - is this line necessary?
-// ClassImp(HistoSet) 
-
 class ZJetsAndDPS: public HistoSet {
   public:
 
@@ -275,6 +272,7 @@ class ZJetsAndDPS: public HistoSet {
     Bool_t   Notify();
     void     Show(Long64_t entry = -1);
     
+    //////////////////////////////////////////////////
     // Baobab->Bonzai acceptance
     void getMcNorm();
     std::vector<Double_t> InEvtWeightSums_;
@@ -282,6 +280,7 @@ class ZJetsAndDPS: public HistoSet {
     std::vector<Double_t> skimAccep_;
     Int_t InEvtCount_;
     Int_t EvtCount_;
+    //////////////////////////////////////////////////
 
     bool nEvents_10000;
     string outputDirectory;

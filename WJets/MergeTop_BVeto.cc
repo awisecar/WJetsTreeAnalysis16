@@ -1,25 +1,28 @@
 #include <iostream>
+#include <sstream>
 #include <TH1.h>
 #include <TH2.h>
 #include <TFile.h>
 #include <TString.h>
-#include <sstream>
 
-void runMergeTop_BVeto(TString lepSelection = "DE", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0);
+void runMergeTop_BVeto(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0);
 
 void MergeTop_BVeto(){
+
     //central
-//    runMergeTop_BVeto("SMu", 0, 30, 0, 0);
+   runMergeTop_BVeto("SMu", 0, 30, 0, 0);
 //    runMergeTop_BVeto("SMu", 0, 30, 0, 30); // METcut of 30 GeV
+
     //systematics
-    runMergeTop_BVeto("SMu", 1, 30, 0, 0);
-    runMergeTop_BVeto("SMu", -1, 30, 0, 0);
-    runMergeTop_BVeto("SMu", 3, 30, 0, 0);
-    runMergeTop_BVeto("SMu", -3, 30, 0, 0);
-  //  runMergeTop_BVeto("SMu", 5, 30, 0, 0);
-  //  runMergeTop_BVeto("SMu", -5, 30, 0, 0);
-    runMergeTop_BVeto("SMu", 6, 30, 0, 0);
-    runMergeTop_BVeto("SMu", -6, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", 1, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", -1, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", 3, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", -3, 30, 0, 0);
+//   //  runMergeTop_BVeto("SMu", 5, 30, 0, 0);
+//   //  runMergeTop_BVeto("SMu", -5, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", 6, 30, 0, 0);
+//     runMergeTop_BVeto("SMu", -6, 30, 0, 0);
+
 }
 
 void runMergeTop_BVeto(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut)
@@ -30,8 +33,8 @@ void runMergeTop_BVeto(TString lepSelection, int systematics, int jetPtCutMin, i
     cout << "\n-----> Running runMergeTop_BVeto!" << endl;
     //--- Read in input arguments
     ostringstream strJetPtCutMin; strJetPtCutMin << jetPtCutMin;
-    ostringstream doQCDStr;     doQCDStr << doQCD;
-    ostringstream METcutStream; METcutStream << METcut;
+    ostringstream doQCDStr;       doQCDStr << doQCD;
+    ostringstream METcutStream;   METcutStream << METcut;
     TString METcutStr;
     if (METcut > 0) {
         METcutStr = "_MET"+METcutStream.str();
@@ -131,53 +134,4 @@ void runMergeTop_BVeto(TString lepSelection, int systematics, int jetPtCutMin, i
     f4->Close();
     f5->Close();
     ff->Close();
-
-//    //--- merge DY files
-//    int countHist(0);
-//    if (lepSelection == "SMu"){
-//        TFile *fDY[10] = {NULL};
-//        for ( int i = 0 ; i < nDYfiles ; i++){
-//            if ( i == nDYfiles - 1 )  fDY[i] =  new TFile(sstrDY[i].c_str(), "recreate");
-//            else fDY[i] =  new TFile(sstrDY[i].c_str(), "read");
-//        }
-//        cout << "Output file: " << sstrDY[nDYfiles - 1] << endl;
-//
-//        nHist = fDY[0]->GetListOfKeys()->GetEntries();
-//        for (int i(0); i < nHist; i++){
-//            
-//            string hName = fDY[0]->GetListOfKeys()->At(i)->GetName();
-//            if (hName.find("hresponse") != string::npos){
-//                continue;
-//                /*
-//                cout << i << " TH2D " << hName << "  " << nHist << endl;
-//                TH2D* hrSum = NULL; TH2D* hrDY[10] = {NULL};
-//                for ( int j = 0 ; j < nDYfiles -1 ; j++){
-//                    hrDY[j] = (TH2D*) fDY[j]->Get(hName.c_str());
-//                    if ( j == 0 ) hrSum = (TH2D*) hrDY[j]->Clone();
-//                    else hrSum->Add(hrDY[j]);
-//                }
-//                fDY[nDYfiles -1]->cd();
-//                hrSum->Write();
-//                */
-//            }
-//            else {
-//                countHist++;
-//                cout << countHist << " " << i << " TH1D " << hName << "  " << nHist << endl;
-//                TH1D* hSum = NULL; TH1D* hDY[10] = {NULL};
-//                for ( int j = 0 ; j < nDYfiles -1 ; j++){
-//                    hDY[j] = (TH1D*) fDY[j]->Get(hName.c_str());
-//                    if ( j == 0 ) hSum = (TH1D*) hDY[j]->Clone();
-//                    else hSum->Add(hDY[j]);
-//                }
-//                fDY[nDYfiles -1]->cd();
-//                hSum->Write();
-//            }
-//        }
-//        
-//        cout << "closing DY files" << endl;
-//        for ( int i = 0 ; i < nDYfiles ; i++){
-//            fDY[i] ->Close();
-//        }
-//    }
-    
 }

@@ -12,16 +12,13 @@
 #include <TLatex.h>
 #include <TLegend.h>
 
-#include "getFilesAndHistograms.h"
-
-//--  Setting global variables --------------------------------------------------------------
 #include "fileNames.h"
-//-------------------------------------------------------------------------------------------
+#include "getFilesAndHistograms.h"
 
 using namespace std;
 
 void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
-    int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1 , 
+    int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1, 
     int JetPtMax = 0, int ZEtaMin = -999999, int ZEtaMax = 999999, 
     bool doRoch = 0, bool doFlat = 0, bool doVarWidth = 1)
 {
@@ -66,13 +63,21 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     bool isDoubleLep(1);
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
         isDoubleLep = 0;
-        nFiles = NFILESTTBARWJETS; 
+
+        // nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
+        nFiles = NFILESTTBARWJETS_NOQCD; // andrew -- 2 sept 2019 -- turn off QCD for now
+        // nFiles = NFILESTTBARWJETS_NOQCD_NOTTBAR; // 
+
     }
     TFile *file[nFiles];
     int countFiles = 0 ;
     for (unsigned short i = 0; i < nFiles; i++){
         int fileSelect = FilesDYJets[i] ;
-        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i];
+
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
+        if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD_NoTTBar[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
+
         if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;
 
         // FilesTTbarWJets will select the correct files for W+jets (defined in fileNames.h)
@@ -218,40 +223,6 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     nHist=nHistNoGen; 
     cout <<"\nNumber of histograms to plot: " << nHistNoGen << endl;
 
-    //nHist=4;
-    /*for (int i = 0; i < nFiles; i++) {
-        cout << i <<"  "<<legendNames[i]  << "   "<<  endl;
-        for (int j = 0; j < nHistNoGen ; j++) {
-            // cout << i <<"  "<<legendNames[i]  << "   "<< j << "   " <<  histoName[j] << endl;
-            hist[i][j] = getHisto(file[i], histoName[j]);
-            hist[i][j]->SetTitle(histoTitle[j].c_str());
-            if ( i == 0) {
-                hist[i][j]->SetMarkerStyle(20);
-                hist[i][j]->SetMarkerColor(Colors[i]);
-                hist[i][j]->SetLineColor(Colors[i]);
-            }
-            else {
-                hist[i][j]->SetFillColor(Colors[i]);
-                hist[i][j]->SetLineColor(Colors[i]);
-                legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
-            }
-        }
-    }
-    
-    for (int i = 1; i < nFiles; i++) {
-        for (int j = 0; j < nHistNoGen ; j++) {
-            if (doBJets <= 0 ){
-                histSumMC[j]->Add(hist[i][j]);
-            }
-            else {
-                if (i == nFiles - 2) histSumMC[j]->Add(hist[nFiles - 1][j]);
-                else if (i == nFiles - 1) histSumMC[j]->Add(hist[nFiles - 2][j]);
-                else histSumMC[j]->Add(hist[i][j]);
-            }
-        }
-    } */  //use this part if you do not want to rescale ttbar 
-	
-
     ////////////////////this is where we start using ttbar rescaling option
 
 
@@ -369,9 +340,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
     for (unsigned short i(0); i < nHistNoGen; i++) {
         if (!file[0]->Get(histoName[i].c_str())->InheritsFrom(TH1D::Class())) continue;
+
         unsigned short nBins(hist[0][i]->GetNbinsX());
         legend[i]->AddEntry(hist[0][i], legendNames[0].c_str(), "ep");
         canvas[i] = new TCanvas(histoName[i].c_str(), histoName[i].c_str(), 700, 900);
+
+        // PAD 1 ------------------------------------------------------
         pad1[i] = new TPad("pad1", "pad1", 0, 0.3, 1, 1);
         pad1[i]->SetTopMargin(0.055);
         pad1[i]->SetBottomMargin(0.);
@@ -385,29 +359,20 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         // Need to draw MC Stack first other wise
         // cannot access Xaxis !!!
         histSumMC[i]->Draw("HIST"); 
-        if ( (leptonFlavor == "Muons" || leptonFlavor == "DMu" || leptonFlavor == "Electrons" ) && !doInvMassCut ) {  
-            if (histoName[i].find("ZMass_Z") != string::npos){
-                hist[0][i]->GetXaxis()->SetRangeUser(71,111);
-                histSumMC[i]->GetXaxis()->SetRangeUser(71,111);
-            }
-            if (histoName[i].find("JetEta") != string::npos){
-                hist[0][i]->GetXaxis()->SetRangeUser(-2.4,2.4);
-                histSumMC[i]->GetXaxis()->SetRangeUser(-2.4,2.4);
 
-            }
+        if ( (histoName[i].find("JetEta") != string::npos) || (histoName[i].find("JetAK8Eta") != string::npos) ){
+            hist[0][i]->GetXaxis()->SetRangeUser(-2.4,2.4);
+            histSumMC[i]->GetXaxis()->SetRangeUser(-2.4,2.4);
         }
 
-        if (histoName[i].find("ZNGoodJets") != string::npos){
-            hist[0][i]->GetXaxis()->SetRangeUser(0,6);
-            histSumMC[i]->GetXaxis()->SetRangeUser(0,6);
+        if (histoName[i].find("ZNGoodJets_") != string::npos){
+            // nominal
+            hist[0][i]->GetXaxis()->SetRangeUser(0,10);
+            histSumMC[i]->GetXaxis()->SetRangeUser(0,10);
+            // for ttbar study
+            // hist[0][i]->GetXaxis()->SetRangeUser(2,6);
+            // histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
         }
-            
-        //andrew -- use the below option if plotting the ttbar control region
-        // if (histoName[i].find("ZNGoodJets_") != string::npos){
-        //     hist[0][i]->GetXaxis()->SetRangeUser(2,6);
-        //     histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
-        // }
-
 
         hist[0][i]->SetTitle("");
         histSumMC[i]->SetTitle(""); 
@@ -418,8 +383,9 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         histSumMC[i]->GetYaxis()->SetTitleFont(42); 
         histSumMC[i]->GetYaxis()->SetTitleSize(0.051); //0.04
         histSumMC[i]->GetYaxis()->SetTitleOffset(1.07); //1.2
-        histSumMC[i]->SetMinimum(8);
-        histSumMC[i]->SetMaximum(110*histSumMC[i]->GetMaximum()); 
+        histSumMC[i]->SetMinimum(20);
+        histSumMC[i]->SetMaximum(1000*histSumMC[i]->GetMaximum()); 
+
         if (histoName[i].find("AbsRapidity") != string::npos){
         histSumMC[i]->SetMaximum(2100*histSumMC[i]->GetMaximum()); 
         }
@@ -429,28 +395,37 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         if (histoName[i].find("LepPtPlusHT") != string::npos){
          histSumMC[i]->SetMaximum(5000*histSumMC[i]->GetMaximum());
         }
-
+        
         /// first pad plots
         hist[0][i]->DrawCopy("e same");
         legend[i]->Draw();
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
         cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
        
-        if (yearStr == "2016") intLumi[i]->DrawLatex(0.73,0.955, "35.9 fb^{-1} (13 TeV)");
-        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.73,0.955, "41.5 fb^{-1} (13 TeV)");
-        else intLumi[i]->DrawLatex(0.73,0.955, "? fb^{-1} (13 TeV)");
+        if (yearStr == "2016") intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
+        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71,0.955, "41.5 fb^{-1} (13 TeV)");
+        else intLumi[i]->DrawLatex(0.71,0.955, "? fb^{-1} (13 TeV)");
 
-
-        if ( histoName[i].find("inc0") == string::npos){
-            ostringstream ptLegend;
-            ptLegend << "p_{T}^{jet} > " << JetPtMin << " GeV,  |y^{jet}| < 2.4";
-            //ptLegend << "p_{T}^{jet} > 100 GeV, |y^{jet}| < 2.4";  //uncomment for DR plot
-            jetCuts[i]->DrawLatex(0.17,0.75, ptLegend.str().c_str());
-            jetAlgo[i]->DrawLatex(0.17,0.80, "anti-k_{T} jets,  R = 0.4");
-            //jetAlgo[i]->DrawLatex(0.17,0.70, "Leading jet p_{T} > 300 GeV");  //uncomment for DR plot
-            pad1[i]->Draw();
+        if (histoName[i].find("inc0") == string::npos){
+            if (histoName[i].find("AK8") != string::npos){
+                ostringstream ptLegend;
+                ptLegend << "p_{T}^{jet} > 200 GeV,  |y^{jet}| < 2.4";
+                jetCuts[i]->DrawLatex(0.17,0.73, ptLegend.str().c_str());
+                jetAlgo[i]->DrawLatex(0.17,0.80, "anti-k_{T} jets,  R = 0.8");
+                pad1[i]->Draw();
+            }
+            else{
+                ostringstream ptLegend;
+                ptLegend << "p_{T}^{jet} > " << JetPtMin << " GeV,  |y^{jet}| < 2.4";
+                //ptLegend << "p_{T}^{jet} > 100 GeV, |y^{jet}| < 2.4";  //uncomment for DR plot
+                jetCuts[i]->DrawLatex(0.17,0.75, ptLegend.str().c_str());
+                jetAlgo[i]->DrawLatex(0.17,0.80, "anti-k_{T} jets,  R = 0.4");
+                //jetAlgo[i]->DrawLatex(0.17,0.70, "Leading jet p_{T} > 300 GeV");  //uncomment for DR plot
+                pad1[i]->Draw();
+            }
         }  
-   
+
+        // PAD 2 ------------------------------------------------------
         //Drawing the data-to-MC ratio plot on the bottom of the canvas
         canvas[i]->cd();
         pad2[i] = new TPad("pad2", "pad2", 0, 0, 1, 0.3);
@@ -493,17 +468,6 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         //andrew -- dividing data (hist[0]) by stacked MC (histSumMC)
         hist[0][i]->Divide((TH1D*) histSumMC[i]->GetStack()->Last());
         for (unsigned short j(1); j <= nBins; j++){
-
-
-        //     double content(hist[0][i]->GetBinContent(j));
-        //     double error(hist[0][i]->GetBinError(j));
-
-        //    double binW(hist[0][i]->GetBinWidth(j));
-
-        //     if (content > 0){
-        //         hist[0][i]->SetBinContent(j, content*1./(binW));
-        //         //hist[0][i]->SetBinError(j, error*1./(binW));
-        //     }
      
             //These lines flip the bin content to Sim/Data ---
             //reassign both bincontent and binerrors
@@ -524,7 +488,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         outputFile->cd();
         canvas[i]->Write();
 
-        // Next section prints out the same plots on a linear scale
+        // Next section prints out the same plots on a linear scale -----
         // histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
         // TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
         // tmpCanvas->cd();
@@ -544,5 +508,6 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
     cout << "\nClosing all files..." << endl;
     for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);
+
     cout << "\nPlotting finished!" << endl;
 }

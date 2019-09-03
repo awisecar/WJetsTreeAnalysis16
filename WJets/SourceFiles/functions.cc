@@ -311,62 +311,67 @@ double table::getEfficiencyHigh(double pt, double eta){
 }
 
 
-double SmearJetPt(double recoPt, double genPt, double eta, int smearJet){
-    // 2016 jet resolution scale factors: twiki.cern.ch/twiki/bin/view/CMS/JetResolution
-    // Results for 2016 data: Spring16_25nsV10 (80X, 2016, BCD+GH PromtReco) DATA/MC SFs
+double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year){
     // https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution#JER_Scaling_factors_and_Uncertai
-    
+
     double centralSF(1.00);
-    if      (fabs(eta) < 0.5) centralSF = 1.109;
-    else if (fabs(eta) < 0.8) centralSF = 1.138;
-    else if (fabs(eta) < 1.1) centralSF = 1.114;
-    else if (fabs(eta) < 1.3) centralSF = 1.123;
-    else if (fabs(eta) < 1.7) centralSF = 1.084;
-    else if (fabs(eta) < 1.9) centralSF = 1.082;
-    else if (fabs(eta) < 2.1) centralSF = 1.140;
-    else if (fabs(eta) < 2.3) centralSF = 1.067;
-    else if (fabs(eta) < 2.5) centralSF = 1.177;
-    else if (fabs(eta) < 2.8) centralSF = 1.364;
-    else if (fabs(eta) < 3.0) centralSF = 1.857;
-    else if (fabs(eta) < 3.2) centralSF = 1.328;
-    else if (fabs(eta) < 5.0) centralSF = 1.160;
-    else centralSF = 1.160;
-    
     double upSF(1.00);
-    if      (fabs(eta) < 0.5) upSF = 1.109+0.008;
-    else if (fabs(eta) < 0.8) upSF = 1.138+0.013;
-    else if (fabs(eta) < 1.1) upSF = 1.114+0.013;
-    else if (fabs(eta) < 1.3) upSF = 1.123+0.024;
-    else if (fabs(eta) < 1.7) upSF = 1.084+0.011;
-    else if (fabs(eta) < 1.9) upSF = 1.082+0.035;
-    else if (fabs(eta) < 2.1) upSF = 1.140+0.047;
-    else if (fabs(eta) < 2.3) upSF = 1.067+0.053;
-    else if (fabs(eta) < 2.5) upSF = 1.177+0.041;
-    else if (fabs(eta) < 2.8) upSF = 1.364+0.039;
-    else if (fabs(eta) < 3.0) upSF = 1.857+0.071;
-    else if (fabs(eta) < 3.2) upSF = 1.328+0.022;
-    else if (fabs(eta) < 5.0) upSF = 1.160+0.029;
-    else upSF = 1.160+0.029;
-    
     double downSF(1.00);
-    if      (fabs(eta) < 0.5) downSF = 1.109-0.008;
-    else if (fabs(eta) < 0.8) downSF = 1.138-0.013;
-    else if (fabs(eta) < 1.1) downSF = 1.114-0.013;
-    else if (fabs(eta) < 1.3) downSF = 1.123-0.024;
-    else if (fabs(eta) < 1.7) downSF = 1.084-0.011;
-    else if (fabs(eta) < 1.9) downSF = 1.082-0.035;
-    else if (fabs(eta) < 2.1) downSF = 1.140-0.047;
-    else if (fabs(eta) < 2.3) downSF = 1.067-0.053;
-    else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
-    else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
-    else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
-    else if (fabs(eta) < 3.2) downSF = 1.328-0.022;
-    else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
-    else downSF = 1.160-0.029;
+
+    if (year == 2016){
+        // centralSF -----
+        if      (fabs(eta) < 0.5) centralSF = 1.109;
+        else if (fabs(eta) < 0.8) centralSF = 1.138;
+        else if (fabs(eta) < 1.1) centralSF = 1.114;
+        else if (fabs(eta) < 1.3) centralSF = 1.123;
+        else if (fabs(eta) < 1.7) centralSF = 1.084;
+        else if (fabs(eta) < 1.9) centralSF = 1.082;
+        else if (fabs(eta) < 2.1) centralSF = 1.140;
+        else if (fabs(eta) < 2.3) centralSF = 1.067;
+        else if (fabs(eta) < 2.5) centralSF = 1.177;
+        else if (fabs(eta) < 2.8) centralSF = 1.364;
+        else if (fabs(eta) < 3.0) centralSF = 1.857;
+        else if (fabs(eta) < 3.2) centralSF = 1.328;
+        else if (fabs(eta) < 5.0) centralSF = 1.160;
+        else centralSF = 1.160;
+        
+        // upSF -----
+        if      (fabs(eta) < 0.5) upSF = 1.109+0.008;
+        else if (fabs(eta) < 0.8) upSF = 1.138+0.013;
+        else if (fabs(eta) < 1.1) upSF = 1.114+0.013;
+        else if (fabs(eta) < 1.3) upSF = 1.123+0.024;
+        else if (fabs(eta) < 1.7) upSF = 1.084+0.011;
+        else if (fabs(eta) < 1.9) upSF = 1.082+0.035;
+        else if (fabs(eta) < 2.1) upSF = 1.140+0.047;
+        else if (fabs(eta) < 2.3) upSF = 1.067+0.053;
+        else if (fabs(eta) < 2.5) upSF = 1.177+0.041;
+        else if (fabs(eta) < 2.8) upSF = 1.364+0.039;
+        else if (fabs(eta) < 3.0) upSF = 1.857+0.071;
+        else if (fabs(eta) < 3.2) upSF = 1.328+0.022;
+        else if (fabs(eta) < 5.0) upSF = 1.160+0.029;
+        else upSF = 1.160+0.029;
+
+        // downSF -----
+        if      (fabs(eta) < 0.5) downSF = 1.109-0.008;
+        else if (fabs(eta) < 0.8) downSF = 1.138-0.013;
+        else if (fabs(eta) < 1.1) downSF = 1.114-0.013;
+        else if (fabs(eta) < 1.3) downSF = 1.123-0.024;
+        else if (fabs(eta) < 1.7) downSF = 1.084-0.011;
+        else if (fabs(eta) < 1.9) downSF = 1.082-0.035;
+        else if (fabs(eta) < 2.1) downSF = 1.140-0.047;
+        else if (fabs(eta) < 2.3) downSF = 1.067-0.053;
+        else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
+        else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
+        else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
+        else if (fabs(eta) < 3.2) downSF = 1.328-0.022;
+        else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
+        else downSF = 1.160-0.029;
+    }
+    if (year == 2017){
+        std::cout << "Add JER SFs" << std::endl;
+    }
     
-    
-    double smearedPt(0);
-    
+    double smearedPt(0.);
     if (smearJet == 0) {
         smearedPt = std::max(0., genPt + centralSF*(recoPt - genPt));
     }
@@ -454,5 +459,23 @@ vector<double> buildVecFineBin( int nStdBin, double arrStdBin[], int factChop)
     }
     vecTemp.push_back(arrStdBin[nStdBin]);
     return vecTemp;
+}
+
+void welcomeMessage(){
+    std::cout << R"(
+
+                          __    __       __       _                           
+                         / / /\ \ \ _    \ \  ___| |_ ___                     
+                         \ \/  \/ /| |_   \ \/ _ \ __/ __|                    
+                          \  /\  /_   _/\_/ /  __/ |_\__ \                    
+                           \/  \/  |_| \___/ \___|\__|___/                    
+            __                 _       __      _           _   _              
+           /__\_   _____ _ __ | |_    / _\ ___| | ___  ___| |_(_) ___  _ __   
+          /_\ \ \ / / _ \ '_ \| __|   \ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \  
+         //__  \ V /  __/ | | | |_    _\ \  __/ |  __/ (__| |_| | (_) | | | | 
+         \__/   \_/ \___|_| |_|\__|   \__/\___|_|\___|\___|\__|_|\___/|_| |_| 
+     	
+
+    )" << '\n';
 }
 

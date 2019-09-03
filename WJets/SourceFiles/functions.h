@@ -71,11 +71,14 @@ class table{
         vector<record> recd;
 };
 
-double SmearJetPt(double, double, double, int);
+double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year);
+
 void normalizeTH2D(TH2D*);
 void bestTwoJetsCandidatesPt(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
 void bestTwoJetsCandidatesPhi(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
 
 vector<double> buildVecFineBin(int nStdBin, double arrStdBin[], int factChop);
+
+void welcomeMessage();
 
 #endif

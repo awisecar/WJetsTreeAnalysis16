@@ -26,6 +26,7 @@ using namespace std;
 ClassImp(ZJetsAndDPS);
 
 void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth){
+    std::cout << "\n >>>>>>>>>> ZJetsAndDPS::Loop() >>>>>>>>>> " << std::endl;
 
     //--- Check weither it is 8 TeV or 13 TeV ---
     //string energy = getEnergy();
@@ -168,7 +169,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
 
     double sumEventW = 0. ;
-    cout << " MC initial weight :  " << sumEventW <<endl;
+    cout << "\nMC initial weight :  " << sumEventW <<endl;
 
     //------------------------------------
     std::cout << "\n-----> Print out variables: " << std::endl;
@@ -232,8 +233,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     std::cout << "-----> Total number of entries: " << nentries << std::endl;
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 4005;
-    //for (Long64_t jentry(0); jentry < nentries; jentry++){
-     for (Long64_t jentry(0); jentry < 5000000; jentry++){
+    for (Long64_t jentry(0); jentry < nentries; jentry++){
+    //  for (Long64_t jentry(0); jentry < 3000000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -1220,19 +1221,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // AK4 jets -------------------------------------------------------------------------------------------------------------------
             for (unsigned short i(0); i < nJetsNoDRCut; i++){
                 int index(-1);
-                double mindR(0.5);
+                double mindR(0.2); // dR of matching cone is half of that used to cluster the jets (for AK4 it's 0.4)
                 double dR(9999);
 
                 //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                 for (unsigned short j(0); j < nGenJetsNoDRCut; j++){
                     dR = deltaR(genJetsNoDRCut[j].phi, genJetsNoDRCut[j].eta, jetsNoDRCut[i].phi, jetsNoDRCut[i].eta);
-                    if (dR < mindR){
+                    if (dR <= mindR){
                         mindR = dR;
                         index = j;
                     }
                 } 
 
                 if (index > -1 ){
+                    // so for gen-reco matched jets, use the "scaling method" approach
+
                     // if a gen-reco jet match found
                     // matchingTable keeps track of which reco-gen jet pairs were matched
                     matchingTable[i][index] = 1;
@@ -1240,7 +1243,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     // andrew -- no JER smearing factors yet! -- 28 august 2019
                     double oldJetPt = jetsNoDRCut[i].pt;
-                    // double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet);
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year);
                     double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
@@ -1256,9 +1259,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }
 
                 else {
-                    // if no match found within dR 0.5 cone, then index == -1
+                    // if no match found within dR 0.2 cone, then index == -1
                     puMVA_JetsNoMatchGenJets->Fill(JetAk04PuMva->at(jetsNoDRCut[i].patIndex), weight);
                     jetsEta_JetsNoMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
+                    
+                    // now do stochastic smearing method for jets that are not gen-matched!
+
+                    
+
+                    
                 }
 
             }
@@ -1266,13 +1275,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // AK8 jets -------------------------------------------------------------------------------------------------------------------
             for (unsigned short i(0); i < nJetsAK8NoDRCut; i++){
                 int index(-1);
-                double mindR(0.5);
+                double mindR(0.4); // dR of matching cone is half of that used to cluster the jets (for AK8 it's 0.8)
                 double dR(9999);
 
                 //Searching for the closest gen-reco jet match within the dR 0.5 cone drawn around the reco jet
                 for (unsigned short j(0); j < nGenJetsAK8NoDRCut; j++){
                     dR = deltaR(genJetsAK8NoDRCut[j].phi, genJetsAK8NoDRCut[j].eta, jetsAK8NoDRCut[i].phi, jetsAK8NoDRCut[i].eta);
-                    if (dR < mindR){
+                    if (dR <= mindR){
                         mindR = dR;
                         index = j;
                     }
@@ -1286,7 +1295,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     // andrew -- no JER smearing factors yet! -- 28 august 2019
                     double oldJetPt = jetsAK8NoDRCut[i].pt;
-                    // double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet);
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year);
                     double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
@@ -2104,7 +2113,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genLeadJ, genSecondJ), genWeight);
                 // genBestSPhi_Zinc2jet->Fill(SPhi(genLep1, genLep2, genBestTwoJets.first, genBestTwoJets.second), genWeight);
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
-                    if ( fabs(genSecondJ.Eta()) >= j_Y_range[i] &&  fabs(genSecondJ.Eta()) < j_Y_range[i+1] )                                                genSecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(genSecondJ.Pt()), genWeight);
+                    if ( fabs(genSecondJ.Eta()) >= j_Y_range[i] &&  fabs(genSecondJ.Eta()) < j_Y_range[i+1] ) genSecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(genSecondJ.Pt()), genWeight);
                 }
                 
                 if (genZ.Pt() < 25){
@@ -2358,10 +2367,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genZNGoodJets_Zinc->Fill(7., genWeight);
                 genZNGoodJetsFull_Zinc->Fill(7., genWeight);
             }
-            
             if (nGoodGenJets >= 8) genZNGoodJets_Zinc->Fill(8., genWeight);
-            if (doW && nGoodGenJets >= 9) genZNGoodJets_Zinc->Fill(9., genWeight);
-            if (doW && nGoodGenJets >= 10) genZNGoodJets_Zinc->Fill(10., genWeight);
+            if (nGoodGenJets >= 9) genZNGoodJets_Zinc->Fill(9., genWeight);
+            if (nGoodGenJets >= 10) genZNGoodJets_Zinc->Fill(10., genWeight);
             
         } //end filling gen histos
         
@@ -2607,8 +2615,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             if (nGoodJets_20 >= 6){
                 SixthJetPt_Zinc6jet  ->Fill(jets_20[5].pt, weight);
                 SixthJetPt_1_Zinc6jet->Fill(jets_20[5].pt, weight);
-            }
-			
+            }	
 			if (nJetsDR02Cut >= 1){
 				dRLepCloseJet_Zinc1jet->Fill(mindRjmu, weight);
 				dRLepCloseJet_2_Zinc1jet->Fill(mindRjmu, weight);
@@ -2690,6 +2697,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     AllJetEta_Zinc1jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc1jet->Fill(jets[j].phi, weight);
                 }
+
                 if ( doW ) dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta - lepton1.eta), weight);
                 else dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta-Z.Eta()), weight);
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
@@ -2846,6 +2854,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     AllJetEta_Zinc2jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc2jet->Fill(jets[j].phi, weight);
                 }
+
                 if (Z.Pt() < 25){
                     ptBal_LowPt_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
                     dPhiJets_LowPt_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
@@ -3283,11 +3292,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 ZNGoodJets_Zinc->Fill(7., weight);
                 ZNGoodJetsFull_Zinc->Fill(7., weight);
             }
-            
             //more bins in Single Lepton dataset than Double --> xsec bigger
             if (nGoodJets >= 8) ZNGoodJets_Zinc->Fill(8., weight);
-            if (doW && nGoodJets >= 9)  ZNGoodJets_Zinc->Fill(9., weight);
-            if (doW && nGoodJets >= 10) ZNGoodJets_Zinc->Fill(10., weight);
+            if (nGoodJets >= 9)  ZNGoodJets_Zinc->Fill(9., weight);
+            if (nGoodJets >= 10) ZNGoodJets_Zinc->Fill(10., weight);
         }
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         
@@ -3766,29 +3774,34 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     cout << "Total GEN pass: GEN weight of all events       : " << TotalGenWeightPassGEN << endl;
     cout << "Total RECO pass: RECO weight of all events     : " << TotalRecoWeightPassRECO << endl;
     cout << "Total RECO pass: GEN weight of all events      : " << TotalGenWeightPassRECO << endl;
-    cout << "Number Inclusif 0 jets                         : " << nEventsIncl0Jets << endl;
-    cout << "Number Exclusif 0 jets                         : " << nEventsExcl0Jets << endl;
-    cout << "Number Exclusif 1 jets                         : " << nEventsExcl1Jets << endl;
-    cout << "Number Exclusif 2 jets                         : " << nEventsExcl2Jets << endl;
-    cout << "Number Exclusif 3 jets                         : " << nEventsExcl3Jets << endl;
-    cout << "Number Inclusive 1 B-jet                       : " << nEventsIncBJets << endl;
-    cout << "Number GEN Inclusif 0 jets                     : " << GENnEventsIncl0Jets << endl;
-    cout << "Number GEN Inclusif 1 jets                     : " << GENnEventsIncl1Jets << endl;
-    cout << "Number GEN Inclusif 2 jets                     : " << GENnEventsIncl2Jets << endl;
-    cout << "Number GEN Inclusif 3 jets                     : " << GENnEventsIncl3Jets << endl;
-    cout << "MC weight (sumEventW)                          : " << sumEventW << endl;
+    cout << "# Events: 0 jets inclusive                     : " << nEventsIncl0Jets << endl;
+    cout << "# Events: 0 jets exclusive                     : " << nEventsExcl0Jets << endl;
+    cout << "# Events: 1 jet exclusive                      : " << nEventsExcl1Jets << endl;
+    cout << "# Events: 2 jets exclusive                     : " << nEventsExcl2Jets << endl;
+    cout << "# Events: 3 jets exclusive                     : " << nEventsExcl3Jets << endl;
+    cout << "# Events: 1 B-jet inclusive                    : " << nEventsIncBJets << endl;
+    cout << "# GEN Events: 0 jets inclusive                 : " << GENnEventsIncl0Jets << endl;
+    cout << "# GEN Events: 1 jets inclusive                 : " << GENnEventsIncl1Jets << endl;
+    cout << "# GEN Events: 2 jets inclusive                 : " << GENnEventsIncl2Jets << endl;
+    cout << "# GEN Events: 3 jets inclusive                 : " << GENnEventsIncl3Jets << endl;
+    cout << "Total MC weight (sumEventW)                    : " << sumEventW << endl;
+    std::cout << "\n=======================================================================================================" << std::endl;
 }
 
 
 ZJetsAndDPS::ZJetsAndDPS(string fileName_, int year_, float lumiScale_, float puScale_, bool useTriggerCorrection_, bool useEfficiencyCorrection_, 
-        int systematics_, int direction_, float xsecfactor_, int jetPtCutMin_, int jetPtCutMax_, int ZPtCutMin_, int ZEtaCutMin_, int ZEtaCutMax_, int METcut_, int jetEtaCutMin_, int jetEtaCutMax_): 
+        int systematics_, int direction_, float xsecfactor_, int jetPtCutMin_, int jetPtCutMax_, int ZPtCutMin_, int ZEtaCutMin_, int ZEtaCutMax_, 
+        int METcut_, int jetEtaCutMin_, int jetEtaCutMax_): 
+
     HistoSet(fileName_.substr(0, fileName_.find("_"))), outputDirectory("HistoFiles/"),
     fileName(fileName_), year(year_), lumiScale(lumiScale_), puScale(puScale_), 
     useTriggerCorrection(useTriggerCorrection_), useEfficiencyCorrection(useEfficiencyCorrection_), 
     systematics(systematics_), direction(direction_), xsecfactor(xsecfactor_), 
     jetPtCutMin(jetPtCutMin_), jetPtCutMax(jetPtCutMax_), jetEtaCutMin(jetEtaCutMin_), jetEtaCutMax(jetEtaCutMax_), 
     ZPtCutMin(ZPtCutMin_), ZEtaCutMin(ZEtaCutMin_), ZEtaCutMax(ZEtaCutMax_), METcut(METcut_)
+
 {
+    std::cout << "\n >>>>>>>>>> ZJetsAndDPS::ZJetsAndDPS() >>>>>>>>>> " << std::endl;
 
     //This function serves to get the correct filenames/locations, and then read in the files to the TChain
 
@@ -3838,28 +3851,29 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, int year_, float lumiScale_, float pu
     else {
         //assuming that the filename locations are listed in a text file, which are read off from EOS
         fullFileName += ".txt";
-        std::cout << "Reading in .txt file: \n" << fullFileName << std::endl;
+        std::cout << "\nReading in .txt file: \n" << fullFileName << std::endl;
         ifstream infile(fullFileName.c_str());
         string line; 
         int countFiles(0);
         // std::cout << __LINE__ << std::endl;
         std::cout << std::endl;
         while (getline(infile, line)){
-            countFiles++;
-
-            string treePath = storageElement + line + dirPath + treeName;
-            chain->Add(treePath.c_str());
-            cout << "Loading file: " << line << endl;
             
+            // Loading the input files into TChains -----
+            string treePath = storageElement + line + dirPath + treeName;
             string bonzaiHeaderPath = storageElement + line + dirPath + "/BonzaiHeader";
+            cout << "Loading file #" << countFiles << ": " << line << endl;
+            chain->Add(treePath.c_str());
             BonzaiHeaderChain->Add(bonzaiHeaderPath.c_str());
+        
+            countFiles++;
         }
     }
     fChain = chain;
     fBonzaiHeaderChain = BonzaiHeaderChain;
     
     if (!isData) getMcNorm();
-    else skimAccep_ = std::vector<double>(1, 1.);
+    else skimAccep_ = std::vector<double>(1., 1.);
 }
 
 ZJetsAndDPS::~ZJetsAndDPS(){
@@ -4148,31 +4162,6 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("GJetAk08Phi", &GJetAk08Phi, &b_GJetAk08Phi);
         fChain->SetBranchAddress("GJetAk08E", &GJetAk08E, &b_GJetAk08E);
 
-        // Other stuff
-        // if (fileName.find("WJets") != string::npos && fileName.find("FxFx") != string::npos){
-        //  fChain->SetBranchAddress("GNup", &GNup, &b_GNup);
-        // }
-        // if (fileName.find("Sherpa") != string::npos || 
-        //         (fileName.find("WJets") != string::npos && hasGenInfo ) || 
-        //         fileName.find("Powheg") != string::npos || 
-        //         fileName.find("P8") != string::npos || 
-        //         fileName.find("TopReweighting") != string::npos ||
-        //         fileName.find("Z2") != string::npos){
-            
-        //     if (fileName.find("MiNLO") != string::npos || 
-        //             fileName.find("mcEveWeight") != string::npos || 
-        //             fileName.find("HepMC") != string::npos){
-        //         fChain->SetBranchAddress("mcEveWeight_", &mcEveWeight_, &b_mcEveWeight_);
-        //     }
-        //     if (fileName.find("HepMC") != string::npos){
-        //         fChain->SetBranchAddress("mcSherpaSumWeight3_", &mcSherpaSumWeight3_, &b_mcSherpaSumWeight3_);
-        //         fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
-        //     }
-        //     if (fileName.find("Sherpa2") != string::npos){
-        //         fChain->SetBranchAddress("mcSherpaWeights_", &mcSherpaWeights_, &b_mcSherpaWeights_);
-        //     }
-        // }
-
     } //end hasGenInfo
 
     Notify();
@@ -4205,20 +4194,23 @@ Int_t ZJetsAndDPS::Cut(Long64_t entry){
 }
 
 void ZJetsAndDPS::getMcNorm(){
+
+    std::cout << "\n >>>>>>>>>> ZJetsAndDPS::getMcNorm() >>>>>>>>>> " << std::endl;
     Int_t InEvtCount = 0;
     std::vector<Double_t>* InEvtWeightSums  = 0;
     std::vector<Double_t>* EvtWeightSums = 0;
     fBonzaiHeaderChain->SetBranchAddress("InEvtWeightSums", &InEvtWeightSums);
     fBonzaiHeaderChain->SetBranchAddress("EvtWeightSums", &EvtWeightSums);
-    int nheaders = fBonzaiHeaderChain->GetEntries(); //can be several in case files were merged with haddd
+
+    int nheaders = fBonzaiHeaderChain->GetEntries(); //can be several in case files were merged with hadd
+    cout << " >>>>> fBonzaiHeaderChain: Looping over " << nheaders << " TChain entries!" << endl;
     for(int ientry = 0; ientry < nheaders; ++ientry){
+        cout << " -----> fBonzaiHeaderChain: getting entry #" << ientry << endl;
         fBonzaiHeaderChain->GetEntry(ientry);
-        
         
         if(ientry == 0){
             InEvtWeightSums_ = std::vector<Double_t>(InEvtWeightSums->size(), 0);
             EvtWeightSums_ = std::vector<Double_t>(EvtWeightSums->size(), 0);
-            
             if(InEvtWeightSums->size() != EvtWeightSums->size()){
                 std::cerr << "InEvtWeightSums and EvtWeightSums branches "
                 "of input BonzaiHeader tree have different size ("
@@ -4228,41 +4220,54 @@ void ZJetsAndDPS::getMcNorm(){
             }
         }
         if(InEvtWeightSums->size() != InEvtWeightSums_.size()){
-            std::cerr << "Inconsistency in number of elements of "
-            << " InEvtWeightSums branch of input files!\n";
+            std::cerr << "Inconsistency in number of elements of InEvtWeightSums branch of input files!\n";
             abort();
         }
         if(EvtWeightSums->size() != EvtWeightSums_.size()){
             std::cerr << "Inconsistency in number of elements of EvtWeightSums branch of input files!\n";
             abort();
         }
+        
+        // Summing elements of InEvtWeightSums and EvtWeightSums vectors over all events
         for(size_t i = 0; i < InEvtWeightSums_.size(); ++i){
             InEvtWeightSums_[i] += (*InEvtWeightSums)[i];
         }
         for(size_t i = 0; i < EvtWeightSums_.size(); ++i){
             EvtWeightSums_[i] += (*EvtWeightSums)[i];
         }
+
         InEvtCount_ += InEvtCount;
+
+        // Print out InEvtWeightSums_[0] and EvtWeightSums_[0] -----
+        // we can see, per event, if there's an inf/NaN value here
+        cout << "(*EvtWeightSums)[0]   = " << (*EvtWeightSums)[0] << endl;
+        cout << "(*InEvtWeightSums)[0] = " << (*InEvtWeightSums)[0] << endl;
+        // cout << "(*EvtWeightSums)[0]/(*InEvtWeightSums)[0] = " << ((*EvtWeightSums)[0])/((*InEvtWeightSums)[0]) << endl;
     }
-    
-    EvtCount_ = fChain->GetEntries();
     
     if(InEvtWeightSums_.size() > 0){
-        std::cerr << "InEvtWeightSums_[0] = " << InEvtWeightSums_[0] << " EvtWeightSums_[0] = " <<  EvtWeightSums_[0] << "\n";
+        cout << "\n >>>>> Sum totals over all Bonzai header events ----- " << endl;
+        std::cout << "EvtWeightSums_[0] = " <<  EvtWeightSums_[0] << std::endl;
+        std::cout << "InEvtWeightSums_[0] = " << InEvtWeightSums_[0] << std::endl;
     }
     
-    if(EvtWeightSums_.size() == 0 || InEvtWeightSums_.size() == 0 || InEvtWeightSums_[0] == 0 ){
+    if(EvtWeightSums_.size() == 0 || InEvtWeightSums_.size() == 0 || InEvtWeightSums_[0] == 0){
+        EvtCount_ = fChain->GetEntries();
         if(InEvtCount_){
             skimAccep_ = std::vector<double>(1, EvtCount_/InEvtCount_);
-        } else{
+        } 
+        else{
             std::cout << "Warning: InEvtCount is equal to 0. Event yield normalization might be wrong!" << std::endl;
         }
-    } else{
+    } 
+    //andrew -- currently what our code uses for determining Bonzai acceptance -- 3 sept 2019
+    else{
         skimAccep_ = std::vector<double>(InEvtWeightSums_.size());
-        for(unsigned i = 0; i < InEvtWeightSums_.size() && i < EvtWeightSums_.size(); ++i){
+        for(unsigned i = 0; i < InEvtWeightSums_.size(); ++i){
             skimAccep_[i] = EvtWeightSums_[i]/InEvtWeightSums_[i];
         }
     }
-    
+
+    cout << "\n >>>>> Sum totals over all Bonzai header events ----- " << endl;
     std::cerr << "skimAccep_[0] = " << skimAccep_[0] << "\n";
 }
