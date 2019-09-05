@@ -739,6 +739,7 @@
         } 
 
        // W+jets FxFx jet-binned signal sample - W+0J
+       // /WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
         if ( doWhat == 61 || doWhat == 100 ){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
@@ -755,6 +756,7 @@
         }
 
        // W+jets FxFx jet-binned signal sample - W+1J
+       // /WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         if ( doWhat == 62 || doWhat == 100 ){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
@@ -772,6 +774,7 @@
         }
 
        // W+jets FxFx jet-binned signal sample - W+2J
+       // /WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
         if ( doWhat == 63 || doWhat == 100 ){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;

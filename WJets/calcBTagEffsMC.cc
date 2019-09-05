@@ -34,141 +34,245 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
 
     string energy = "13TeV";
 
+    std::string yearStr;
+    std::stringstream yearSStr;
+    yearSStr << year;
+    yearStr = yearSStr.str();
+
     // assuming W+Jets, leptonFlavor == "SMu" here 
-    int nFiles = NFILESTTBARWJETS_NOQCD;
+    int nFiles = NFILESTTBARWJETS_NOQCD_NODATA;
     TFile *file[nFiles];    
-    int countFiles = 0;
+    int openedFiles(0);
     cout << "\n >>>>> Getting all files..." << endl;
     for (unsigned short i = 0; i < nFiles; i++){
 
-        int fileSelect = FilesTTbarWJets_NoQCD[i];
+        int fileSelect = FilesTTbarWJets_NoQCD_NoData[i];
         string fileNameTemp =  ProcessInfo[fileSelect].filename;
-        cout << " --> fileNameTemp = " << fileNameTemp << endl; 
-        file[countFiles] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
+        cout << "#" << i << " -----> fileNameTemp = " << fileNameTemp << endl; 
+        file[i] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
 
         // check if file is opened correctly
-        if (file[countFiles]->IsOpen()) countFiles++;
+        if (file[i]->IsOpen()) openedFiles++;
+        cout << endl;
     }
-    // cout << "nFiles = " << nFiles << ", countFiles = " << countFiles << endl;
-    if (countFiles == nFiles) cout << "\n >>>>> All files found!" << endl;
+    if (openedFiles == nFiles) cout << "\n >>>>> All files found!" << endl;
     else {
         cout << "\n >>>>> Missing file(s)!!!!!" << endl;
         return; //should catch error and exit the main function
     }
 
-    unsigned short nHist = file[0]->GetListOfKeys()->GetEntries();
-    string histoNameTemp;
-    TH1D *histTemp;
-    vector<string> histoName;
-
-    int nHistNoGen = 0;
-    cout << "\n >>>>> Looking at histograms in files..." << endl;
-    for (unsigned short i(0); i < nHist; i++) {
-
-        histoNameTemp = file[0]->GetListOfKeys()->At(i)->GetName();
-        if (histoNameTemp.find("gen") != string::npos) continue; // is it not a reco-level histo?
-
-        histTemp = (TH1D*) file[0]->Get(histoNameTemp.c_str());
-        if (histTemp->GetEntries() < 1) continue; // is it empty?
-        if (!histTemp->InheritsFrom(TH1D::Class())) continue; // is it a TH2?
-
-        cout << "Found histogram #" << i << ": " << histoNameTemp << endl;
-        histoName.push_back(histoNameTemp);
-
-        nHistNoGen++;
-    }
-    cout << "Number of relevant histograms: " << nHistNoGen << endl;
-
-    TH1D* hist[countFiles][nHistNoGen];
-    cout << "\n >>>>> Grabbing b-tag efficiency histos from each file..." << endl;
-
-    TH1D* hBJet;
-    TH1D* hBJetTagged;
-    TH1D* hCJet;
-    TH1D* hCJetTagged;
-    TH1D* hLightJet;
-    TH1D* hLightJetTagged;
-    TH1D* hTemp;
-
+    ///////////////////////////////////////////////////////////////////////////////////////
+    
+    TH1D *hBJetTagged;
+    TH1D *hBJet;
+    TH1D *hCJetTagged;
+    TH1D *hCJet;
+    TH1D *hLightJetTagged;
+    TH1D *hLightJet;
+     
+    cout << "\n >>>>> Getting efficiency histos from files..." << endl;
+    // Loop through all files
     for (int i = 0; i < nFiles; i++) {
-        for (int j = 0; j < nHistNoGen ; j++) {
-            hist[i][j] = getHisto(file[i], histoName[j]);
-            hTemp = hist[i][j];
-            if (i == 0) {
-                if (histoName.find("h_pt_b") != string::npos)            hBJet = (TH1D*) hist[i][j]->Clone();
-                if (histoName.find("h_pt_b_tagged") != string::npos)     hBJetTagged = (TH1D*) hist[i][j]->Clone();
-                if (histoName.find("h_pt_c") != string::npos)            hCJet = (TH1D*) hist[i][j]->Clone();
-                if (histoName.find("h_pt_c_tagged") != string::npos)     hCJetTagged = (TH1D*) hist[i][j]->Clone();
-                if (histoName.find("h_pt_udsg") != string::npos)         hLightJet = (TH1D*) hist[i][j]->Clone();
-                if (histoName.find("h_pt_udsg_tagged") != string::npos)  hLightJetTagged = (TH1D*) hist[i][j]->Clone();
 
+        cout << "\nFile #" << i << endl;
+        unsigned short nHist(0); 
+        nHist = file[i]->GetListOfKeys()->GetEntries(); 
+        
+        // Loop through all histograms in each file to find the eff histos
+        for (unsigned short j(0); j < nHist; j++) {
 
+            string histoNameTemp = "";
+            histoNameTemp = file[i]->GetListOfKeys()->At(j)->GetName();
+            if (histoNameTemp.find("gen") != string::npos) continue; // only reco-level histos
+
+            TH1D *histFromFile = NULL;
+            histFromFile = (TH1D*) file[i]->Get(histoNameTemp.c_str());
+            histFromFile->SetDirectory(0);
+            if (histFromFile->GetEntries() < 1) continue; // skip empty histos
+            if (!histFromFile->InheritsFrom(TH1D::Class())) continue; // skip TH2's
+
+            TH1D* histTemp = NULL;
+            histTemp = (TH1D*) histFromFile->Clone(); // need to clone this to a separate histogram for some reason
+
+            // get the b-tagging efficiency histos
+            // structure if statements to search for the more specific string first
+            // we assume that the index of the histograms is the same in each file (set in HistoSet.h)
+
+            if (histoNameTemp.find("h_pt_b_tagged") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hBJetTagged = (TH1D*) histTemp->Clone();
+                else hBJetTagged->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
             }
-            else {
-                if (histoName.find("h_pt_b") != string::npos)            hBJet->Add(hTemp);
-                if (histoName.find("h_pt_b_tagged") != string::npos)     hBJetTagged->Add(hTemp);
-                if (histoName.find("h_pt_c") != string::npos)            hCJet->Add(hTemp);
-                if (histoName.find("h_pt_c_tagged") != string::npos)     hCJetTagged->Add(hTemp);
-                if (histoName.find("h_pt_udsg") != string::npos)         hLightJet->Add(hTemp);
-                if (histoName.find("h_pt_udsg_tagged") != string::npos)  hLightJetTagged->Add(hTemp);
+            else if (histoNameTemp.find("h_pt_b") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hBJet = (TH1D*) histTemp->Clone();
+                else hBJet->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
             }
+            else if (histoNameTemp.find("h_pt_c_tagged") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hCJetTagged = (TH1D*) histTemp->Clone();
+                else hCJetTagged->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
+            }
+            else if (histoNameTemp.find("h_pt_c") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hCJet = (TH1D*) histTemp->Clone();
+                else hCJet->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
+            }
+            else if (histoNameTemp.find("h_pt_udsg_tagged") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hLightJetTagged = (TH1D*) histTemp->Clone();
+                else hLightJetTagged->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
+            }
+            else if (histoNameTemp.find("h_pt_udsg") != string::npos){
+                cout << " >>> histo #" << j << ": " << histoNameTemp << std::endl;
+                if (i == 0) hLightJet = (TH1D*) histTemp->Clone();
+                else hLightJet->Add(histTemp);
+
+                int nBins(histTemp->GetNbinsX());
+                for (int k(1); k <= nBins; k++) {
+                    cout << histTemp->GetBinContent(k) << "  ";
+                }
+                cout << "\n" << endl;
+            }
+            // else cout << "Found histogram " << histoNameTemp << " at index #" << j << std::endl;
+            else continue;
+
         }
+    } 
 
-    }
+    ///////////////////////////////////////////////////////////////////////////////////////
 
-    // Calculate the efficiencies
-    TH1D* hBJetEff     = (TH1D*) hBJetTagged->Clone();
-    TH1D* hCJetEff     = (TH1D*) hCJetTagged->Clone();
-    TH1D* hLightJetEff = (TH1D*) hLightJetTagged->Clone();
-    hBJetEff->Divide(hBJet);
-    hCJetEff->Divide(hCJet);
-    hLightJetEff->Divide(hLightJet);
-
-    int nBins(hBJetEff->GetNbinsX());
+    cout << "\n///////////////////////////////////////////////////////////////////////////////////////" << endl;
+    cout << ">>>>> Sum totals:\n" << endl;
+    int nBins(hBJetTagged->GetNbinsX());
 
     // BJets -----
+    cout << "hBJetTagged" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hBJetTagged->GetBinContent(i) << " ";
+        cout << hBJetTagged->GetBinContent(i) << "  ";
     }
-    cout << endl;
+    cout << "\n" << endl;
+    cout << "hBJet" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hBJet->GetBinContent(i) << " ";
+        cout << hBJet->GetBinContent(i) << "  ";
     }
-    cout << endl;
+    cout << "\n" << endl;
+
+    // Charm Jets -----
+    cout << "hCJetTagged" << endl;
+    for (int i(1); i <= nBins; i++){
+        cout << hCJetTagged->GetBinContent(i) << "  ";
+    }
+    cout << "\n" << endl;
+    cout << "hCJet" << endl;
+    for (int i(1); i <= nBins; i++){
+        cout << hCJet->GetBinContent(i) << "  ";
+    }
+    cout << "\n" << endl;
+
+    // Light Jets -----
+    cout << "hLightJetTagged" << endl;
+    for (int i(1); i <= nBins; i++){
+        cout << hLightJetTagged->GetBinContent(i) << "  ";
+    }
+    cout << "\n" << endl;
+    cout << "hLightJet" << endl;
+    for (int i(1); i <= nBins; i++){
+        cout << hLightJet->GetBinContent(i) << "  ";
+    }
+    cout << "\n" << endl;
+
+    // Calculate the efficiencies
+    cout << "///////////////////////////////////////////////////////////////////////////////////////" << endl;
+    cout << ">>>>> Calculating efficiencies:\n" << endl;
+    TH1D* hBJetEff     = (TH1D*) hBJetTagged->Clone("h_pt_bjet_eff");
+    TH1D* hCJetEff     = (TH1D*) hCJetTagged->Clone("h_pt_cjet_eff");
+    TH1D* hLightJetEff = (TH1D*) hLightJetTagged->Clone("h_pt_udsgjet_eff");
+    // binomial errors for efficiencies
+    hBJetEff->Divide(hBJetTagged, hBJet, 1, 1, "B");
+    hCJetEff->Divide(hCJetTagged, hCJet, 1, 1, "B");
+    hLightJetEff->Divide(hLightJetTagged, hLightJet, 1, 1, "B");
+
+    // BJets -----
+    cout << "hBJetEff" << endl;
     for (int i(1); i <= nBins; i++){
         cout << hBJetEff->GetBinContent(i) << " ";
     }
-    cout << endl;
+    cout << "\n" << endl;
 
     // Charm Jets -----
+    cout << "hCJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hCJetTagged->GetBinContent(i) << " ";
+        cout << hCJetEff->GetBinContent(i) << "  ";
     }
-    cout << endl;
-    for (int i(1); i <= nBins; i++){
-        cout << hCJet->GetBinContent(i) << " ";
-    }
-    cout << endl;
-    for (int i(1); i <= nBins; i++){
-        cout << hCJetEff->GetBinContent(i) << " ";
-    }
-    cout << endl;
+    cout << "\n" << endl;
 
     // Light Jets -----
+    cout << "hLightJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hLightJetTagged->GetBinContent(i) << " ";
-    }
-    cout << endl;
-    for (int i(1); i <= nBins; i++){
-        cout << hLightJet->GetBinContent(i) << " ";
-    }
-    cout << endl;
-    for (int i(1); i <= nBins; i++){
-        cout << hLightJetEff->GetBinContent(i) << " ";
+        cout << hLightJetEff->GetBinContent(i) << "  ";
     }
     cout << endl;
 
-    cout << "\n >>>>> Closing all files..." << endl;
+    ///////////////////////////////////////////////////////////////////////////////////////
+    TString outputDirBtag = "EfficiencyTables/";
+    // TString command = "mkdir -p "+outputDirBtag;
+    // system(command);
+
+    cout << "\n///////////////////////////////////////////////////////////////////////////////////////" << endl;
+    TString outputFilename = outputDirBtag+"bTagEffsMC_"+yearStr+".root";
+    // TString outputFilename = "bTagEffsMC_"+yearStr+".root";
+    cout << ">>>>> Writing histograms to output file at --- \n" << outputFilename << endl;
+
+    TFile *outputFile = new TFile(outputFilename, "RECREATE");
+    outputFile->cd();
+
+    hBJet->Write();
+    hBJetTagged->Write();
+    hBJetEff->Write();
+    hCJet->Write();
+    hCJetTagged->Write();
+    hCJetEff->Write();
+    hLightJet->Write();
+    hLightJetTagged->Write();
+    hLightJetEff->Write();
+
+    outputFile->Close();
+    delete outputFile;
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    cout << "\n>>>>> Closing all files..." << endl;
     for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);
 
     cout << "\nExiting runCalcBTagEffsMC!" << endl;
