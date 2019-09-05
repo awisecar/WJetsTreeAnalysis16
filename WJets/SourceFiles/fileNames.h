@@ -79,6 +79,8 @@ const int FilesTTbarWJets_NoQCD[NFILESTTBARWJETS_NOQCD] = {0, 5, 21, 10, 9, 25};
 // used for btag efficiencies studies
 const int NFILESTTBARWJETS_NOQCD_NODATA(5);
 const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {5, 21, 10, 9, 25};
+// const int NFILESTTBARWJETS_NOQCD_NODATA(1);
+// const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {25};
 
 // some testing - 2 sept 2019 - andrew
 const int NFILESTTBARWJETS_NOQCD_NOTTBAR(5);

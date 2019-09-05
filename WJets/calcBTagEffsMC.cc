@@ -22,7 +22,8 @@ void runCalcBTagEffsMC(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
     int JetPtMax = 0, bool doFlat = 0, bool doVarWidth = 1);
 
 void calcBTagEffsMC(){
-     runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
+    welcomeMessage();
+    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
 }
 
 void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
@@ -31,6 +32,9 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
+
+    // prevents the addition of histograms in memory
+    TH1::AddDirectory(kFALSE); //sets a global switch disabling the reference
 
     string energy = "13TeV";
 
@@ -41,15 +45,17 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
 
     // assuming W+Jets, leptonFlavor == "SMu" here 
     int nFiles = NFILESTTBARWJETS_NOQCD_NODATA;
-    TFile *file[nFiles];    
+    TFile *file[nFiles];   
+    std::vector <std::string> fileNames;
     int openedFiles(0);
     cout << "\n >>>>> Getting all files..." << endl;
-    for (unsigned short i = 0; i < nFiles; i++){
+    for (int i = 0; i < nFiles; i++){
 
         int fileSelect = FilesTTbarWJets_NoQCD_NoData[i];
         string fileNameTemp =  ProcessInfo[fileSelect].filename;
         cout << "#" << i << " -----> fileNameTemp = " << fileNameTemp << endl; 
         file[i] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
+        fileNames.push_back(fileNameTemp);
 
         // check if file is opened correctly
         if (file[i]->IsOpen()) openedFiles++;
@@ -57,42 +63,39 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     }
     if (openedFiles == nFiles) cout << "\n >>>>> All files found!" << endl;
     else {
-        cout << "\n >>>>> Missing file(s)!!!!!" << endl;
+        cout << "\n >>>>> Missing file(s)! Aborting!\n" << endl;
         return; //should catch error and exit the main function
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
     
-    TH1D *hBJetTagged;
-    TH1D *hBJet;
-    TH1D *hCJetTagged;
-    TH1D *hCJet;
-    TH1D *hLightJetTagged;
-    TH1D *hLightJet;
+    TH1D *hBJetTagged = NULL;
+    TH1D *hBJet = NULL;
+    TH1D *hCJetTagged = NULL;
+    TH1D *hCJet = NULL;
+    TH1D *hLightJetTagged = NULL;
+    TH1D *hLightJet = NULL;
      
     cout << "\n >>>>> Getting efficiency histos from files..." << endl;
     // Loop through all files
     for (int i = 0; i < nFiles; i++) {
 
-        cout << "\nFile #" << i << endl;
-        unsigned short nHist(0); 
+        cout << "\nFile #" << i << ": " << fileNames.at(i) << endl;
+        int nHist(0); 
         nHist = file[i]->GetListOfKeys()->GetEntries(); 
         
         // Loop through all histograms in each file to find the eff histos
-        for (unsigned short j(0); j < nHist; j++) {
+        for (int j(0); j < nHist; j++) {
 
             string histoNameTemp = "";
             histoNameTemp = file[i]->GetListOfKeys()->At(j)->GetName();
             if (histoNameTemp.find("gen") != string::npos) continue; // only reco-level histos
 
-            TH1D *histFromFile = NULL;
-            histFromFile = (TH1D*) file[i]->Get(histoNameTemp.c_str());
-            histFromFile->SetDirectory(0);
-            if (histFromFile->GetEntries() < 1) continue; // skip empty histos
-            if (!histFromFile->InheritsFrom(TH1D::Class())) continue; // skip TH2's
-
-            TH1D* histTemp = NULL;
-            histTemp = (TH1D*) histFromFile->Clone(); // need to clone this to a separate histogram for some reason
+            TH1D *histTemp = NULL;
+            histTemp = (TH1D*) file[i]->Get(histoNameTemp.c_str());
+            // histTemp->SetDirectory(0); // not necessary because of TH1::AddDirectory(kFALSE) statement above
+            if (histTemp->GetEntries() < 1) continue; // skip empty histos
+            if (!histTemp->InheritsFrom(TH1D::Class())) continue; // skip TH2's
 
             // get the b-tagging efficiency histos
             // structure if statements to search for the more specific string first
@@ -273,7 +276,7 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     ///////////////////////////////////////////////////////////////////////////////////////
 
     cout << "\n>>>>> Closing all files..." << endl;
-    for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);
+    for (int i(0); i < nFiles; i++) closeFile(file[i]);
 
     cout << "\nExiting runCalcBTagEffsMC!" << endl;
 }
