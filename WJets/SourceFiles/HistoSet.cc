@@ -382,6 +382,12 @@ HistoSet::HistoSet(string leptonFlavor)
     // double wBosonJetAK8Pt_ZRatios[5] = {235, 300, 400, 550, 900};
     // int nWBosonJetAK8Pt_2_ZRatios(8);
     // double wBosonJetAK8Pt_2_ZRatios[9] = {235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+
+    //change binning a little
+    int nWBosonJetAK8Pt_ZRatios(7);
+    double wBosonJetAK8Pt_ZRatios[8] = {220, 250, 300, 370, 470, 570, 720, 1000};
+    int nWBosonJetAK8Pt_2_ZRatios(14);
+    double wBosonJetAK8Pt_2_ZRatios[15] = {220, 235, 250, 275, 300, 335, 370, 420, 470, 520, 570, 645, 720, 860, 1000};
     
 
     //***************************** Basic plots for Wjets *****************************//

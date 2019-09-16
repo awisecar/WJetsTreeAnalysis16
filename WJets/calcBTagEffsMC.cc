@@ -229,21 +229,21 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     // BJets -----
     cout << "hBJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hBJetEff->GetBinContent(i) << " ";
+        cout << hBJetEff->GetBinContent(i) << "   ";
     }
     cout << "\n" << endl;
 
     // Charm Jets -----
     cout << "hCJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hCJetEff->GetBinContent(i) << "  ";
+        cout << hCJetEff->GetBinContent(i) << "   ";
     }
     cout << "\n" << endl;
 
     // Light Jets -----
     cout << "hLightJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hLightJetEff->GetBinContent(i) << "  ";
+        cout << hLightJetEff->GetBinContent(i) << "   ";
     }
     cout << endl;
 

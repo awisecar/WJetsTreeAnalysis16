@@ -162,8 +162,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // if (systematics == 10 && direction ==  1) doRespSyst = true;
     
     TRandom3* RandGen = new TRandom3();
-    RandGen->SetSeed(22346);
-    if (sysBtagSF != 0) RandGen->SetSeed(333);
+    RandGen->SetSeed(12345678);
+    if (sysBtagSF != 0) RandGen->SetSeed(23456789);
     
     TRandom3* Rand_MER_Gen = new TRandom3();
     //==========================================================================================================//
@@ -672,11 +672,20 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscCisvV2->at(i) = " << JetAk04BDiscCisvV2->at(i) << endl;
 
                 //************************* B-tag Veto Correction *******************************//
-                float this_rand = RandGen->Rndm(); // Get a random number.
-                float pt= JetAk04Pt->at(i);
-                float eta= JetAk04Eta->at(i);
+                
+                // Get pt, eta of the i-th jet in the jet loop
+                float pt = JetAk04Pt->at(i);
+                float eta = JetAk04Eta->at(i);
+                
+                // Get a uniformly distributed float between 0 and 1
+                // This value should change every time we look at a new jet in the jet loop
+                float this_rand = RandGen->Rndm(); 
 
                 //************************* Begin emulating btagging efficiencies in MC (MC only)********//
+
+                // Correct for data/MC b-tag eff. discrepancy by updating b-tag score on jet-by-jet basis
+
+                // do if (!isData) instead???
                 if (isData == false){
                     if (year == 2016){
                     
@@ -686,7 +695,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         // Get jet flavor (hadron definition)
                         int jetflavour= JetAk04HadFlav->at(i);
                         
-                        // ---------------- For Real B-jets --------------- //
+                        // ---------------- For Truth-Level B-jets --------------- //
                         if (abs(jetflavour)==5){
                             float effb = 0.67298;
                             float effb_corr = 1;
@@ -755,7 +764,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             
                         } // end b-jet section
                         
-                        // ---------------- For Real C-jets--------------- //
+                        // ---------------- For Truth-Level C-jets--------------- //
                         if (abs(jetflavour)==4){
                             float effc = 0.185922;
                             float effc_corr = 1;
@@ -823,7 +832,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             
                         } // end c-jet section
                         
-                        // ---------------- For REAL Light-jets --------------- //
+                        // ---------------- For Truth-Level Light-jets --------------- //
                         if (abs(jetflavour)<4){
                             float eff_l = 0.0200484;
                             float eff_l_corr = 1;
@@ -888,13 +897,103 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
                         // Wb study
-                        if (abs(jetflavour)==5) countWbBjets++ ;
+                        if (abs(jetflavour)==5) countWbBjets++;
+
                     } // end b-tag efficiency SFs for 2016 MC
 
-                    // andrew - no btag SFs yet for MC!!! - 28 August 2019
-                    // if (year == 2017){
-                    //     passBJets = true; // do btag MC SFs for 2017
-                    // } // end b-tag efficiency SFs for 2017 MC
+                    if (year == 2017){
+                        
+                        // Get jet flavor (hadron definition)
+                        int jetflavour= JetAk04HadFlav->at(i);
+
+                        // Initialize the systematic variations as the central value
+                        bool passBJets_SFB_sys_up = passBJets; 
+                        bool passBJets_SFB_sys_down = passBJets;  
+                        
+                        // ---------------- For Truth-Level B-jets --------------- //
+                        if (abs(jetflavour)==5){
+
+                            // Set the b-tag eff's determined in MC for truth b jets
+                            float effb = 1.;
+                            if (pt < 30.)                 effb = 0.658148;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.658148;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.692716;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.702473;
+                            if (pt >= 100. && pt < 140.)  effb = 0.694655;
+                            if (pt >= 140. && pt < 200.)  effb = 0.669370;
+                            if (pt >= 200. && pt < 300.)  effb = 0.617494;
+                            if (pt >= 300. && pt < 600.)  effb = 0.542055;
+                            if (pt >= 600. && pt < 1000.) effb = 0.438289;
+                            if (pt >= 1000.)              effb = 0.438289;
+                            
+                            // Get the central SF -----
+                            // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values 
+                            // Assuming that the SF is pT-dependent (?)
+                            float           SFb = 1.09079*((1.+(0.180764*pt))/(1.+(0.216797*pt)));
+                            if (pt < 20.)   SFb = 1.09079*((1.+(0.180764*20.))/(1.+(0.216797*20.)));
+                            if (pt > 1000.) SFb = 1.09079*((1.+(0.180764*1000.))/(1.+(0.216797*1000.)));
+                            
+                            // Grab SF errors for use in systematic variations
+                            // Errors listed in the .csv file are symmetric
+                            float SFb_error = 0.;
+                            if (pt < 20.)                 SFb_error = 0.048631865531206131 * 2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.048631865531206131;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.014063102193176746;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.013459851965308189;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.012704650871455669;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.014372736215591431;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.015085947699844837;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.033626105636358261;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.045323032885789871;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.058395344763994217;
+                            if (pt >= 1000.)              SFb_error = 0.058395344763994217 * 2.;
+                            float SFb_up = SFb + SFb_error;
+                            float SFb_down = SFb - SFb_error;
+                            
+                            // f values (jet fractions) for comparison to rand
+                            // method of computation depends on wheter SF < 1, or SF > 1
+                            float f = 0.;
+                            float f_up = 0.;
+                            float f_down = 0.;
+                        
+                            // If SF < 1, randomly untag a tagged jet ------
+                            // Compute the untag fraction
+                            if (SFb < 1.0)           f = (1.0 - SFb);
+                            if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
+                            if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
+                            // We untag a fraction f of the tagged jets
+                            if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                            if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                            
+                            // If SF > 1, randomly tag an untagged jet ------
+                            // Compute the re-tag fraction
+                            if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                            if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                            if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                            // We re-tag a fraction f of the untagged jets
+                            if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                            if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            
+                        } // end b-jet section
+
+                        // ---------------- For Truth-Level C-jets--------------- //
+                        if (abs(jetflavour)==4){
+                        } // end c-jet section
+
+                        // ---------------- For Truth-Level Light-jets --------------- //
+                        if (abs(jetflavour)<4){
+                        } // end light jet section
+
+                        // for btagging SF systematics
+                        if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                        if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
+                        
+                        // Wb study
+                        if (abs(jetflavour)==5) countWbBjets++;
+                        
+                    } // end b-tag efficiency SFs for 2017 MC
 
                 } // --------- End MC-only b-tag efficiency SF section
 
