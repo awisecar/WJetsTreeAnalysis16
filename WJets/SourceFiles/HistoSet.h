@@ -38,8 +38,10 @@ public:
     double j_Y_range[NbinsEta2D];
 
     //***************************** Basic plots for Wjets *****************************//
+
+    TH1D *NEventsPassCuts;
     
-    //--- For calculateing b-tagging efficiency---
+    //--- For calculating b-tagging efficiencies---
     TH2D *h_pt_eta_b;
     TH2D *h_pt_eta_b_tagged;
     TH2D *h_pt_eta_c;
@@ -54,7 +56,9 @@ public:
     TH1D *h_pt_udsg;
     TH1D *h_pt_udsg_tagged;
 
-	TH1D *NEventsPassCuts;
+    TH1D *NumRecoVtx;
+    TH1D *NumPUTruthVtx;
+    TH1D *NumPUObsVtx;
     
     //--- Jet multiplicity
     TH1D *ZNGoodJets_Zexc;
@@ -1577,7 +1581,6 @@ public:
 
     TH1D *deltaRjetMu;
     TH1D *deltaPtjetMu;
-    TH1D *NVtx;
 
     TH1D *Beta;
     TH1D *BetaStar;

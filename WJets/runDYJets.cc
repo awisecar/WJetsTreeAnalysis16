@@ -19,7 +19,7 @@
     welcomeMessage();
         
     //------------------
-     int doWhat       = 21;
+     int doWhat       = 42;
                               // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
@@ -713,7 +713,7 @@
            
         }
 
-       //W+jets inclusive LO-MLM sample
+       // W+jets inclusive LO-MLM sample
        // /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
         if (doWhat == 42 || doWhat == 100 ){
            int doGen = 0;

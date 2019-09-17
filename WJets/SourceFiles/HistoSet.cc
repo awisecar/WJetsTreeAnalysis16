@@ -2106,7 +2106,9 @@ HistoSet::HistoSet(string leptonFlavor)
     deltaRjetMu                = newTH1D("deltaRjetMu", "delta R btwn jet and muon", "#R", 50, 0., 2.5);
     deltaPtjetMu               = newTH1D("deltaPtjetMu", "delta Pt btwn jet and muon if dR<0.5", "#R", 150, -75., 75.);
     
-    NVtx                          = newTH1D("NVtx", "Number of vertices", "Number of primary vertices", 100, 0.5, 100.5);
+    NumRecoVtx                 = newTH1D("NumRecoVtx", "Number of reconstructed vertices", "Number of reconstructed vertices", 100, 0., 100.);
+    NumPUTruthVtx              = newTH1D("NumPUTruthVtx", "Number of truth PU vertices", "Number of truth PU vertices", 100, 0., 100.);
+    NumPUObsVtx                = newTH1D("NumPUObsVtx", "Number of observed PU vertices", "Number of observed PU vertices", 100, 0., 100.);
 
     ZNGoodJetsBeta_Zexc = newTH2D("ZNGoodJetsBeta_Zexc","Beta cut vs Jet Counter (excl.) ", 11, -0.5, 10.5, 10, -0.5, 9.5);
     ZNGoodJetsBeta_Zexc->GetXaxis()->SetBinLabel(1, "= 0");

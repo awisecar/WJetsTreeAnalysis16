@@ -234,7 +234,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 4005;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //  for (Long64_t jentry(0); jentry < 3000000; jentry++){
+    //  for (Long64_t jentry(0); jentry < 1000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -342,17 +342,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         }
 
 		//=======================================================================================================//
-        //     Reweighting MC for pileup discrepancy    //
-        //==============================================//
+        //     Reweighting MC for pileup profile discrepancy    //
+        //======================================================//
 
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
-
-            // puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
-
-            // andrew -- turning off PU reweighting for now!!! - 28 August 2019
-            // puWeightFact = (double)puWeight.weight(int(EvtPuCntObs)); // using observed number MC PU vertices
-
+            // Don't want to consider events with 0 "truth" vertices (if these even exist
+            // PU histos have upper bin edge of 100 vertices
+            if ( (int(EvtPuCntTruth) < 1) || (int(EvtPuCntTruth) > 99)) puWeightFact = 0.; 
+            else puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
             weight *= puWeightFact;
         }
 
@@ -1912,8 +1910,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             genWeight = genWeight * WbSystSF;
         }
         
-        // Filling puMVA, btag eff histograms before 
-        // final event selection for filling analysis histograms
+        // Filling puMVA, btag eff histograms, PU profile info from MC
+        // before final event selection for filling analysis histograms
         if (hasRecoInfo) {
 
             //--- Fill puMVA ---
@@ -1964,7 +1962,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     }
                 }
             }
-            //--- End for calculating b-tagging efficiency-------------------------
+
+            //--- For histos for PU reweighting-------------------------
+            if (!isData){
+                // Determining PU profiles from MC
+                // NOTE: remember to turn off PU reweighting line in order for weightNoSF to not have this info!!!
+                // In fact, if the PU reweighting is on, then NumPUTruthVtx should look like truth vertex dist. in data, by construction
+                NumPUTruthVtx->Fill(int(EvtPuCntTruth), weightNoSF);
+                NumPUObsVtx->Fill(int(EvtPuCntObs), weightNoSF);
+            }
+            // Number of reconstructed vertices
+            // Present in both MC and data
+            NumRecoVtx->Fill(int(EvtVtxCnt), weightNoSF);
         }
         //---
         
@@ -2613,15 +2622,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             countEventpassBveto++;
             TotalRecoWeightPassRECO+=weight;
             TotalGenWeightPassRECO+=genWeightBackup;
-            NVtx->Fill(EvtVtxCnt, weight);
 
-            PUWeight->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
-            if (nGoodJets == 0){
-                PUWeight0->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
-            }
-            else {
-                PUWeight1->Fill(puWeight.weight(int(EvtPuCntObs)), 1);
-            }
+            // weights from PU reweighting
+            PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)), 1.);
+            if (nGoodJets == 0) PUWeight0->Fill(puWeight.weight(int(EvtPuCntTruth)), 1.);
+            else PUWeight1->Fill(puWeight.weight(int(EvtPuCntTruth)), 1.);
             
             if (lepton1.charge > 0){
                 MuPlusPt->Fill(lepton1.pt, weight);
@@ -4269,10 +4274,10 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     if (hasRecoInfo){
 
         // General variables
-        // used for pileup, pileup reweighting for MC, etc.
-        fChain->SetBranchAddress("EvtVtxCnt", &EvtVtxCnt, &b_EvtVtxCnt);
-        fChain->SetBranchAddress("EvtPuCntObs", &EvtPuCntObs, &b_EvtPuCntObs);
-        fChain->SetBranchAddress("EvtPuCntTruth", &EvtPuCntTruth, &b_EvtPuCntTruth);
+        // reconstructed vertices, pileup information
+        fChain->SetBranchAddress("EvtVtxCnt", &EvtVtxCnt, &b_EvtVtxCnt);             // Number of vertices reco::Vertex that pass some basic sanity checks
+        fChain->SetBranchAddress("EvtPuCntTruth", &EvtPuCntTruth, &b_EvtPuCntTruth); // PileupSummaryInfo::getTrueNumInteractions()
+        fChain->SetBranchAddress("EvtPuCntObs", &EvtPuCntObs, &b_EvtPuCntObs);       // PileupSummaryInfo::getPU_NumInteractions()
         // contains main weights for MC
         fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
         // old method for storing trigger bit information
