@@ -57,6 +57,7 @@ public:
     TH1D *h_pt_udsg_tagged;
 
     TH1D *NumRecoVtx;
+    TH1D *NumRecoVtx_EvtSelection;
     TH1D *NumPUTruthVtx;
     TH1D *NumPUObsVtx;
     

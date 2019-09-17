@@ -347,9 +347,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         double puWeightFact(1);
         if (hasRecoInfo && !isData){
-            // Don't want to consider events with 0 "truth" vertices (if these even exist
             // PU histos have upper bin edge of 100 vertices
-            if ( (int(EvtPuCntTruth) < 1) || (int(EvtPuCntTruth) > 99)) puWeightFact = 0.; 
+            if ( (int(EvtPuCntTruth) < 0) || (int(EvtPuCntTruth) > 99)) puWeightFact = 0.; 
             else puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
             weight *= puWeightFact;
         }
@@ -1459,8 +1458,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     // andrew -- no JER smearing factors yet! -- 28 august 2019
                     double oldJetPt = jetsNoDRCut[i].pt;
-                    // double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year);
-                    double newJetPt = oldJetPt;
+                    double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year, 0);
+                    // double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
                     jetsNoDRCut[i].pt = newJetPt;
@@ -1480,6 +1479,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     jetsEta_JetsNoMatchGenJets->Fill(JetAk04Eta->at(jetsNoDRCut[i].patIndex), weight);
                     
                     // now do stochastic smearing method for jets that are not gen-matched!
+
+                    // TO-DO!!!!
 
                     
 
@@ -1511,8 +1512,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     // andrew -- no JER smearing factors yet! -- 28 august 2019
                     double oldJetPt = jetsAK8NoDRCut[i].pt;
-                    // double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year);
-                    double newJetPt = oldJetPt;
+                    double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year, 1);
+                    // double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
                     jetsAK8NoDRCut[i].pt = newJetPt;
@@ -1520,6 +1521,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     
                     // jetsAK8Eta_AK8JetsMatchGenJets->Fill(JetAk08Eta->at(jetsAK8NoDRCut[i].patIndex), weight);
                 }
+                // else {
+                //     // Stochastic smearing of jet pT
+                //     // TO-DO!!!!
+                // }
 
             }
         } //end if hasRecoInfo and hasGenInfo for reco jet smearing
@@ -2622,6 +2627,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             countEventpassBveto++;
             TotalRecoWeightPassRECO+=weight;
             TotalGenWeightPassRECO+=genWeightBackup;
+
+            // number of reconstructed vertices (for W+jets event selection)
+            NumRecoVtx_EvtSelection->Fill(int(EvtVtxCnt), weight);
 
             // weights from PU reweighting
             PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)), 1.);

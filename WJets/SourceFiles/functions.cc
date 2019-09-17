@@ -311,74 +311,184 @@ double table::getEfficiencyHigh(double pt, double eta){
 }
 
 
-double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year){
-    // https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution#JER_Scaling_factors_and_Uncertai
+double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year, int jetType){
 
-    double centralSF(1.00);
-    double upSF(1.00);
-    double downSF(1.00);
+    double centralSF(1.);
+    double upSF(1.);
+    double downSF(1.);
 
-    if (year == 2016){
-        // centralSF -----
-        if      (fabs(eta) < 0.5) centralSF = 1.109;
-        else if (fabs(eta) < 0.8) centralSF = 1.138;
-        else if (fabs(eta) < 1.1) centralSF = 1.114;
-        else if (fabs(eta) < 1.3) centralSF = 1.123;
-        else if (fabs(eta) < 1.7) centralSF = 1.084;
-        else if (fabs(eta) < 1.9) centralSF = 1.082;
-        else if (fabs(eta) < 2.1) centralSF = 1.140;
-        else if (fabs(eta) < 2.3) centralSF = 1.067;
-        else if (fabs(eta) < 2.5) centralSF = 1.177;
-        else if (fabs(eta) < 2.8) centralSF = 1.364;
-        else if (fabs(eta) < 3.0) centralSF = 1.857;
-        else if (fabs(eta) < 3.2) centralSF = 1.328;
-        else if (fabs(eta) < 5.0) centralSF = 1.160;
-        else centralSF = 1.160;
-        
-        // upSF -----
-        if      (fabs(eta) < 0.5) upSF = 1.109+0.008;
-        else if (fabs(eta) < 0.8) upSF = 1.138+0.013;
-        else if (fabs(eta) < 1.1) upSF = 1.114+0.013;
-        else if (fabs(eta) < 1.3) upSF = 1.123+0.024;
-        else if (fabs(eta) < 1.7) upSF = 1.084+0.011;
-        else if (fabs(eta) < 1.9) upSF = 1.082+0.035;
-        else if (fabs(eta) < 2.1) upSF = 1.140+0.047;
-        else if (fabs(eta) < 2.3) upSF = 1.067+0.053;
-        else if (fabs(eta) < 2.5) upSF = 1.177+0.041;
-        else if (fabs(eta) < 2.8) upSF = 1.364+0.039;
-        else if (fabs(eta) < 3.0) upSF = 1.857+0.071;
-        else if (fabs(eta) < 3.2) upSF = 1.328+0.022;
-        else if (fabs(eta) < 5.0) upSF = 1.160+0.029;
-        else upSF = 1.160+0.029;
+    // AK4 jets -------------------
+    if (jetType == 0){
+        if (year == 2016){
 
-        // downSF -----
-        if      (fabs(eta) < 0.5) downSF = 1.109-0.008;
-        else if (fabs(eta) < 0.8) downSF = 1.138-0.013;
-        else if (fabs(eta) < 1.1) downSF = 1.114-0.013;
-        else if (fabs(eta) < 1.3) downSF = 1.123-0.024;
-        else if (fabs(eta) < 1.7) downSF = 1.084-0.011;
-        else if (fabs(eta) < 1.9) downSF = 1.082-0.035;
-        else if (fabs(eta) < 2.1) downSF = 1.140-0.047;
-        else if (fabs(eta) < 2.3) downSF = 1.067-0.053;
-        else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
-        else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
-        else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
-        else if (fabs(eta) < 3.2) downSF = 1.328-0.022;
-        else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
-        else downSF = 1.160-0.029;
+            // centralSF -----
+            if      (fabs(eta) < 0.5) centralSF = 1.109;
+            else if (fabs(eta) < 0.8) centralSF = 1.138;
+            else if (fabs(eta) < 1.1) centralSF = 1.114;
+            else if (fabs(eta) < 1.3) centralSF = 1.123;
+            else if (fabs(eta) < 1.7) centralSF = 1.084;
+            else if (fabs(eta) < 1.9) centralSF = 1.082;
+            else if (fabs(eta) < 2.1) centralSF = 1.140;
+            else if (fabs(eta) < 2.3) centralSF = 1.067;
+            else if (fabs(eta) < 2.5) centralSF = 1.177;
+            else if (fabs(eta) < 2.8) centralSF = 1.364;
+            else if (fabs(eta) < 3.0) centralSF = 1.857;
+            else if (fabs(eta) < 3.2) centralSF = 1.328;
+            else if (fabs(eta) < 5.0) centralSF = 1.160;
+            else centralSF = 1.160;
+            
+            // upSF -----
+            if      (fabs(eta) < 0.5) upSF = 1.109+0.008;
+            else if (fabs(eta) < 0.8) upSF = 1.138+0.013;
+            else if (fabs(eta) < 1.1) upSF = 1.114+0.013;
+            else if (fabs(eta) < 1.3) upSF = 1.123+0.024;
+            else if (fabs(eta) < 1.7) upSF = 1.084+0.011;
+            else if (fabs(eta) < 1.9) upSF = 1.082+0.035;
+            else if (fabs(eta) < 2.1) upSF = 1.140+0.047;
+            else if (fabs(eta) < 2.3) upSF = 1.067+0.053;
+            else if (fabs(eta) < 2.5) upSF = 1.177+0.041;
+            else if (fabs(eta) < 2.8) upSF = 1.364+0.039;
+            else if (fabs(eta) < 3.0) upSF = 1.857+0.071;
+            else if (fabs(eta) < 3.2) upSF = 1.328+0.022;
+            else if (fabs(eta) < 5.0) upSF = 1.160+0.029;
+            else upSF = 1.160+0.029;
+
+            // downSF -----
+            if      (fabs(eta) < 0.5) downSF = 1.109-0.008;
+            else if (fabs(eta) < 0.8) downSF = 1.138-0.013;
+            else if (fabs(eta) < 1.1) downSF = 1.114-0.013;
+            else if (fabs(eta) < 1.3) downSF = 1.123-0.024;
+            else if (fabs(eta) < 1.7) downSF = 1.084-0.011;
+            else if (fabs(eta) < 1.9) downSF = 1.082-0.035;
+            else if (fabs(eta) < 2.1) downSF = 1.140-0.047;
+            else if (fabs(eta) < 2.3) downSF = 1.067-0.053;
+            else if (fabs(eta) < 2.5) downSF = 1.177-0.041;
+            else if (fabs(eta) < 2.8) downSF = 1.364-0.039;
+            else if (fabs(eta) < 3.0) downSF = 1.857-0.071;
+            else if (fabs(eta) < 3.2) downSF = 1.328-0.022;
+            else if (fabs(eta) < 5.0) downSF = 1.160-0.029;
+            else downSF = 1.160-0.029;
+
+        }
+        // 2017 MC, AK4 Jets: Fall17_V3_MC_SF_AK4PFchs
+        // these SFs are symmetric in eta
+        if (year == 2017){
+
+            // centralSF -----
+            if      (fabs(eta) < 0.522) centralSF = 1.1432;
+            else if (fabs(eta) < 0.783) centralSF = 1.1815;
+            else if (fabs(eta) < 1.131) centralSF = 1.0989;
+            else if (fabs(eta) < 1.305) centralSF = 1.1137;
+            else if (fabs(eta) < 1.740) centralSF = 1.1307;
+            else if (fabs(eta) < 1.930) centralSF = 1.1600;
+            else if (fabs(eta) < 2.043) centralSF = 1.2393;
+            else if (fabs(eta) < 2.322) centralSF = 1.2604;
+            else if (fabs(eta) < 2.500) centralSF = 1.4085;
+            else if (fabs(eta) < 2.853) centralSF = 1.9909;
+            else if (fabs(eta) < 2.964) centralSF = 2.2923;
+            else if (fabs(eta) < 3.139) centralSF = 1.2696;
+            else if (fabs(eta) < 5.191) centralSF = 1.1542;
+            else centralSF = 1.1542;
+
+            // upSF -----
+            if      (fabs(eta) < 0.522) upSF = 1.1654;
+            else if (fabs(eta) < 0.783) upSF = 1.2299;
+            else if (fabs(eta) < 1.131) upSF = 1.1444;
+            else if (fabs(eta) < 1.305) upSF = 1.2533;
+            else if (fabs(eta) < 1.740) upSF = 1.2778;
+            else if (fabs(eta) < 1.930) upSF = 1.2576;
+            else if (fabs(eta) < 2.043) upSF = 1.4301;
+            else if (fabs(eta) < 2.322) upSF = 1.4105;
+            else if (fabs(eta) < 2.500) upSF = 1.6105;
+            else if (fabs(eta) < 2.853) upSF = 2.5593;
+            else if (fabs(eta) < 2.964) upSF = 2.6665;
+            else if (fabs(eta) < 3.139) upSF = 1.3785;
+            else if (fabs(eta) < 5.191) upSF = 1.3066;
+            else upSF = 1.3066;
+
+            // downSF -----
+            if      (fabs(eta) < 0.522) downSF = 1.1210;
+            else if (fabs(eta) < 0.783) downSF = 1.1332;
+            else if (fabs(eta) < 1.131) downSF = 1.0533;
+            else if (fabs(eta) < 1.305) downSF = 0.9740;
+            else if (fabs(eta) < 1.740) downSF = 0.9837;
+            else if (fabs(eta) < 1.930) downSF = 1.0623;
+            else if (fabs(eta) < 2.043) downSF = 1.0484;
+            else if (fabs(eta) < 2.322) downSF = 1.1103;
+            else if (fabs(eta) < 2.500) downSF = 1.2066;
+            else if (fabs(eta) < 2.853) downSF = 1.4225;
+            else if (fabs(eta) < 2.964) downSF = 1.9180;
+            else if (fabs(eta) < 3.139) downSF = 1.1607;
+            else if (fabs(eta) < 5.191) downSF = 1.0019;
+            else downSF = 1.0019;
+
+        }
     }
-    if (year == 2017){
-        std::cout << "Add JER SFs" << std::endl;
+    // AK8 jets -------------------
+    if (jetType == 1){
+        // 2017 MC, AK8 Jets: Fall17_V3_MC_SF_AK8PFPuppi
+        // these SFs are symmetric in eta
+        if (year == 2017){
+
+            // centralSF -----
+            if      (fabs(eta) < 0.522) centralSF = 1.1432;
+            else if (fabs(eta) < 0.783) centralSF = 1.1815;
+            else if (fabs(eta) < 1.131) centralSF = 1.0989;
+            else if (fabs(eta) < 1.305) centralSF = 1.1137;
+            else if (fabs(eta) < 1.740) centralSF = 1.1307;
+            else if (fabs(eta) < 1.930) centralSF = 1.1600;
+            else if (fabs(eta) < 2.043) centralSF = 1.2393;
+            else if (fabs(eta) < 2.322) centralSF = 1.2604;
+            else if (fabs(eta) < 2.500) centralSF = 1.4085;
+            else if (fabs(eta) < 2.853) centralSF = 1.9909;
+            else if (fabs(eta) < 2.964) centralSF = 2.2923;
+            else if (fabs(eta) < 3.139) centralSF = 1.2696;
+            else if (fabs(eta) < 5.191) centralSF = 1.1542;
+            else centralSF = 1.1542;
+
+            // upSF -----
+            if      (fabs(eta) < 0.522) upSF = 1.1654;
+            else if (fabs(eta) < 0.783) upSF = 1.2299;
+            else if (fabs(eta) < 1.131) upSF = 1.1444;
+            else if (fabs(eta) < 1.305) upSF = 1.2533;
+            else if (fabs(eta) < 1.740) upSF = 1.2778;
+            else if (fabs(eta) < 1.930) upSF = 1.2576;
+            else if (fabs(eta) < 2.043) upSF = 1.4301;
+            else if (fabs(eta) < 2.322) upSF = 1.4105;
+            else if (fabs(eta) < 2.500) upSF = 1.6105;
+            else if (fabs(eta) < 2.853) upSF = 2.5593;
+            else if (fabs(eta) < 2.964) upSF = 2.6665;
+            else if (fabs(eta) < 3.139) upSF = 1.3785;
+            else if (fabs(eta) < 5.191) upSF = 1.3066;
+            else upSF = 1.3066;
+            
+            // downSF -----
+            if      (fabs(eta) < 0.522) downSF = 1.1210;
+            else if (fabs(eta) < 0.783) downSF = 1.1332;
+            else if (fabs(eta) < 1.131) downSF = 1.0533;
+            else if (fabs(eta) < 1.305) downSF = 0.9740;
+            else if (fabs(eta) < 1.740) downSF = 0.9837;
+            else if (fabs(eta) < 1.930) downSF = 1.0623;
+            else if (fabs(eta) < 2.043) downSF = 1.0484;
+            else if (fabs(eta) < 2.322) downSF = 1.1103;
+            else if (fabs(eta) < 2.500) downSF = 1.2066;
+            else if (fabs(eta) < 2.853) downSF = 1.4225;
+            else if (fabs(eta) < 2.964) downSF = 1.9180;
+            else if (fabs(eta) < 3.139) downSF = 1.1607;
+            else if (fabs(eta) < 5.191) downSF = 1.0019;
+            else downSF = 1.0019;
+
+        }
     }
     
     double smearedPt(0.);
-    if (smearJet == 0) {
+    if (smearJet == 0) {         // central SF
         smearedPt = std::max(0., genPt + centralSF*(recoPt - genPt));
     }
-    else if (smearJet == 1) {
+    else if (smearJet == 1) {    // SF variation up
         smearedPt = std::max(0., genPt + upSF*(recoPt - genPt));
     }
-    else if (smearJet == -1) {
+    else if (smearJet == -1) {   // SF variation down
         smearedPt = std::max(0., genPt + downSF*(recoPt - genPt));
     }
     

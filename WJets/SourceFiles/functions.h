@@ -71,7 +71,7 @@ class table{
         vector<record> recd;
 };
 
-double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year);
+double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year, int jetType);
 
 void normalizeTH2D(TH2D*);
 void bestTwoJetsCandidatesPt(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
