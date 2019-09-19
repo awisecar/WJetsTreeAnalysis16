@@ -26,7 +26,6 @@
 #include "getFilesAndHistograms.h"
 #include "DataDrivenQCD.h"
 #include "fileNames.h"
-#include "variablesOfInterestVarWidth.h"
 
 using namespace std;
 
