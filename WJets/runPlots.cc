@@ -16,8 +16,16 @@
     welcomeMessage();
 
     // plot data and MC -----
-    Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
+    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
     // //Plotter("SMu", 2017, 30, 0, 0, 0, 30, -1, 0, -999999, 999999, 0, 0, 1); // METcut of 30 GeV
+
+    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = -1
+    // Plotter("SMu", 2017, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
+    Plotter("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements
+
+
+
+
 
     // plot only data -----
     // Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
@@ -27,15 +35,7 @@
     // getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, true); //no MET cut, doBJets = -1, doTTScale = True
     // //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, -1, false); //no MET cut, doBJets = -1, doTTScale = False
     // //getStatistics("SMu", 30, 0, false, true, 0, false, false, 30, -1, false); //30 GeV MET cut, doBJets = -1, doTTScale = False
+    // getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 2, true); //no MET cut, doBJets=2, doTTScale=True 
+    //getStatistics("SMu", 30, 0, false, true, 0, false, false, 0, 2, false); //no MET cut, doBJets=2, doTTScale=False
 
-    // //--- clean the *_cc.d and *_cc.so files ---
-    // string cmd = "if ls *_cc.d &> .ls_tmp.list; then rm *_cc.d; fi";
-    // system(cmd.c_str());
-    // cmd = "if ls *_cc.so &> .ls_tmp.list; then rm *_cc.so; fi";
-    // system(cmd.c_str());
-    // cmd = "if ls " + srcdir + "*_cc.d &> .ls_tmp.list; then rm " + srcdir + "*_cc.d; fi";
-    // system(cmd.c_str());
-    // cmd = "if ls " + srcdir + "*_cc.so &> .ls_tmp.list; then rm " + srcdir + "*_cc.so; fi";
-    // system(cmd.c_str());
-    // system("rm .ls_tmp.list");
 }

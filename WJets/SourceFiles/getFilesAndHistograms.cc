@@ -88,8 +88,11 @@ TFile* getFile(string histoFilesDirectory, string leptonFlavor, string energy, s
     if (dodR) fileName += "_dR5";
     if (doInvMassCut) fileName += "_InvMass";
     if (doSSign) fileName += "_SS";
+
     if (doBJets > 0) fileName += "_BJets";
-    if (doBJets < 0) fileName += "_BVeto";
+    else if (doBJets < 0) fileName += "_BVeto";
+    else fileName += "";
+
     if (doQCD > 0) fileName += "_QCD" + doQCDStr.str();
     if (MET > 0) fileName += "_MET" + METStr.str();
     //---------------------------------------------------
@@ -323,8 +326,11 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     if (doSSign)   nameStrExc << "_SS";
     if (doQCD > 0) nameStrExc << "_QCD"<<doQCD;
     if (METcut > 0) nameStrExc << "_MET"<< METcut;
+
     if (doBJets < 0) nameStrExc <<"_BVeto";
-    if (doBJets > 0) nameStrExc << "_BJets";
+    else if (doBJets > 0) nameStrExc << "_BJets";
+    else nameStrExc << "";
+
     if (doTTScale) nameStrExc << "_TTSFs";
     if (!doTTScale) nameStrExc << "_noTTSFs";
     nameStrExc << ".tex";
@@ -380,8 +386,11 @@ void getStatistics(string leptonFlavor, int JetPtMin, int JetPtMax, bool doFlat,
     if (doSSign)   nameStrInc << "_SS";
     if (doQCD > 0) nameStrInc << "_QCD"<<doQCD;
     if (METcut > 0) nameStrInc << "_MET"<< METcut;
+
     if (doBJets < 0) nameStrInc <<"_BVeto";
-    if (doBJets > 0) nameStrInc << "_BJets";
+    else if (doBJets > 0) nameStrInc << "_BJets";
+    else nameStrInc << "";
+
     if (doTTScale) nameStrInc << "_TTSFs";
     if (!doTTScale) nameStrInc << "_noTTSFs";
     nameStrInc << ".tex";

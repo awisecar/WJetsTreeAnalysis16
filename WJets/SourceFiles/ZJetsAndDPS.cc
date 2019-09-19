@@ -234,7 +234,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 4005;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //  for (Long64_t jentry(0); jentry < 1000; jentry++){
+    //  for (Long64_t jentry(0); jentry < 300000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -912,16 +912,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                             // Set the b-tag eff's determined in MC for truth b jets
                             float effb = 1.;
-                            if (pt < 30.)                 effb = 0.658148;
-                            if (pt >= 30.  && pt < 50.)   effb = 0.658148;
-                            if (pt >= 50.  && pt < 70.)   effb = 0.692716;
-                            if (pt >= 70.  && pt < 100.)  effb = 0.702473;
-                            if (pt >= 100. && pt < 140.)  effb = 0.694655;
-                            if (pt >= 140. && pt < 200.)  effb = 0.669370;
-                            if (pt >= 200. && pt < 300.)  effb = 0.617494;
-                            if (pt >= 300. && pt < 600.)  effb = 0.542055;
-                            if (pt >= 600. && pt < 1000.) effb = 0.438289;
-                            if (pt >= 1000.)              effb = 0.438289;
+                            if (pt < 30.)                 effb = 0.624885;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.624885;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.673144;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.694114;
+                            if (pt >= 100. && pt < 140.)  effb = 0.687739;
+                            if (pt >= 140. && pt < 200.)  effb = 0.663262;
+                            if (pt >= 200. && pt < 300.)  effb = 0.616566;
+                            if (pt >= 300. && pt < 600.)  effb = 0.541383;
+                            if (pt >= 600. && pt < 1000.) effb = 0.438860;
+                            if (pt >= 1000.)              effb = 0.438860;
                             
                             // Get the central SF -----
                             // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, b-jets
@@ -980,16 +980,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                             // Set the b-tag eff's determined in MC for truth c jets
                             float effc = 1.;
-                            if (pt < 30.)                 effc = 0.1175300;
-                            if (pt >= 30.  && pt < 50.)   effc = 0.1175300;
-                            if (pt >= 50.  && pt < 70.)   effc = 0.1162670;
-                            if (pt >= 70.  && pt < 100.)  effc = 0.1227900;
-                            if (pt >= 100. && pt < 140.)  effc = 0.1254900;
-                            if (pt >= 140. && pt < 200.)  effc = 0.1195980;
-                            if (pt >= 200. && pt < 300.)  effc = 0.1117250;
-                            if (pt >= 300. && pt < 600.)  effc = 0.1082510;
-                            if (pt >= 600. && pt < 1000.) effc = 0.0946445;
-                            if (pt >= 1000.)              effc = 0.0946445;
+                            if (pt < 30.)                 effc = 0.1167410;
+                            if (pt >= 30.  && pt < 50.)   effc = 0.1167410;
+                            if (pt >= 50.  && pt < 70.)   effc = 0.1156690;
+                            if (pt >= 70.  && pt < 100.)  effc = 0.1231580;
+                            if (pt >= 100. && pt < 140.)  effc = 0.1250250;
+                            if (pt >= 140. && pt < 200.)  effc = 0.1183740;
+                            if (pt >= 200. && pt < 300.)  effc = 0.1084660;
+                            if (pt >= 300. && pt < 600.)  effc = 0.1017420;
+                            if (pt >= 600. && pt < 1000.) effc = 0.0881154;
+                            if (pt >= 1000.)              effc = 0.0881154;
                             
                             // Get the central SF -----
                             // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, c-jets
@@ -1048,16 +1048,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                             // Set the b-tag eff's determined in MC for truth light jets
                             float eff_l = 1.;
-                            if (pt < 30.)                 eff_l = 0.00567292;
-                            if (pt >= 30.  && pt < 50.)   eff_l = 0.00567292;
-                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00688654;
-                            if (pt >= 70.  && pt < 100.)  eff_l = 0.00939173;
-                            if (pt >= 100. && pt < 140.)  eff_l = 0.01009870;
-                            if (pt >= 140. && pt < 200.)  eff_l = 0.01091620;
-                            if (pt >= 200. && pt < 300.)  eff_l = 0.01098960;
-                            if (pt >= 300. && pt < 600.)  eff_l = 0.01451240;
-                            if (pt >= 600. && pt < 1000.) eff_l = 0.01619300;
-                            if (pt >= 1000.)              eff_l = 0.01619300;
+                            if (pt < 30.)                 eff_l = 0.00465021;
+                            if (pt >= 30.  && pt < 50.)   eff_l = 0.00465021;
+                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00562437;
+                            if (pt >= 70.  && pt < 100.)  eff_l = 0.00791489;
+                            if (pt >= 100. && pt < 140.)  eff_l = 0.00857474;
+                            if (pt >= 140. && pt < 200.)  eff_l = 0.00937996;
+                            if (pt >= 200. && pt < 300.)  eff_l = 0.00940644;
+                            if (pt >= 300. && pt < 600.)  eff_l = 0.01284070;
+                            if (pt >= 600. && pt < 1000.) eff_l = 0.01378930;
+                            if (pt >= 1000.)              eff_l = 0.01378930;
                             
                             // Get the central SF and variations -----
                             // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "incl" values, light-jets
@@ -2629,7 +2629,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             TotalGenWeightPassRECO+=genWeightBackup;
 
             // number of reconstructed vertices (for W+jets event selection)
-            NumRecoVtx_EvtSelection->Fill(int(EvtVtxCnt), weight);
+            NumRecoVtx_EvtSelection->Fill(int(EvtVtxCnt), weight);
 
             // weights from PU reweighting
             PUWeight->Fill(puWeight.weight(int(EvtPuCntTruth)), 1.);

@@ -63,10 +63,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 
 ### First time running over 2017 data!
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 61, 62, 63] # full set of files
-doWhat = [30]
+# doWhat = [30]
 # doWhat = [22]
 # doQCD = [0, 1, 2, 3]
-doQCD = [0]
+# doQCD = [0]
+# doSysRunning = [0]
+# years = [2017]
+
+### Running full 2017 data/MC, incl. QCD BG
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 61, 62, 63] # full set of files
+doQCD = [0, 1, 2, 3]
 doSysRunning = [0]
 years = [2017]
 

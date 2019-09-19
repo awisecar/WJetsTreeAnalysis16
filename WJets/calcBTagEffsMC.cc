@@ -45,6 +45,8 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
 
     // assuming W+Jets, leptonFlavor == "SMu" here 
     int nFiles = NFILESTTBARWJETS_NOQCD_NODATA;
+    // int nFiles = 1; // just running ttBar
+
     TFile *file[nFiles];   
     std::vector <std::string> fileNames;
     int openedFiles(0);
@@ -52,6 +54,8 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     for (int i = 0; i < nFiles; i++){
 
         int fileSelect = FilesTTbarWJets_NoQCD_NoData[i];
+        // int fileSelect = 9; // just running ttBar
+
         string fileNameTemp =  ProcessInfo[fileSelect].filename;
         cout << "#" << i << " -----> fileNameTemp = " << fileNameTemp << endl; 
         file[i] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
@@ -229,26 +233,29 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     // BJets -----
     cout << "hBJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hBJetEff->GetBinContent(i) << "   ";
+        // cout << hBJetEff->GetBinContent(i) << "   ";
+        cout << hBJetEff->GetBinContent(i) << std::endl;
     }
     cout << "\n" << endl;
 
     // Charm Jets -----
     cout << "hCJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hCJetEff->GetBinContent(i) << "   ";
+        // cout << hCJetEff->GetBinContent(i) << "   ";
+        cout << hCJetEff->GetBinContent(i) << std::endl;
     }
     cout << "\n" << endl;
 
     // Light Jets -----
     cout << "hLightJetEff" << endl;
     for (int i(1); i <= nBins; i++){
-        cout << hLightJetEff->GetBinContent(i) << "   ";
+        // cout << hLightJetEff->GetBinContent(i) << "   ";
+        cout << hLightJetEff->GetBinContent(i) << std::endl;
     }
     cout << endl;
 
     ///////////////////////////////////////////////////////////////////////////////////////
-    TString outputDirBtag = "EfficiencyTables/";
+    TString outputDirBtag = "EfficiencyTables/bTagEffSFs/";
     // TString command = "mkdir -p "+outputDirBtag;
     // system(command);
 

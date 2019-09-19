@@ -80,5 +80,6 @@ void bestTwoJetsCandidatesPhi(vector<jetStruct>, pair<TLorentzVector, TLorentzVe
 vector<double> buildVecFineBin(int nStdBin, double arrStdBin[], int factChop);
 
 void welcomeMessage();
+void bTagVetoMessage(int doBJets);
 
 #endif

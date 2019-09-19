@@ -1,6 +1,6 @@
-// void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2017)
+void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2017)
 // ^^^turn on above line if doing the job submission with wjets_jobsub_Condor.py
-// and comment out the below lines defining doWhat, doQCD, doSysRunning, year
+// and comment out the below lines defining doWhat, doSysRunning, doQCD, year
 {
     string srcdir = "SourceFiles/";
     vector<string> sources;
@@ -19,31 +19,35 @@
     welcomeMessage();
         
     //------------------
-     int doWhat       = 42;
+    //  int doWhat       = 42;
                               // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
-     int doSysRunning = 0;
+    //  int doSysRunning = 0;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
-     int doQCD        = 0;
+    //  int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
-    int doBJets      = -1; //normal btag veto
+    // int doBJets      = -1; //normal btag veto
+    int doBJets      = 0; //normal btag veto
     //int doBJets      = 2; //ttbar SFs
-                            // 0 - no infor on B-jets will be used ;
+                            // 0 - no information on b-jets will be used ;
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
                             // -1, -2, .. veto the event if you have 1 or more, 2 or more .. b-jets ;
                             // 101 - require exactly 1 b-jet
-    int year        = 2017;
+    // int year        = 2017;
                            // 2016, 2017, or 2018 data/MC
 
     //------------------
-    
+
+    // printout about b-tag veto info
+    bTagVetoMessage(doBJets);
+
     string lepSelection = "SMu";
 
     double muLumi(0.);
@@ -782,6 +786,6 @@
     }
     
     else{
-        std::cout << "\nPlease select a year." << std::endl;
+        std::cout << "\nPlease select a valid year." << std::endl;
     }
 }

@@ -2106,8 +2106,8 @@ HistoSet::HistoSet(string leptonFlavor)
     deltaRjetMu                = newTH1D("deltaRjetMu", "delta R btwn jet and muon", "#R", 50, 0., 2.5);
     deltaPtjetMu               = newTH1D("deltaPtjetMu", "delta Pt btwn jet and muon if dR<0.5", "#R", 150, -75., 75.);
     
-    NumRecoVtx                 = newTH1D("NumRecoVtx", "Number of reconstructed vertices", "Number of reconstructed vertices", 100, 0., 100.);
-    NumRecoVtx_EvtSelection    = newTH1D("NumRecoVtx_EvtSelection", "Number of reconstructed vertices for W+Jets selection", "Number of reconstructed vertices for W+Jets selection", 100, 0., 100.);
+    NumRecoVtx                 = newTH1D("NumRecoVtx", "Number of Reco Vertices", "#Vtx", 100, 0., 100.);
+    NumRecoVtx_EvtSelection    = newTH1D("NumRecoVtx_EvtSelection", "Number of Reco Vertices for W+Jets selection", "#Vtx for W+Jets selection", 100, 0., 100.);
     NumPUTruthVtx              = newTH1D("NumPUTruthVtx", "Number of truth PU vertices", "Number of truth PU vertices", 100, 0., 100.);
     NumPUObsVtx                = newTH1D("NumPUObsVtx", "Number of observed PU vertices", "Number of observed PU vertices", 100, 0., 100.);
 

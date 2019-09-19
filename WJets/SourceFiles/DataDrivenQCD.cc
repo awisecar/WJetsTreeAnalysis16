@@ -16,25 +16,19 @@
 #include <iostream>
 #include <sstream>
 #include <TLorentzVector.h>
-#include <RooUnfoldResponse.h>
-#include <RooUnfold.h>
-#include <RooUnfoldBayes.h>
-#include <RooUnfoldSvd.h>
-#include <RooUnfoldBinByBin.h>
-#include <RooUnfoldInvert.h>
 #include <TSVDUnfold.h>
 #include <TLatex.h>
 #include <TStyle.h>
 #include <TDatime.h>
 #include <TRandom3.h>
 #include <TMatrixD.h>
+
 #include "getFilesAndHistograms.h"
 #include "DataDrivenQCD.h"
-using namespace std;
-
-//--  Setting global variables --------------------------------------------------------------
 #include "fileNames.h"
 #include "variablesOfInterestVarWidth.h"
+
+using namespace std;
 
 const int NQCD = 4 ;
 //const int NMC = 10 ;
@@ -60,7 +54,7 @@ void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
     // Creating output file
     string nameQCDout = fData[0]->GetName();
     nameQCDout.insert(nameQCDout.find("Data") + 4,"QCD");
-    TFile *fOut = new TFile(nameQCDout.c_str(), "recreate");
+    TFile *fOut = new TFile(nameQCDout.c_str(), "RECREATE");
     
     // Derive QCD BG for each histogram
     std::cout << "\n-----> Start QCD BG derivation!" << std::endl;
@@ -104,8 +98,8 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             //note: is this the wjets file that needs to be used? (other is MLM)
             //comment: believe so, MLM is matching/merching for LO and FxFx is for NLO
             //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
-            //if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-            if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
+            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
             if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
             if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
@@ -168,16 +162,17 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         cout << "   --- Doing QCD region #" << i << " --- " << endl;
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
-            if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
-            if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 8) FilenameTemp = "WW_dR_5311_List";
-            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+            // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+            if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+            if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+            if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
+            if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
+            if (j == 4) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+            if (j == 5) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+            if (j == 6) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+            if (j == 7) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 8) FilenameTemp =  "WW_dR_5311_List";
+            if (j == 9) FilenameTemp =  "WZ_dR_5311_List";
             if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
