@@ -29,9 +29,8 @@
 
 using namespace std;
 
-const int NQCD = 4 ;
-//const int NMC = 10 ;
-const int NMC = 11 ;
+const int NQCD = 4;
+const int NMC = 13;
 
 //string energy = getEnergy();
 string energy = "13TeV";
@@ -96,19 +95,23 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
             //note: is this the wjets file that needs to be used? (other is MLM)
             //comment: believe so, MLM is matching/merching for LO and FxFx is for NLO
+
             //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
             if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
             // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 8) FilenameTemp = "WW_dR_5311_List";
-            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+            if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
+            if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
+            if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
+            if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
+            if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 10) FilenameTemp = "WW_dR_5311_List";
+            if (j == 11) FilenameTemp = "WZ_dR_5311_List";
+            if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
+
             std::cout << "Getting " << FilenameTemp << std::endl;
             
             fMC[i][j] = getFile(FILESDIRECTORY, leptonFlavor, energy, FilenameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, i , 0, 0, METcut, doBJets, "", "0", false, false);
@@ -164,15 +167,17 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
             if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
-            if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
-            if (j == 5) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
-            if (j == 7) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 8) FilenameTemp =  "WW_dR_5311_List";
-            if (j == 9) FilenameTemp =  "WZ_dR_5311_List";
-            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+            if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
+            if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
+            if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
+            if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
+            if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+            if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+            if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+            if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 10) FilenameTemp =  "WW_dR_5311_List";
+            if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
+            if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
             cout << "Going to fetch histo for file " << FilenameTemp << ", Integral: " << hTemp1 ->Integral() << endl;

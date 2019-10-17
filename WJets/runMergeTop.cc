@@ -5,16 +5,16 @@
 #include <TFile.h>
 #include <TString.h>
 
-void runMergeTop(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
+void mergeTop(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
 
-void mergeTop(){
+void runMergeTop(){
 
     //central
 //    runMergeTop_BVeto("SMu", 0, 30, 0, 0);
 //    runMergeTop_BVeto("SMu", 0, 30, 0, 30); // METcut of 30 GeV
 
-    // runMergeTop_BVeto("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet 
-    runMergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
+    // mergeTop_BVeto("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet 
+    mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
 
     //systematics
 //     runMergeTop_BVeto("SMu", 1, 30, 0, 0);
@@ -28,12 +28,12 @@ void mergeTop(){
 
 }
 
-void runMergeTop(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
+void mergeTop(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
-    cout << "\n-----> Running runMergeTop!" << endl;
+    cout << "\n-----> Running mergeTop!" << endl;
     //--- Read in input arguments
     ostringstream strJetPtCutMin; strJetPtCutMin << jetPtCutMin;
     ostringstream doQCDStr;       doQCDStr << doQCD;

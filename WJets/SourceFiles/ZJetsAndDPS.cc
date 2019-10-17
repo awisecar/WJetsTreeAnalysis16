@@ -234,15 +234,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 4005;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //  for (Long64_t jentry(0); jentry < 300000; jentry++){
+    //for (Long64_t jentry(0); jentry < 100; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
         if (jentry % 100000 == 0) std::cout << jentry << " of " << nentries << std::endl;
+
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nb = fChain->GetEntry(jentry);  
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nbytes += nb;
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nEvents++;
 
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
@@ -255,39 +259,43 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         double weightNoSF(1.);
         //-----------------------
         
+        //----------------------------------------------
+        // Beginning calculation of the main event weight for event selection
         weight = weight * lumiScale * xsec;
         
+        // Very important set of lines that grab the main generator weight for the MC event
+        // and also add this MC weight for the event to the sum of the MC weights for all events
         if (hasRecoInfo && !isData){
             // 0th element of EvtWeights should return
             // main event weight from GenEventInfoProduct
             weight *= EvtWeights->at(0);
             sumEventW += EvtWeights->at(0);
         }
+        //----------------------------------------------
 
-        //--- There is no pile-up so no need to reweight for that ---
+        //--- 
         genWeight = weight;
         double genWeightBackup(genWeight);
         TotalGenWeight += genWeightBackup;
         //---
         
+        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         if (hasRecoInfo){
-
-            // old way to do trigger requirements
-            // if (energy == "13TeV" && doW) {
-            //     if ( (year == 2016) && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) countEventpassTrig++;
-            //     else if ( (year == 2017) && (TrigHltMu & 1LL<<12) ) countEventpassTrig++;
+            // if (isData) {
+            if (energy == "13TeV" && doW){
+                // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+                if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+                // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
+                if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
+                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+            }
             // }
-            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-            // new way
-             if (energy == "13TeV" && doW) {
-                 // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
-                 if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
-                 // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
-                 if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
-             }
-            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
+            if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         }
 
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
@@ -4433,11 +4441,17 @@ void ZJetsAndDPS::getMcNorm(){
     fBonzaiHeaderChain->SetBranchAddress("InEvtWeightSums", &InEvtWeightSums);
     fBonzaiHeaderChain->SetBranchAddress("EvtWeightSums", &EvtWeightSums);
 
-    int nheaders = fBonzaiHeaderChain->GetEntries(); //can be several in case files were merged with hadd
+    int nheaders = fBonzaiHeaderChain->GetEntries(); 
+
     cout << " >>>>> fBonzaiHeaderChain: Looping over " << nheaders << " TChain entries!" << endl;
     for(int ientry = 0; ientry < nheaders; ++ientry){
+
         cout << " -----> fBonzaiHeaderChain: getting entry #" << ientry << endl;
         fBonzaiHeaderChain->GetEntry(ientry);
+
+        // Check size of the weights vectors
+        std::cout << "InEvtWeightSums->size() = " << InEvtWeightSums->size() << std::endl;
+        std::cout << "EvtWeightSums->size() = " << EvtWeightSums->size() << std::endl;
         
         if(ientry == 0){
             InEvtWeightSums_ = std::vector<Double_t>(InEvtWeightSums->size(), 0);
@@ -4450,6 +4464,7 @@ void ZJetsAndDPS::getMcNorm(){
                 abort();
             }
         }
+
         if(InEvtWeightSums->size() != InEvtWeightSums_.size()){
             std::cerr << "Inconsistency in number of elements of InEvtWeightSums branch of input files!\n";
             abort();
@@ -4459,6 +4474,11 @@ void ZJetsAndDPS::getMcNorm(){
             abort();
         }
         
+        // Print out InEvtWeightSums[0] and EvtWeightSums[0] (these values from Bonzai trees)
+        // We can see, per Bonzai, if there's an inf/NaN value here
+        cout << "(*EvtWeightSums)[0]   = " << (*EvtWeightSums)[0] << endl;
+        cout << "(*InEvtWeightSums)[0] = " << (*InEvtWeightSums)[0] << endl;
+
         // Summing elements of InEvtWeightSums and EvtWeightSums vectors over all events
         for(size_t i = 0; i < InEvtWeightSums_.size(); ++i){
             InEvtWeightSums_[i] += (*InEvtWeightSums)[i];
@@ -4469,11 +4489,6 @@ void ZJetsAndDPS::getMcNorm(){
 
         InEvtCount_ += InEvtCount;
 
-        // Print out InEvtWeightSums_[0] and EvtWeightSums_[0] -----
-        // we can see, per event, if there's an inf/NaN value here
-        cout << "(*EvtWeightSums)[0]   = " << (*EvtWeightSums)[0] << endl;
-        cout << "(*InEvtWeightSums)[0] = " << (*InEvtWeightSums)[0] << endl;
-        // cout << "(*EvtWeightSums)[0]/(*InEvtWeightSums)[0] = " << ((*EvtWeightSums)[0])/((*InEvtWeightSums)[0]) << endl;
     }
     
     if(InEvtWeightSums_.size() > 0){

@@ -64,8 +64,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
         isDoubleLep = 0;
 
-        nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
-        // nFiles = NFILESTTBARWJETS_NOQCD; // andrew -- 2 sept 2019 -- turn off QCD for now
+        // nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
+        nFiles = NFILESTTBARWJETS_NOQCD; // andrew -- 2 sept 2019 -- turn off QCD for now
         // nFiles = NFILESTTBARWJETS_NOQCD_NOTTBAR; // 
 
     }
@@ -74,8 +74,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     for (unsigned short i = 0; i < nFiles; i++){
         int fileSelect = FilesDYJets[i] ;
 
-        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
-        // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
+        if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD_NoTTBar[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
 
         if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;

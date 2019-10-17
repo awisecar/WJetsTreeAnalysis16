@@ -24,9 +24,6 @@
     Plotter("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements
 
 
-
-
-
     // plot only data -----
     // Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
    

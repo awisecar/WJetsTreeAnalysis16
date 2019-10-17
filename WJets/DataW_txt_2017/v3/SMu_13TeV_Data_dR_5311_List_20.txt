@@ -1,0 +1,11 @@
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_117.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_118.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_119.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_12.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_120.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_121.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_122.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_123.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_124.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_125.root
+/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v3/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/190811_192739/0000/Bonzai-SingleMuon-VJetPruner-SMu_126.root

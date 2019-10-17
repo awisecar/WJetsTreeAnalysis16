@@ -4,22 +4,22 @@
 #include <TH2.h>
 #include <TFile.h>
 
-void runMergeVV(string lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
+void mergeVV(string lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
 
-void mergeVV(){
+void runMergeVV(){
     //  runMergeVV("SMu", 0, 30, 0, 0);
     // runMergeVV_BVeto("SMu", 0, 30, 0, 30); //MET cut of 30 GeV
 
-    // runMergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
-    runMergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
+    // mergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
+    mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
 }
 
-void runMergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
+void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
-    cout << "\n-----> Running runMergeVV!" << endl;
+    cout << "\n-----> Running mergeVV!" << endl;
     //--- Read in input arguments
     ostringstream strJetPtCutMin; strJetPtCutMin << jetPtCutMin;
     ostringstream doQCDStr;       doQCDStr << doQCD ;

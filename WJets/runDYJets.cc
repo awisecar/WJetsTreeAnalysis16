@@ -19,8 +19,12 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
     welcomeMessage();
         
     //------------------
-    //  int doWhat       = 42;
-                              // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
+    //  int doWhat       = 11;
+     //int doWhat       = 200;
+     //int doWhat       = 10;
+     //int doWhat       = 42;
+                              // 100 - all samples; 200 - all MC samples 
+                              // 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
@@ -34,7 +38,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     // int doBJets      = -1; //normal btag veto
-    int doBJets      = 0; //normal btag veto
+    int doBJets      = 0; //no btag veto
     //int doBJets      = 2; //ttbar SFs
                             // 0 - no information on b-jets will be used ;
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
@@ -520,8 +524,8 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
            for (unsigned int i(0); i < NSystData; i++) {
                if (dataSyst[i] != doSysRunning && doSysRunning != 100)  continue;
 
-               ZJetsAndDPS DMudata1(lepSelection+"_13TeV_Data_dR_5311_List_1", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata1.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+               //ZJetsAndDPS DMudata1(lepSelection+"_13TeV_Data_dR_5311_List_1", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               //DMudata1.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
                ZJetsAndDPS DMudata11(lepSelection+"_13TeV_Data_dR_5311_List_11", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata11.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
                ZJetsAndDPS DMudata21(lepSelection+"_13TeV_Data_dR_5311_List_21", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
@@ -634,22 +638,56 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
         }
 
        // Background -- TTbar
-       // /TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if (doWhat == 21 || doWhat == 100 ){
+       // /TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       // /TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
+       // /TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        // if (doWhat == 21 || doWhat == 100 || doWhat == 200){
+        //    for (unsigned int i(0); i < NSystMC; i++){
+        //        if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               
+        //        ZJetsAndDPS DMuTT1(lepSelection+"_13TeV_TT_FullHad_dR_5311_List", year, muLumi * 377.96, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+        //        DMuTT1.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+
+        //        ZJetsAndDPS DMuTT2(lepSelection+"_13TeV_TT_SemiLep_dR_5311_List", year, muLumi * 365.34, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+        //        DMuTT2.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+
+        //        ZJetsAndDPS DMuTT3(lepSelection+"_13TeV_TT_2L2Nu_dR_5311_List", year, muLumi * 88.29, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+        //        DMuTT3.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+        //    }
+        // }
+
+        // /TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if (doWhat == 211 || doWhat == 100 || doWhat == 200){
            for (unsigned int i(0); i < NSystMC; i++){
                if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
-               
-               // my result was 687.1 pb (very confused!) --- xsec value does not seem to give the correct plots, however --- new value is from XSDB
-               ZJetsAndDPS DMuTT(lepSelection+"_13TeV_TTJets_dR_5311_List", year, muLumi * 88.29, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMuTT.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+               ZJetsAndDPS DMuTT1(lepSelection+"_13TeV_TT_FullHad_dR_5311_List", year, muLumi * 377.96, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuTT1.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           }
+        }
+
+        // /TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
+        if (doWhat == 212 || doWhat == 100 || doWhat == 200){
+           for (unsigned int i(0); i < NSystMC; i++){
+               if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               ZJetsAndDPS DMuTT2(lepSelection+"_13TeV_TT_SemiLep_dR_5311_List", year, muLumi * 365.34, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuTT2.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           }
+        }
+
+        // /TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if (doWhat == 213 || doWhat == 100 || doWhat == 200){
+           for (unsigned int i(0); i < NSystMC; i++){
+               if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               ZJetsAndDPS DMuTT3(lepSelection+"_13TeV_TT_2L2Nu_dR_5311_List", year, muLumi * 88.29, 1., 1, !doDataEff, ttSyst[i], ttDir[i], ttScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuTT3.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
        // Background -- Diboson
-       // /WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       // /WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM
        // /WZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
        // /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if (doWhat == 22 || doWhat == 100 ){
+        if (doWhat == 22 || doWhat == 100 || doWhat == 200){
            for (unsigned int i(0); i < NSystMC; i++){
                if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
@@ -666,28 +704,28 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
         }
 
        // Background -- ST_s,ST_t
-       // /ST_s-channel_4f_leptonDecays_TuneCP5_13TeV-amcatnlo-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       // /ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       // /ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if (doWhat == 23 || doWhat == 100 ){
+       // /ST_s-channel_4f_leptonDecays_TuneCP5_PSweights_13TeV-amcatnlo-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       // /ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       // /ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if (doWhat == 23 || doWhat == 100 || doWhat == 200){
            for (unsigned int i(0); i < NSystMC; i++){
                if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
                ZJetsAndDPS DMuT1(lepSelection+"_13TeV_ST_s_channel_dR_5311_List", year, muLumi * 3.74,  1., 1, !doDataEff, tcsSyst[i], tcsDir[i], tcsScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuT1.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
 
-               ZJetsAndDPS DMuT2(lepSelection+"_13TeV_ST_t_top_channel_dR_5311_List", year, muLumi * 113.3,  1., 1, !doDataEff, tctSyst[i], tctDir[i], tctScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               ZJetsAndDPS DMuT2(lepSelection+"_13TeV_ST_t_top_channel_dR_5311_List", year, muLumi * 136.02,  1., 1, !doDataEff, tctSyst[i], tctDir[i], tctScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuT2.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
 
-               ZJetsAndDPS DMuT3(lepSelection+"_13TeV_ST_t_antitop_channel_dR_5311_List", year, muLumi * 67.91,  1., 1, !doDataEff, tctSyst[i], tctDir[i], tctScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               ZJetsAndDPS DMuT3(lepSelection+"_13TeV_ST_t_antitop_channel_dR_5311_List", year, muLumi * 80.95,  1., 1, !doDataEff, tctSyst[i], tctDir[i], tctScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuT3.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
        // Background -- ST_tW
-       // /ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-       // /ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if (doWhat == 24 || doWhat == 100 ){
+       // /ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+       // /ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
+        if (doWhat == 24 || doWhat == 100 || doWhat == 200){
            for (unsigned int i(0); i < NSystMC; i++){
                if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
@@ -700,8 +738,8 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
         }
 
        // DY+Jets
-       // /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if (doWhat == 30 || doWhat == 100 ){
+       // /DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM
+        if (doWhat == 30 || doWhat == 100 || doWhat == 200){
            int doGen = 0 ;
            if ( lepSelection.find("DMu") == 0 || lepSelection.find("DE") == 0 ) doGen = 1;
            
@@ -718,8 +756,8 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
         }
 
        // W+jets inclusive LO-MLM sample
-       // /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
-        if (doWhat == 42 || doWhat == 100 ){
+       // /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
+        if (doWhat == 42 || doWhat == 100 || doWhat == 200){
            int doGen = 0;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
 
@@ -736,7 +774,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
 
        // W+jets FxFx jet-binned signal sample - W+0J
        // /WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM
-        if ( doWhat == 61 || doWhat == 100 ){
+        if ( doWhat == 61 || doWhat == 100 || doWhat == 200){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
            
@@ -745,14 +783,15 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
                
-               ZJetsAndDPS DMuWJFxFx_jet0(lepSelection+"_13TeV_WJets_FxFx_0J_dR_5311_List", year, muLumi * 54601., 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               // previous value was 54601
+               ZJetsAndDPS DMuWJFxFx_jet0(lepSelection+"_13TeV_WJets_FxFx_0J_dR_5311_List", year, muLumi * 49264.92, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuWJFxFx_jet0.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
            }
         }
 
        // W+jets FxFx jet-binned signal sample - W+1J
-       // /WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if ( doWhat == 62 || doWhat == 100 ){
+       // /WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM
+        if ( doWhat == 62 || doWhat == 100 || doWhat == 200){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
            
@@ -761,15 +800,16 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
-               ZJetsAndDPS DMuWJFxFx_jet1(lepSelection+"_13TeV_WJets_FxFx_1J_dR_5311_List", year, muLumi * 8939., 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                // previous value was 8939
+               ZJetsAndDPS DMuWJFxFx_jet1(lepSelection+"_13TeV_WJets_FxFx_1J_dR_5311_List", year, muLumi * 8280.36, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuWJFxFx_jet1.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
 
             }
         }
 
        // W+jets FxFx jet-binned signal sample - W+2J
-       // /WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-        if ( doWhat == 63 || doWhat == 100 ){
+       // /WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM
+        if ( doWhat == 63 || doWhat == 100 || doWhat == 200){
            int doGen = 0 ;
            if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
            
@@ -778,7 +818,8 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int year = 2
                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
-               ZJetsAndDPS DMuWJFxFx_jet2(lepSelection+"_13TeV_WJets_FxFx_2J_dR_5311_List", year, muLumi * 3511, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                // previous value was 3511
+               ZJetsAndDPS DMuWJFxFx_jet2(lepSelection+"_13TeV_WJets_FxFx_2J_dR_5311_List", year, muLumi * 3118.08, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMuWJFxFx_jet2.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
            }
         }

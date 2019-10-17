@@ -71,8 +71,11 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 # years = [2017]
 
 ### Running full 2017 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 61, 62, 63] # full set of files
-doQCD = [0, 1, 2, 3]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+# doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
+doWhat = [61, 62, 63] # just W+jets MC
+# doQCD = [0, 1, 2, 3]
+doQCD = [0]
 doSysRunning = [0]
 years = [2017]
 
