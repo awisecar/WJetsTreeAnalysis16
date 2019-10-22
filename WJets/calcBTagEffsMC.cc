@@ -23,7 +23,8 @@ void runCalcBTagEffsMC(string leptonFlavor = "SMu", int year = 2017, int JetPtMi
 
 void calcBTagEffsMC(){
     welcomeMessage();
-    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
+    // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
+    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
 }
 
 void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,

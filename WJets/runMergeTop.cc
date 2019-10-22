@@ -9,14 +9,12 @@ void mergeTop(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin
 
 void runMergeTop(){
 
-    //central
-//    runMergeTop_BVeto("SMu", 0, 30, 0, 0);
-//    runMergeTop_BVeto("SMu", 0, 30, 0, 30); // METcut of 30 GeV
-
+    //central ---
     // mergeTop_BVeto("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet 
-    mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
+    //mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
+    mergeTop("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
-    //systematics
+    //systematics ---
 //     runMergeTop_BVeto("SMu", 1, 30, 0, 0);
 //     runMergeTop_BVeto("SMu", -1, 30, 0, 0);
 //     runMergeTop_BVeto("SMu", 3, 30, 0, 0);

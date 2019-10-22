@@ -64,9 +64,10 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
         isDoubleLep = 0;
 
-        // nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
-        nFiles = NFILESTTBARWJETS_NOQCD; // andrew -- 2 sept 2019 -- turn off QCD for now
+        nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
+        // nFiles = NFILESTTBARWJETS_NOQCD; // // turn off QCD, used for ttbar studies
         // nFiles = NFILESTTBARWJETS_NOQCD_NOTTBAR; // 
+        //nFiles = NFILESTTBARWJETS_DATAQCDVV; // just run QCD and VV
 
     }
     TFile *file[nFiles];
@@ -74,9 +75,10 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
     for (unsigned short i = 0; i < nFiles; i++){
         int fileSelect = FilesDYJets[i] ;
 
-        // if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
-        if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
+        if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // turn off QCD, used for ttbar studies
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD_NoTTBar[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
+        // if (!isDoubleLep) fileSelect = FilesTTbarWJets_DataQCDVV[i]; // just run QCD and VV
 
         if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;
 
@@ -370,8 +372,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
         if (histoName[i].find("ZNGoodJets_") != string::npos){
             // nominal
-            hist[0][i]->GetXaxis()->SetRangeUser(0,10);
-            histSumMC[i]->GetXaxis()->SetRangeUser(0,10);
+           hist[0][i]->GetXaxis()->SetRangeUser(0,10);
+           histSumMC[i]->GetXaxis()->SetRangeUser(0,10);
             // for ttbar study
             // hist[0][i]->GetXaxis()->SetRangeUser(2,6);
             // histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
@@ -492,20 +494,21 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         canvas[i]->Write();
 
         // Next section prints out the same plots on a linear scale -----
-        // histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
-        // TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
-        // tmpCanvas->cd();
-        // tmpCanvas->Draw();
-        // TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
-        // tmpPad->SetLogy(0);
-        // histoName[i] += "_Lin";
-        // tmpCanvas->SetTitle(histoName[i].c_str());
-        // tmpCanvas->SetName(histoName[i].c_str());
-        // string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
-        // tmpCanvas->Print(outputFileLinPDF.c_str());
-        // outputFile->cd();
-        // tmpCanvas->Write();
+      //  histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
+      //  TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
+      //  tmpCanvas->cd();
+      //  tmpCanvas->Draw();
+      //  TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
+      //  tmpPad->SetLogy(0);
+      //  histoName[i] += "_Lin";
+      //  tmpCanvas->SetTitle(histoName[i].c_str());
+      //  tmpCanvas->SetName(histoName[i].c_str());
+      //  string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
+      //  tmpCanvas->Print(outputFileLinPDF.c_str());
+      //  outputFile->cd();
+      //  tmpCanvas->Write();
     }
+
     outputFile->cd();
     outputFile->Close();
 

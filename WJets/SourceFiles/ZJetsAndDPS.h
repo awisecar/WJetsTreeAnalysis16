@@ -156,6 +156,10 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>        *MuEta;
     vector<float>        *MuPhi;
     vector<float>        *MuE;
+    vector<float>        *MuPtRoch;
+    vector<float>        *MuEtaRoch;
+    vector<float>        *MuPhiRoch;
+    vector<float>        *MuERoch;
     vector<bool>         *MuIdLoose;
     vector<bool>         *MuIdMedium;
     vector<bool>         *MuIdTight;
@@ -171,6 +175,10 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_MuEta;   //!
     TBranch        *b_MuPhi;   //!
     TBranch        *b_MuE;   //!
+    TBranch        *b_MuPtRoch;   //!
+    TBranch        *b_MuEtaRoch;   //!
+    TBranch        *b_MuPhiRoch;   //!
+    TBranch        *b_MuERoch;   //!
     TBranch        *b_MuIdLoose;   //!
     TBranch        *b_MuIdMedium;   //!
     TBranch        *b_MuIdTight;   //!

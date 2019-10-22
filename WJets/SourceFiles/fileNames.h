@@ -85,6 +85,10 @@ const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {5, 21, 
 // some testing - 2 sept 2019 - andrew
 const int NFILESTTBARWJETS_NOQCD_NOTTBAR(5);
 const int FilesTTbarWJets_NoQCD_NoTTBar[NFILESTTBARWJETS_NOQCD_NOTTBAR] = {0, 5, 21, 10, 25};
+
+// looking at QCD contribution
+const int NFILESTTBARWJETS_DATAQCDVV(2);
+const int FilesTTbarWJets_DataQCDVV[NFILESTTBARWJETS_DATAQCDVV] = {0, 24};
 //////////////////////////////////////////////////////////////////////////////////////////
 
 const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};

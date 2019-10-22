@@ -57,8 +57,11 @@ void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
     // Derive QCD BG for each histogram
     std::cout << "\n-----> Start QCD BG derivation!" << std::endl;
     for (int i(0); i < int(histoNameRun.size()) ; i++){
-        cout << "\n\n------------------------------------------------------------------------------" << endl;
-        cout << "----------> Processing histogram #" << i << " : " << histoNameRun[i] << endl;
+        
+        if ( (histoNameRun[i].find("ZNGoodJets_") == string::npos) ) continue; // 22 oct 2019 -- just looking at jet mult for right now
+
+        cout << "\n------------------------------------------------------------------------------" << endl;
+        cout << " >>>>>>> Processing histogram #" << i << " : " << histoNameRun[i] << endl;
         FuncDataDrivenQCD(histoNameRun[i], fData, fMC, fOut);
     }
     
@@ -81,15 +84,15 @@ void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
 
 void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, int METcut, bool doFlat , bool doVarWidth, int doBJets){
     // Get data files
-    std::cout << "Getting data files -- " << std::endl;
+    std::cout << "\n --- Getting data files --- " << std::endl;
     for ( int i = 0 ; i < NQCD ; i++){
         std::cout << "Getting " << ProcessInfo[DATAFILENAME].filename << " for NQCD = " << i << std::endl;
         fData[i] = getFile(FILESDIRECTORY, leptonFlavor, energy, ProcessInfo[DATAFILENAME].filename, JetPtMin, JetPtMax, doFlat, doVarWidth, i, 0, 0, METcut, doBJets, "", "0", false, false);
     }
     /// get MC files
-    std::cout << "Getting MC files -- " << std::endl;
+    std::cout << "\n --- Getting MC files --- " << std::endl;
     for ( int i=0 ; i < NQCD ; i++){
-        std::cout << "-----> Doing NQCD = " << i << std::endl;
+        std::cout << "\n-----> Doing NQCD = " << i << std::endl;
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
             //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
@@ -120,11 +123,11 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
         }
     }
     cout << endl;
-    cout << "--- Opened all data and MC files ---"<< endl;
+    cout << "\n --- Opened all data and MC files! ---"<< endl;
 }
 
 vector<string> getVectorOfHistoNames(TFile *fData[]){
-    cout << "--- Checking the histogram names to be studied ---" << endl;
+    cout << "\n --- Checking the histogram names to be studied ---" << endl;
     unsigned short nHist = fData[0]->GetListOfKeys()->GetEntries();
     vector<string> histoName;
     int countHist = 0 ;
@@ -139,7 +142,7 @@ vector<string> getVectorOfHistoNames(TFile *fData[]){
         }
     }
     cout << "We will produce " << histoName.size() << " QCD histograms! " << endl;
-    cout << "--------------------------------------------------" << endl;
+    // cout << "--------------------------------------------------" << endl;
     return histoName;
     
 }
@@ -149,8 +152,8 @@ vector<string> getVectorOfHistoNames(TFile *fData[]){
 void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile *fOut){
     TH1D  *hData[NQCD], *hSignal[NQCD], *hBack[NQCD];
 
-    cout << "-----> Opening histograms from Data files ---" << endl;
-    for ( int i=0 ; i < NQCD ; i++){
+    cout << "\n-----> Opening histograms from Data files" << endl;
+    for (int i=0 ; i < NQCD ; i++){
         TH1D *hTemp = getHisto(fData[i], variable);
         hData[i] = (TH1D *) hTemp->Clone();
         cout << "Got data of histo name: " << variable << " for QCD region: " << i << " " << ", Integral: " << hData[i]->Integral() << endl;
@@ -158,10 +161,9 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
     }
     cout << " --- Retrieved Data histos ---" << endl;
     
-    cout << endl;
-    cout << "-----> Opening histograms from all the MC files ---" << endl;
+    cout << "\n-----> Opening histograms from all the MC files" << endl;
     for ( int i=0 ; i < NQCD ; i++){
-        cout << "   --- Doing QCD region #" << i << " --- " << endl;
+        cout << "   --- QCD region #" << i << " --- " << endl;
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
             // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
@@ -180,22 +182,22 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
-            cout << "Going to fetch histo for file " << FilenameTemp << ", Integral: " << hTemp1 ->Integral() << endl;
+            cout << "File: " << FilenameTemp << endl;
             if (FilenameTemp.find("WJets") != string::npos) {
-                cout << " This is signal: " << FilenameTemp << endl;
+                cout << "   This is signal: " << FilenameTemp << endl;
                 hSignal[i] = (TH1D *) hTemp1->Clone();
             }
             else{
                 if (j == 1) {
-                    cout << " This is background: " << FilenameTemp << endl;
+                    cout << "   This is background: " << FilenameTemp << endl;
                     hBack[i] = (TH1D *) hTemp1->Clone();
                 }
                 else {
-                    cout << " Add another background: " << FilenameTemp << endl;
+                    cout << "   Add another background: " << FilenameTemp << endl;
                     hBack[i]->Add(hTemp1);
                 }
             }
-            cout << " Got MC histograms for QCD region #" << i << "; MC type: " << j << "; Integral: " << hTemp1->Integral() << endl;
+            cout << "   Got MC histograms for QCD region #" << i << "; MC type: " << j << "; Integral: " << hTemp1->Integral() << endl;
             delete hTemp1;
         }
     }
@@ -209,8 +211,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
     // QCD control region D (phase space where MT < 50 GeV and Iso > 0.20) = 3
     // Region C is used to derive shape, and regions D and B are used to determine normalization
 
-    cout << endl;
-    cout << " --- Start QCD background estimation! --- " << endl;
+    cout << "\n --- Start QCD background estimation! --- " << endl;
     
     // Followed as described in AN2012_331_v20 pages 7-9
     TH1D* scaledMC[NQCD], *hQCD[NQCD];
@@ -235,7 +236,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
 
             // recalculate NormFactor by including QCD[0]
             if ( j > 0 )  NormFactor = (hData[0]->Integral() - hBack[0]->Integral() - hQCD[0]->Integral()) / hSignal[0]->Integral();
-            cout << " >>> NormFactor f_W: " << NormFactor << endl;
+            cout << " NormFactor f_W: " << NormFactor << endl;
             
             // Step 1: calculate QCD BG in all 4 regions (1 signal and 3 control) ---
             for ( int i = 0  ; i < NQCD ; i++){
@@ -270,7 +271,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                 NormFactIsoError = NormFactorISO * sqrt( pow((errhqcd1/inthqcd1), 2) + pow((errhqcd3/inthqcd3), 2) );
             }
 
-            cout << " >> Ratio of QCD contributions (region B to D), f_B/D: " << NormFactorISO << " +- " << NormFactIsoError << ", Percent error: " << (NormFactIsoError/NormFactorISO)*100. << endl;
+            cout << " Ratio of QCD contributions (region B to D), f_B/D: " << NormFactorISO << " +- " << NormFactIsoError << ", Percent error: " << (NormFactIsoError/NormFactorISO)*100. << endl;
             
             // step 3 : isolation fake-rate from step 2 is aplied to QCD[2] to get QCD[0]
             for (int m = 1; m <= hQCD[0]->GetNbinsX(); m++){
@@ -300,9 +301,36 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         
     }
     else{
-        std::cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!!!!  Processing jet-binned histogram!  !!!!!! \n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
+        std::cout << "\n          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n          !!!!!!  Processing jet-binned histogram!  !!!!!! \n          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
+        
+        ////////////////////////////////////////////////////////////////////////
+        std::cout << "\n >>>>> Bin contents for hData histos" << std::endl;
+        for (int i = 0; i < NQCD; i++){
+            std::cout << "QCD region " << i << std::endl;
+            for (int m = 1; m <= hData[0]->GetNbinsX(); m++){
+                std::cout << hData[i]->GetBinContent(m) << "   " << std::endl;
+            }
+        }
+
+        std::cout << "\n >>>>> Bin contents for hSignal histos" << std::endl;
+        for (int i = 0; i < NQCD; i++){
+            std::cout << "QCD region " << i << std::endl;
+            for (int m = 1; m <= hSignal[0]->GetNbinsX(); m++){
+                std::cout << hSignal[i]->GetBinContent(m) << "   " << std::endl;
+            }
+        }
+
+        std::cout << "\n >>>>> Bin contents for hBack histos" << std::endl;
+        for (int i = 0; i < NQCD; i++){
+            std::cout << "QCD region " << i << std::endl;
+            for (int m = 1; m <= hBack[0]->GetNbinsX(); m++){
+                std::cout << hBack[i]->GetBinContent(m) << "   " << std::endl;
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////
+
         // for ZNGoodJets dist.
-        for ( int i = 0  ; i < NQCD ; i++){
+        for (int i = 0; i < NQCD; i++){
             scaledMC[i] = (TH1D*) hSignal[i]->Clone();
             hQCD[i] = (TH1D*) hData[i]->Clone();
         }
@@ -310,23 +338,20 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         // Computing QCD separately for each jet multiplicity bin
         for (int m = 1; m <= hData[0]->GetNbinsX(); m++){
             cout << " -------- Processing bin number: " << m << endl;
+
             // step 0 : initial normalization of Wjets and data
             double NormFactor(1);
             if(hSignal[0]->GetBinContent(m) > 0){
-                NormFactor = (hData[0]->GetBinContent(m) - hBack[0]->GetBinContent(m)) / hSignal[0]->GetBinContent(m) ;
+                NormFactor = (hData[0]->GetBinContent(m) - hBack[0]->GetBinContent(m)) / hSignal[0]->GetBinContent(m);
             }
-            else {
-                NormFactor = 1.;
-            }
+            else NormFactor = 1.;
             
-            for ( int j = 0  ; j < 12 ; j++){
+            for (int j = 0; j < 12; j++){
                 if ( j > 0 )  {
                     if(hSignal[0]->GetBinContent(m) > 0 ){
                         NormFactor = (hData[0]->GetBinContent(m) - hBack[0]->GetBinContent(m) - hQCD[0]->GetBinContent(m) ) / hSignal[0]->GetBinContent(m) ;
                     }
-                    else {
-                        NormFactor = 1. ;
-                    }
+                    else NormFactor = 1. ;
                 }
                 
                 // step 1:
@@ -338,7 +363,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                     hQCD[i]->SetBinError(m,  sqrt(pow(hData[i]->GetBinError(m), 2) + pow(scaledMC[i]->GetBinError(m), 2) + pow(hBack[i]->GetBinError(m), 2)) );
                     
                     // set the negative bins to 0
-                    if ( hQCD[i]->GetBinContent(m) <= 0 ) {
+                    if (hQCD[i]->GetBinContent(m) <= 0) {
                         hQCD[i]->SetBinContent(m, 0. ) ;
                         hQCD[i]->SetBinError(m, 0. ) ;
                     }
@@ -359,9 +384,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                 if ( hQCD[0]->GetBinContent(m) > 0){
                     hQCD[0]->SetBinError(m, hQCD[0]->GetBinContent(m) * sqrt( pow((NormFactIsoError/NormFactorISO), 2) + pow((hQCD[2]->GetBinError(m)/hQCD[2]->GetBinContent(m)), 2)));
                 }
-                else {
-                    hQCD[0]->SetBinError(m, 0.);
-                }
+                else hQCD[0]->SetBinError(m, 0.);
                 
                 // Note: the only quantity that keeps updating is NormFactor and we treat it as constant without uncertainty. 
                 // So, the uncertainty in QCD[i] is determined by the operation in the last loop, although we do calculate it in every loop. 
@@ -373,7 +396,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             NormFactor_o[m] = NormFactor;
         }
         
-        cout << " >>>>> Print out QCD BG statistics for " << variable << endl;
+        cout << "\n >>>>> Print out QCD BG statistics for " << variable << endl;
         cout << " \t" << "# QCD Events" << " \t\t" << "Error " << " \t\t" << "Percent Error" << " \t\t" << "Final f_W" << " \t\t" << "Final transfer factor f_B/D" << " \t\t" << "Percent Error in f_B/D" << endl;
         for (int i = 1; i <= hQCD[0]->GetNbinsX(); i++){
             cout << "Bin #" << i << endl;

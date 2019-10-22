@@ -9,7 +9,9 @@ void mergeTT(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin 
 
 void runMergeTT(){
 
-    mergeTT("SMu", 0, 30, 0, 0, 0); // no bveto
+    //mergeTT("SMu", 0, 30, 0, 0, 0); // no bveto
+    //mergeTT("SMu", 0, 30, 0, 0, -1); // btag veto
+    mergeTT("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
 }
 

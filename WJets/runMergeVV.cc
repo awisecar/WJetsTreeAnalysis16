@@ -7,11 +7,9 @@
 void mergeVV(string lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
 
 void runMergeVV(){
-    //  runMergeVV("SMu", 0, 30, 0, 0);
-    // runMergeVV_BVeto("SMu", 0, 30, 0, 30); //MET cut of 30 GeV
-
-    // mergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
-    mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
+    //mergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
+    //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
+    mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 }
 
 void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)

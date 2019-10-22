@@ -71,13 +71,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 # years = [2017]
 
 ### Running full 2017 data/MC, incl. QCD BG
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
 # doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
-doWhat = [61, 62, 63] # just W+jets MC
+#doWhat = [61, 62, 63] # just W+jets MC
+#doWhat = [212]
 # doQCD = [0, 1, 2, 3]
-doQCD = [0]
-doSysRunning = [0]
-years = [2017]
+#doQCD = [0] #signal region
+#doQCD = [1, 2, 3] #control regions
+#doQCD = [2]
+#doSysRunning = [0]
+#years = [2017]
 
 ##############################
 ## Systematics ---
@@ -122,9 +125,11 @@ years = [2017]
 ##############################
 ## ttbar SFs (remember to turn doBJets to 2)
 ## we do not run QCD BG for this control region study
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54]
-#doQCD = [0]
-#doSysRunning = [0]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63]
+doWhat = [61, 62, 63]
+doQCD = [0]
+doSysRunning = [0]
+years = [2017]
 ##############################
 
 for year in years:
@@ -145,7 +150,7 @@ for year in years:
 				job += 'printf "CMSSW version: %s'+str(r'\n\n')+'" "$CMSSW_VERSION"\n\n'
 				job += 'printf "Running code! ------------------------------- '+str(r'\n\n')+'"'
 				
-				com = 'root -l -b -q runDYJets.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + ',' + str(year) + '\) 2>&1\n'
+				com = 'root -l -b -q runEvtSelection.cc\(' + str(what) + ',' + str(QCD) + ',' + str(sys) + ',' + str(year) + '\) 2>&1\n'
 
 				jobName = mtmpdir+'/job_' + str(year) + '_do' + str(what) + '_QCD' + str(QCD) + '_Sys' + str(sys) + '.sh'
 				jobScript = open(jobName,'w')
