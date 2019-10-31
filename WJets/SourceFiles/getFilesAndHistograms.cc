@@ -219,7 +219,7 @@ void getHistos(TH1D *histograms[], TFile *Files[], string variable, bool isDoubl
     } 
 }
 
-void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int METcut, int doBJets, bool doTTScale)
+void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int METcut, int doBJets, bool doTTScale, bool inclQCD)
 {
 
     std::cout <<"\n >>>>> Getting jet multiplicity statistics!" << std::endl;
@@ -229,7 +229,9 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
     string energy = "13TeV";
 
     //-- Fetch the data files and histograms --------------
-    int usedFiles = NFILESTTBARWJETS; // nominal switch, including QCD 
+    int usedFiles(1);
+    if (inclQCD == true) usedFiles = NFILESTTBARWJETS; // nominal switch, including QCD 
+    else usedFiles = NFILESTTBARWJETS_NOQCD; // // turn off QCD, used for ttbar studies
 
     // jet counter
     int NBins = 11;
@@ -248,7 +250,10 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
 
         //"fData" is the name of the file (either data or MC) we are recording bin counts of
         TFile *fData;
-        int sel = FilesTTbarWJets[i]; // nominal switch, including QCD 
+
+        int sel(0);
+        if (inclQCD == true) sel = FilesTTbarWJets[i]; // nominal switch, including QCD 
+        else sel = FilesTTbarWJets_NoQCD[i]; // turn off QCD, used for ttbar studies
 
         //following line skips over any of the QCD control region files
         if ( (doQCD > 0) && ProcessInfo[sel].filename.find("QCD") != string::npos ) continue;
@@ -323,14 +328,16 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
 
     std::cout << "\n\t\t\t\t";
     for (int j = 1; j < NBins + 1; j++ ){
-        if (j > 7) continue;
+        if (j > 9) continue; // stop at #jets = 8
         std::cout << "#jets = " << j-1 << "\t";
     }
     std::cout << std::endl;
 
     for (int i(0); i < usedFiles+1; i++) {
         if (i < usedFiles){
-            int sel = FilesTTbarWJets[i]; 
+            int sel(0);
+            if (inclQCD == true) sel = FilesTTbarWJets[i]; 
+            else sel = FilesTTbarWJets_NoQCD[i];
             std::cout << ProcessInfo[sel].filename << std::endl;
         }
         else {
@@ -340,7 +347,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
 
         std::cout << "\t\t\t\t";
         for (int j = 1 ; j < NBins + 1 ; j++ ){
-            if (j > 7) continue;
+            if (j > 9) continue; // stop at #jets = 8
             std::cout << DataEvExc[i][j-1] << "\t";
         }
         std::cout << std::endl;
@@ -350,7 +357,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
     std::cout << "Simulation/Data" << std::endl;
     std::cout << "\t\t\t\t";
     for (int j = 1 ; j < NBins + 1 ; j++ ){
-        if (j > 7) continue;
+        if (j > 9) continue; // stop at #jets = 8
         std::cout << DataEvExc[usedFiles][j-1]/DataEvExc[0][j-1] << "\t";
     }
     std::cout << "\n" << std::endl;
@@ -363,14 +370,16 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
 
     std::cout << "\n\t\t\t\t";
     for (int j = 1; j < NBins + 1; j++ ){
-        if (j > 7) continue;
+        if (j > 9) continue; // stop at #jets = 8
         std::cout << "#jets >= " << j-1 << "\t";
     }
     std::cout << std::endl;
 
     for (int i(0); i < usedFiles+1; i++) {
         if (i < usedFiles){
-            int sel = FilesTTbarWJets[i]; 
+            int sel(0);
+            if (inclQCD == true) sel = FilesTTbarWJets[i]; 
+            else sel = FilesTTbarWJets_NoQCD[i];
             std::cout << ProcessInfo[sel].filename << std::endl;
         }
         else {
@@ -380,7 +389,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
 
         std::cout << "\t\t\t\t";
         for (int j = 1 ; j < NBins + 1 ; j++ ){
-            if (j > 7) continue;
+            if (j > 9) continue; // stop at #jets = 8
             std::cout << DataEvInc[i][j-1] << "\t";
         }
         std::cout << std::endl;
@@ -390,7 +399,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
     std::cout << "Simulation/Data" << std::endl;
     std::cout << "\t\t\t\t";
     for (int j = 1 ; j < NBins + 1 ; j++ ){
-        if (j > 7) continue;
+        if (j > 9) continue; // stop at #jets = 8
         std::cout << DataEvInc[usedFiles][j-1]/DataEvInc[0][j-1] << "\t";
     }
     std::cout << "\n" << std::endl;

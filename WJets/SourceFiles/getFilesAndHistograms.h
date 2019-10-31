@@ -17,6 +17,6 @@ void closeFiles(TFile *Files[]);
 void closeFiles(TFile *Files[], int nFiles);
 TH1D* getHisto(TFile*, string);
 void getHistos(TH1D *histograms[], TFile *Files[], string, bool isDoubleLep = true );
-void getStatistics(string leptonFlavor = "SMu",  int year = 2016, int JetPtMin = 30, int JetPtMax = 0,  bool doFlat = false , bool doVarWidth = true, int doQCD = 0 , bool doSSign = false ,  bool doInvMassCut = false , int METcut = 0 , int doBjets = 0 , bool doTTScale = false );
+void getStatistics(string leptonFlavor = "SMu",  int year = 2016, int JetPtMin = 30, int JetPtMax = 0,  bool doFlat = false , bool doVarWidth = true, int doQCD = 0 , bool doSSign = false ,  bool doInvMassCut = false , int METcut = 0 , int doBjets = 0 , bool doTTScale = false, bool inclQCD = true );
 #endif
 

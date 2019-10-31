@@ -2102,6 +2102,16 @@ HistoSet::HistoSet(string leptonFlavor)
     MuPFIso_Zinc0jet           = newTH1D("MuPFIso_Zinc0jet",      "Muon PF Iso DBeta corr. Sig",     "l_{Iso}^{PF}",   30, 0, 1.5);
     MuPFIso_2ndZinc0jet        = newTH1D("MuPFIso_2ndZinc0jet",   "Muon PF Iso DBeta corr. Sig2",    "l_{Iso}^{PF}",   150, 0, 1.5);
     MuPFIso_3rdZinc0jet        = newTH1D("MuPFIso_3rdZinc0jet",   "Muon PF Iso DBeta corr. Sig3",    "l_{Iso}^{PF}",   200, 0, 2.0);
+
+    MuPFIso_Zexc0jet           = newTH1D("MuPFIso_Zexc0jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc1jet           = newTH1D("MuPFIso_Zexc1jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc2jet           = newTH1D("MuPFIso_Zexc2jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc3jet           = newTH1D("MuPFIso_Zexc3jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc4jet           = newTH1D("MuPFIso_Zexc4jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc5jet           = newTH1D("MuPFIso_Zexc5jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc6jet           = newTH1D("MuPFIso_Zexc6jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc7jet           = newTH1D("MuPFIso_Zexc7jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
+    MuPFIso_Zexc8jet           = newTH1D("MuPFIso_Zexc8jet",   "Muon PF Iso DBeta corr.",    "Iso_{PF}",   100, 0, 2.0);
     
     deltaRjetMu                = newTH1D("deltaRjetMu", "delta R btwn jet and muon", "#R", 50, 0., 2.5);
     deltaPtjetMu               = newTH1D("deltaPtjetMu", "delta Pt btwn jet and muon if dR<0.5", "#R", 150, -75., 75.);

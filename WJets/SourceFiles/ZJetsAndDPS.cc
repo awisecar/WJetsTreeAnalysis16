@@ -169,7 +169,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
 
     double sumEventW = 0. ;
-    cout << "\nMC initial weight :  " << sumEventW <<endl;
+    cout << "\nMC initial weight: " << sumEventW <<endl;
 
     //------------------------------------
     std::cout << "\n-----> Print out variables: " << std::endl;
@@ -232,9 +232,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     std::cout << "-----> Begin loop on all entries! " << std::endl;
     std::cout << "-----> Total number of entries: " << nentries << std::endl;
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
-    int eventOfInterest = 4005;
+    int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //for (Long64_t jentry(0); jentry < 100; jentry++){
+    // for (Long64_t jentry(0); jentry < 500000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -242,14 +242,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         if (jentry % 100000 == 0) std::cout << jentry << " of " << nentries << std::endl;
 
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nb = fChain->GetEntry(jentry);  
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nbytes += nb;
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         nEvents++;
 
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         //=======================================================================================================//
         //         Computing weight           //
         //====================================//
@@ -281,17 +277,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         if (hasRecoInfo){
-            // if (isData) {
             if (energy == "13TeV" && doW){
-                // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
-                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+
+                // 2016 paths of interest: 
+                // we trigger on HLTIsoMu24 || HLTIsoTkMu24
                 if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
-                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-                // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
+
+                // 2017 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
+                // we trigger on HLT_IsoMu27
                 if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
-                if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
+                // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
+                // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) countEventpassTrig++;
+
             }
-            // }
 
             if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
@@ -392,14 +390,23 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuEta->size() = " << MuEta->size() << endl;
                 
                 // Trigger requirement ---
-                 if (energy == "13TeV" && doW) {
-                     // for WJets 13 TeV 2016, HLT trigger path should be HLTIsoMu24 || HLTIsoTkMu24
-                     if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
-                     // for WJets 13 TeV 2017, HLT path of interest is HLT_IsoMu27
-                     if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
-                 }
+                if (energy == "13TeV" && doW) {
+
+                    // 2016 paths of interest: 
+                    // we trigger on HLTIsoMu24 || HLTIsoTkMu24
+                    if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
+
+                    // 2017 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
+                    // we trigger on HLT_IsoMu27
+                    if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
+                    // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
+                    // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) eventTrigger = true;
+
+                }
+
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath1->at(0) = " << MuHltTrgPath1->at(0) << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath2->at(0) = " << MuHltTrgPath2->at(0) << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath3->at(0) = " << MuHltTrgPath3->at(0) << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: eventTrigger = " << eventTrigger << endl;
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
@@ -423,7 +430,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     bool muPassesIsoCut(doW && MuPfIso->at(i) < 0.15);  
                     if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << " MuPfIso->at(i) = " << MuPfIso->at(i) << endl;
                     // Iso cut for muon (for doing QCD background)
+                    // 22 oct 2019 -- QCD BG derivation not giving good control regions (doQCD=2,3) so trying to play w/ iso cut
                     bool muPassesQCDIsoCut(doW && MuPfIso->at(i) >= 0.2); // use 0.15 if you want to cover full Iso space
+                    // 22 oct 2019 -- reduce back to 0.15 (previously used at some point)
+                    // bool muPassesQCDIsoCut(doW && MuPfIso->at(i) >= 0.15);
                     
                     // select the good muons only
                     // all muons that survive eta cut of 2.4 and pT cut of 15
@@ -442,13 +452,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if (muPassesPtCut && muPassesEtaCut && muPassesIdCut && (!useTriggerCorrection || eventTrigger)){
                         // analysis iso cut
                         if (muPassesIsoCut){  
-                            if (doQCD < 2 && leptonFlavor != "SingleElectron") {
+                            if (doQCD < 2) {
                                 leptons.push_back(mu); 
                                 // if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: Mu #" << i << " passed analysis cuts!" << endl;
                             }
                         } 
                         // QCD isolation cut
-                        if (doQCD > 1 && muPassesQCDIsoCut && leptonFlavor != "SingleElectron") leptons.push_back(mu);                        
+                        if (doQCD > 1 && muPassesQCDIsoCut) leptons.push_back(mu);                        
                     }
                 }//End of loop over all the muons
             }
@@ -1605,7 +1615,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MT = " << MT << endl;
 
                 // Apply transverse mass and MET cut
-                if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
+                if ( METpt >= METcut && passMETFILTER && ( ((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut) ) ) {
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
                     nEventsWithTwoGoodLeptons++;
@@ -2693,6 +2703,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             dEtaLeptons_Zinc0jet->Fill(lepton1.eta - lepton2.eta, weight);
             dRLeptons_Zinc0jet->Fill(deltaR(lepton1.phi, lepton1.eta, lepton2.phi, lepton2.eta), weight);
             SpTLeptons_Zinc0jet->Fill(SpTsub(lep1, lep2), weight);
+
             if (nGoodJets == 0){
                 nEventsExcl0Jets++;
                 ZNGoodJets_Zexc_NoWeight->Fill(0.);
@@ -2709,6 +2720,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 dPhiLeptons_Zexc0jet->Fill(deltaPhi(lep1, lep2), weight);
                 dEtaLeptons_Zexc0jet->Fill(lepton1.eta - lepton2.eta, weight);
                 SpTLeptons_Zexc0jet->Fill(SpTsub(lep1, lep2), weight);
+
+                MuPFIso_Zexc0jet->Fill(lepton1.iso, weight);
             }
             
             if (nGoodJets_20 >= 1){
@@ -2970,6 +2983,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     FirstJetPhi_Zexc1jet->Fill(jets[0].phi, weight);
                     if ( doW ) dEtaBosonJet_Zexc1jet->Fill(fabs(jets[0].eta - lepton1.eta), weight);
                     else dEtaBosonJet_Zexc1jet->Fill(fabs(jets[0].eta-Z.Eta()), weight);
+
+                    MuPFIso_Zexc1jet->Fill(lepton1.iso, weight);
                     
                 }
             }
@@ -3164,6 +3179,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     PHI_HighSpT_Zinc2jet->Fill(PHI(lep1, lep2, leadJ, secondJ), weight);
                     SPhi_HighSpT_Zinc2jet->Fill(SPhi(lep1, lep2, leadJ, secondJ), weight);
                 }
+
                 if (nGoodJets == 2){
                     nEventsExcl2Jets++;
                     ZNGoodJets_Zexc_NoWeight->Fill(2.);
@@ -3183,6 +3199,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     SecondJetPt_Zexc2jet->Fill(jets[1].pt, weight);
                     SecondJetEta_Zexc2jet->Fill(jets[1].eta, weight);
                     SecondJetPhi_Zexc2jet->Fill(jets[1].phi, weight);
+
+                    MuPFIso_Zexc2jet->Fill(lepton1.iso, weight);
                     
                     //-- DPS Histograms
                     TwoJetsPtDiff_Zexc2jet->Fill(jet1Minus2.Pt(), weight);
@@ -3344,6 +3362,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     AllJetEta_Zinc3jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc3jet->Fill(jets[j].phi, weight);
                 }
+
                 if (nGoodJets == 3){
                     nEventsExcl3Jets++;
                     ZNGoodJets_Zexc_NoWeight->Fill(3.);
@@ -3360,6 +3379,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     dPhiLeptons_Zexc3jet->Fill(deltaPhi(lep1, lep2), weight);
                     dEtaLeptons_Zexc3jet->Fill(lepton1.eta - lepton2.eta, weight);
                     SpTLeptons_Zexc3jet->Fill(SpTsub(lep1, lep2), weight);
+
+                    MuPFIso_Zexc3jet->Fill(lepton1.iso, weight);
 
                 }
             }
@@ -3448,6 +3469,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     dEtaLeptons_Zexc4jet->Fill(lepton1.eta - lepton2.eta, weight);
                     SpTLeptons_Zexc4jet->Fill(SpTsub(lep1, lep2), weight);
 
+                    MuPFIso_Zexc4jet->Fill(lepton1.iso, weight);
+
                 }
             }
             if (nGoodJets >= 5){
@@ -3499,6 +3522,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     dPhiLeptons_Zexc5jet->Fill(deltaPhi(lep1, lep2), weight);
                     dEtaLeptons_Zexc5jet->Fill(lepton1.eta - lepton2.eta, weight);
                     SpTLeptons_Zexc5jet->Fill(SpTsub(lep1, lep2), weight);
+
+                    MuPFIso_Zexc5jet->Fill(lepton1.iso, weight);
                 }
             }
             if (nGoodJets >= 6){
@@ -3519,20 +3544,29 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 SixthJetPhi_Zinc6jet->Fill(jets[5].phi, weight);
                 JetsHT_Zinc6jet->Fill(jetsHT, weight);
                 JetsHT_1_Zinc6jet->Fill(jetsHT, weight);
+                
                 if (nGoodJets == 6){
                     ZNGoodJets_Zexc_NoWeight->Fill(6.);
                     ZMass_Zexc6jet->Fill(Z.M(), weight);
                     ZPt_Zexc6jet->Fill(Z.Pt(), weight);
                     ZRapidity_Zexc6jet->Fill(Z.Rapidity(), weight);
                     ZEta_Zexc6jet->Fill(Z.Eta(), weight);
+
+                    MuPFIso_Zexc6jet->Fill(lepton1.iso, weight);
                 }
             }
             if (nGoodJets >= 7){
                 ZNGoodJets_Zinc->Fill(7., weight);
                 ZNGoodJetsFull_Zinc->Fill(7., weight);
+
+                if (nGoodJets == 7) MuPFIso_Zexc7jet->Fill(lepton1.iso, weight);
             }
             //more bins in Single Lepton dataset than Double --> xsec bigger
-            if (nGoodJets >= 8) ZNGoodJets_Zinc->Fill(8., weight);
+            if (nGoodJets >= 8) {
+                ZNGoodJets_Zinc->Fill(8., weight);
+
+                if (nGoodJets == 8) MuPFIso_Zexc8jet->Fill(lepton1.iso, weight);
+            }
             if (nGoodJets >= 9)  ZNGoodJets_Zinc->Fill(9., weight);
             if (nGoodJets >= 10) ZNGoodJets_Zinc->Fill(10., weight);
         }
@@ -4246,6 +4280,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     // MuDz = 0;
     MuHltTrgPath1 = 0;
     MuHltTrgPath2 = 0;
+    MuHltTrgPath3 = 0;
     
     METPt = 0;
     METPx = 0;
@@ -4324,6 +4359,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         // fChain->SetBranchAddress("MuDz", &MuDz, &b_MuDz);
         fChain->SetBranchAddress("MuHltTrgPath1", &MuHltTrgPath1, &b_MuHltTrgPath1);
         fChain->SetBranchAddress("MuHltTrgPath2", &MuHltTrgPath2, &b_MuHltTrgPath2);
+        fChain->SetBranchAddress("MuHltTrgPath3", &MuHltTrgPath3, &b_MuHltTrgPath3);
         
         //MET, MET filters
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);

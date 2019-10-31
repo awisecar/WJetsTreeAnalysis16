@@ -1580,6 +1580,16 @@ public:
     TH1D *MuPFIso_2ndZinc0jet;
     TH1D *MuPFIso_3rdZinc0jet;
 
+    TH1D *MuPFIso_Zexc0jet;
+    TH1D *MuPFIso_Zexc1jet;
+    TH1D *MuPFIso_Zexc2jet;
+    TH1D *MuPFIso_Zexc3jet;
+    TH1D *MuPFIso_Zexc4jet;
+    TH1D *MuPFIso_Zexc5jet;
+    TH1D *MuPFIso_Zexc6jet;
+    TH1D *MuPFIso_Zexc7jet;
+    TH1D *MuPFIso_Zexc8jet;
+
     TH1D *deltaRjetMu;
     TH1D *deltaPtjetMu;
 

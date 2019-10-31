@@ -23,9 +23,13 @@ submit += 'arguments = "$(argument)"\n'
 submit += 'output = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).out\n'
 submit += 'error = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).err\n'
 submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
+
 ##submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
 # submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
-submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
+# submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
+submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
+
+
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 submit += 'queue argument in 1'
 
@@ -34,7 +38,6 @@ subScript = open(submitName,'w')
 subScript.write(submit+'\n')
 subScript.close()
 os.system('chmod 755 '+submitName)
-
 
 ####################################################################
 
@@ -71,16 +74,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 # years = [2017]
 
 ### Running full 2017 data/MC, incl. QCD BG
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
 # doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
 #doWhat = [61, 62, 63] # just W+jets MC
-#doWhat = [212]
-# doQCD = [0, 1, 2, 3]
+# doWhat = [62]
+doQCD = [0, 1, 2, 3]
 #doQCD = [0] #signal region
 #doQCD = [1, 2, 3] #control regions
-#doQCD = [2]
-#doSysRunning = [0]
-#years = [2017]
+# doQCD = [1]
+doSysRunning = [0]
+years = [2017]
 
 ##############################
 ## Systematics ---
@@ -126,10 +129,10 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ## ttbar SFs (remember to turn doBJets to 2)
 ## we do not run QCD BG for this control region study
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63]
-doWhat = [61, 62, 63]
-doQCD = [0]
-doSysRunning = [0]
-years = [2017]
+# doWhat = [61, 62, 63]
+# doQCD = [0]
+# doSysRunning = [0]
+# years = [2017]
 ##############################
 
 for year in years:

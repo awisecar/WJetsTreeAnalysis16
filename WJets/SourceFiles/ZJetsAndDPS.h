@@ -170,6 +170,7 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>        *MuDz;
     vector<bool>         *MuHltTrgPath1;
     vector<bool>         *MuHltTrgPath2;
+    vector<bool>         *MuHltTrgPath3;
 
     TBranch        *b_MuPt;   //!
     TBranch        *b_MuEta;   //!
@@ -189,6 +190,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_MuDz;   //!
     TBranch        *b_MuHltTrgPath1;   //!
     TBranch        *b_MuHltTrgPath2;   //!
+    TBranch        *b_MuHltTrgPath3;   //!
     
     //MET, MET filters
     vector<float>  *METPt;

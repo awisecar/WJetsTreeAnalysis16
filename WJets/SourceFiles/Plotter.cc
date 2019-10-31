@@ -387,8 +387,11 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         histSumMC[i]->GetYaxis()->SetTitle("Event count"); 
         histSumMC[i]->GetYaxis()->SetTitleFont(42); 
         histSumMC[i]->GetYaxis()->SetTitleSize(0.051); //0.04
-        histSumMC[i]->GetYaxis()->SetTitleOffset(1.07); //1.2
-        histSumMC[i]->SetMinimum(20);
+        histSumMC[i]->GetYaxis()->SetTitleOffset(1.09); //1.2
+
+        histSumMC[i]->SetMinimum(20); // andrew - was the option before
+        // histSumMC[i]->SetMinimum(2);
+
         histSumMC[i]->SetMaximum(1000*histSumMC[i]->GetMaximum()); 
 
         if (histoName[i].find("AbsRapidity") != string::npos){
@@ -460,7 +463,9 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
             hist[0][i]->GetXaxis()->SetLabelSize(0.16);  //0.12
         }
 
-        hist[0][i]->GetYaxis()->SetRangeUser(0.51,1.49);
+        hist[0][i]->GetYaxis()->SetRangeUser(0.51, 1.49); // andrew -- the usual y-axis settings for the ratio plot
+        // hist[0][i]->GetYaxis()->SetRangeUser(0.01, 1.99);
+
         hist[0][i]->GetYaxis()->SetNdivisions(5,5,0);
         hist[0][i]->GetYaxis()->SetTitle("Simulation/Data");
         hist[0][i]->GetYaxis()->SetTitleFont(42);

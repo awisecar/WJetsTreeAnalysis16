@@ -9,7 +9,12 @@ void mergeVV(string lepSelection = "SMu", int systematics = 0, int jetPtCutMin =
 void runMergeVV(){
     //mergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
     //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
-    mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
+    // mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
+
+    mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+    mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+    mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+    mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 }
 
 void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
@@ -49,19 +54,12 @@ void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, i
 
     TString str1, str2, str3, strf;
 
-    // int nDYfiles = 2 ;
-    string sstrDY[10];
-
     //--- Form file strings from input arguments
     if (doQCD == 0) {
         str1 = "HistoFiles/"+ lepSelection +  "_13TeV_WW_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
         str2 = "HistoFiles/"+ lepSelection +  "_13TeV_WZ_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
         str3 = "HistoFiles/"+ lepSelection +  "_13TeV_ZZ_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
         strf = "HistoFiles/"+ lepSelection +  "_13TeV_VV_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
-        
-        //--- DY Files
-        sstrDY[0] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets50toInf_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
-        sstrDY[1] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets10toInf3_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+METcutStr+".root";
     }
 
     if (doQCD > 0){
@@ -69,10 +67,6 @@ void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, i
         str2 = "HistoFiles/"+ lepSelection +  "_13TeV_WZ_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+"_QCD" + doQCDStr.str()+ METcutStr + ".root";
         str3 = "HistoFiles/"+ lepSelection +  "_13TeV_ZZ_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+"_QCD" + doQCDStr.str()+ METcutStr + ".root";
         strf = "HistoFiles/"+ lepSelection +  "_13TeV_VV_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+"_QCD" + doQCDStr.str()+ METcutStr + ".root";
-        
-        //--- DY Files
-        sstrDY[0] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets50toInf_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str()+ "_VarWidth"+doBVetoStr+"_QCD" + doQCDStr.str()+ METcutStr + ".root";
-        sstrDY[1] = "HistoFiles/"+ lepSelection +  "_13TeV_DYJets10toInf3_dR_5311_List_EffiCorr_1_TrigCorr_1_" + syst + "JetPtMin_" + strJetPtCutMin.str() + "_VarWidth"+doBVetoStr+"_QCD" + doQCDStr.str()+ METcutStr + ".root";
     }
 
     cout << "\nInput files:\n" << str1 << "\n" << str2 << "\n" << str3 << std::endl;

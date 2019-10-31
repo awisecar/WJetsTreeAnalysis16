@@ -19,8 +19,8 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     welcomeMessage();
         
     //------------------
-     //int doWhat       = 11;
-     //int doWhat       = 200;
+    //  int doWhat       = 213;
+    //  int doWhat       = 100;
      //int doWhat       = 10;
      //int doWhat       = 42;
                               // 100 - all samples; 200 - all MC samples 
@@ -29,12 +29,12 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
-      //int doSysRunning = 0;
+    //   int doSysRunning = 0;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
-      //int doQCD        = 0;
+    //   int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     // int doBJets      = -1; //normal btag veto
@@ -44,7 +44,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
                             // -1, -2, .. veto the event if you have 1 or more, 2 or more .. b-jets ;
                             // 101 - require exactly 1 b-jet
-     //int year        = 2017;
+    //  int year        = 2017;
                            // 2016, 2017, or 2018 data/MC
 
     //------------------
@@ -59,8 +59,15 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         muLumi = 35916.625; // 80X 2016 data bonzai 23Sep2016ReReco golden json
     }
     if (year == 2017){
+
+        // NOMINAL INT. LUMINOSITY FOR UNPRESCALED TRIGGERS ---
         // (4793.961 + 9631.214 + 4247.682 + 9313.642 + 13538.716) pb^-1 = 41525.217 pb^-1
         muLumi = 41525.217; // 2017 data, EOY2017ReReco_Collisions17 json
+
+        // REDUCED INT. LUMINOSITY FOR HLT_Mu27 PRESCALED TRIGGER ---
+        // ( (27.264+8.951) + (42.011+4.128) + 21.282 + 32.486 + 48.814 ) pb^-1 = 184.939 pb^-1
+        // muLumi = 184.939;
+
     }
 
     //switches
@@ -513,10 +520,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                 ZJetsAndDPS DMudata0(lepSelection+"_13TeV_Data_dR_5311_List_0", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                 DMudata0.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-                ZJetsAndDPS DMudata10(lepSelection+"_13TeV_Data_dR_5311_List_10", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-                DMudata10.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-                ZJetsAndDPS DMudata20(lepSelection+"_13TeV_Data_dR_5311_List_20", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-                DMudata20.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           //     ZJetsAndDPS DMudata10(lepSelection+"_13TeV_Data_dR_5311_List_10", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+           //     DMudata10.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           //     ZJetsAndDPS DMudata20(lepSelection+"_13TeV_Data_dR_5311_List_20", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+           //     DMudata20.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
             }
         }
 
@@ -526,10 +533,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata1(lepSelection+"_13TeV_Data_dR_5311_List_1", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata1.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata11(lepSelection+"_13TeV_Data_dR_5311_List_11", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata11.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata21(lepSelection+"_13TeV_Data_dR_5311_List_21", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata21.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata11(lepSelection+"_13TeV_Data_dR_5311_List_11", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata11.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata21(lepSelection+"_13TeV_Data_dR_5311_List_21", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata21.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -539,10 +546,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata2(lepSelection+"_13TeV_Data_dR_5311_List_2", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata2.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata12(lepSelection+"_13TeV_Data_dR_5311_List_12", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata12.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata22(lepSelection+"_13TeV_Data_dR_5311_List_22", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata22.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata12(lepSelection+"_13TeV_Data_dR_5311_List_12", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata12.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata22(lepSelection+"_13TeV_Data_dR_5311_List_22", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata22.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -552,10 +559,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata3(lepSelection+"_13TeV_Data_dR_5311_List_3", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata3.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata13(lepSelection+"_13TeV_Data_dR_5311_List_13", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata13.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata23(lepSelection+"_13TeV_Data_dR_5311_List_23", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata23.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata13(lepSelection+"_13TeV_Data_dR_5311_List_13", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata13.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata23(lepSelection+"_13TeV_Data_dR_5311_List_23", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata23.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -565,10 +572,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata4(lepSelection+"_13TeV_Data_dR_5311_List_4", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata4.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata14(lepSelection+"_13TeV_Data_dR_5311_List_14", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata14.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata24(lepSelection+"_13TeV_Data_dR_5311_List_24", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata24.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata14(lepSelection+"_13TeV_Data_dR_5311_List_14", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata14.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata24(lepSelection+"_13TeV_Data_dR_5311_List_24", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata24.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -578,10 +585,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata5(lepSelection+"_13TeV_Data_dR_5311_List_5", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata5.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata15(lepSelection+"_13TeV_Data_dR_5311_List_15", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata15.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata25(lepSelection+"_13TeV_Data_dR_5311_List_25", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata25.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata15(lepSelection+"_13TeV_Data_dR_5311_List_15", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata15.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata25(lepSelection+"_13TeV_Data_dR_5311_List_25", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata25.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -591,10 +598,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata6(lepSelection+"_13TeV_Data_dR_5311_List_6", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata6.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata16(lepSelection+"_13TeV_Data_dR_5311_List_16", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata16.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata26(lepSelection+"_13TeV_Data_dR_5311_List_26", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata26.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata16(lepSelection+"_13TeV_Data_dR_5311_List_16", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata16.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata26(lepSelection+"_13TeV_Data_dR_5311_List_26", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata26.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -604,10 +611,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata7(lepSelection+"_13TeV_Data_dR_5311_List_7", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata7.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata17(lepSelection+"_13TeV_Data_dR_5311_List_17", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata17.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata27(lepSelection+"_13TeV_Data_dR_5311_List_27", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata27.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata17(lepSelection+"_13TeV_Data_dR_5311_List_17", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata17.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata27(lepSelection+"_13TeV_Data_dR_5311_List_27", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata27.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -617,10 +624,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata8(lepSelection+"_13TeV_Data_dR_5311_List_8", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata8.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata18(lepSelection+"_13TeV_Data_dR_5311_List_18", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata18.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata28(lepSelection+"_13TeV_Data_dR_5311_List_28", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata28.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata18(lepSelection+"_13TeV_Data_dR_5311_List_18", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata18.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+          //     ZJetsAndDPS DMudata28(lepSelection+"_13TeV_Data_dR_5311_List_28", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+          //     DMudata28.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -630,10 +637,10 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                ZJetsAndDPS DMudata9(lepSelection+"_13TeV_Data_dR_5311_List_9", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
                DMudata9.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata19(lepSelection+"_13TeV_Data_dR_5311_List_19", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata19.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-               ZJetsAndDPS DMudata29(lepSelection+"_13TeV_Data_dR_5311_List_29", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMudata29.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           //    ZJetsAndDPS DMudata19(lepSelection+"_13TeV_Data_dR_5311_List_19", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+           //    DMudata19.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+           //    ZJetsAndDPS DMudata29(lepSelection+"_13TeV_Data_dR_5311_List_29", year, 1., 1., 1, doDataEff, dataSyst[i], dataDir[i], 1, jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+           //    DMudata29.Loop(1, 0, year, doQCD, doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
 
@@ -757,22 +764,22 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
            
         }
 
-       // W+jets inclusive LO-MLM sample
-       // /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
-        if (doWhat == 42 || doWhat == 100 || doWhat == 200){
-           int doGen = 0;
-           if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
+    //    // W+jets inclusive LO-MLM sample
+    //    // /WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM
+    //     if (doWhat == 42 || doWhat == 100 || doWhat == 200){
+    //        int doGen = 0;
+    //        if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
 
-           for (unsigned int i(0); i < NSystWJets; i++){
-               if (!doGen ) continue;
-               if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
-               if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+    //        for (unsigned int i(0); i < NSystWJets; i++){
+    //            if (!doGen ) continue;
+    //            if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
+    //            if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
-                // my result was 52770 pb
-               ZJetsAndDPS DMuWJMLM(lepSelection+"_13TeV_WJets_MLM_dR_5311_List", year, muLumi * 52940., 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-               DMuWJMLM.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-           }
-        } 
+    //             // my result was 52770 pb
+    //            ZJetsAndDPS DMuWJMLM(lepSelection+"_13TeV_WJets_MLM_dR_5311_List", year, muLumi * 52940., 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+    //            DMuWJMLM.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+    //        }
+    //     } 
 
        // W+jets FxFx jet-binned signal sample - W+0J
        // /WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM

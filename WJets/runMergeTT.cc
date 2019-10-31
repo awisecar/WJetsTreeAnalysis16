@@ -11,7 +11,12 @@ void runMergeTT(){
 
     //mergeTT("SMu", 0, 30, 0, 0, 0); // no bveto
     //mergeTT("SMu", 0, 30, 0, 0, -1); // btag veto
-    mergeTT("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
+    // mergeTT("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
+
+    mergeTT("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+    mergeTT("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+    mergeTT("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+    mergeTT("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
 }
 
