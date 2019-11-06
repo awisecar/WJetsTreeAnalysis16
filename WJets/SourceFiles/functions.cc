@@ -591,13 +591,13 @@ void welcomeMessage(){
 
 void bTagVetoMessage(int doBJets){
     if (doBJets > -1){
-        std::cout << "\n                        ///////////////////////////////////////////////////////////////////////////////////////" << std::endl;
-        std::cout << "                        //                                                                                   //" << std::endl;
-        std::cout << "                        //                              ---   WARNING   ---                                  //" << std::endl;
-        std::cout << "                        //               You are running event selection without a b-tag veto.               //" << std::endl;
-        std::cout << "                        //                       Are you sure you want to do this?                           //" << std::endl;
-        std::cout << "                        //                                                                                   //" << std::endl;
-        std::cout << "                        ///////////////////////////////////////////////////////////////////////////////////////\n" << std::endl;
+        std::cout << "\n                       ///////////////////////////////////////////////////////////////////////////////////////" << std::endl;
+        std::cout << "                       //                                                                                   //" << std::endl;
+        std::cout << "                       //                              ---   WARNING   ---                                  //" << std::endl;
+        std::cout << "                       //               You are running event selection without a b-tag veto.               //" << std::endl;
+        std::cout << "                       //                       Are you sure you want to do this?                           //" << std::endl;
+        std::cout << "                       //                                                                                   //" << std::endl;
+        std::cout << "                       ///////////////////////////////////////////////////////////////////////////////////////\n" << std::endl;
     }
 }
 
