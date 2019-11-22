@@ -15,29 +15,52 @@
     // dit bonjour
     welcomeMessage();
 
-    // plot only data -----
-    // Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
+    //////////////////////////////////
+    //         2016 data/MC         //
+    //////////////////////////////////
 
-    // plot data and MC -----
-    // //Plotter("SMu", 2017, 30, 0, 0, 0, 30, -1, 0, -999999, 999999, 0, 0, 1); // METcut of 30 GeV
+    Plotter("SMu", 2016, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
+    // Plotter("SMu", 2016, 30, 1, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=1
+    // Plotter("SMu", 2016, 30, 2, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=2
+    // Plotter("SMu", 2016, 30, 3, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=3
 
-    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = -1
-    // Plotter("SMu", 2017, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
+    // getStatistics("SMu", 2016, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
+    // getStatistics("SMu", 2016, 30, 0, false, true, 0, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, no QCD BG
+    // getStatistics("SMu", 2016, 30, 0, false, true, 1, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=1, doTTScale=False, no QCD BG
+    // getStatistics("SMu", 2016, 30, 0, false, true, 2, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=2, doTTScale=False, no QCD BG
+    // getStatistics("SMu", 2016, 30, 0, false, true, 3, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=3, doTTScale=False, no QCD BG
 
-    Plotter("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
-    // Plotter("SMu", 2017, 30, 1, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=1
-    // Plotter("SMu", 2017, 30, 2, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=2
-    // Plotter("SMu", 2017, 30, 3, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=3
+
+    //////////////////////////////////
+    //         2017 data/MC         //
+    //////////////////////////////////
+
+    // // plot only data -----
+    // // Plotter_ONLY_DATA("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut
+
+    // // plot data and MC -----
+    // // //Plotter("SMu", 2017, 30, 0, 0, 0, 30, -1, 0, -999999, 999999, 0, 0, 1); // METcut of 30 GeV
+
+    // // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = -1
+    // // Plotter("SMu", 2017, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
+
+    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
+    // // Plotter("SMu", 2017, 30, 1, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=1
+    // // Plotter("SMu", 2017, 30, 2, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=2
+    // // Plotter("SMu", 2017, 30, 3, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=3
     
-    // grab statistics for the plotted data -----
-    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, -1, false); //no MET cut, doBJets = -1, doTTScale = False
-    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false); //no MET cut, doBJets=0, doTTScale=False
-    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 2, false); //no MET cut, doBJets=2, doTTScale=False
-    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 30, -1, false); //30 GeV MET cut, doBJets = -1, doTTScale = False
+    // // grab statistics for the plotted data -----
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, -1, false); //no MET cut, doBJets = -1, doTTScale = False
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false); //no MET cut, doBJets=0, doTTScale=False
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 2, false); //no MET cut, doBJets=2, doTTScale=False
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 30, -1, false); //30 GeV MET cut, doBJets = -1, doTTScale = False
 
-    getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, doBJets=0, doQCD=0, doTTScale=False, incl QCD BG
-    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false, false); // no MET cut, doBJets=0, doQCD=0, doTTScale=False, no QCD BG
-    // getStatistics("SMu", 2017, 30, 0, false, true, 1, false, false, 0, 0, false, false); // no MET cut, doBJets=0, doQCD=1, doTTScale=False, no QCD BG
-    // getStatistics("SMu", 2017, 30, 0, false, true, 2, false, false, 0, 0, false, false); // no MET cut, doBJets=0, doQCD=2, doTTScale=False, no QCD BG
-    // getStatistics("SMu", 2017, 30, 0, false, true, 3, false, false, 0, 0, false, false); // no MET cut, doBJets=0, doQCD=3, doTTScale=False, no QCD BG
+    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, no QCD BG
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 1, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=1, doTTScale=False, no QCD BG
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 2, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=2, doTTScale=False, no QCD BG
+    // // getStatistics("SMu", 2017, 30, 0, false, true, 3, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=3, doTTScale=False, no QCD BG
+
+
+    
 }

@@ -1603,27 +1603,27 @@ HistoSet::HistoSet(string leptonFlavor)
 
     AllJetAK8Phi_Zinc1jet = newTH1D("AllJetAK8Phi_Zinc1jet",  "All AK8 jets #phi (N_{jets_{AK8}} #geq 1)", "#phi(jets_{AK8})",   30,-PI, PI );
 
-    lepPt_Zinc0jet                      = newTH1D("lepPt_Zinc0jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 0)",       lpT,     80, 0, 400);
-    lepPt_Zinc1jet                      = newTH1D("lepPt_Zinc1jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 1)",       lpT,     80, 0, 400);
-    lepPt_Zinc2jet                      = newTH1D("lepPt_Zinc2jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 2)",       lpT,     80, 0, 400);
-    lepPt_Zinc3jet                      = newTH1D("lepPt_Zinc3jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 3)",       lpT,     80, 0, 400);
-    lepPt_Zinc4jet                      = newTH1D("lepPt_Zinc4jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 4)",       lpT,     80, 0, 400);
-    lepPt_Zinc5jet                      = newTH1D("lepPt_Zinc5jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 5)",       lpT,     80, 0, 400);
+    lepPt_Zinc0jet                      = newTH1D("lepPt_Zinc0jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 0)",       lpT,     74, 30, 400);
+    lepPt_Zinc1jet                      = newTH1D("lepPt_Zinc1jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 1)",       lpT,     74, 30, 400);
+    lepPt_Zinc2jet                      = newTH1D("lepPt_Zinc2jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 2)",       lpT,     74, 30, 400);
+    lepPt_Zinc3jet                      = newTH1D("lepPt_Zinc3jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 3)",       lpT,     74, 30, 400);
+    lepPt_Zinc4jet                      = newTH1D("lepPt_Zinc4jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 4)",       lpT,     74, 30, 400);
+    lepPt_Zinc5jet                      = newTH1D("lepPt_Zinc5jet",                      "1st & 2nd lep p_{T} (N_{jets} #geq 5)",       lpT,     74, 30, 400);
 
-    GLepBarePtZinc0jet                   = newTH1D("GLepBarePtZinc0jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 0)",   lpT,     80, 0, 400);
-    GLepBarePtZinc1jet                   = newTH1D("GLepBarePtZinc1jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 1)",   lpT,     80, 0, 400);
-    GLepBarePtZinc2jet                   = newTH1D("GLepBarePtZinc2jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 2)",   lpT,     80, 0, 400);
+    GLepBarePtZinc0jet                   = newTH1D("GLepBarePtZinc0jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 0)",   lpT,     74, 30, 400);
+    GLepBarePtZinc1jet                   = newTH1D("GLepBarePtZinc1jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 1)",   lpT,     74, 30, 400);
+    GLepBarePtZinc2jet                   = newTH1D("GLepBarePtZinc2jet",                   "gen 1st & 2nd lep p_{T} (N_{jets} #geq 2)",   lpT,     74, 30, 400);
 
-    lepPt_Zexc0jet                      = newTH1D("lepPt_Zexc0jet",                      "1st & 2nd lep p_{T} (N_{jets} = 0)",          lpT,     80, 0, 400);
-    lepPt_Zexc1jet                      = newTH1D("lepPt_Zexc1jet",                      "1st & 2nd lep p_{T} (N_{jets} = 1)",          lpT,     80, 0, 400);
-    lepPt_Zexc2jet                      = newTH1D("lepPt_Zexc2jet",                      "1st & 2nd lep p_{T} (N_{jets} = 2)",          lpT,     80, 0, 400);
-    lepPt_Zexc3jet                      = newTH1D("lepPt_Zexc3jet",                      "1st & 2nd lep p_{T} (N_{jets} = 3)",          lpT,     80, 0, 400);
-    lepPt_Zexc4jet                      = newTH1D("lepPt_Zexc4jet",                      "1st & 2nd lep p_{T} (N_{jets} = 4)",          lpT,     80, 0, 400);
-    lepPt_Zexc5jet                      = newTH1D("lepPt_Zexc5jet",                      "1st & 2nd lep p_{T} (N_{jets} = 5)",          lpT,     80, 0, 400);
+    lepPt_Zexc0jet                      = newTH1D("lepPt_Zexc0jet",                      "1st & 2nd lep p_{T} (N_{jets} = 0)",          lpT,     74, 30, 400);
+    lepPt_Zexc1jet                      = newTH1D("lepPt_Zexc1jet",                      "1st & 2nd lep p_{T} (N_{jets} = 1)",          lpT,     74, 30, 400);
+    lepPt_Zexc2jet                      = newTH1D("lepPt_Zexc2jet",                      "1st & 2nd lep p_{T} (N_{jets} = 2)",          lpT,     74, 30, 400);
+    lepPt_Zexc3jet                      = newTH1D("lepPt_Zexc3jet",                      "1st & 2nd lep p_{T} (N_{jets} = 3)",          lpT,     74, 30, 400);
+    lepPt_Zexc4jet                      = newTH1D("lepPt_Zexc4jet",                      "1st & 2nd lep p_{T} (N_{jets} = 4)",          lpT,     74, 30, 400);
+    lepPt_Zexc5jet                      = newTH1D("lepPt_Zexc5jet",                      "1st & 2nd lep p_{T} (N_{jets} = 5)",          lpT,     74, 30, 400);
 
     // lepton + and - charge Pt
-    lepChargePlusPt_Zinc1jet    = newTH1D("lepChargePlusPt_Zinc1jet",  "lep+ p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{+}) [GeV]", 80, 0, 400);
-    lepChargeMinusPt_Zinc1jet    = newTH1D("lepChargeMinusPt_Zinc1jet",  "lep- p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{-}) [GeV]", 80, 0, 400);
+    lepChargePlusPt_Zinc1jet    = newTH1D("lepChargePlusPt_Zinc1jet",  "lep+ p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{+}) [GeV]", 74, 30, 400);
+    lepChargeMinusPt_Zinc1jet    = newTH1D("lepChargeMinusPt_Zinc1jet",  "lep- p_{T} (N_{jets} #geq 1)", "p_{T}(#mu^{-}) [GeV]", 74, 30, 400);
     
     //andrew
     hresponseLepPt_Zinc1jet = newTH2D("hresponseLepPt_Zinc1jet", "hresponse LepPt_Zinc1jet", 40, 0., 200., 40, 0., 200.);

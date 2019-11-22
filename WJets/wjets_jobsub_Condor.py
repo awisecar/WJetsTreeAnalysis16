@@ -46,44 +46,27 @@ print 'Submit script finished, writing individual job scripts!'
 cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0/src'
 # os.system('cd '+mtmpdir)
 
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 51, 52, 53, 54] #important files
-##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #everything
-##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
-## doWhat = [21, 22, 23, 24, 30] #Background
-## doWhat = [41, 42, 51, 52, 53, 54, 61, 62, 63] #W+jets MC
-#doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #BG + W+jets MC for syst. uncert.'s
-#
-#doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
-##doQCD = [0]
-#
-#doSysRunning = [0] #nominal
-##doSysRunning = [2] #JES uncertainties
-##doSysRunning = [3, 4, 5, 6] #other uncertanties
+##############################
 
-#doWhat = [52]
-#doQCD = [3]
-#doSysRunning = [0]
+### Running full 2016 data/MC, incl. QCD BG
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 61, 62, 63] # full set of files
+doQCD = [0, 1, 2, 3]
+doSysRunning = [0]
+years = [2016]
 
-### First time running over 2017 data!
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 61, 62, 63] # full set of files
-# doWhat = [30]
-# doWhat = [22]
+##############################
+
+# ### Running full 2017 data/MC, incl. QCD BG
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+# # doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
+# #doWhat = [61, 62, 63] # just W+jets MC
+# # doWhat = [62]
 # doQCD = [0, 1, 2, 3]
-# doQCD = [0]
+# #doQCD = [0] #signal region
+# #doQCD = [1, 2, 3] #control regions
+# # doQCD = [1]
 # doSysRunning = [0]
 # years = [2017]
-
-### Running full 2017 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
-# doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
-#doWhat = [61, 62, 63] # just W+jets MC
-# doWhat = [62]
-doQCD = [0, 1, 2, 3]
-#doQCD = [0] #signal region
-#doQCD = [1, 2, 3] #control regions
-# doQCD = [1]
-doSysRunning = [0]
-years = [2017]
 
 ##############################
 ## Systematics ---

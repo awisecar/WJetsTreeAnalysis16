@@ -30,7 +30,8 @@
 using namespace std;
 
 const int NQCD = 4;
-const int NMC = 13;
+const int NMC = 11; // 2016
+// const int NMC = 13; // 2017
 
 //string energy = getEnergy();
 string energy = "13TeV";
@@ -95,25 +96,36 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
         std::cout << "\n-----> Doing NQCD = " << i << std::endl;
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
-            //if (j == 0) FilenameTemp = "WJetsALL_MIX_UNFOLDING_dR_5311_List";
-            //note: is this the wjets file that needs to be used? (other is MLM)
-            //comment: believe so, MLM is matching/merching for LO and FxFx is for NLO
 
-            //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
+            // for 2016 ---
             if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-            // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
             if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
-            if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
-            if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 10) FilenameTemp = "WW_dR_5311_List";
-            if (j == 11) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
+            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
+            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
+            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 8) FilenameTemp = "WW_dR_5311_List";
+            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+
+            // for 2017 ---
+            // //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
+            // if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            // // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
+            // if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
+            // if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
+            // if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
+            // if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
+            // if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
+            // if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            // if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            // if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            // if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            // if (j == 10) FilenameTemp = "WW_dR_5311_List";
+            // if (j == 11) FilenameTemp = "WZ_dR_5311_List";
+            // if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
 
             std::cout << "Getting " << FilenameTemp << std::endl;
             
@@ -166,20 +178,35 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         cout << "   --- QCD region #" << i << " --- " << endl;
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
-            // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
-            if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-            if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
-            if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
-            if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
-            if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
-            if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
-            if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
-            if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
-            if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 10) FilenameTemp =  "WW_dR_5311_List";
-            if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
-            if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
+
+            // 2016 ---
+            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+            if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
+            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
+            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
+            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+            if (j == 8) FilenameTemp = "WW_dR_5311_List";
+            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+
+            // 2017 ---
+            // // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+            // if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+            // if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+            // if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
+            // if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
+            // if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
+            // if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
+            // if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+            // if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+            // if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+            // if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+            // if (j == 10) FilenameTemp =  "WW_dR_5311_List";
+            // if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
+            // if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
             cout << "File: " << FilenameTemp << endl;
@@ -213,8 +240,8 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
     // Note: Currently QCD regions are indexed as such:
     // QCD signal region A = 0
     // QCD control region B (phase space where MT < 50 GeV and Iso < 0.15) = 1
-    // QCD control region C (phase space where MT > 50 GeV and Iso > 0.20) = 2
-    // QCD control region D (phase space where MT < 50 GeV and Iso > 0.20) = 3
+    // QCD control region C (phase space where MT > 50 GeV and Iso >= 0.20) = 2
+    // QCD control region D (phase space where MT < 50 GeV and Iso >= 0.20) = 3
     // Region C is used to derive shape, and regions D and B are used to determine normalization
 
     cout << "\n --- Start QCD background estimation! --- " << endl;

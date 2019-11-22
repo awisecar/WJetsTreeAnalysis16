@@ -372,8 +372,11 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
         if (histoName[i].find("ZNGoodJets_") != string::npos){
             // nominal
-           hist[0][i]->GetXaxis()->SetRangeUser(0,10);
-           histSumMC[i]->GetXaxis()->SetRangeUser(0,10);
+           //hist[0][i]->GetXaxis()->SetRangeUser(0,10);
+           //histSumMC[i]->GetXaxis()->SetRangeUser(0,10);
+           // up to 8 jets
+           hist[0][i]->GetXaxis()->SetRangeUser(0,8);
+           histSumMC[i]->GetXaxis()->SetRangeUser(0,8);
             // for ttbar study
             // hist[0][i]->GetXaxis()->SetRangeUser(2,6);
             // histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
