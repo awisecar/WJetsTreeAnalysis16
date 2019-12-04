@@ -68,7 +68,7 @@ class table{
         double getEfficiencyHigh(double, double);  
 
     private:
-        vector<record> recd;
+        std::vector<record> recd;
 };
 
 double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year, int jetType);

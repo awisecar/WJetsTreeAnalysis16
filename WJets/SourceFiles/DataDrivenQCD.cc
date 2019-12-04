@@ -40,14 +40,14 @@ int JetPtMin(30);
 int JetPtMax(0);
 
 //-------------------------------------------------------------------------------------------
-void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
+void DataDrivenQCD(string leptonFlavor, int year, int METcut , int doBJets){
     
     TH1::SetDefaultSumw2();
     
     // Opening all files
     TFile *fData[NQCD] = {NULL};
     TFile *fMC[NQCD][NMC] = {{NULL}};
-    FuncOpenAllFiles(fData, fMC, leptonFlavor, METcut, false, true, doBJets);
+    FuncOpenAllFiles(fData, fMC, leptonFlavor, year, METcut, false, true, doBJets);
     vector<string> histoNameRun = getVectorOfHistoNames(fData);
     
     // Creating output file
@@ -63,7 +63,7 @@ void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
 
         cout << "\n------------------------------------------------------------------------------" << endl;
         cout << " >>>>>>> Processing histogram #" << i << " : " << histoNameRun[i] << endl;
-        FuncDataDrivenQCD(histoNameRun[i], fData, fMC, fOut);
+        FuncDataDrivenQCD(histoNameRun[i], fData, fMC, fOut, year);
     }
     
     //-- Close all the files ------------------------------
@@ -83,7 +83,7 @@ void DataDrivenQCD(string leptonFlavor, int METcut , int doBJets){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, int METcut, bool doFlat , bool doVarWidth, int doBJets){
+void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, int year, int METcut, bool doFlat , bool doVarWidth, int doBJets){
     // Get data files
     std::cout << "\n --- Getting data files --- " << std::endl;
     for ( int i = 0 ; i < NQCD ; i++){
@@ -97,35 +97,36 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
 
-            // for 2016 ---
-            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-            if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 8) FilenameTemp = "WW_dR_5311_List";
-            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
-
-            // for 2017 ---
-            // //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
-            // if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-            // // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
-            // if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            // if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
-            // if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
-            // if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
-            // if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
-            // if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            // if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            // if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            // if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            // if (j == 10) FilenameTemp = "WW_dR_5311_List";
-            // if (j == 11) FilenameTemp = "WZ_dR_5311_List";
-            // if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
+            if (year == 2016){
+                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
+                if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
+                if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+                if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+                if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+                if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 8) FilenameTemp = "WW_dR_5311_List";
+                if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+                if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+            }
+            else if (year == 2017){
+                //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
+                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+                // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
+                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
+                if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
+                if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
+                if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
+                if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+                if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+                if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+                if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 10) FilenameTemp = "WW_dR_5311_List";
+                if (j == 11) FilenameTemp = "WZ_dR_5311_List";
+                if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
+            }
 
             std::cout << "Getting " << FilenameTemp << std::endl;
             
@@ -161,7 +162,7 @@ vector<string> getVectorOfHistoNames(TFile *fData[]){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile *fOut){
+void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile *fOut, int year){
     TH1D  *hData[NQCD], *hSignal[NQCD], *hBack[NQCD];
 
     cout << "\n-----> Opening histograms from Data files" << endl;
@@ -179,34 +180,35 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         for ( int j = 0 ; j < NMC ; j++){
             string FilenameTemp;
 
-            // 2016 ---
-            if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-            if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-            if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-            if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-            if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-            if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-            if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-            if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-            if (j == 8) FilenameTemp = "WW_dR_5311_List";
-            if (j == 9) FilenameTemp = "WZ_dR_5311_List";
-            if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
-
-            // 2017 ---
-            // // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
-            // if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-            // if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
-            // if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
-            // if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
-            // if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
-            // if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
-            // if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
-            // if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
-            // if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
-            // if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
-            // if (j == 10) FilenameTemp =  "WW_dR_5311_List";
-            // if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
-            // if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
+            if (year == 2016){
+                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
+                if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
+                if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
+                if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
+                if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
+                if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 8) FilenameTemp = "WW_dR_5311_List";
+                if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+                if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
+            }
+            else if (year == 2017){
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
+                if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
+                if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
+                if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
+                if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+                if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+                if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+                if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 10) FilenameTemp =  "WW_dR_5311_List";
+                if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
+                if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
+            }
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
             cout << "File: " << FilenameTemp << endl;

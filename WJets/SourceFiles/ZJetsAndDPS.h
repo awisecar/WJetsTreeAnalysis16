@@ -50,6 +50,9 @@ class ZJetsAndDPS: public HistoSet {
     Int_t           EvtPuCntObs;
     Int_t           EvtPuCntTruth;
     vector<double>  *EvtWeights;
+    Double_t        PreFiringWeight;
+    Double_t        PreFiringWeightUp;
+    Double_t        PreFiringWeightDown;
 
     TBranch        *b_EvtNum;   //!
     TBranch        *b_EvtRunNum;   //!
@@ -57,6 +60,9 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_EvtPuCntObs;   //!
     TBranch        *b_EvtPuCntTruth;   //!
     TBranch        *b_EvtWeights;   //!
+    TBranch        *b_PreFiringWeight;   //!
+    TBranch        *b_PreFiringWeightUp;   //!
+    TBranch        *b_PreFiringWeightDown;   //!
 
     Int_t           GNup;
     Double_t        mcEveWeight_;
