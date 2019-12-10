@@ -1,1 +1,1 @@
-/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v7/MC/CRAB_PrivateMC/crab_WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8-VJetPruner-SMu/191028_103406/0000/Bonzai-WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8-VJetPruner-SMu_1.root
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2017/31Mar2018/Bonzai/v8/MC/CRAB_PrivateMC/crab_WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8-VJetPruner-SMu/191203_183505/0000/Bonzai-WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8-VJetPruner-SMu_1.root

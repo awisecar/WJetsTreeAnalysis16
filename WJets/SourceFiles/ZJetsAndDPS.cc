@@ -90,10 +90,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // 2016 legacy rereco tables
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2016Legacy_SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/2016Legacy_SMu_SFs_TightISO_13TeV_EtaPt.txt");
-                // table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/OLD_2016_SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/OLD_2016_SMu_SFs_HLTIsoMu24IsoTkMu24_13TeV_EtaPt.txt"); 
                 LeptID = SF_Muon_TightID_ReReco;
                 LeptIso = SF_Muon_TightISO_ReReco;
-                // LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
+                LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
             }
         }
         else if (year == 2017){
@@ -284,8 +284,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
 
                 // 2017 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
-                // we trigger on HLT_IsoMu27
-                if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) countEventpassTrig++;
+                // we trigger on HLT_IsoMu24 || HLT_IsoMu27
+                if ( (year == 2017) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) countEventpassTrig++;
                 // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
                 // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) countEventpassTrig++;
 
@@ -444,8 +444,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if ( (year == 2016) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
 
                     // 2017 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
-                    // we trigger on HLT_IsoMu27
-                    if ( (year == 2017) && (MuHltTrgPath2->at(0) == 1) ) eventTrigger = true;
+                    // we trigger on  HLT_IsoMu24 || HLT_IsoMu27
+                    if ( (year == 2017) && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
                     // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
                     // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) eventTrigger = true;
 
@@ -1674,8 +1674,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             // tables sorted by eta, not by abs(eta), for 2016
                             effWeight = LeptID.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
                             effWeight *= LeptIso.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
-                            // no Trig/Iso SF's yet for 2016 legacy
-                            // if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
+                            // no Trig/Iso SF's yet for 2016 legacy, so use SFs for old rereco
+                            if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
                         else if (year == 2017){
                             effWeight = LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
@@ -4219,8 +4219,11 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, int year_, float lumiScale_, float pu
         while (getline(infile, line)){
             
             // Loading the input files into TChains -----
-            string treePath = storageElement + line + dirPath + treeName;
-            string bonzaiHeaderPath = storageElement + line + dirPath + "/BonzaiHeader";
+            // string treePath = storageElement + line + dirPath + treeName;
+            // string bonzaiHeaderPath = storageElement + line + dirPath + "/BonzaiHeader";
+            // Edit: taking out the beginning part with "/eos/cms"
+            string treePath = line + dirPath + treeName;
+            string bonzaiHeaderPath = line + dirPath + "/BonzaiHeader";
             // cout << "Loading file #" << countFiles << ": " << line << endl;
             chain->Add(treePath.c_str());
             BonzaiHeaderChain->Add(bonzaiHeaderPath.c_str());

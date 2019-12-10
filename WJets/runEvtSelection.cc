@@ -20,7 +20,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         
     //------------------
     //  int doWhat       = 213;
-    //  int doWhat       = 100;
+    // int doWhat       = 100;
     //  int doWhat       = 63;
      //int doWhat       = 42;
                               // 100 - all samples; 200 - all MC samples 
@@ -29,12 +29,12 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
-    //    int doSysRunning = 0;
+    // int doSysRunning = 0;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
-    //    int doQCD        = 0;
+    // int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     // int doBJets      = -1; //normal btag veto
@@ -44,7 +44,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
                             // -1, -2, .. veto the event if you have 1 or more, 2 or more .. b-jets ;
                             // 101 - require exactly 1 b-jet
-    //  int year        = 2016;
+    //   int year        = 2016;
     //  int year        = 2017;
                            // 2016, 2017, or 2018 data/MC
 
@@ -87,7 +87,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
     }
 
-    std::cout << "\nUsing " << muLumi << " pb as the integrated luminosity!" << std::endl;
+    std::cout << "\n Using " << muLumi << " pb as the integrated luminosity!\n" << std::endl;
 
     //switches
     bool doSSign  =  0;     // contribution of QCD to emu in TTbar
@@ -159,8 +159,9 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     float wjScale[NSystWJets]  = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1};
         
     //------------------------------------
+
     if (year == 2016){
-       std::cout << " >>>>>>>>>> Doing 2016 data/MC! >>>>>>>>>>>>" << std::endl;
+       std::cout << " >>>>>>>>>> Doing 2016 data/MC! >>>>>>>>>>>>>>>>>" << std::endl;
        // Data
        if (doWhat == 10 || doWhat == 100) {
            for (unsigned int i(0); i < NSystData; i++) {
@@ -472,7 +473,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     }
 
     else if (year == 2017){
-        std::cout << " >>>>>>>>> Doing 2017 data/MC! >>>>>>>>>" << std::endl;
+        std::cout << " >>>>>>>>> Doing 2017 data/MC! >>>>>>>>>>" << std::endl;
 
         // Data
         if (doWhat == 10 || doWhat == 100) {
