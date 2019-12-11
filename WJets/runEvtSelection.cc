@@ -38,8 +38,8 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     // int doBJets      = -1; //normal btag veto
-    int doBJets      = 0; //no btag veto
-    // int doBJets      = 2; //ttbar SFs
+    // int doBJets      = 0; //no btag veto
+    int doBJets      = 2; //ttbar SFs
                             // 0 - no information on b-jets will be used ;
                             // 1, 2 .. require at least 1, 2, .. ; use 2 for ttbar systmatics;
                             // -1, -2, .. veto the event if you have 1 or more, 2 or more .. b-jets ;

@@ -1,0 +1,4 @@
+DeepCSV;OperatingPoint, measurementType, sysType, jetFlavor, etaMin, etaMax, ptMin, ptMax, discrMin, discrMax, formula 
+1, incl, central, 2, 0, 2.4, 20, 1000, 0, 1, "1.09286+-0.00052597*x+1.88225e-06*x*x+-1.27417e-09*x*x*x" 
+1, incl, down, 2, 0, 2.4, 20, 1000, 0, 1, "(1.09286+-0.00052597*x+1.88225e-06*x*x+-1.27417e-09*x*x*x)*(1-(0.101915+0.000192134*x+-1.94974e-07*x*x))" 
+1, incl, up, 2, 0, 2.4, 20, 1000, 0, 1, "(1.09286+-0.00052597*x+1.88225e-06*x*x+-1.27417e-09*x*x*x)*(1+(0.101915+0.000192134*x+-1.94974e-07*x*x))" 

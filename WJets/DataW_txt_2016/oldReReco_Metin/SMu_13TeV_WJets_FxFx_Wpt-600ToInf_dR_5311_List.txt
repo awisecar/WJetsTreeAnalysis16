@@ -1,1 +1,0 @@
-/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/MC/CRAB_PrivateMC/crab_WJetsToLNu_Pt-600ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu/180909_124842/0000/Bonzai-WJetsToLNu_Pt-600ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu_1.root

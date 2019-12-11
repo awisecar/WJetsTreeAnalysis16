@@ -117,14 +117,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
     //     Systematics: jec, pu, xsec     //
     //====================================//
-    int puYear(0); 
-    if (energy == "13TeV") {
-        if (year == 2016) puYear = 2016;
-        if (year == 2017) puYear = 2017;
-    }
+    
     int mode = (systematics == 1) ? direction : 0; // PU
-    cout << "Pile Up Distribution: " << puYear << ", Mode: " << mode << endl;
-    standalone_LumiReWeighting puWeight(puYear, mode);
+    cout << "Pile Up Distribution: " << year << ", Mode: " << mode << endl;
+    standalone_LumiReWeighting puWeight(year, mode);
    
     int scale(0); // JES
     if (systematics == 2 && direction ==  1) scale =  1;
@@ -752,9 +748,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //************************* Begin emulating btagging efficiencies in MC (MC only)********//
 
                 // Correct for data/MC b-tag eff. discrepancy by updating b-tag score on jet-by-jet basis
-
-                // do if (!isData) instead???
-                if (isData == false){
+                if (!isData){
                     if (year == 2016){
                     
                         bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
@@ -764,41 +758,37 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         int jetflavour= JetAk04HadFlav->at(i);
                         
                         // ---------------- For Truth-Level B-jets --------------- //
-                        if (abs(jetflavour)==5){
-                            float effb = 0.67298;
-                            float effb_corr = 1;
-                            if (false) {
-                            }
-                            else{
-                                if (pt < 30.)                 effb = 0.67298  * effb_corr;
-                                if (pt >= 30.  && pt < 50.)   effb = 0.67298  * effb_corr;
-                                if (pt >= 50.  && pt < 70.)   effb = 0.70732  * effb_corr;
-                                if (pt >= 70.  && pt < 100.)  effb = 0.715349 * effb_corr;
-                                if (pt >= 100. && pt < 140.)  effb = 0.712663 * effb_corr;
-                                if (pt >= 140. && pt < 200.)  effb = 0.694916 * effb_corr;
-                                if (pt >= 200. && pt < 300.)  effb = 0.667261 * effb_corr;
-                                if (pt >= 300. && pt < 600.)  effb = 0.607964 * effb_corr;
-                                if (pt >= 600. && pt < 1000.) effb = 0.489927 * effb_corr;
-                                if (pt >= 1000.)              effb = 0.489927 * effb_corr;
-                            }
+                        if (fabs(jetflavour)==5){
+
+                            float effb = 1.;
+                            if (pt < 30.)                 effb = 0.644505;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.644505;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.692229;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.711688;
+                            if (pt >= 100. && pt < 140.)  effb = 0.714178;
+                            if (pt >= 140. && pt < 200.)  effb = 0.704809;
+                            if (pt >= 200. && pt < 300.)  effb = 0.677119;
+                            if (pt >= 300. && pt < 600.)  effb = 0.637666;
+                            if (pt >= 600. && pt < 1000.) effb = 0.549428;
+                            if (pt >= 1000.)              effb = 0.549428;
                             
-                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                            float           SFb = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                            if (pt < 20.)   SFb = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                            if (pt > 1000.) SFb = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, b-jets
+                            float           SFb = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                            if (pt < 20.)   SFb = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                            if (pt > 1000.) SFb = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
                             
                             float SFb_error = 0.0;
-                            if (pt < 20.)                 SFb_error = 0.040213499218225479*2.;
-                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.040213499218225479;
-                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.014046305790543556;
-                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.012372690252959728;
-                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.012274007312953472;
-                            if (pt >= 100. && pt < 140.)  SFb_error = 0.011465910822153091;
-                            if (pt >= 140. && pt < 200.)  SFb_error = 0.012079551815986633;
-                            if (pt >= 200. && pt < 300.)  SFb_error = 0.014995276927947998;
-                            if (pt >= 300. && pt < 600.)  SFb_error = 0.021414462476968765;
-                            if (pt >= 600. && pt < 1000.) SFb_error = 0.032377112656831741;
-                            if (pt >= 1000.)              SFb_error = 0.032377112656831741*2.;
+                            if (pt < 20.)                 SFb_error = 0.043795019388198853*2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.043795019388198853;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.015845479443669319;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.014174085110425949;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.013200919143855572;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.012912030331790447;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.019475525245070457;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.01628459244966507;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.034840557724237442;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.049875054508447647;
+                            if (pt >= 1000.)              SFb_error = 0.049875054508447647*2.;
                             
                             float SFb_up = SFb + SFb_error;
                             float SFb_down = SFb - SFb_error;
@@ -817,13 +807,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
                             
                             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
                             // Untag a tagged jet
                             if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
                             if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
                             if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
-                            
                             
                             // Tag an untagged jet
                             if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
@@ -833,41 +822,37 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         } // end b-jet section
                         
                         // ---------------- For Truth-Level C-jets--------------- //
-                        if (abs(jetflavour)==4){
-                            float effc = 0.185922;
-                            float effc_corr = 1;
-                            if (false) {
-                            }
-                            else{
-                                if (pt < 30.)                 effc = 0.185922 * effc_corr;
-                                if (pt >= 30.  && pt < 50.)   effc = 0.185922 * effc_corr;
-                                if (pt >= 50.  && pt < 70.)   effc = 0.182578 * effc_corr;
-                                if (pt >= 70.  && pt < 100.)  effc = 0.18893 * effc_corr;
-                                if (pt >= 100. && pt < 140.)  effc = 0.189251 * effc_corr;
-                                if (pt >= 140. && pt < 200.)  effc = 0.186575 * effc_corr;
-                                if (pt >= 200. && pt < 300.)  effc = 0.194419 * effc_corr;
-                                if (pt >= 300. && pt < 600.)  effc = 0.171999 * effc_corr;
-                                if (pt >= 600. && pt < 1000.) effc = 0.143033 * effc_corr;
-                                if (pt >= 1000.)              effc = 0.143033 * effc_corr;
-                            }
+                        if (fabs(jetflavour)==4){
+
+                            float effc = 1.;
+                            if (pt < 30.)                 effc = 0.117646;
+                            if (pt >= 30.  && pt < 50.)   effc = 0.117646;
+                            if (pt >= 50.  && pt < 70.)   effc = 0.11037;
+                            if (pt >= 70.  && pt < 100.)  effc = 0.114895;
+                            if (pt >= 100. && pt < 140.)  effc = 0.119415;
+                            if (pt >= 140. && pt < 200.)  effc = 0.127047;
+                            if (pt >= 200. && pt < 300.)  effc = 0.129395;
+                            if (pt >= 300. && pt < 600.)  effc = 0.142779;
+                            if (pt >= 600. && pt < 1000.) effc = 0.142482;
+                            if (pt >= 1000.)              effc = 0.142482;
                             
-                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                            float           SFc = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                            if (pt < 20.)   SFc = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                            if (pt > 1000.) SFc = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, c-jets
+                            float           SFc = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                            if (pt < 20.)   SFc = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                            if (pt > 1000.) SFc = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
                             
                             float SFc_error = 0.0;
-                            if (pt < 20.)                 SFc_error = 0.12064050137996674*2.;
-                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.12064050137996674;
-                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.042138919234275818;
-                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.03711806982755661;
-                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.036822021007537842;
-                            if (pt >= 100. && pt < 140.)  SFc_error = 0.034397732466459274;
-                            if (pt >= 140. && pt < 200.)  SFc_error = 0.0362386554479599;
-                            if (pt >= 200. && pt < 300.)  SFc_error = 0.044985830783843994;
-                            if (pt >= 300. && pt < 600.)  SFc_error = 0.064243391156196594;
-                            if (pt >= 600. && pt < 1000.) SFc_error = 0.097131341695785522;
-                            if (pt >= 1000.)              SFc_error = 0.097131341695785522*2.;
+                            if (pt < 20.)                 SFc_error = 0.13138505816459656*2.;
+                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.13138505816459656;
+                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.047536440193653107;
+                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.042522255331277847;
+                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.039602756500244141;
+                            if (pt >= 100. && pt < 140.)  SFc_error = 0.038736090064048767;
+                            if (pt >= 140. && pt < 200.)  SFc_error = 0.058426573872566223;
+                            if (pt >= 200. && pt < 300.)  SFc_error = 0.048853777348995209;
+                            if (pt >= 300. && pt < 600.)  SFc_error = 0.10452167689800262;
+                            if (pt >= 600. && pt < 1000.) SFc_error = 0.14962516725063324;
+                            if (pt >= 1000.)              SFc_error = 0.14962516725063324*2.;
                             
                             float SFc_up = SFc + SFc_error;
                             float SFc_down = SFc - SFc_error;
@@ -886,7 +871,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
                             
                             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
                             // Untag a tagged jet
                             if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
@@ -901,37 +886,32 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         } // end c-jet section
                         
                         // ---------------- For Truth-Level Light-jets --------------- //
-                        if (abs(jetflavour) < 4){
-                            float eff_l = 0.0200484;
-                            float eff_l_corr = 1;
+                        if (fabs(jetflavour) < 4){
 
-                            if (false) {
-                            }
-                            else{
-                                if (pt < 30.)                 eff_l = 0.0200484 * eff_l_corr;
-                                if (pt >= 30.  && pt < 50.)   eff_l = 0.0200484 * eff_l_corr;
-                                if (pt >= 50.  && pt < 70.)   eff_l = 0.0171176 * eff_l_corr;
-                                if (pt >= 70.  && pt < 100.)  eff_l = 0.0158081 * eff_l_corr;
-                                if (pt >= 100. && pt < 140.)  eff_l = 0.0155987 * eff_l_corr;
-                                if (pt >= 140. && pt < 200.)  eff_l = 0.0211239 * eff_l_corr;
-                                if (pt >= 200. && pt < 300.)  eff_l = 0.0223319 * eff_l_corr;
-                                if (pt >= 300. && pt < 600.)  eff_l = 0.030051  * eff_l_corr;
-                                if (pt >= 600. && pt < 1000.) eff_l = 0.0427809 * eff_l_corr;
-                                if (pt >= 1000.)              eff_l = 0.0427809 * eff_l_corr;
-                            }
+                            float eff_l = 1.;
+                            if (pt < 30.)                 eff_l = 0.0112759;
+                            if (pt >= 30.  && pt < 50.)   eff_l = 0.0112759;
+                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00951306;
+                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0103573;
+                            if (pt >= 100. && pt < 140.)  eff_l = 0.0104005;
+                            if (pt >= 140. && pt < 200.)  eff_l = 0.0122555;
+                            if (pt >= 200. && pt < 300.)  eff_l = 0.0148327;
+                            if (pt >= 300. && pt < 600.)  eff_l = 0.0217662;
+                            if (pt >= 600. && pt < 1000.) eff_l = 0.0335962;
+                            if (pt >= 1000.)              eff_l = 0.0335962;
                             
-                            //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                            float           SFlight = 1.0589+(0.000382569*pt)+(-2.4252e-07*(pt*pt))+(2.20966e-10*(pt*pt*pt));
-                            if (pt < 20.)   SFlight = 1.0589+(0.000382569*20)+(-2.4252e-07*(20*20))+(2.20966e-10*(20*20*20));
-                            if (pt > 1000.) SFlight = 1.0589+(0.000382569*1000)+(-2.4252e-07*(1000*1000))+(2.20966e-10*(1000*1000*1000));
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "incl" values, light-jets
+                            float           SFlight = 1.09286+(-0.00052597*pt)+(1.88225e-06*pt*pt)+(-1.27417e-09*pt*pt*pt);
+                            if (pt < 20.)   SFlight = 1.09286+(-0.00052597*20.)+(1.88225e-06*20.*20.)+(-1.27417e-09*20.*20.*20.);
+                            if (pt > 1000.) SFlight = 1.09286+(-0.00052597*1000.)+(1.88225e-06*1000.*1000.)+(-1.27417e-09*1000.*1000.*1000.);
                             
-                            float           SFlight_up = SFlight * (1+(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                            if (pt < 20.)   SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                            if (pt > 1000.) SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
+                            float           SFlight_up = SFlight * (1+(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                            if (pt < 20.)   SFlight_up = SFlight * (1+(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                            if (pt > 1000.) SFlight_up = SFlight * (1+(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                             
-                            float           SFlight_down = SFlight * (1-(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                            if (pt < 20.)   SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                            if (pt > 1000.) SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
+                            float           SFlight_down = SFlight * (1-(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                            if (pt < 20.)   SFlight_down = SFlight * (1-(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                            if (pt > 1000.) SFlight_down = SFlight * (1-(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                             
                             // F values for rand comparison
                             float f = 0.0;
@@ -947,7 +927,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
                             
                             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                            passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
                             // Untag a tagged jet
                             if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
@@ -965,7 +945,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
                         // Wb study
-                        if (abs(jetflavour)==5) countWbBjets++;
+                        if (fabs(jetflavour)==5) countWbBjets++;
 
                     } // end b-tag efficiency SFs for 2016 MC
 
@@ -979,42 +959,42 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         bool passBJets_SFB_sys_down = passBJets;  
                         
                         // ---------------- For Truth-Level B-jets --------------- //
-                        if (abs(jetflavour)==5){
+                        if (fabs(jetflavour)==5){
 
                             // Set the b-tag eff's determined in MC for truth b jets
                             float effb = 1.;
-                            if (pt < 30.)                 effb = 0.647438;
-                            if (pt >= 30.  && pt < 50.)   effb = 0.647438;
-                            if (pt >= 50.  && pt < 70.)   effb = 0.68449;
-                            if (pt >= 70.  && pt < 100.)  effb = 0.696806;
-                            if (pt >= 100. && pt < 140.)  effb = 0.689625;
-                            if (pt >= 140. && pt < 200.)  effb = 0.662531;
-                            if (pt >= 200. && pt < 300.)  effb = 0.611499;
-                            if (pt >= 300. && pt < 600.)  effb = 0.539008;
-                            if (pt >= 600. && pt < 1000.) effb = 0.443531;
-                            if (pt >= 1000.)              effb = 0.443531;
+                            if (pt < 30.)                 effb = 0.68635;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.68635;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.734214;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.755399;
+                            if (pt >= 100. && pt < 140.)  effb = 0.757332;
+                            if (pt >= 140. && pt < 200.)  effb = 0.740454;
+                            if (pt >= 200. && pt < 300.)  effb = 0.692885;
+                            if (pt >= 300. && pt < 600.)  effb = 0.592282;
+                            if (pt >= 600. && pt < 1000.) effb = 0.395662;
+                            if (pt >= 1000.)              effb = 0.395662;
                             
                             // Get the central SF -----
-                            // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, b-jets
+                            // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, b-jets
                             // SFs are given as functions of pT
-                            float           SFb = 1.09079*((1.+(0.180764*pt))/(1.+(0.216797*pt)));
-                            if (pt < 20.)   SFb = 1.09079*((1.+(0.180764*20.))/(1.+(0.216797*20.)));
-                            if (pt > 1000.) SFb = 1.09079*((1.+(0.180764*1000.))/(1.+(0.216797*1000.)));
+                            float           SFb = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
+                            if (pt < 20.)   SFb = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
+                            if (pt > 1000.) SFb = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
                             
                             // Grab SF errors for use in systematic variations
                             // Errors listed in the .csv file are symmetric
                             float SFb_error = 0.;
-                            if (pt < 20.)                 SFb_error = 0.048631865531206131 * 2.;
-                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.048631865531206131;
-                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.014063102193176746;
-                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.013459851965308189;
-                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.012704650871455669;
-                            if (pt >= 100. && pt < 140.)  SFb_error = 0.014372736215591431;
-                            if (pt >= 140. && pt < 200.)  SFb_error = 0.015085947699844837;
-                            if (pt >= 200. && pt < 300.)  SFb_error = 0.033626105636358261;
-                            if (pt >= 300. && pt < 600.)  SFb_error = 0.045323032885789871;
-                            if (pt >= 600. && pt < 1000.) SFb_error = 0.058395344763994217;
-                            if (pt >= 1000.)              SFb_error = 0.058395344763994217 * 2.;
+                            if (pt < 20.)                 SFb_error = 0.038731977343559265 * 2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.038731977343559265;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.015137125737965107;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.013977443799376488;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.012607076205313206;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.013979751616716385;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.015011214651167393;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.034551065415143967;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.040168888866901398;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.054684814065694809;
+                            if (pt >= 1000.)              SFb_error = 0.054684814065694809 * 2.;
                             float SFb_up = SFb + SFb_error;
                             float SFb_down = SFb - SFb_error;
                             
@@ -1047,42 +1027,42 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         } // end b-jet section
 
                         // ---------------- For Truth-Level C-jets--------------- //
-                        if (abs(jetflavour)==4){
+                        if (fabs(jetflavour)==4){
 
                             // Set the b-tag eff's determined in MC for truth c jets
                             float effc = 1.;
-                            if (pt < 30.)                 effc = 0.118207;
-                            if (pt >= 30.  && pt < 50.)   effc = 0.118207;
-                            if (pt >= 50.  && pt < 70.)   effc = 0.11601;
-                            if (pt >= 70.  && pt < 100.)  effc = 0.12303;
-                            if (pt >= 100. && pt < 140.)  effc = 0.124999;
-                            if (pt >= 140. && pt < 200.)  effc = 0.122833;
-                            if (pt >= 200. && pt < 300.)  effc = 0.113622;
-                            if (pt >= 300. && pt < 600.)  effc = 0.11026;
-                            if (pt >= 600. && pt < 1000.) effc = 0.100382;
-                            if (pt >= 1000.)              effc = 0.100382;
+                            if (pt < 30.)                 effc = 0.101402;
+                            if (pt >= 30.  && pt < 50.)   effc = 0.101402;
+                            if (pt >= 50.  && pt < 70.)   effc = 0.107145;
+                            if (pt >= 70.  && pt < 100.)  effc = 0.120956;
+                            if (pt >= 100. && pt < 140.)  effc = 0.128843;
+                            if (pt >= 140. && pt < 200.)  effc = 0.136532;
+                            if (pt >= 200. && pt < 300.)  effc = 0.129016;
+                            if (pt >= 300. && pt < 600.)  effc = 0.10803;
+                            if (pt >= 600. && pt < 1000.) effc = 0.0488107;
+                            if (pt >= 1000.)              effc = 0.0488107;
                             
                             // Get the central SF -----
-                            // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, c-jets
+                            // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, c-jets
                             // SFs are given as functions of pT
-                            float           SFc = 1.09079*((1.+(0.180764*pt))/(1.+(0.216797*pt)));
-                            if (pt < 20.)   SFc = 1.09079*((1.+(0.180764*20.))/(1.+(0.216797*20.)));
-                            if (pt > 1000.) SFc = 1.09079*((1.+(0.180764*1000.))/(1.+(0.216797*1000.)));
+                            float           SFc = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
+                            if (pt < 20.)   SFc = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
+                            if (pt > 1000.) SFc = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
                             
                             // Grab SF errors for use in systematic variations
                             // Errors listed in the .csv file are symmetric
                             float SFc_error = 0.;
-                            if (pt < 20.)                 SFc_error = 0.14589560031890869 * 2.;
-                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.14589560031890869;
-                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.042189307510852814;
-                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.040379554033279419;
-                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.038113951683044434;
-                            if (pt >= 100. && pt < 140.)  SFc_error = 0.043118208646774292;
-                            if (pt >= 140. && pt < 200.)  SFc_error = 0.045257844030857086;
-                            if (pt >= 200. && pt < 300.)  SFc_error = 0.10087831318378448;
-                            if (pt >= 300. && pt < 600.)  SFc_error = 0.13596910238265991;
-                            if (pt >= 600. && pt < 1000.) SFc_error = 0.17518603801727295;
-                            if (pt >= 1000.)              SFc_error = 0.17518603801727295 * 2.;
+                            if (pt < 20.)                 SFc_error = 0.1161959320306778 * 2.;
+                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.1161959320306778;
+                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.045411378145217896;
+                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.041932329535484314;
+                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.037821229547262192;
+                            if (pt >= 100. && pt < 140.)  SFc_error = 0.041939254850149155;
+                            if (pt >= 140. && pt < 200.)  SFc_error = 0.045033644884824753;
+                            if (pt >= 200. && pt < 300.)  SFc_error = 0.1036531925201416;
+                            if (pt >= 300. && pt < 600.)  SFc_error = 0.12050666660070419;
+                            if (pt >= 600. && pt < 1000.) SFc_error = 0.16405443847179413;
+                            if (pt >= 1000.)              SFc_error = 0.16405443847179413 * 2.;
                             float SFc_up = SFc + SFc_error;
                             float SFc_down = SFc - SFc_error;
                             
@@ -1115,35 +1095,35 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         } // end c-jet section
 
                         // ---------------- For Truth-Level Light-jets --------------- //
-                        if (abs(jetflavour) < 4){
+                        if (fabs(jetflavour) < 4){
 
                             // Set the b-tag eff's determined in MC for truth light jets
                             float eff_l = 1.;
-                            if (pt < 30.)                 eff_l = 0.00479541;
-                            if (pt >= 30.  && pt < 50.)   eff_l = 0.00479541;
-                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00575495;
-                            if (pt >= 70.  && pt < 100.)  eff_l = 0.00775084;
-                            if (pt >= 100. && pt < 140.)  eff_l = 0.0083638;
-                            if (pt >= 140. && pt < 200.)  eff_l = 0.00896325;
-                            if (pt >= 200. && pt < 300.)  eff_l = 0.00955954;
-                            if (pt >= 300. && pt < 600.)  eff_l = 0.0123235;
-                            if (pt >= 600. && pt < 1000.) eff_l = 0.0149292;
-                            if (pt >= 1000.)              eff_l = 0.0149292;
+                            if (pt < 30.)                 eff_l = 0.00580523;
+                            if (pt >= 30.  && pt < 50.)   eff_l = 0.00580523;
+                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00690804;
+                            if (pt >= 70.  && pt < 100.)  eff_l = 0.00954291;
+                            if (pt >= 100. && pt < 140.)  eff_l = 0.0105542;
+                            if (pt >= 140. && pt < 200.)  eff_l = 0.0114382;
+                            if (pt >= 200. && pt < 300.)  eff_l = 0.0117215;
+                            if (pt >= 300. && pt < 600.)  eff_l = 0.0112139;
+                            if (pt >= 600. && pt < 1000.) eff_l = 0.00976563;
+                            if (pt >= 1000.)              eff_l = 0.00976563;
                             
                             // Get the central SF and variations -----
-                            // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "incl" values, light-jets
+                            // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "incl" values, light-jets
                             // SFs are given as functions of pT
-                            float           SF_l = 0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt);
-                            if (pt < 20.)   SF_l = 0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.);
-                            if (pt > 1000.) SF_l = 0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.);
+                            float           SF_l = 0.972902+(0.000201811*pt)+(3.96396e-08*pt*pt)+(-4.53965e-10*pt*pt*pt);
+                            if (pt < 20.)   SF_l = 0.972902+(0.000201811*20.)+(3.96396e-08*20.*20.)+(-4.53965e-10*20.*20.*20.);
+                            if (pt > 1000.) SF_l = 0.972902+(0.000201811*1000.)+(3.96396e-08*1000.*1000.)+(-4.53965e-10*1000.*1000.*1000.);
 
-                            float           SF_l_up = (0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt))          * (1+(0.115123+(0.000153114*pt)+(-1.72111e-07*pt*pt)));
-                            if (pt < 20.)   SF_l_up = (0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.))       * (1+(0.115123+(0.000153114*20.)+(-1.72111e-07*20.*20.)));
-                            if (pt > 1000.) SF_l_up = (0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.)) * (1+(0.115123+(0.000153114*1000.)+(-1.72111e-07*1000.*1000.)));
+                            float           SF_l_up = SF_l * (1+(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
+                            if (pt < 20.)   SF_l_up = SF_l * (1+(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
+                            if (pt > 1000.) SF_l_up = SF_l * (1+(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
 
-                            float           SF_l_down = (0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt))          * (1-(0.115123+(0.000153114*pt)+(-1.72111e-07*pt*pt)));
-                            if (pt < 20.)   SF_l_down = (0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.))       * (1-(0.115123+(0.000153114*20.)+(-1.72111e-07*20.*20.)));
-                            if (pt > 1000.) SF_l_down = (0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.)) * (1-(0.115123+(0.000153114*1000.)+(-1.72111e-07*1000.*1000.)));
+                            float           SF_l_down = SF_l * (1-(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
+                            if (pt < 20.)   SF_l_down = SF_l * (1-(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
+                            if (pt > 1000.) SF_l_down = SF_l * (1-(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
                             
                             // f values (jet fractions) for comparison to rand
                             // method of computation depends on wheter SF < 1, or SF > 1
@@ -1178,7 +1158,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
                         // Wb study
-                        if (abs(jetflavour)==5) countWbBjets++;
+                        if (fabs(jetflavour)==5) countWbBjets++;
                         
                     } // end b-tag efficiency SFs for 2017 MC
 
@@ -2025,7 +2005,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //--- For calculating b-tagging efficiency-------------------------
             float btagWP(1.);
             if (year == 2016) btagWP = 0.6321;
-            if (year == 2017) btagWP = 0.4941;
+            else if (year == 2017) btagWP = 0.4941;
 
             // advantage of using analysis-cuts jets is that we
             // cut out many jets from pileup

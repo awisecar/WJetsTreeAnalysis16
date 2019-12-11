@@ -29,7 +29,7 @@ void calcBTagEffsMC(){
 
  //   // 2017 --
  //   // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
- //   runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+//    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
 }
 
 void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
@@ -266,7 +266,7 @@ void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,
     // system(command);
 
     cout << "\n///////////////////////////////////////////////////////////////////////////////////////" << endl;
-    TString outputFilename = outputDirBtag+"bTagEffsMC_"+yearStr+".root";
+    TString outputFilename = outputDirBtag+"bTagEffsMC_DeepCSV_"+yearStr+".root";
     // TString outputFilename = "bTagEffsMC_"+yearStr+".root";
     cout << ">>>>> Writing histograms to output file at --- \n" << outputFilename << endl;
 

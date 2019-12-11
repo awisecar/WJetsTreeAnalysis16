@@ -378,8 +378,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
            hist[0][i]->GetXaxis()->SetRangeUser(0,8);
            histSumMC[i]->GetXaxis()->SetRangeUser(0,8);
             // for ttbar study
-            // hist[0][i]->GetXaxis()->SetRangeUser(2,6);
-            // histSumMC[i]->GetXaxis()->SetRangeUser(2,6);
+            // hist[0][i]->GetXaxis()->SetRangeUser(2,8);
+            // histSumMC[i]->GetXaxis()->SetRangeUser(2,8);
         }
 
         hist[0][i]->SetTitle("");
