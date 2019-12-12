@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
+void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
     int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1, 
     int JetPtMax = 0, int ZEtaMin = -999999, int ZEtaMax = 999999, 
     bool doRoch = 0, bool doFlat = 0, bool doVarWidth = 1)
@@ -225,14 +225,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
 
         nHistNoGen++;
     } 
-    nHist=nHistNoGen; 
+    nHist = nHistNoGen; 
     cout <<"\nNumber of histograms to plot: " << nHistNoGen << endl;
 
-    ////////////////////this is where we start using ttbar rescaling option
+    ////////////////////////////////////////////////////////////////////////////////////////
 
-
-    //andrew -- ttbar SFs for 2016 data -- 8 April 2019
-    double SFttbar(1);
+    double SFttbar(1.);
 	
     //looping over files
     for (int i = 0; i < nFiles; i++) {
@@ -242,74 +240,159 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         for (int j = 0; j < nHistNoGen ; j++) {
             hist[i][j] = getHisto(file[i], histoName[j]);
             hist[i][j]->SetTitle(histoTitle[j].c_str());
-			
-            //factors applied for jet multiplicities of 2 to 6
-            //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions i.e. file[5]=ttbar (see fileNames.h)
-            //note: I believe the scaling of the histograms is actually not saved back into the original file; 
-            //the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
 
-            // inclusive
-            if (histoName[j].find("Zinc2jet")!= string::npos) SFttbar = 1.04904374;
-            else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 0.99624372;
-            else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.97243212;
-            else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = 0.94750793;
-            else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = 0.92506162;
-            // exclusive
-            else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = 1.28532061;
-            else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = 1.02880218;
-            else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = 0.98994466;
-            else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = 0.95915763;
-            else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = 0.93695869;
-			
-            if ( i == 0) {
+            if (i == 0){
                 //Don't need to do anything to the data, just plotting the points on top of the stacked MC
                 hist[i][j]->SetMarkerStyle(20);
                 hist[i][j]->SetMarkerColor(Colors[i]);
                 hist[i][j]->SetLineColor(Colors[i]);
             }
-
+            
+			// -----------------------------------------------------------------------------------------
+			
             //andrew -- comment out this next block if you want to turn SFs off
-	        //else if (i == 4){ // ttbar is file #4 when QCD is turned off (ttbar study) -- see fileNames.h
-	        // else if (i == 5){ //ttbar is file #5 when running usual distributions with bveto == -1
-            //     hist[i][j]->SetFillColor(Colors[i]);
-            //     hist[i][j]->SetLineColor(Colors[i]);
-            //     legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
-	
-            //     //the two sections below scale the jet multiplicities
-            //     if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
-            //                     //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
-            //         hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.04904374);
-            //         hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*0.99624372);
-            //         hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.97243212);
-            //         hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.94750793);
-            //         hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.92506162);
-                
-            //         hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.04904374);
-            //         hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*0.99624372);
-            //         hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.97243212);
-            //         hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.94750793);
-            //         hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.92506162);
-            //     }
-            //     else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
-            //         hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.28532061);
-            //         hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.02880218);
-            //         hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.98994466);
-            //         hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.95915763);
-            //         hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.93695869);
-                    
-            //         hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.28532061);
-            //         hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.02880218);
-            //         hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.98994466);
-            //         hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.95915763);
-            //         hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.93695869);
-            //     }
-            //     else {
-            //         //it is this line where we scale the ttbar MC for each of the histograms
-            //         //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
-            //         hist[i][j]->Scale(SFttbar);
-            //     }
+	        // else if (i == 4){ // ttbar is file #4 when QCD is turned off (ttbar study) -- see fileNames.h
+	        else if (i == 5){ //ttbar is file #5 when running usual distributions with bveto == -1
 
-	        // } // END SCALING OF TTBAR
+                hist[i][j]->SetFillColor(Colors[i]);
+                hist[i][j]->SetLineColor(Colors[i]);
+                legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
+
+                //factors applied for jet multiplicities of 2 to 8
+                //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions i.e. file[5]=ttbar (see fileNames.h)
+                //note: I believe the scaling of the histograms is actually not saved back into the original file; 
+                //the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
+                if (year == 2016){
+                    // inclusive jet cut
+                    if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = 1.06528037;
+                    else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 1.009716169;
+                    else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 0.990739532;
+                    else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = 0.972304061;
+                    else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = 0.959557649;
+                    else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = 0.957901269;
+                    else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = 0.965237066;
+                    // exclusive jet cut
+                    else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = 1.350528196;
+                    else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = 1.037399403;
+                    else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = 1.004154159;
+                    else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = 0.979092242;
+                    else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = 0.960275994;
+                    else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = 0.955092048;
+                    else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = 0.970195144;
+                    // if not >= 2 jets cut, set xsec SF to 1
+                    else SFttbar = 1.;
+                }
+                else if (year == 2017){
+                    // inclusive jet cut
+                    if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = 1.228337257;
+                    else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = 1.128980552;
+                    else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = 1.106099341;
+                    else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = 1.117373284;
+                    else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = 1.146303363;
+                    else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = 1.198295451;
+                    else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = 1.269531851;
+                    // exclusive jet cut
+                    else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = 1.736731701;
+                    else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = 1.162577023;
+                    else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = 1.098032049;
+                    else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = 1.10247707;
+                    else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = 1.124533279;
+                    else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = 1.172495085;
+                    else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = 1.253243104;
+                    // if not >= 2 jets cut, set xsec SF to 1
+                    else SFttbar = 1.;
+                }
+                else std::cout << "Not yet done for 2018!" << std::endl;
+
+                //the two sections below scale the jet multiplicities
+                //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
+                if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
+                    if (year == 2016){
+                        // bin contents
+                        hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.06528037);
+                        hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.009716169);
+                        hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.990739532);
+                        hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.972304061);
+                        hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.959557649);
+                        hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.957901269);
+                        hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*0.965237066);
+                        // bin errors 
+                        hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.06528037);
+                        hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.009716169);
+                        hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.990739532);
+                        hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.972304061);
+                        hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.959557649);
+                        hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.957901269);
+                        hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*0.965237066);
+                    }
+                    else if (year == 2017){
+                        // bin contents
+                        hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.228337257);
+                        hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.128980552);
+                        hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*1.106099341);
+                        hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*1.117373284);
+                        hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*1.146303363);
+                        hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*1.198295451);
+                        hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*1.269531851);
+                        // bin errors 
+                        hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.228337257);
+                        hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.128980552);
+                        hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*1.106099341);
+                        hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*1.117373284);
+                        hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*1.146303363);
+                        hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*1.198295451);
+                        hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*1.269531851);
+                    }
+                    else std::cout << "Not yet done for 2018!" << std::endl;
+                }
+                else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
+                    if (year == 2016){
+                        // bin contents
+                        hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.350528196);
+                        hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.037399403);
+                        hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*1.004154159);
+                        hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.979092242);
+                        hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.960275994);
+                        hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*0.955092048);
+                        hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*0.970195144);
+                        // bin errors 
+                        hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.350528196);
+                        hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.037399403);
+                        hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*1.004154159);
+                        hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.979092242);
+                        hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.960275994);
+                        hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*0.955092048);
+                        hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*0.970195144);
+                    }
+                    else if (year == 2017){
+                        // bin contents
+                        hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.736731701);
+                        hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.162577023);
+                        hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*1.098032049);
+                        hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*1.10247707);
+                        hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*1.124533279);
+                        hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*1.172495085);
+                        hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*1.253243104);
+                        // bin errors 
+                        hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.736731701);
+                        hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.162577023);
+                        hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*1.098032049);
+                        hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*1.10247707);
+                        hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*1.124533279);
+                        hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*1.172495085);
+                        hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*1.253243104);
+                    }
+                    else std::cout << "Not yet done for 2018!" << std::endl;
+                }
+                else {
+                    //it is this line where we scale the ttbar MC for each of the histograms
+                    //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
+                    hist[i][j]->Scale(SFttbar);
+                }
+
+	        } // END SCALING OF TTBAR
+
+            // -----------------------------------------------------------------------------------------
 
             else {
                 //if it's any of the other MC, set fill/line colors and legends like normal
@@ -318,8 +401,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
                 legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
             }
 
-        }
-    }
+        } // end loop over histograms
+    } // end loop over files
     
     //Here is where the THStack histSumMC is filled/stacked ---
     //Loop starts with i=1 here because hist[0] refers to the data file (see fileNames.h)
@@ -338,7 +421,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
         }
     }
     
-    ////////////////////this is where we end using ttbar rescaling option  
+    ////////////////////////////////////////////////////////////////////////////////////////
 
 
     cout << "\n >>> Summed all MC histograms to create stacks! " << endl;
