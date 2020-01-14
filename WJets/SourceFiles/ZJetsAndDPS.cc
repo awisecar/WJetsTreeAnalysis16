@@ -86,7 +86,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (year == 2016){
             table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
             TableJESunc = TableJESUncertainties;
-            if (leptonFlavor == "SingleMuon")  {
+            if (leptonFlavor == "SingleMuon"){
                 // 2016 legacy rereco tables
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2016Legacy_SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/2016Legacy_SMu_SFs_TightISO_13TeV_EtaPt.txt");
@@ -100,7 +100,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // using 2016 JES uncertainties for now
             table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
             TableJESunc = TableJESUncertainties;
-            if (leptonFlavor == "SingleMuon")  {
+            if (leptonFlavor == "SingleMuon"){
+                table SF_Muon_TightID_ReReco("EfficiencyTables/2017_SMu_SFs_TightId_13TeV_EtaPt.txt");
+                table SF_Muon_TightISO_ReReco("EfficiencyTables/2017_SMu_SFs_TightISO_13TeV_EtaPt.txt");
+                table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/2017_SMu_SFs_HLTIsoMu27_13TeV_EtaPt.txt");
+                LeptID = SF_Muon_TightID_ReReco;
+                LeptIso = SF_Muon_TightISO_ReReco;
+                LeptTrig = SF_Muon_HLTIsoMu24IsoTkMu24_ReReco;
+            }
+        }
+        else{
+            // NOTE: update with 2018 factors!!! --> have 2017 SFs in place for now
+            // using 2016 JES uncertainties for now
+            table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            TableJESunc = TableJESUncertainties;
+            if (leptonFlavor == "SingleMuon"){
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2017_SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/2017_SMu_SFs_TightISO_13TeV_EtaPt.txt");
                 table SF_Muon_HLTIsoMu24IsoTkMu24_ReReco("EfficiencyTables/2017_SMu_SFs_HLTIsoMu27_13TeV_EtaPt.txt");
@@ -231,7 +245,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 100000; jentry++){
+    // for (Long64_t jentry(0); jentry < 10; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -285,6 +299,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
                 // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) countEventpassTrig++;
 
+                // 2018 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
+                // we trigger on HLT_IsoMu24
+                if ( (year == 2018) && (MuHltTrgPath1->at(0) == 1) ) countEventpassTrig++;
+
             }
 
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
@@ -311,9 +329,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         // && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter //this flag not included for 2016
                         && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                     );
-                    if (passMETFILTER) nEventsPassMETFilter++ ;
+                    if (passMETFILTER) nEventsPassMETFilter++;
                 }
-                if (year == 2017){
+                else if (year == 2017){
                     passMETFILTER = (
                         (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
                         && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
@@ -323,7 +341,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
                         && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                     );
-                    if (passMETFILTER) nEventsPassMETFilter++ ;
+                    if (passMETFILTER) nEventsPassMETFilter++;
+                }
+                else{
+                    passMETFILTER = (
+                        (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
+                        && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
+                        && (METFilterPath3->at(0) == 1)  //Flag_globalSuperTightHalo2016Filter
+                        && (METFilterPath4->at(0) == 1)  //Flag_EcalDeadCellTriggerPrimitiveFilter
+                        && (METFilterPath5->at(0) == 1)  //Flag_goodVertices
+                        // && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
+                        && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
+                    );
+                    if (passMETFILTER) nEventsPassMETFilter++;
                 }
             }
 
@@ -339,9 +369,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         // && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter //this flag not included for 2016
                         && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                     );
-                    if (passMETFILTER) nEventsPassMETFilter++ ;
+                    if (passMETFILTER) nEventsPassMETFilter++;
                 }
-                if (year == 2017){
+                else if (year == 2017){
                     passMETFILTER = (
                         (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
                         && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
@@ -351,7 +381,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
                         && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
                     );
-                    if (passMETFILTER) nEventsPassMETFilter++ ;
+                    if (passMETFILTER) nEventsPassMETFilter++;
+                }
+                else{
+                    passMETFILTER = (
+                        (METFilterPath1->at(0) == 1)     //Flag_HBHENoiseFilter
+                        && (METFilterPath2->at(0) == 1)  //Flag_HBHENoiseIsoFilter
+                        && (METFilterPath3->at(0) == 1)  //Flag_globalSuperTightHalo2016Filter
+                        && (METFilterPath4->at(0) == 1)  //Flag_EcalDeadCellTriggerPrimitiveFilter
+                        && (METFilterPath5->at(0) == 1)  //Flag_goodVertices
+                        // && (METFilterPath6->at(0) == 1)  //Flag_eeBadScFilter
+                        && (METFilterPath7->at(0) == 1)  //Flag_BadPFMuonFilter
+                    );
+                    if (passMETFILTER) nEventsPassMETFilter++;
                 }
             }
 
@@ -369,14 +411,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //     Reweighting MC for pileup profile discrepancy    //
         //======================================================//
 
-        double puWeightFact(1);
+        double puWeightFact(1.);
         if (hasRecoInfo && !isData){
             // PU histos have upper bin edge of 100 vertices
             if ( (int(EvtPuCntTruth) < 0) || (int(EvtPuCntTruth) > 99)) puWeightFact = 0.; 
             else puWeightFact = (double)puWeight.weight(int(EvtPuCntTruth)); // using "true" number of MC PU vertices
 
-            // ALW 20 NOV 19
-            weight *= puWeightFact;
+            // ALW 13 DEC 19
+            // weight *= puWeightFact;
 
             //std::cout << "EvtPuCntTruth = " << EvtPuCntTruth << std::endl;
             //std::cout << "puWeightFact = " << puWeightFact << std::endl;
@@ -396,10 +438,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // which is calculated using all of the offline photons and jets found in the event
         double L1prefireweight(1.);
         if (hasRecoInfo && !isData){
-            if ( (year == 2016) || (year == 2017) ){
-                L1prefireweight = PreFiringWeight;
-            }
-            // ALW 3 DEC 19
+            if ( (year == 2016) || (year == 2017) ) L1prefireweight = PreFiringWeight;
+            // ALW 13 DEC 19
             weight *= L1prefireweight;
         }
 
@@ -445,6 +485,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // andrew - 29 oct 2019 - look at alternate prescaled trigger for QCD BG purposes
                     // if ( (year == 2017) && (MuHltTrgPath3->at(0) == 1) ) eventTrigger = true;
 
+                    // 2018 paths of interest: HLT_IsoMu24_v*, HLT_IsoMu27_v*, HLT_Mu27_v*
+                    // we trigger on HLT_IsoMu24
+                    if ( (year == 2018) && (MuHltTrgPath1->at(0) == 1) ) eventTrigger = true;
+
                 }
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MuHltTrgPath1->at(0) = " << MuHltTrgPath1->at(0) << endl;
@@ -454,21 +498,23 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
 
-                    // ALW 3 DEC 2019
+                    // ALW 13 DEC 19
                     // grabbing reco muon information as a leptonStruct
                     // --- no Rochester corrections ---
-                    //if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
-                    //leptonStruct mu = {(MuPt->at(i) * muScale) + merUncer, MuEta->at(i), MuPhi->at(i), MuE->at(i) * (((MuPt->at(i) * muScale) + merUncer)/MuPt->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
-                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ": pT, eta = " << MuPt->at(i) << ", " << MuEta->at(i) << endl;
+                    // if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
+                    // leptonStruct mu = {(MuPt->at(i) * muScale) + merUncer, MuEta->at(i), MuPhi->at(i), MuE->at(i) * (((MuPt->at(i) * muScale) + merUncer)/MuPt->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
                     // --- Rochester corrections ---
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPtRoch->at(i) * 0.006));
                     leptonStruct mu = {(MuPtRoch->at(i) * muScale) + merUncer, MuEtaRoch->at(i), MuPhiRoch->at(i), MuERoch->at(i) * (((MuPtRoch->at(i) * muScale) + merUncer)/MuPtRoch->at(i)), MuCh->at(i), MuPfIso->at(i), 0};
+                    
+                    if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ": pT, eta = " << MuPt->at(i) << ", " << MuEta->at(i) << endl;
                     if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ": pT_roch, eta_roch = " << MuPtRoch->at(i) << ", " << MuEtaRoch->at(i) << endl;
 
                     // pT cut for muon
                     bool muPassesPtCut(false);
                     if ((year == 2016) && (doW && mu.pt >= 26.)) muPassesPtCut = true;
                     if ((year == 2017) && (doW && mu.pt >= 29.)) muPassesPtCut = true;
+                    if ((year == 2018) && (doW && mu.pt >= 26.)) muPassesPtCut = true;
                     // eta cut for muon
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
                     bool muPassesEtaCut(doW && fabs(mu.eta) <= 2.4);
@@ -618,6 +664,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     double genLepPtCut = 25.;
                     if (year == 2016) genLepPtCut = 26.;
                     if (year == 2017) genLepPtCut = 29.;
+                    if (year == 2018) genLepPtCut = 26.;
                     //For WJets, pT and eta cut on the muon, MET cut on the neutrino
                     if (doW && ( (fabs(genLep.charge) > 0 && genLep.pt >= genLepPtCut && fabs(genLep.eta) <= 2.4) || (fabs(genLep.charge) == 0 && genLep.pt >= METcut) ) ){
                         genLeptons.push_back(genLep); 
@@ -731,8 +778,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 //btagging criterion
                 //nominal btagging criterion
-                if ( (year == 2016) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321)) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                if ( (year == 2017) && (JetAk04BDiscDeepCSV->at(i) >= 0.4941)) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2016) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2017) && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2018) && (JetAk04BDiscDeepCSV->at(i) >= 0.4184) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscDeepCSV->at(i) = " << JetAk04BDiscDeepCSV->at(i) << endl;
 
                 //************************* B-tag Veto Correction *******************************//
@@ -948,8 +996,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (fabs(jetflavour)==5) countWbBjets++;
 
                     } // end b-tag efficiency SFs for 2016 MC
-
-                    if (year == 2017){
+                    else if (year == 2017){
                         
                         // Get jet flavor (hadron definition)
                         int jetflavour= JetAk04HadFlav->at(i);
@@ -1161,7 +1208,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (fabs(jetflavour)==5) countWbBjets++;
                         
                     } // end b-tag efficiency SFs for 2017 MC
-
+                    // else{
+                    //     // No b-tag SFs for 2018 yet!!!
+                    // } // end b-tag efficiency SFs for 2018 MC
                 } // --------- End MC-only b-tag efficiency SF section
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
@@ -1202,7 +1251,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04Id->at(i) = " << JetAk04Id->at(i) << endl;
 
                 // Pileup jet ID cut to help mitigate pileup jets
-                // For 2016, 2017, we use Loose ID
+                // For 2016, 2017, and 2018, we use Loose ID
                 bool jetPassesPuIdCut(0);
                 // only use PU Jet ID for jets w/ pT < 50 GeV
                 if (jet.pt < 50.) jetPassesPuIdCut = JetAk04PuIdLoose->at(i);
@@ -1373,6 +1422,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 bool passBJetsAK8(0);
                 if ( (year == 2016) && (JetAk08BDiscDeepCSV->at(i) >= 0.6321)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if ( (year == 2017) && (JetAk08BDiscDeepCSV->at(i) >= 0.4941)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2018) && (JetAk08BDiscDeepCSV->at(i) >= 0.4184)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk08BDiscDeepCSV->at(i) = " << JetAk08BDiscDeepCSV->at(i) << endl;
                 
                 // ~~~~~ B-TAGGING SCALE FACTOR CORRECTIONS ~~~~~
@@ -1519,9 +1569,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     double oldJetPt = jetsNoDRCut[i].pt;
 
-                    // ALW 20 NOV 19
-                    double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year, 0);
-                    // double newJetPt = oldJetPt;
+                    // ALW 13 DEC 19
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year, 0);
+                    double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
                     jetsNoDRCut[i].pt = newJetPt;
@@ -1574,9 +1624,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Smearing of reco MC jets to match jet energy resolution seen in data
                     double oldJetPt = jetsAK8NoDRCut[i].pt;
 
-                    // ALW 20 NOV 19
-                    double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year, 1);
-                    // double newJetPt = oldJetPt;
+                    // ALW 13 DEC 19
+                    // double newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year, 1);
+                    double newJetPt = oldJetPt;
 
                     // Smearing done for both reco jet pT and energy
                     jetsAK8NoDRCut[i].pt = newJetPt;
@@ -1644,10 +1694,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // correct for identification and isolation efficiencies if required by useEfficiencyCorrection
                 // and then trigger efficiencies if useTriggerCorrection
                 // Applying scale factors only on reco MC
-                if (useEfficiencyCorrection) {
-                    double effWeight = 1.;
 
-                    // ALW 20 NOV 19
+
+                // ALW 13 DEC 19
+                if (useEfficiencyCorrection){
+                    double effWeight = 1.;
                     if (leptonFlavor == "SingleMuon") {
                         // std::cout << "pt = " << lepton1.pt << ", eta = " << lepton1.eta << ", sysLepSF = " << sysLepSF << std::endl;
                         if (year == 2016){
@@ -1662,13 +1713,16 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             effWeight *= LeptIso.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                             if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
+                        // else{
+                        //     // No Muon SFs for 2018 yet!!!
+                        // }
                     }
                     // std::cout << "effWeight = " << effWeight << std::endl;
-
                     if (isData) weight /= effWeight;
                     // The following line should give the emulation of the ID, Iso, Trig efficiencies seen in data to the MC
                     else weight *= effWeight; 
                 }
+
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: METpt = " << METpt << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MT = " << MT << endl;
@@ -2006,6 +2060,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             float btagWP(1.);
             if (year == 2016) btagWP = 0.6321;
             else if (year == 2017) btagWP = 0.4941;
+            else btagWP = 0.4184;
 
             // advantage of using analysis-cuts jets is that we
             // cut out many jets from pileup
@@ -4050,7 +4105,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         
         //=======================================================================================================//
 
-    } //End of loop over all the events
+    } //End of loop over all the events!
     
     //==========================================================================================================//
 	NEventsPassCuts->Fill(0., nEvents*1.0);
@@ -4079,9 +4134,12 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         }
     }
     
-    for (unsigned short i(0); i < numbOfHistograms; i++){
+    for(unsigned short i(0); i < numbOfHistograms; i++){
         string hName = listOfHistograms[i]->GetName();
-        if ( (!hasGenInfo && hName.find("gen") != string::npos ) || (!hasRecoInfo && hName.find("gen") == string::npos )) continue; 
+        if ( !hasGenInfo && (hName.find("gen") != string::npos) ){
+            delete listOfHistograms[i];
+            continue; 
+        }
 
         //global scaling of MC
         if (hasRecoInfo && !isData){
@@ -4090,7 +4148,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         listOfHistograms[i]->Write();
         delete listOfHistograms[i];
 
-        // need to make sure we don't skip over the deleting of the gen histos (for the reco files)
     }
     std::cout << "\nAll histograms written! Yay!" << std::endl;
     

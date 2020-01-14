@@ -424,6 +424,9 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else downSF = 1.0019;
 
         }
+        // else{
+        //     // no JER smearing factors yet!!!
+        // }
     }
     // AK8 jets -------------------
     if (jetType == 1){
@@ -533,6 +536,9 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else downSF = 1.0019;
 
         }
+        // else{
+        //     // no JER smearing factors yet!!!
+        // }
     }
     
     double smearedPt(0.);

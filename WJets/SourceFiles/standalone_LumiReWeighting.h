@@ -51,7 +51,7 @@ double Data2016Golden[100] = {
   26.203375901826135, 19.918796002930055, 15.039187884158551, 11.27822683451309, 8.400634164145696, 6.214952158443832, 4.566859382647435, 3.333122552000094, 2.416230595998896, 1.7397169535292134
 };
 
-// Systematic variation up --   69.2 mb * (1+0.046)
+// Systematic variation up -- 69.2 mb * (1+0.046)
 // double Data2016Golden_up[100] = {};
 
 // Systematic variation down -- 69.2 mb * (1-0.046)
@@ -91,7 +91,7 @@ double Data2017Golden[100] = {
   52.34469822398521, 31.936666402091813, 19.302382481913746, 11.554773698521458, 6.849765308507507, 4.0206539272263875, 2.336548489106792, 1.3442083507406772, 0.7654801324872996, 0.4314625385234751
 };
 
-// Systematic variation up --   69.2 mb * (1+0.046)
+// Systematic variation up -- 69.2 mb * (1+0.046)
 // double Data2017Golden_up[100] = {};
 
 // Systematic variation down -- 69.2 mb * (1-0.046)
@@ -114,6 +114,26 @@ double MC_2017_RunIIFall17MiniAODv2[100] = {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// For 2018 data, All Eras --------------------------
+// entries go from 0 vertices to 99 vertices
+
+// // Central value -- 69.2 mb
+// double Data2018Golden[100] = {
+// };
+
+// // Systematic variation up -- 69.2 mb * (1+0.046)
+// // double Data2018Golden_up[100] = {};
+
+// // Systematic variation down -- 69.2 mb * (1-0.046)
+// // double Data2018Golden_down[100] = {};
+
+// // For 2018 MC: RunIIAutumn18MiniAOD,
+// // pileup profile used is 102X_upgrade2018_realistic_v15
+// double MC_2018_RunIIAutumn18MiniAOD[100] = {
+// };
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 standalone_LumiReWeighting::standalone_LumiReWeighting(int year, int mode){
   
   std::vector<float> MC_distr;
@@ -121,7 +141,7 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year, int mode){
   MC_distr.clear();
   Lumi_distr.clear();
 
-  if (year != 2016 && year != 2017){
+  if (year != 2016 && year != 2017 && year != 2018){
     std::cout << "Select a compatible year for PU reweighting." << std::endl;
     std::cout << "Setting year to 2016." << std::endl;
     year = 2016;
@@ -144,10 +164,11 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year, int mode){
   Int_t NBins = 100;
   if (year == 2016) NBins = 100;
   else if (year == 2017) NBins = 100;
+  else NBins = 100;
 
   for(int i(0); i < NBins; ++i) {
     // ----------------------- 2016 -----------------------
-    if(year == 2016){
+    if (year == 2016){
 	    switch (mode){
 	      case 0:
           Lumi_distr.push_back(Data2016Golden[i]);
@@ -167,8 +188,28 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year, int mode){
 	    MC_distr.push_back(MC_2016_RunIISummer16MiniAODv3[i]);
     }
     // ----------------------- 2017 -----------------------
-    else if(year == 2017){
+    else if (year == 2017){
 	    switch (mode){
+	      case 0:
+          Lumi_distr.push_back(Data2017Golden[i]);
+          break;
+	      case 1:
+          // Lumi_distr.push_back(Data2017Golden_up[i]);
+          Lumi_distr.push_back(Data2017Golden[i]); // no syst var yet!
+	        break;
+	      case -1:
+          // Lumi_distr.push_back(Data2017Golden_down[i]);
+          Lumi_distr.push_back(Data2017Golden[i]); // no syst var yet!
+	        break;
+        default:
+	        abort();
+	        break;
+	    } // end of switch
+	    MC_distr.push_back(MC_2017_RunIIFall17MiniAODv2[i]);
+    }
+    else if (year == 2018){
+      // USING 2017 FOR NOW!!!!!
+      switch (mode){
 	      case 0:
           Lumi_distr.push_back(Data2017Golden[i]);
           break;

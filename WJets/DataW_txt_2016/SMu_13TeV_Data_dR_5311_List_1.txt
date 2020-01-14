@@ -74,6 +74,7 @@
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_245.root
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_246.root
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_247.root
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_248.root
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_249.root
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_25.root
 /eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v2/Data/CRAB_PrivateMC/crab_SingleMuon-VJetPruner-SMu/191203_183117/0000/Bonzai-SingleMuon-VJetPruner-SMu_250.root
