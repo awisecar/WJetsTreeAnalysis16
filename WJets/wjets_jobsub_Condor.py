@@ -74,7 +74,8 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ##############################
 
 ## Running full 2018 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # full set of files
+doWhat = [14]
 doQCD = [0, 1, 2, 3] #signal and control regions
 #doQCD = [0] #signal region
 doSysRunning = [0]

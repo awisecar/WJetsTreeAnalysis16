@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void runCalcBTagEffsMC(string leptonFlavor = "SMu", int year = 2017, int JetPtMin = 30,
+void runCalcBTagEffsMC(string leptonFlavor = "SMu", int year = 2018, int JetPtMin = 30,
     int doQCD = 0, bool doSSign = 0, bool doInvMassCut = 0, int METcut = 0 , int doBJets = -1, 
     int JetPtMax = 0, bool doFlat = 0, bool doVarWidth = 1);
 
@@ -25,11 +25,15 @@ void calcBTagEffsMC(){
     welcomeMessage();
 
     // 2016 --
-    runCalcBTagEffsMC("SMu", 2016, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+    // runCalcBTagEffsMC("SMu", 2016, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
 
- //   // 2017 --
- //   // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
-//    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+    // 2017 --
+    // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
+    // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+
+    // 2018 --
+    runCalcBTagEffsMC("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+
 }
 
 void runCalcBTagEffsMC(string leptonFlavor, int year, int JetPtMin,

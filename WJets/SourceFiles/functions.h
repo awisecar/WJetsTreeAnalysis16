@@ -72,6 +72,7 @@ class table{
 };
 
 double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int year, int jetType);
+double SmearJetPtLite(double recoPt, double genPt, double scaleFactor);
 
 void normalizeTH2D(TH2D*);
 void bestTwoJetsCandidatesPt(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);

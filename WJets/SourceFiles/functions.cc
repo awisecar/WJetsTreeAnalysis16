@@ -318,9 +318,9 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
 
     // AK4 jets -------------------
     if (jetType == 0){
-        // 2016 MC, AK4 Jets: Summer16_25nsV1_MC_SF_AK4PFchs
-        // these SFs are symmetric in eta
         if (year == 2016){
+            // 2016 MC, AK4 Jets: Summer16_25nsV1_MC_SF_AK4PFchs
+            // these SFs are symmetric in eta
 
             // centralSF -----
             if      (fabs(eta) < 0.522) centralSF = 1.1595;
@@ -370,10 +370,10 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else if (fabs(eta) < 5.191) downSF = 1.0434;
             else downSF = 1.0434;
 
-        }
-        // 2017 MC, AK4 Jets: Fall17_V3_MC_SF_AK4PFchs
-        // these SFs are symmetric in eta
+        }   
         else if (year == 2017){
+            // 2017 MC, AK4 Jets: Fall17_V3_MC_SF_AK4PFchs
+            // these SFs are symmetric in eta
 
             // centralSF -----
             if      (fabs(eta) < 0.522) centralSF = 1.1432;
@@ -424,15 +424,13 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else downSF = 1.0019;
 
         }
-        // else{
-        //     // no JER smearing factors yet!!!
-        // }
     }
+
     // AK8 jets -------------------
     if (jetType == 1){
-        // 2016 MC, AK8 Jets: Summer16_25nsV1_MC_SF_AK8PFPuppi
-        // these SFs are symmetric in eta
         if (year == 2016){
+            // 2016 MC, AK8 Jets: Summer16_25nsV1_MC_SF_AK8PFPuppi
+            // these SFs are symmetric in eta
 
             // centralSF -----
             if      (fabs(eta) < 0.522) centralSF = 1.1595;
@@ -483,9 +481,9 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else downSF = 1.0434;
 
         }
-        // 2017 MC, AK8 Jets: Fall17_V3_MC_SF_AK8PFPuppi
-        // these SFs are symmetric in eta
         else if (year == 2017){
+            // 2017 MC, AK8 Jets: Fall17_V3_MC_SF_AK8PFPuppi
+            // these SFs are symmetric in eta
 
             // centralSF -----
             if      (fabs(eta) < 0.522) centralSF = 1.1432;
@@ -536,22 +534,27 @@ double SmearJetPt(double recoPt, double genPt, double eta, int smearJet, int yea
             else downSF = 1.0019;
 
         }
-        // else{
-        //     // no JER smearing factors yet!!!
-        // }
     }
     
     double smearedPt(0.);
-    if (smearJet == 0) {         // central SF
-        smearedPt = std::max(0., genPt + centralSF*(recoPt - genPt));
-    }
-    else if (smearJet == 1) {    // SF variation up
-        smearedPt = std::max(0., genPt + upSF*(recoPt - genPt));
-    }
-    else if (smearJet == -1) {   // SF variation down
-        smearedPt = std::max(0., genPt + downSF*(recoPt - genPt));
-    }
+    // central SF
+    if (smearJet == 0)       smearedPt = std::max(0., genPt + centralSF*(recoPt - genPt));
+    // SF variation up
+    else if (smearJet == 1)  smearedPt = std::max(0., genPt + upSF*(recoPt - genPt));
+    // SF variation down
+    else if (smearJet == -1) smearedPt = std::max(0., genPt + downSF*(recoPt - genPt));
     
+    return smearedPt;
+}
+
+double SmearJetPtLite(double recoPt, double genPt, double scaleFactor){
+
+    // used for --
+    // 2018 MC, AK4 Jets: Autumn18_V7b_MC_SF_AK4PFchs
+    // 2018 MC, AK8 Jets: Autumn18_V7b_MC_SF_AK8PFPuppi
+
+    double smearedPt = std::max(0., genPt + scaleFactor*(recoPt - genPt));
+
     return smearedPt;
 }
 

@@ -4,12 +4,12 @@ import pickle
 
 #######################################
 
-year = 2016
+# year = 2016
 # year = 2017
-# year = 2018
+year = 2018
 
-whichSF = 1 #ID/Tracks SF
-# whichSF = 2 #Iso/ID SF
+# whichSF = 1 #ID/Tracks SF
+whichSF = 2 #Iso/ID SF
 # whichSF = 3 #Trig/Iso SF
 
 #######################################
@@ -33,11 +33,11 @@ elif year == 2017:
         jsonfile = '2017_IsoSF_BCDEF.json'
     elif (whichSF == 3):
         jsonfile = '2017_SingleLeptonTriggerSF_BCDEF.pkl'
-elif year == 2018:    ### haven't done 2018 yet
+elif year == 2018: 
     if (whichSF == 1):
-        jsonfile = ''
+        jsonfile = '2018_IdSF_ABCD.json'
     elif (whichSF == 2):
-        jsonfile = ''
+        jsonfile = '2018_IsoSF_ABCD.json'
     elif (whichSF == 3):
         jsonfile = ''
 
@@ -71,13 +71,13 @@ elif year == 2017:
     elif (whichSF == 3):
         string1 = "IsoMu27_PtEtaBins"
         string2 = "abseta_pt_DATA"
-elif year == 2018:    ### haven't done 2018 yet
+elif year == 2018:  
     if (whichSF == 1):
-        string1 = ""
-        string2 = ""
+        string1 = "NUM_TightID_DEN_TrackerMuons"
+        string2 = "abseta_pt"
     elif (whichSF == 2):
-        string1 = ""
-        string2 = ""
+        string1 = "NUM_TightRelIso_DEN_TightIDandIPCut"
+        string2 = "abseta_pt"
     elif (whichSF == 3):
         string1 = ""
         string2 = ""
@@ -93,5 +93,10 @@ elif year == 2017:
     for etaKey, values in sorted(results[string1][string2].iteritems()):
         for ptKey, result in sorted(values.iteritems()):
             print "%s\t%s\t\t%.12f\t%.12f\t%.12f" % (etaKey, ptKey, result["value"], result["error"], result["error"])
+elif year == 2018:
+    for etaKey, values in sorted(results[string1][string2].iteritems()):
+        for ptKey, result in sorted(values.iteritems()):
+            print "%s\t%s\t\t%.12f\t%.12f\t%.12f" % (etaKey, ptKey, result["value"], result["stat"], result["stat"])
+
 
 print ("")

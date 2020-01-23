@@ -30,8 +30,8 @@
 using namespace std;
 
 const int NQCD = 4;
-const int NMC = 11; // 2016
-// const int NMC = 13; // 2017
+// const int NMC = 11; // 2016
+const int NMC = 13; // 2017, 2018
 
 //string energy = getEnergy();
 string energy = "13TeV";
@@ -110,7 +110,7 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
                 if (j == 9) FilenameTemp = "WZ_dR_5311_List";
                 if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             }
-            else if (year == 2017){
+            else if (year == 2017 || year == 2018){
                 //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
                 if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
                 // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
@@ -193,7 +193,7 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                 if (j == 9) FilenameTemp = "WZ_dR_5311_List";
                 if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             }
-            else if (year == 2017){
+            else if (year == 2017 || year == 2018){
                 // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
                 if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
