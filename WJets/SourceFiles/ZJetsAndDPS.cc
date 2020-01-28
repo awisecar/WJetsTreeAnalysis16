@@ -250,7 +250,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 10; jentry++){
+    // for (Long64_t jentry(0); jentry < 50; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -425,8 +425,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // ALW 13 DEC 19
             weight *= puWeightFact;
 
-            //std::cout << "EvtPuCntTruth = " << EvtPuCntTruth << std::endl;
-            //std::cout << "puWeightFact = " << puWeightFact << std::endl;
+            // std::cout << "EvtPuCntTruth = " << EvtPuCntTruth << std::endl;
+            // std::cout << "puWeightFact = " << puWeightFact << std::endl;
 
         }
 
@@ -1791,6 +1791,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if ( (year == 2016) || (year == 2017) ) newJetPt = SmearJetPt(oldJetPt, genJetsNoDRCut[index].pt, jetsNoDRCut[i].eta, smearJet, year, 0);
                     else{
                         // 2018 JER SFs are eta- and pT-dependent
+                        // std::cout << "reco jet pt, eta = " << oldJetPt << ", " << jetsNoDRCut[i].eta << std::endl;
+                        // std::cout << "genJetsNoDRCut[index].pt = " << genJetsNoDRCut[index].pt << std::endl;
                         double smearingFactor = jerSFs_AK4PFchs.getEfficiency(oldJetPt, jetsNoDRCut[i].eta, smearJet);
                         newJetPt = SmearJetPtLite(oldJetPt, genJetsNoDRCut[index].pt, smearingFactor);
                     }
@@ -1858,6 +1860,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if ( (year == 2016) || (year == 2017) ) newJetPt = SmearJetPt(oldJetPt, genJetsAK8NoDRCut[index].pt, jetsAK8NoDRCut[i].eta, smearJet, year, 1);
                     else{
                         // 2018 JER SFs are eta- and pT-dependent
+                        // std::cout << "reco jet pt, eta = " << oldJetPt << ", " << jetsAK8NoDRCut[i].eta << std::endl;
+                        // std::cout << "genJetsAK8NoDRCut[index].pt = " << genJetsAK8NoDRCut[index].pt << std::endl;
                         double smearingFactor = jerSFs_AK8PFPuppi.getEfficiency(oldJetPt, jetsAK8NoDRCut[i].eta, smearJet);
                         newJetPt = SmearJetPtLite(oldJetPt, genJetsAK8NoDRCut[index].pt, smearingFactor);
                     }
@@ -1938,7 +1942,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (useEfficiencyCorrection){
                     double effWeight = 1.;
                     if (leptonFlavor == "SingleMuon") {
-                        // std::cout << "pt = " << lepton1.pt << ", eta = " << lepton1.eta << ", sysLepSF = " << sysLepSF << std::endl;
+                        // std::cout << "\npt = " << lepton1.pt << ", eta = " << lepton1.eta << ", sysLepSF = " << sysLepSF << std::endl;
                         if (year == 2016){
                             // tables sorted by eta, not by abs(eta), for 2016
                             effWeight = LeptID.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
@@ -1957,7 +1961,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
                     }
-                    // std::cout << "effWeight = " << effWeight << std::endl;
+                    // std::cout << ">>> effWeight = " << effWeight << std::endl;
                     if (isData) weight /= effWeight;
                     // The following line should give the emulation of the ID, Iso, Trig efficiencies seen in data to the MC
                     else weight *= effWeight; 

@@ -203,7 +203,7 @@ double SPhi(TLorentzVector l1, TLorentzVector l2, TLorentzVector j1, TLorentzVec
 }
 
 record::record(): 
-    ptLow(0), ptHi(0), etaLow(0), etaHi(0), effi(0), effiErrorLow(0), effiErrorHigh(0)
+    ptLow(0.), ptHi(0.), etaLow(0.), etaHi(0.), effi(0.), effiErrorLow(0.), effiErrorHigh(0.)
 {
 }
 

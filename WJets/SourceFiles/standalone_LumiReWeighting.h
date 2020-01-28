@@ -291,8 +291,8 @@ standalone_LumiReWeighting::standalone_LumiReWeighting(int year, int mode){
   // Number of vertices goes from 0 to 99
   // std::cout << "\nPrinting values for pileup weights vector: " << std::endl;
   // for(int ibin = 1; ibin < NBins+1; ++ibin) {
-  //     //std::cout << "   # vtx = " << ibin-1 << ": " << weights_->GetBinContent(ibin) << std::endl;
-  //     std::cout << weights_->GetBinContent(ibin) << std::endl;
+  //     std::cout << "   # vtx = " << ibin-1 << ": " << weights_->GetBinContent(ibin) << std::endl;
+  //     // std::cout << weights_->GetBinContent(ibin) << std::endl;
   // }
   // std::cout << "\nweights_->Integral() = " << weights_->Integral() << std::endl;
  

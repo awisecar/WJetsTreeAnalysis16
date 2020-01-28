@@ -269,7 +269,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
         if (i == 5){
             if (doTTScale){
                 if (year == 2016){
-                    std::cout << "\n >>> Implementing ttbar SFs for 2016!" << std::endl;
+                    std::cout << "\n >>> Implementing ttbar SFs for 2016!\n" << std::endl;
                     //inclusive jets
                     hTempInc->SetBinContent(3, hTempInc->GetBinContent(3)*1.06528037);
                     hTempInc->SetBinContent(4, hTempInc->GetBinContent(4)*1.009716169);
@@ -302,7 +302,7 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
                     hTempExc->SetBinError(9, hTempExc->GetBinError(9)*0.970195144);
                 }
                 else if (year == 2017){
-                    std::cout << "\n >>> Implementing ttbar SFs for 2017!" << std::endl;
+                    std::cout << "\n >>> Implementing ttbar SFs for 2017!\n" << std::endl;
                     //inclusive jets
                     hTempInc->SetBinContent(3, hTempInc->GetBinContent(3)*1.1307126);
                     hTempInc->SetBinContent(4, hTempInc->GetBinContent(4)*1.0430415);
@@ -335,7 +335,37 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
                     hTempExc->SetBinError(9,   hTempExc->GetBinError(9)*1.1651105);
                 }
                 else {
-                    std::cout << "\n >>> No ttbar SFs yet implemented for 2018!" << std::endl;
+                    std::cout << "\n >>> Implementing ttbar SFs for 2018!\n" << std::endl;
+                    //inclusive jets
+                    hTempInc->SetBinContent(3, hTempInc->GetBinContent(3)*1.109773);
+                    hTempInc->SetBinContent(4, hTempInc->GetBinContent(4)*1.007606);
+                    hTempInc->SetBinContent(5, hTempInc->GetBinContent(5)*0.971728);
+                    hTempInc->SetBinContent(6, hTempInc->GetBinContent(6)*0.968652);
+                    hTempInc->SetBinContent(7, hTempInc->GetBinContent(7)*0.978734);
+                    hTempInc->SetBinContent(8, hTempInc->GetBinContent(8)*1.020448);
+                    hTempInc->SetBinContent(9, hTempInc->GetBinContent(9)*1.080920);
+                    hTempInc->SetBinError(3,   hTempInc->GetBinError(3)*1.109773);
+                    hTempInc->SetBinError(4,   hTempInc->GetBinError(4)*1.007606);
+                    hTempInc->SetBinError(5,   hTempInc->GetBinError(5)*0.971728);
+                    hTempInc->SetBinError(6,   hTempInc->GetBinError(6)*0.968652);
+                    hTempInc->SetBinError(7,   hTempInc->GetBinError(7)*0.978734);
+                    hTempInc->SetBinError(8,   hTempInc->GetBinError(8)*1.020448);
+                    hTempInc->SetBinError(9,   hTempInc->GetBinError(9)*1.080920);
+                    //exclusive jets
+                    hTempExc->SetBinContent(3, hTempExc->GetBinContent(3)*1.624871);
+                    hTempExc->SetBinContent(4, hTempExc->GetBinContent(4)*1.060111);
+                    hTempExc->SetBinContent(5, hTempExc->GetBinContent(5)*0.973931);
+                    hTempExc->SetBinContent(6, hTempExc->GetBinContent(6)*0.963456);
+                    hTempExc->SetBinContent(7, hTempExc->GetBinContent(7)*0.961292);
+                    hTempExc->SetBinContent(8, hTempExc->GetBinContent(8)*0.998488);
+                    hTempExc->SetBinContent(9, hTempExc->GetBinContent(9)*1.055199);
+                    hTempExc->SetBinError(3,   hTempExc->GetBinError(3)*1.624871);
+                    hTempExc->SetBinError(4,   hTempExc->GetBinError(4)*1.060111);
+                    hTempExc->SetBinError(5,   hTempExc->GetBinError(5)*0.973931);
+                    hTempExc->SetBinError(6,   hTempExc->GetBinError(6)*0.963456);
+                    hTempExc->SetBinError(7,   hTempExc->GetBinError(7)*0.961292);
+                    hTempExc->SetBinError(8,   hTempExc->GetBinError(8)*0.998488);
+                    hTempExc->SetBinError(9,   hTempExc->GetBinError(9)*1.055199);
                 }
             } 
             else std::cout << "\n >>> No ttbar SFs implemented for " << year << "!" << std::endl;

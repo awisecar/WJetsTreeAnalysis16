@@ -94,9 +94,16 @@
 
     // running signal region with no btag veto
     Plotter("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
-    getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
+    getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 0, true, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=True, incl QCD BG
 
 
+    // for ttbar studies
+    // before rescaling...
+    // Plotter("SMu", 2018, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
+    // getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 2, false, false); // no MET cut, doBJets=2, doQCD=0, doTTScale=False, no QCD BG
+    // after rescaling...
+    // Plotter("SMu", 2018, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
+    // getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 2, true, false); // no MET cut, doBJets=2, doQCD=0, doTTScale=True, no QCD BG
 
 
 
