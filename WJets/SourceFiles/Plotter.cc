@@ -29,7 +29,6 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 
     std::cout << "\nPlotting data/MC for year = " << yearStr << "!" << std::endl;
    
-    // string energy = getEnergy();
     string energy = "13TeV";
 
     cout << endl << "\n-----> Running the Plotter with the following options as input: " << endl;
@@ -51,17 +50,13 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         " WZJets3LNu", " WZJets2L2Q", " WWJets2L2Nu", " Single Top", 
         " DYtautau", " TTJets", " DYJets MD", " DYJets Po", " DYJets Sh"
     };
-    if (leptonFlavor == "Electrons") legendNames[0] = " ee ";
-    else if  (leptonFlavor == "Muons") legendNames[0] = " #mu#mu ";
-    else if  (leptonFlavor == "SMuE") legendNames[0] = " #mue ";
-    else if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = " #mu#nu ";
-    else if  (leptonFlavor == "SE" || leptonFlavor == "Electron") legendNames[0] = " e#nu ";
+    if (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = " #mu#nu ";
 
     //-----------------------------------------------------
     // Getting files ---
-    int nFiles = NFILESDYJETS;
+    int nFiles = 0;
     bool isDoubleLep(1);
-    if ( leptonFlavor == "SMuE" || leptonFlavor == "SMu" || leptonFlavor == "Muon" || leptonFlavor == "Electron") {
+    if (leptonFlavor == "SMu") {
         isDoubleLep = 0;
 
         nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
@@ -73,14 +68,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
     TFile *file[nFiles];
     int countFiles = 0 ;
     for (unsigned short i = 0; i < nFiles; i++){
-        int fileSelect = FilesDYJets[i] ;
+        int fileSelect = 0;
 
         if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // turn off QCD, used for ttbar studies
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD_NoTTBar[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_DataQCDVV[i]; // just run QCD and VV
-
-        if (leptonFlavor == "SMuE") fileSelect = FilesTTbar[i] ;
 
         // FilesTTbarWJets will select the correct files for W+jets (defined in fileNames.h)
         string fileNameTemp =  ProcessInfo[fileSelect].filename ; 
@@ -91,12 +84,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         file[countFiles] = getFile(FILESDIRECTORY, leptonFlavor, energy, fileNameTemp, JetPtMin, JetPtMax, doFlat, doVarWidth, doQCD, doSSign, doInvMassCut, METcut, doBJets);
 
         if ( i == 0 ){
-            if (leptonFlavor == "Electrons") legendNames[0] = " ee ";
-            else if  (leptonFlavor == "Muons") legendNames[0] = " #mu#mu ";
-            else if  (leptonFlavor == "SMuE") legendNames[0] = " #mue ";
-            //else if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = " #mu#nu ";
-            else if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = "";
-            else if  (leptonFlavor == "SE" || leptonFlavor == "Electron") legendNames[0] = " e#nu ";
+            //if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = " #mu#nu ";
+            if  (leptonFlavor == "SMu" || leptonFlavor == "Muon" ) legendNames[0] = "";
             legendNames[0] += "Data";
         }
         // for W+jets, if not Data, then grab the legend and color parts of the ProcessInfo struct for each file (in fileNames.h)
@@ -251,8 +240,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 			// -----------------------------------------------------------------------------------------
 			
             //andrew -- comment out this next block if you want to turn ttBar SFs off
-	        // else if (i == 4){ // ttbar is file #4 when QCD is turned off (ttbar study) -- see fileNames.h
-            else if (i == 5){ //ttbar is file #5 when running usual distributions with bveto == -1
+	        // else if (i == 5){ // ttbar is file #5 when QCD is turned off (ttbar study) -- see fileNames.h
+            else if (i == 6){ //ttbar is file #6 when running usual distributions with bveto == -1
 
                 hist[i][j]->SetFillColor(Colors[i]);
                 hist[i][j]->SetLineColor(Colors[i]);

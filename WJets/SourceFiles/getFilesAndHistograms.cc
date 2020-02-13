@@ -8,11 +8,6 @@
 #include "getFilesAndHistograms.h"
 using namespace std;
 
-//------------------------------------------------------------
-// getEnergy() returns a string, either "7TeV" or "13TeV"
-// according to the name of the directory from which the 
-// code is being executed.
-//------------------------------------------------------------
 string getEnergy()
 {
     string energy = "";
@@ -218,7 +213,8 @@ void getHistos(TH1D *histograms[], TFile *Files[], string variable, bool isDoubl
     } 
 }
 
-void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, int doQCD, bool doSSign, bool doInvMassCut, int METcut, int doBJets, bool doTTScale, bool inclQCD)
+void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bool doFlat, bool doVarWidth, 
+    int doQCD, bool doSSign, bool doInvMassCut, int METcut, int doBJets, bool doTTScale, bool inclQCD)
 {
 
     std::cout <<"\n >>>>> Getting jet multiplicity statistics!" << std::endl;
@@ -263,10 +259,10 @@ void getStatistics(string leptonFlavor, int year, int JetPtMin, int JetPtMax, bo
         TH1D *hTempInc = getHisto(fData, variableInc);
         
         //andrew -- ttbar SFs for 2016 data -- 8 April 2019
-        //i==4 is the ttbar file when QCD is turned off (see fileNames.h)
-        //i==5 when running the usual distributions with bveto == -1
-        // if (i==4){
-        if (i == 5){
+        //i==5 is the ttbar file when QCD is turned off (see fileNames.h)
+        //i==6 when running the usual distributions with bveto == -1
+        // if (i==5){
+        if (i == 6){
             if (doTTScale){
                 if (year == 2016){
                     std::cout << "\n >>> Implementing ttbar SFs for 2016!\n" << std::endl;

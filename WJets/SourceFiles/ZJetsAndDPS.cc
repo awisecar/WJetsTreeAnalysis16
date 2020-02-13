@@ -2374,7 +2374,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // doBJets < 0 is a btag veto
             // if doBJets == -1, then veto event if one or more bjets
             // if doBJets == -2, then veto if two or more
-            if (doBJets < 0 && countBJets >= fabs(doBJets)) {
+            if (doBJets < 0 && countBJets >= fabs(doBJets)){
                 passesLeptonCut = 0;
                 passesBtagReq = false;
                 nEventsIncBJets++;
@@ -2400,7 +2400,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         // if (DEBUG) cout << "Stop after line " << __LINE__ << "   " << hasGenInfo <<"    gen Wgh = " << genWeight << "  pass gen cuts = " << passesGenLeptonCut <<"  nGenJets = " << nGoodGenJets <<  endl;
         //=======================================================================================================//
-        //   Filling gen and parton histos    //
+        //        Filling gen histos          //
         //====================================//
         if (hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling gen histos --- " << endl;
@@ -2435,9 +2435,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genLeadingJetPt_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 // genLeadingJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                // genLepPtPlusLeadingJetPt_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 // genLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
                 genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 // genZPt_1_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 genZPt_2_Zinc1jet->Fill(genZ.Pt(), genWeight);
@@ -2462,12 +2464,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genLeadingJetPt_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
                 // genLeadingJetPt_1_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+
                 genHTover2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 // genHTover2_1_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc2jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genLepPtPlusLeadingJetPt_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                // genLepPtPlusLeadingJetPt_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 // genLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
                 genLepPtPlusHTover2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 // genLepPtPlusHTover2_1_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc2jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
@@ -2498,12 +2503,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genLeadingJetPt_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
                 // genLeadingJetPt_1_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+
                 genHTover2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 // genHTover2_1_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc3jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genLepPtPlusLeadingJetPt_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                // genLepPtPlusLeadingJetPt_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 // genLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
                 genLepPtPlusHTover2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 // genLepPtPlusHTover2_1_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc3jet->Fill(genLep1.Pt() + (genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
@@ -2533,12 +2541,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genLeadingJetPt_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
                 // genLeadingJetPt_1_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
                 genLeadingJetPt_2_Zinc4jet->Fill(genJets_20[0].pt, genWeight);
+
                 genHTover2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 // genHTover2_1_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
                 genHTover2_2_Zinc4jet->Fill((genJets_20[0].pt + genJets_20[1].pt)/2. , genWeight);
-                genLepPtPlusLeadingJetPt_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
+                // genLepPtPlusLeadingJetPt_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 // genLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
-                genLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+
                 genLepPtPlusHTover2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 // genLepPtPlusHTover2_1_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
                 genLepPtPlusHTover2_2_Zinc4jet->Fill(genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., genWeight);
@@ -2598,6 +2609,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc1jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc1jet->Fill(genZ.Eta(), genWeight);
+
+
+                genLepPtPlusLeadingJetPt_TUnfold_Zinc1jet->Fill(genLep1.Pt()+genJets[0].pt, genWeight);
+                
                 
                 genFirstJetEta_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
                 genFirstJetEta_2_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
@@ -2623,6 +2638,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 }
                 if ( doW ) gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta() - genLep1.Eta()), genWeight);
                 else gendEtaBosonJet_Zinc1jet->Fill(fabs(genLeadJ.Eta()-genZ.Eta()), genWeight);
+
                 if (nGoodGenJets == 1){
                     genFirstJetPt_Zexc1jet->Fill(genLeadJ.Pt(), genWeight);
                     //    gendEtaBosonJet_Zexc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
@@ -2665,6 +2681,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genZEta_Zinc2jet->Fill(genZ.Eta(), genWeight);
                 genFirstHighestJetPt_Zinc2jet->Fill(genLeadJ.Pt(), genWeight);
                 genSecondHighestJetPt_Zinc2jet->Fill(genSecondJ.Pt(), genWeight);
+
+
+                genLepPtPlusLeadingJetPt_TUnfold_Zinc2jet->Fill(genLep1.Pt()+genJets[0].pt, genWeight);
 
 
                 genSecondJetEta_Zinc2jet->Fill(fabs(genSecondJ.Eta()), genWeight);
@@ -2854,6 +2873,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genZRapidity_Zinc3jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc3jet->Fill(genZ.Eta(), genWeight);
 
+
+                genLepPtPlusLeadingJetPt_TUnfold_Zinc3jet->Fill(genLep1.Pt()+genJets[0].pt, genWeight);
+
+
                 genThirdJetEta_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
                 genThirdJetEta_2_Zinc3jet->Fill(fabs(genJets[2].eta), genWeight);
                 genThirdJetAbsRapidity_Zinc3jet->Fill(fabs(genNewThirdJ.Rapidity()), genWeight);
@@ -2911,7 +2934,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //  genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc4jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc4jet->Fill(genZ.Eta(), genWeight);
+
+
+                genLepPtPlusLeadingJetPt_TUnfold_Zinc4jet->Fill(genLep1.Pt()+genJets[0].pt, genWeight);
                 
+
                 genFourthJetEta_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
                 genFourthJetEta_2_Zinc4jet->Fill(fabs(genJets[3].eta), genWeight);
                 genFourthJetAbsRapidity_Zinc4jet->Fill(fabs(genNewFourthJ.Rapidity()), genWeight);
@@ -2992,7 +3019,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
 
         //=======================================================================================================//
-        //      Selection for Reco Histos      //
+        //        Filling reco histos         //
         //====================================//
         if (hasRecoInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling reco histos --- " << endl;
@@ -3101,9 +3128,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LeadingJetPt_Zinc1jet->Fill(jets_20[0].pt, weight);
                 // LeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc1jet->Fill(jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
+                // LepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 // LepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_2_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
                 ZPt_Zinc1jet->Fill(Z.Pt(), weight);
                 // ZPt_1_Zinc1jet->Fill(Z.Pt(), weight);
                 ZPt_2_Zinc1jet->Fill(Z.Pt(), weight);
@@ -3129,12 +3158,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LeadingJetPt_Zinc2jet->Fill(jets_20[0].pt, weight);
                 // LeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc2jet->Fill(jets_20[0].pt, weight);
+
                 HTover2_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 // HTover2_1_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc2jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
-                LepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
+                // LepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 // LepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_2_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
                 LepPtPlusHTover2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 // LepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
@@ -3165,12 +3197,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LeadingJetPt_Zinc3jet->Fill(jets_20[0].pt, weight);
                 // LeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc3jet->Fill(jets_20[0].pt, weight);
+
                 HTover2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
                 // HTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2. , weight);
-                LepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
+                // LepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 // LepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_2_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
                 LepPtPlusHTover2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
                 // LepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., weight);
@@ -3200,12 +3235,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LeadingJetPt_Zinc4jet->Fill(jets_20[0].pt, weight);
                 // LeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, weight);
                 LeadingJetPt_2_Zinc4jet->Fill(jets_20[0].pt, weight);
+
                 HTover2_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 // HTover2_1_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
                 HTover2_2_Zinc4jet->Fill((jets_20[0].pt + jets_20[1].pt)/2. , weight);
-                LepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
+                // LepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
                 // LepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                LepPtPlusLeadingJetPt_2_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+
                 LepPtPlusHTover2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 // LepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
                 LepPtPlusHTover2_2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt + jets_20[1].pt)/2., weight);
@@ -3265,6 +3303,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //                ZPt_Zinc1jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc1jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc1jet->Fill(Z.Eta(), weight);
+
+
+                LepPtPlusLeadingJetPt_TUnfold_Zinc1jet->Fill(lepton1.pt + jets[0].pt, weight);
+
 
                 lepPt_Zinc1jet->Fill(lepton1.pt, weight);
                 lepEta_Zinc1jet->Fill(lepton1.eta, weight);
@@ -3387,6 +3429,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //                ZPt_Zinc2jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc2jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc2jet->Fill(Z.Eta(), weight);
+
+
+                LepPtPlusLeadingJetPt_TUnfold_Zinc2jet->Fill(lepton1.pt + jets[0].pt, weight);
+
+
                 lepPt_Zinc2jet->Fill(lepton1.pt, weight);
                 lepEta_Zinc2jet->Fill(lepton1.eta, weight);
                 if (doZ || doTT){
@@ -3672,6 +3719,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //                ZPt_Zinc3jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc3jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc3jet->Fill(Z.Eta(), weight);
+
+
+                LepPtPlusLeadingJetPt_TUnfold_Zinc3jet->Fill(lepton1.pt + jets[0].pt, weight);
+
+
                 lepPt_Zinc3jet->Fill(lepton1.pt, weight);
                 lepEta_Zinc3jet->Fill(lepton1.eta, weight);
                 if ( doZ || doTT){
@@ -3771,6 +3823,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 //                ZPt_Zinc4jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc4jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc4jet->Fill(Z.Eta(), weight);
+
+
+                LepPtPlusLeadingJetPt_TUnfold_Zinc4jet->Fill(lepton1.pt + jets[0].pt, weight);
+
+
                 lepPt_Zinc4jet->Fill(lepton1.pt, weight);
                 lepEta_Zinc4jet->Fill(lepton1.eta, weight);
                 if (doZ || doTT){
@@ -3940,7 +3997,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         
         //=======================================================================================================//
-        //             Unfolding              //
+        //      Filling unfolding histos      //
         //====================================//
         if (hasRecoInfo && hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling hresponse histos --- " << endl;
@@ -3966,9 +4023,11 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseLeadingJetPt_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 // hresponseLeadingJetPt_1_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
+                // hresponseLepPtPlusLeadingJetPt_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 // hresponseLepPtPlusLeadingJetPt_1_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_2_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
                 hresponseZPt_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 // hresponseZPt_1_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
                 hresponseZPt_2_Zinc1jet->Fill(Z.Pt(), genZ.Pt(), weight);
@@ -3977,10 +4036,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseZPtPlusLeadingJetPt_2_Zinc1jet->Fill(Z.Pt()+jets_20[0].pt, genZ.Pt()+genJets_20[0].pt, weight);
 
                 // looking to study particle-level corrections of ratios
-                LeadingJetPt_MIGRATIONS_Zinc1jet->Fill(jets_20[0].pt, weight);
-                genLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
-                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // LeadingJetPt_MIGRATIONS_Zinc1jet->Fill(jets_20[0].pt, weight);
+                // genLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+                // LepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
 
                 if (nGoodGenJets_20 == 1 && nGoodJets_20 == 1){
                     hresponseLeadingJetPt_Zexc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
@@ -3999,12 +4058,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseLeadingJetPt_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 // hresponseLeadingJetPt_1_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+
                 hresponseHTover2_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 // hresponseHTover2_1_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc2jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
+                // hresponseLepPtPlusLeadingJetPt_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 // hresponseLepPtPlusLeadingJetPt_1_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_2_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
                 hresponseLepPtPlusHTover2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 // hresponseLepPtPlusHTover2_1_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc2jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
@@ -4019,10 +4081,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseZPtPlusHTover2_2_Zinc2jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
 
                 // looking to study particle-level corrections of ratios
-                LeadingJetPt_MIGRATIONS_Zinc2jet->Fill(jets_20[0].pt, weight);
-                genLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
-                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // LeadingJetPt_MIGRATIONS_Zinc2jet->Fill(jets_20[0].pt, weight);
+                // genLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genJets_20[0].pt, genWeight);
+                // LepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
 
                 if (nGoodGenJets_20 == 2 && nGoodJets_20 == 2){
                     hresponseLeadingJetPt_Zexc2jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
@@ -4041,12 +4103,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseLeadingJetPt_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 // hresponseLeadingJetPt_1_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+
                 hresponseHTover2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 // hresponseHTover2_1_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc3jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
+                // hresponseLepPtPlusLeadingJetPt_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 // hresponseLepPtPlusLeadingJetPt_1_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_2_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
                 hresponseLepPtPlusHTover2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 // hresponseLepPtPlusHTover2_1_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc3jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
@@ -4061,10 +4126,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseZPtPlusHTover2_2_Zinc3jet->Fill(Z.Pt()+(jets_20[0].pt+jets_20[1].pt)/2., genZ.Pt()+(genJets_20[0].pt+genJets_20[1].pt)/2., weight);
 
                 // looking to study particle-level corrections of ratios
-                LeadingJetPt_MIGRATIONS_Zinc3jet->Fill(jets_20[0].pt, weight);
-                genLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
-                LepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
-                genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                // LeadingJetPt_MIGRATIONS_Zinc3jet->Fill(jets_20[0].pt, weight);
+                // genLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genJets_20[0].pt, genWeight);
+                // LepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(lepton1.pt + jets_20[0].pt, weight);
+                // genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
 
                 if (nGoodGenJets_20 == 3 && nGoodJets_20 == 3){
                     hresponseLeadingJetPt_Zexc3jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
@@ -4082,12 +4147,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseLeadingJetPt_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 // hresponseLeadingJetPt_1_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseLeadingJetPt_2_Zinc4jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+
                 hresponseHTover2_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 // hresponseHTover2_1_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
                 hresponseHTover2_2_Zinc4jet->Fill((jets_20[0].pt+jets_20[1].pt)/2., (genJets_20[0].pt+genJets_20[1].pt)/2., weight);
-                hresponseLepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
+                // hresponseLepPtPlusLeadingJetPt_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
                 // hresponseLepPtPlusLeadingJetPt_1_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
-                hresponseLepPtPlusLeadingJetPt_2_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+                hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet->Fill(lepton1.pt + jets_20[0].pt, genLep1.Pt()+genJets_20[0].pt, weight);
+
                 hresponseLepPtPlusHTover2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
                 // hresponseLepPtPlusHTover2_1_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
                 hresponseLepPtPlusHTover2_2_Zinc4jet->Fill(lepton1.pt + (jets_20[0].pt+jets_20[1].pt)/2., genLep1.Pt()+(genJets_20[0].pt + genJets_20[1].pt)/2., weight);
@@ -4147,6 +4215,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseJetsHT_Zinc1jet->Fill(jetsHT, genJetsHT, weight);
                 hresponseJetsHT_20_30_Zinc1jet->Fill(jetsHT_20, genJetsHT_20, weight);
 
+
+                hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc1jet->Fill(lepton1.pt + jets[0].pt, genLep1.Pt()+genJets[0].pt, weight);
+
+
                 hresponseFirstJetEta_2_Zinc1jet->Fill(fabs(jets[0].eta), fabs(genJets[0].eta), weight);
                 hresponseJetsHT_1_Zinc1jet->Fill(jetsHT, genJetsHT, weight);
                 hresponseJetsHT_2_Zinc1jet->Fill(jetsHT, genJetsHT, weight);
@@ -4180,6 +4252,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseSecondJetEta_Zinc2jet->Fill(fabs(jets[1].eta), fabs(genJets[1].eta), weight);
                 hresponseJetsHT_Zinc2jet->Fill(jetsHT, genJetsHT, weight);
                 hresponseJetsHT_20_30_Zinc2jet->Fill(jetsHT_20, genJetsHT_20, weight);
+
+
+                hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc2jet->Fill(lepton1.pt + jets[0].pt, genLep1.Pt()+genJets[0].pt, weight);
+
                 
                 hresponseSecondJetEta_2_Zinc2jet->Fill(fabs(jets[1].eta), fabs(genJets[1].eta), weight);
                 hresponseJetsHT_1_Zinc2jet->Fill(jetsHT, genJetsHT, weight);
@@ -4233,6 +4309,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseThirdJetEta_Zinc3jet->Fill(fabs(jets[2].eta), fabs(genJets[2].eta), weight);
                 hresponseJetsHT_Zinc3jet->Fill(jetsHT, genJetsHT, weight);
                 hresponseJetsHT_20_30_Zinc3jet->Fill(jetsHT_20, genJetsHT_20, weight);
+
+
+                hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc3jet->Fill(lepton1.pt + jets[0].pt, genLep1.Pt()+genJets[0].pt, weight);
+
                 
                 hresponseThirdJetEta_2_Zinc3jet->Fill(fabs(jets[2].eta), fabs(genJets[2].eta), weight);
                 hresponseJetsHT_1_Zinc3jet->Fill(jetsHT, genJetsHT, weight);
@@ -4285,6 +4365,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseFourthJetEta_2_Zinc4jet->Fill(fabs(jets[3].eta), fabs(genJets[3].eta), weight);
                 hresponseJetsHT_1_Zinc4jet->Fill(jetsHT, genJetsHT, weight);
                 hresponseJetsHT_2_Zinc4jet->Fill(jetsHT, genJetsHT, weight);
+
+
+                hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc4jet->Fill(lepton1.pt + jets[0].pt, genLep1.Pt()+genJets[0].pt, weight);
                 
                 
                 hresponsedRapidityJets_Zinc4jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), weight);

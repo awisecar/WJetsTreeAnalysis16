@@ -135,11 +135,17 @@ public:
     TH2D *hresponseSixthJetPt_1_Zinc6jet;
     TH2D *hresponseSixthJetPt_2_Zinc6jet;
 
-    ///////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////// AK4 Jet Distributions
+    ///////////////////////////////////
+    //                               //
+    //    W+jets alpha-s Analysis    //
+    //                               //
+    ///////////////////////////////////
 
-    //leading jet pt -- alpha-s
+    // AK4 Jet Distributions 
+
+    //  -------------- Leading jet pt -------------- 
     TH1D *LeadingJetPt_Zinc1jet;
     TH1D *LeadingJetPt_Zinc2jet;
     TH1D *LeadingJetPt_Zinc3jet;
@@ -202,14 +208,14 @@ public:
     TH2D *hresponseLeadingJetPt_2_Zexc3jet;
 
     // looking to study particle-level corrections of ratios
-    TH1D *LeadingJetPt_MIGRATIONS_Zinc1jet;
-    TH1D *LeadingJetPt_MIGRATIONS_Zinc2jet;
-    TH1D *LeadingJetPt_MIGRATIONS_Zinc3jet;
-    TH1D *genLeadingJetPt_MIGRATIONS_Zinc1jet;
-    TH1D *genLeadingJetPt_MIGRATIONS_Zinc2jet;
-    TH1D *genLeadingJetPt_MIGRATIONS_Zinc3jet;
+    // TH1D *LeadingJetPt_MIGRATIONS_Zinc1jet;
+    // TH1D *LeadingJetPt_MIGRATIONS_Zinc2jet;
+    // TH1D *LeadingJetPt_MIGRATIONS_Zinc3jet;
+    // TH1D *genLeadingJetPt_MIGRATIONS_Zinc1jet;
+    // TH1D *genLeadingJetPt_MIGRATIONS_Zinc2jet;
+    // TH1D *genLeadingJetPt_MIGRATIONS_Zinc3jet;
 
-    //--- Jet HT/2 -- alpha-s
+    // -------------- Jet HT/2 -------------- 
     TH1D *HTover2_Zinc2jet;
     TH1D *HTover2_Zinc3jet;
     TH1D *HTover2_Zinc4jet;
@@ -240,53 +246,53 @@ public:
     TH2D *hresponseHTover2_2_Zinc3jet;
     TH2D *hresponseHTover2_2_Zinc4jet;
 
-    //Lepton Pt + LJ Pt -- alpha-s
-    TH1D *LepPtPlusLeadingJetPt_Zinc1jet;
-    TH1D *LepPtPlusLeadingJetPt_Zinc2jet;
-    TH1D *LepPtPlusLeadingJetPt_Zinc3jet;
-    TH1D *LepPtPlusLeadingJetPt_Zinc4jet;
+    // -------------- Lepton Pt + LJ Pt -------------- 
+    TH1D *LepPtPlusLeadingJetPt_TUnfold_Zinc1jet;
+    TH1D *LepPtPlusLeadingJetPt_TUnfold_Zinc2jet;
+    TH1D *LepPtPlusLeadingJetPt_TUnfold_Zinc3jet;
+    TH1D *LepPtPlusLeadingJetPt_TUnfold_Zinc4jet;
     // TH1D *LepPtPlusLeadingJetPt_1_Zinc1jet;
     // TH1D *LepPtPlusLeadingJetPt_1_Zinc2jet;
     // TH1D *LepPtPlusLeadingJetPt_1_Zinc3jet;
     // TH1D *LepPtPlusLeadingJetPt_1_Zinc4jet;
-    TH1D *LepPtPlusLeadingJetPt_2_Zinc1jet;
-    TH1D *LepPtPlusLeadingJetPt_2_Zinc2jet;
-    TH1D *LepPtPlusLeadingJetPt_2_Zinc3jet;
-    TH1D *LepPtPlusLeadingJetPt_2_Zinc4jet;
+    TH1D *LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet;
+    TH1D *LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet;
+    TH1D *LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet;
+    TH1D *LepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet;
 
-    TH1D *genLepPtPlusLeadingJetPt_Zinc1jet;
-    TH1D *genLepPtPlusLeadingJetPt_Zinc2jet;
-    TH1D *genLepPtPlusLeadingJetPt_Zinc3jet;
-    TH1D *genLepPtPlusLeadingJetPt_Zinc4jet;
+    TH1D *genLepPtPlusLeadingJetPt_TUnfold_Zinc1jet;
+    TH1D *genLepPtPlusLeadingJetPt_TUnfold_Zinc2jet;
+    TH1D *genLepPtPlusLeadingJetPt_TUnfold_Zinc3jet;
+    TH1D *genLepPtPlusLeadingJetPt_TUnfold_Zinc4jet;
     // TH1D *genLepPtPlusLeadingJetPt_1_Zinc1jet;
     // TH1D *genLepPtPlusLeadingJetPt_1_Zinc2jet;
     // TH1D *genLepPtPlusLeadingJetPt_1_Zinc3jet;
     // TH1D *genLepPtPlusLeadingJetPt_1_Zinc4jet;
-    TH1D *genLepPtPlusLeadingJetPt_2_Zinc1jet;
-    TH1D *genLepPtPlusLeadingJetPt_2_Zinc2jet;
-    TH1D *genLepPtPlusLeadingJetPt_2_Zinc3jet;
-    TH1D *genLepPtPlusLeadingJetPt_2_Zinc4jet;
+    TH1D *genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet;
+    TH1D *genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet;
+    TH1D *genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet;
+    TH1D *genLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet;
 
-    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc1jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc2jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc3jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc4jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc3jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_TUnfold_Zinc4jet;
     // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc1jet;
     // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc2jet;
     // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc3jet;
     // TH2D *hresponseLepPtPlusLeadingJetPt_1_Zinc4jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc1jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc2jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc3jet;
-    TH2D *hresponseLepPtPlusLeadingJetPt_2_Zinc4jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc1jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc2jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc3jet;
+    TH2D *hresponseLepPtPlusLeadingJetPt_INCLUDELOWPT_TUnfold_Zinc4jet;
 
     // looking to study particle-level corrections of ratios
-    TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet;
-    TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet;
-    TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet;
-    TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet;
-    TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet;
-    TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet;
+    // TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet;
+    // TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet;
+    // TH1D *LepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet;
+    // TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc1jet;
+    // TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc2jet;
+    // TH1D *genLepPtPlusLeadingJetPt_MIGRATIONS_Zinc3jet;
 
     //exclusive jet requirement
     TH1D *LepPtPlusLeadingJetPt_Zexc1jet;
@@ -310,7 +316,7 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_2_Zexc2jet;
     TH2D *hresponseLepPtPlusLeadingJetPt_2_Zexc3jet;
 
-    //Lepton Pt + HT/2 -- alpha-s
+    // -------------- Lepton Pt + HT/2 -------------- 
     TH1D *LepPtPlusHTover2_Zinc2jet;
     TH1D *LepPtPlusHTover2_Zinc3jet;
     TH1D *LepPtPlusHTover2_Zinc4jet;
@@ -341,7 +347,7 @@ public:
     TH2D *hresponseLepPtPlusHTover2_2_Zinc3jet;
     TH2D *hresponseLepPtPlusHTover2_2_Zinc4jet;
 
-    // WpT -- alpha-s
+    // -------------- WpT -------------- 
     TH1D *ZPt_Zinc1jet;
     TH1D *ZPt_Zinc2jet;
     TH1D *ZPt_Zinc3jet;
@@ -381,7 +387,7 @@ public:
     TH2D *hresponseZPt_2_Zinc3jet;
     TH2D *hresponseZPt_2_Zinc4jet;
 
-    //WpT + LJ pT -- alpha-s
+    // -------------- WpT + LJ pT -------------- 
     TH1D *ZPtPlusLeadingJetPt_Zinc1jet;
     TH1D *ZPtPlusLeadingJetPt_Zinc2jet;
     TH1D *ZPtPlusLeadingJetPt_Zinc3jet;
@@ -421,7 +427,7 @@ public:
     TH2D *hresponseZPtPlusLeadingJetPt_2_Zinc3jet;
     TH2D *hresponseZPtPlusLeadingJetPt_2_Zinc4jet;
 
-    //WpT + HT,2/2 -- alpha-s
+    // -------------- WpT + HT,2/2 -------------- 
     TH1D *ZPtPlusHTover2_Zinc2jet;
     TH1D *ZPtPlusHTover2_Zinc3jet;
     TH1D *ZPtPlusHTover2_Zinc4jet;
@@ -455,7 +461,7 @@ public:
 
     ///////// AK8 Jet Distributions
 
-    // Leading AK8 Jet Pt -- alpha-s
+    // -------------- Leading AK8 Jet Pt -------------- 
     TH1D *LeadingJetAK8Pt_Zinc1jet;
     TH1D *LeadingJetAK8Pt_Zinc2jet;
     TH1D *LeadingJetAK8Pt_Zinc3jet;
@@ -499,7 +505,7 @@ public:
     TH2D *hresponseLeadingJetAK8Pt_2_Zexc2jet;
     TH2D *hresponseLeadingJetAK8Pt_2_Zexc3jet;
 
-    // Lepton Pt + Leading AK8 Jet Pt -- alpha-s
+    // -------------- Lepton Pt + Leading AK8 Jet Pt -------------- 
     TH1D *LepPtPlusLeadingJetAK8Pt_Zinc1jet;
     TH1D *LepPtPlusLeadingJetAK8Pt_Zinc2jet;
     TH1D *LepPtPlusLeadingJetAK8Pt_Zinc3jet;
@@ -543,7 +549,10 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc2jet;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_2_Zexc3jet;
 
-    ///////////////////////////////////////////////////////////////////////////
+    //
+    // end W+jets alpha-s plots
+    //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //--- Jet Ht
     TH1D *JetsHT_Zinc1jet;

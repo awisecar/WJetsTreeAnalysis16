@@ -1,9 +1,10 @@
 #ifndef __fileNames_H___
 #define __fileNames_H___
 
-//-- directory of input root files --------------------
+// Directory of input root files
 const string FILESDIRECTORY("HistoFiles/");
-//---------- lets add basic information on samples inot common struct -------------------------------------------
+
+// Basic information on samples in common struct
 struct processInfoStruct{
     string filename;
     double NEvents, xsec, xsecFrac, xsecError;
@@ -11,8 +12,9 @@ struct processInfoStruct{
     string legend;
 };
 
-const int NFILESWJETS(10); 
-const int NFilesFull(28); 
+// the only three methods of processInfoStruct currently used are...
+// filename, legend, color
+
 const processInfoStruct ProcessInfo[] = {
     //--  Name  ---------------------------- #events ---- xsec - branch - xsec error (%) -- color for plot -- name on legend
     {"Data_dR_5311_List",                          1,          1.,      1,         1,             kBlack,      " Data"},   // 0
@@ -54,121 +56,43 @@ const processInfoStruct ProcessInfo[] = {
     {"WJetsALL_MIX_dR_5311_List",                  76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},  // relative weight for mixed DY and WJ files are set inthe code
     {"WJetsALL_dR_5311_List",                      76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},
     {"DYJets_UNFOLDING_dR_5311_List_Inf3",         30459503.,  3531.8,  1,         0.04,          kAzure+10,   " DY+jets"}, /// up to this line files are set for W+jet s and TTbar
+
+    //
+
+    {"ttV_dR_5311_List",       1.,  1.,  1,         1,          kViolet+6,       " t#bar{t}V"},       // 29
 };
 
-//--- first element must point to the data
-//--- last element must point to the MC Signal
-const int NFILESDYJETS(12);
-//const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 13};
-const int FilesDYJets[NFILESDYJETS] = {0, 1, 21, 15, 20, 14, 16, 19, 18, 17, 11, 27};
-
-const int NFILESTTBAR(7);
 
 //////////////////////////////////////////////////////////////////////////////////////////
+
+// first element must point to the data
+// last element must point to the MC Signal
+const int DATAFILENAME(0);
+
 // andrew -- for Run II W+jets
 // main event selection, signal & backgrounds
-const int NFILESTTBARWJETS(7);
-const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 5, 24, 21, 10, 9, 25};
+const int NFILESTTBARWJETS(8);
+const int FilesTTbarWJets[NFILESTTBARWJETS] = {0, 29, 5, 24, 21, 10, 9, 25};
 
 // QCD BG turned off here
 // used for ttbar studies
-const int NFILESTTBARWJETS_NOQCD(6);
-const int FilesTTbarWJets_NoQCD[NFILESTTBARWJETS_NOQCD] = {0, 5, 21, 10, 9, 25};
+const int NFILESTTBARWJETS_NOQCD(7);
+const int FilesTTbarWJets_NoQCD[NFILESTTBARWJETS_NOQCD] = {0, 29, 5, 21, 10, 9, 25};
 
 // data, QCD BG turned off here
 // used for btag efficiencies studies
-const int NFILESTTBARWJETS_NOQCD_NODATA(5);
-const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {5, 21, 10, 9, 25};
-// const int NFILESTTBARWJETS_NOQCD_NODATA(1);
-// const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {25};
+const int NFILESTTBARWJETS_NOQCD_NODATA(6);
+const int FilesTTbarWJets_NoQCD_NoData[NFILESTTBARWJETS_NOQCD_NODATA] = {29, 5, 21, 10, 9, 25};
 
 // some testing - 2 sept 2019 - andrew
-const int NFILESTTBARWJETS_NOQCD_NOTTBAR(5);
-const int FilesTTbarWJets_NoQCD_NoTTBar[NFILESTTBARWJETS_NOQCD_NOTTBAR] = {0, 5, 21, 10, 25};
+const int NFILESTTBARWJETS_NOQCD_NOTTBAR(6);
+const int FilesTTbarWJets_NoQCD_NoTTBar[NFILESTTBARWJETS_NOQCD_NOTTBAR] = {0, 29, 5, 21, 10, 25};
 
 // looking at QCD contribution
 const int NFILESTTBARWJETS_DATAQCDVV(2);
 const int FilesTTbarWJets_DataQCDVV[NFILESTTBARWJETS_DATAQCDVV] = {0, 24};
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
-const int FilesTTbar[NFILESTTBAR] = {0, 5, 24, 21, 10, 9, 25};
-const int NFILESWJETS_M(11);
-const int FilesWJets_M[NFILESWJETS_M] = {0, 2, 3, 4, 23, 5, 6, 7, 8, 9, 24};
-const int DATAFILENAME(0);
-const int DYMADGRAPHFILENAME(13);
-
-//-- file names ---------------------------------------
-const string FILENAMESTTbar[NFILESTTBAR] = {
-    "Data_dR_5311_List",
-    "VV_dR_5311_List",
-    "DataQCD_dR_5311_List",
-    "Top_dR_5311_List",
-    "DYJets10toInf3_dR_5311_List",
-    "TTJets_dR_5311_List",
-    //"WJetsALL_UNFOLDING_dR_5311_List",
-    "WJets_FxFx_dR_5311_List"
-};
-const int NFILESVJETS(14);
-const string FILENAMES[NFILESVJETS] = {
-    "Data_dR_5311_List",
-    "WJetsALL_MIX_dR_5311_List",
-    "DYJets_FromTau_UNFOLDING_dR_5311_List_Inf3",
-    "Top_dR_5311_List",
-    "ZZJets2L2Nu_dR_5311_List",
-    "ZZJets4L_dR_5311_List",
-    "ZZJets2L2Q_dR_5311_List",
-    "WZJets3LNu_dR_5311_List",
-    "WZJets2L2Q_dR_5311_List",
-    "WWJets2L2Nu_dR_5311_List",
-    "TTJets_dR_5311_List",
-    //"DYJets_UNFOLDING_NOLEPTON_5311_List",
-    //"DYJets_UNFOLDING_dR_5311_List_Inf3",
-    "DYJets_MIX_UNFOLDING_dR_5311_List_Inf3",
-    // "DY01234Jets_UNFOLDING_dR_5311_List_Inf3",
-    //"DYJets_PowhegNLO1Jet_GEN",
-    "DYJets_PowhegZ2jMiNLO_dR_GEN_CernMOJ",
-    //"DYJets_UNFOLDING_Sherpa",
-    "DY_Sherpa_1NLO4_HepMC_dR_Full_List"
-}; 
-//-----------------------------------------------------
-
-
-const string DYPOWHEGFILENAME = FILENAMES[12];
-const string DYSHERPAFILENAME = FILENAMES[13];
-const string DYSHERPA2NLOFILENAME ="DY_Sherpa_2NLO4_HepMC_dR_Full_ListALL";
-
-const string BGFILENAMES[9] = {
-    FILENAMES[1],
-    FILENAMES[2],
-    FILENAMES[3],
-    FILENAMES[4],
-    FILENAMES[5],
-    FILENAMES[6],
-    FILENAMES[7],
-    FILENAMES[8],
-    FILENAMES[9],
-};
-const string BGFILENAMESGrouped[8] = {
-    FILENAMES[1],
-    FILENAMES[2],
-    FILENAMES[3],
-    FILENAMES[4],
-    FILENAMES[5],
-    FILENAMES[6],
-    FILENAMES[7],
-    FILENAMES[9],
-};
-
-const string GenMCFILENAMES[5] = {
-    "DYJets_GEN_Z2_MPIoff",
-    "DYJets_GEN_Z2Star",
-    "DYJets_GEN_Z2Star_MPIoff",
-    "DYJets_P8_ZmumJets_MPIon_GEN_Tune4C",
-    "DYJets_PowhegZjjMiNLO_GEN"
-};
-const string DYPOWHEGZjjFILENAME = GenMCFILENAMES[4];
-const string DYSHERPAZjFILENAME("DYJets_Sherpa_UNFOLDING_dR_5311_List_Inf");
 
 #endif
-
-

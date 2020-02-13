@@ -31,7 +31,7 @@ using namespace std;
 
 const int NQCD = 4;
 // const int NMC = 11; // 2016
-const int NMC = 13; // 2017, 2018
+const int NMC = 19; // 2017, 2018
 
 //string energy = getEnergy();
 string energy = "13TeV";
@@ -112,20 +112,26 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             }
             else if (year == 2017 || year == 2018){
                 //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
-                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
                 // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
-                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-                if (j == 2) FilenameTemp = "TT_FullHad_dR_5311_List";
-                if (j == 3) FilenameTemp = "TT_SemiLep_dR_5311_List";
-                if (j == 4) FilenameTemp = "TT_2L2Nu_dR_5311_List";
-                if (j == 5) FilenameTemp = "ST_s_channel_dR_5311_List";
-                if (j == 6) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-                if (j == 7) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-                if (j == 8) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-                if (j == 9) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
+                if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
+                if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
+                if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
+                if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+                if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+                if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+                if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
                 if (j == 10) FilenameTemp = "WW_dR_5311_List";
                 if (j == 11) FilenameTemp = "WZ_dR_5311_List";
                 if (j == 12) FilenameTemp = "ZZ_dR_5311_List";
+                if (j == 13) FilenameTemp = "ttW_LNu_channel_dR_5311_List";
+                if (j == 14) FilenameTemp = "ttW_QQ_channel_dR_5311_List";
+                if (j == 15) FilenameTemp = "ttZ_LLNuNu_channel_dR_5311_List";
+                if (j == 16) FilenameTemp = "ttZ_QQ_channel_dR_5311_List";
+                if (j == 17) FilenameTemp = "ttH_bb_channel_dR_5311_List";
+                if (j == 18) FilenameTemp = "ttH_non_bb_channel_dR_5311_List";
             }
 
             std::cout << "Getting " << FilenameTemp << std::endl;
@@ -195,19 +201,25 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             }
             else if (year == 2017 || year == 2018){
                 // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
-                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-                if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
-                if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
-                if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
-                if (j == 4) FilenameTemp =  "TT_2L2Nu_dR_5311_List";
-                if (j == 5) FilenameTemp =  "ST_s_channel_dR_5311_List";
-                if (j == 6) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
-                if (j == 7) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
-                if (j == 8) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
-                if (j == 9) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 0) FilenameTemp =   "WJets_FxFx_012J_dR_5311_List";
+                if (j == 1) FilenameTemp =   "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp =   "TT_FullHad_dR_5311_List";
+                if (j == 3) FilenameTemp =   "TT_SemiLep_dR_5311_List";
+                if (j == 4) FilenameTemp =   "TT_2L2Nu_dR_5311_List";
+                if (j == 5) FilenameTemp =   "ST_s_channel_dR_5311_List";
+                if (j == 6) FilenameTemp =   "ST_t_antitop_channel_dR_5311_List";
+                if (j == 7) FilenameTemp =   "ST_t_top_channel_dR_5311_List";
+                if (j == 8) FilenameTemp =   "ST_tW_top_channel_dR_5311_List";
+                if (j == 9) FilenameTemp =   "ST_tW_antitop_channel_dR_5311_List";
                 if (j == 10) FilenameTemp =  "WW_dR_5311_List";
                 if (j == 11) FilenameTemp =  "WZ_dR_5311_List";
                 if (j == 12) FilenameTemp =  "ZZ_dR_5311_List";
+                if (j == 13) FilenameTemp =  "ttW_LNu_channel_dR_5311_List";
+                if (j == 14) FilenameTemp =  "ttW_QQ_channel_dR_5311_List";
+                if (j == 15) FilenameTemp =  "ttZ_LLNuNu_channel_dR_5311_List";
+                if (j == 16) FilenameTemp =  "ttZ_QQ_channel_dR_5311_List";
+                if (j == 17) FilenameTemp =  "ttH_bb_channel_dR_5311_List";
+                if (j == 18) FilenameTemp =  "ttH_non_bb_channel_dR_5311_List";
             }
             
             TH1D *hTemp1 = getHisto(fMC[i][j], variable);
@@ -375,8 +387,8 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
         // Computing QCD separately for each jet multiplicity bin
         for (int m = 1; m <= hData[0]->GetNbinsX(); m++){
             std::cout << "\n ----------------------------------------------------------" << std::endl;
-            std::cout << " ---------------- Processing bin number: " << m << " ---------------- " << std::endl;
-            std::cout << " ----------------------------------------------------------\n" << std::endl;
+            std::cout <<   " ---------------- Processing bin number: " << m << " ---------------- " << std::endl;
+            std::cout <<   " ----------------------------------------------------------\n" << std::endl;
 
             // step 0 : initial normalization of Wjets and data -----
             double NormFactor(1);
