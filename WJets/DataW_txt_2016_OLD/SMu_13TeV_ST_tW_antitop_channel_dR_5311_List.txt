@@ -1,0 +1,1 @@
+/store/group/phys_smp/AnalysisFramework/Baobab/Metin/03Feb2017/Bonzai/v9/MC/CRAB_PrivateMC/crab_ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-VJetPruner-SMu/180909_124706/0000/Bonzai-ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-VJetPruner-SMu_1.root
