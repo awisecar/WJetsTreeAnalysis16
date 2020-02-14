@@ -1,15 +1,12 @@
 #! /usr/bin/env python2
 import os
 import sys
-#from ROOT import *
 import random
 import time
 import datetime
 
 cwd = os.getcwd()
 print 'Current working directory: ' + cwd + '\n'
-
-os.system('root -b -q wjets_compileCode.cc')
 
 ####################################################################
 
@@ -27,7 +24,10 @@ submit += 'arguments = "$(argument)"\n'
 submit += 'output = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).out\n'
 submit += 'error = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).err\n'
 submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
-submit += '+JobFlavour = "testmatch"\n\n'
+
+# submit += '+JobFlavour = "testmatch"\n\n'
+submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
+
 submit += 'queue argument in 1'
 
 submitName = mtmpdir+'_Submit.sub'
@@ -40,26 +40,24 @@ os.system('chmod 755 '+submitName)
 ####################################################################
 
 print 'Submit script finished, writing individual job scripts!'
-cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
+cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_LAST_GOOD_BVETO/CMSSW_7_6_0/src'
 # os.system('cd '+mtmpdir)
 
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 42, 51, 52, 53, 54] #important files
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54] #important files
 ##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #everything
 ##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
 ## doWhat = [21, 22, 23, 24, 30] #Background
 ## doWhat = [41, 42, 51, 52, 53, 54, 61, 62, 63] #W+jets MC
 #doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #BG + W+jets MC for syst. uncert.'s
+doWhat = [15]
 #
 #doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
-##doQCD = [0]
+doQCD = [1]
 #
-#doSysRunning = [0] #nominal
+doSysRunning = [0] #nominal
 ##doSysRunning = [2] #JES uncertainties
 ##doSysRunning = [3, 4, 5, 6] #other uncertanties
 
-#doWhat = [52]
-#doQCD = [3]
-#doSysRunning = [0]
 
 ##############################
 ## Systematics ---
@@ -91,9 +89,9 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16/CMSSW_5_3_20/src'
 ##############################
 ## ttbar SFs (remember to turn doBJets to 2)
 ## we do not run QCD BG for this control region study
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54]
-doQCD = [0]
-doSysRunning = [0]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54]
+# doQCD = [0]
+# doSysRunning = [0]
 ##############################
 
 for what in doWhat:

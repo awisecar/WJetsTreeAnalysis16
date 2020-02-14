@@ -1,25 +1,25 @@
-{
-  cout << "\nI'm executing rootlogon.C\n" << endl;
+void rootlogon(void) {
+  cout << "\nExecuting rootlogon.C" << endl;
   string currentFile =  __FILE__;
   string currentWorkingDir = currentFile.substr(0, currentFile.find("./rootlogon.C"));
-  cout << "The Working Directory is:\n\t" << currentWorkingDir << "\n"<< endl;
-  gErrorIgnoreLevel = kError;
-  string srcdir = currentWorkingDir + "Sources/";
-  string incdir = currentWorkingDir + "Includes/";
-  string lhapdfdir = "/cvmfs/cms.cern.ch/slc5_amd64_gcc434/external/lhapdf/5.8.5/include/";
-  string roounfolddir = currentWorkingDir + "RooUnfold/";  
+  cout << "Current working directory is:\n\t" << currentWorkingDir << endl;
+  std::cout << std::endl;
 
-  cout << "--------------------------------------------------------------------------------\n" << endl; 
-  cout << "Adding " << incdir << " to includes directories..." << endl;
-  gSystem->AddIncludePath(string("-I" + incdir).c_str());
-  cout << "Adding " << lhapdfdir << " to includes directories..." << endl;
-  gSystem->AddIncludePath(string("-I" + lhapdfdir).c_str());
-  cout << "Adding " << roounfolddir << "src" << " to includes directories..." << endl;
-  gSystem->AddIncludePath(string("-I" + roounfolddir + "src").c_str());
-  cout << "Include Path -D__USE_XOPEN2K8 to fix lxplus6 compatibility" << endl;
-  gSystem->AddIncludePath("-D__USE_XOPEN2K8");
-  cout << "Loading RooUnfold libraries..." << endl;
-  gSystem->Load(string(roounfolddir + "libRooUnfold").c_str());
-  cout << "\n";
-  cout << "--------------------------------------------------------------------------------\n" << endl; 
+
+  string srcDir = "SourceFiles/";
+  vector<string> sources;
+  sources.push_back("getFilesAndHistograms");
+  sources.push_back("functions");
+  sources.push_back("HistoSet");
+  sources.push_back("ZJetsAndDPS");
+  unsigned int nSources = sources.size();
+  for (unsigned int i(0); i < nSources; i++) {
+    std::cout << " >>> Compiling/loading libraries for " << srcDir + sources[i] << ".cc" << std::endl;
+
+    // single-plus at the end rebuilds the library only if the script 
+    // or any of the files it includes are newer than the library
+    // gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc+").c_str());
+    gROOT->LoadMacro(string(srcDir + sources[i] + ".cc+").c_str());
+  }
+  std::cout << "\n=======================================================================================================\n" << std::endl;
 }

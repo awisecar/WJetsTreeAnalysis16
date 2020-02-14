@@ -1,36 +1,31 @@
 void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
 {
-    string srcdir = "Sources/";
-
+    string srcdir = "SourceFiles/";
     vector<string> sources;
     sources.push_back("getFilesAndHistograms");
     sources.push_back("functions");
-    sources.push_back("funcReweightResp");
     sources.push_back("HistoSet");
     sources.push_back("ZJetsAndDPS");
-
     ////--- Load shared libraries (the .so's) ---
     unsigned int nSources = sources.size();
-    gSystem->AddIncludePath("-D__USE_XOPEN2K8");
-    gROOT->ProcessLine(".L /cvmfs/cms.cern.ch/slc5_amd64_gcc434/external/lhapdf/5.8.5/lib/libLHAPDF.so");
     for (unsigned int i(0); i < nSources; i++) {
         std::cout << "Compiling " << srcdir + sources[i] << ".cc" << std::endl;
         gROOT->ProcessLine(string(".L " + srcdir + sources[i] + ".cc+").c_str());
     }
         
     //------------------
-     //int doWhat       = 23;
+     // int doWhat       = 41;
                               // 100 - all ; 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
         
-     //int doSysRunning = 1;
+     // int doSysRunning = 0;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
         
-     //int doQCD        = 0;
+     // int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
         
     int doBJets      = -1; //normal btag veto
@@ -352,7 +347,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
             ZJetsAndDPS DMuWJFxFx(lepSelection+"_13TeV_WJets_FxFx_dR_5311_List", muLumi* 60290.0 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, 0, jetEtaMin, jetEtaMax);
             DMuWJFxFx.Loop(1, doGen,  doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth, hasPartonInfo);
         }
-     }
+    }
 
     //W+jets inclusive LO-MLM sample
     if (doWhat == 42 || doWhat == 100 ){
@@ -367,7 +362,7 @@ void runDYJets(int doWhat = 0, int doQCD = 0, int doSysRunning = 0)
            ZJetsAndDPS DMuWJMLM(lepSelection+"_13TeV_WJets_MLM_dR_5311_List", muLumi* 61526.7 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, 0, jetEtaMin, jetEtaMax);
            DMuWJMLM.Loop(1, doGen,  doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth, hasPartonInfo);
        }
-     }    
+    }    
     
     // W+jets FxFx W pT-binned signal sample - 0 to 50 pT
     if (doWhat == 51 || doWhat == 100 ){
