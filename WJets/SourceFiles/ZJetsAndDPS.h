@@ -70,22 +70,22 @@ class ZJetsAndDPS: public HistoSet {
     vector<int>  *GLepBareId;
     vector<int>  *GLepBareSt;
     vector<bool>  *GLepBarePrompt;
-    vector<bool>  *GLepBareTauProd;
+    // vector<bool>  *GLepBareTauProd;
     
-    vector<float>  *GPhotPt;
-    vector<float>  *GPhotEta;
-    vector<float>  *GPhotPhi;
-    vector<float>  *GPhotE;
-    vector<int>  *GPhotMotherId;
-    vector<int>  *GPhotSt;
+    // vector<float>  *GPhotPt;
+    // vector<float>  *GPhotEta;
+    // vector<float>  *GPhotPhi;
+    // vector<float>  *GPhotE;
+    // vector<int>    *GPhotMotherId;
+    // vector<int>    *GPhotSt;
     
     vector<float>   *GLepClosePhotPt;
     vector<float>   *GLepClosePhotEta;
     vector<float>   *GLepClosePhotPhi;
-    vector<float>   *GLepClosePhotE;
-    vector<int>     *GLepClosePhotId;
-    vector<int>     *GLepClosePhotMother0Id;
-    vector<int>     *GLepClosePhotMotherCnt;
+    // vector<float>   *GLepClosePhotE;
+    // vector<int>     *GLepClosePhotId;
+    // vector<int>     *GLepClosePhotMother0Id;
+    // vector<int>     *GLepClosePhotMotherCnt;
     vector<int>     *GLepClosePhotSt;
 
     vector<float>  *GJetAk04Pt;
@@ -105,16 +105,16 @@ class ZJetsAndDPS: public HistoSet {
     //vector<double>  *gsfElecPhi_;
     //vector<double>  *gsfElecEnergy_;
 
-    vector<float>  *ElPt;
-    vector<float>  *ElEta;
-    vector<float>  *ElPhi;
-    vector<float>  *ElE;
-    vector<float>  *ElCh;
-    // APICHART vector<double>  *ElId;
-    vector<unsigned int> *ElId;
-    //vector<double>  *ElTrig;
-    vector<float>  *ElPfIsoRho;
-    vector<float>  *ElEtaSc;
+    // vector<float>  *ElPt;
+    // vector<float>  *ElEta;
+    // vector<float>  *ElPhi;
+    // vector<float>  *ElE;
+    // vector<float>  *ElCh;
+    // // APICHART vector<double>  *ElId;
+    // vector<unsigned int> *ElId;
+    // //vector<double>  *ElTrig;
+    // vector<float>  *ElPfIsoRho;
+    // vector<float>  *ElEtaSc;
     
     vector<float>  *MuPt;
     vector<float>  *MuEta;
@@ -123,9 +123,11 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *MuE;
     vector<float>  *MuCh;
     vector<float>  *MuDxy;
-    vector<unsigned int> *MuIdTight;
+    vector<bool>   *MuIdTight;
   
-    ULong64_t      TrigHltMu;
+    // ULong64_t      TrigHltMu;
+    vector<bool>         *MuHltTrgPath1;
+    vector<bool>         *MuHltTrgPath2;
 
     vector<float>  *MuPfIso;
 
@@ -135,12 +137,18 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *JetAk04Eta;
     vector<float>  *JetAk04Phi;
     vector<float>  *JetAk04Id;
-    vector<int>  *JetAk04PuId;
+    vector<int>    *JetAk04PuId;
+    vector<bool>   *JetAk04PuIdLoose;
+    vector<bool>   *JetAk04PuIdMedium;
+    vector<bool>   *JetAk04PuIdTight;
     vector<float>  *JetAk04PuMva;
-    vector<float>  *JetAk04BTagCsv;
-    vector<float>  *JetAk04BDiscCisvV2;
+    // vector<float>  *JetAk04BTagCsv;
+
+    // vector<float>  *JetAk04BDiscCisvV2;
+    vector<float>  *JetAk04BDiscDeepCSV;
+
     vector<float>  *JetAk04HadFlav;
-    vector<float>  *JetAk04PartFlav;
+    // vector<float>  *JetAk04PartFlav;
     //vector<float>  *JetAk04JetBeta;
     //vector<float>  *JetAk04JetBetaStar;
 
@@ -149,10 +157,10 @@ class ZJetsAndDPS: public HistoSet {
     
     vector<float>  *METPx;
     vector<float>  *METPy;
-    vector<float>  *METPz;
+    // vector<float>  *METPz;
     vector<float>  *METE;
-    ULong64_t TrigMET;
-    ULong64_t TrigMETBit;
+    // ULong64_t TrigMET;
+    // ULong64_t TrigMETBit;
     vector<bool>  *EvtFilterbadChCandidate;
     vector<bool>  *EvtFilterbadPFMuon;
 
@@ -185,22 +193,22 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_GLepBareId;   //!
     TBranch        *b_GLepBareSt;   //!
     TBranch        *b_GLepBarePrompt;   //!
-    TBranch        *b_GLepBareTauProd;   //!
+    // TBranch        *b_GLepBareTauProd;   //!
     
-    TBranch        *b_GPhotPt;   //!
-    TBranch        *b_GPhotEta;   //!
-    TBranch        *b_GPhotPhi;   //!
-    TBranch        *b_GPhotE;   //!
-    TBranch        *b_GPhotMotherId;   //!
-    TBranch        *b_GPhotSt;   //!
+    // TBranch        *b_GPhotPt;   //!
+    // TBranch        *b_GPhotEta;   //!
+    // TBranch        *b_GPhotPhi;   //!
+    // TBranch        *b_GPhotE;   //!
+    // TBranch        *b_GPhotMotherId;   //!
+    // TBranch        *b_GPhotSt;   //!
     
     TBranch        *b_GLepClosePhotPt;   //!
     TBranch        *b_GLepClosePhotEta;   //!
     TBranch        *b_GLepClosePhotPhi;   //!
-    TBranch        *b_GLepClosePhotE;   //!
-    TBranch        *b_GLepClosePhotId;   //!
-    TBranch        *b_GLepClosePhotMother0Id;   //!
-    TBranch        *b_GLepClosePhotMotherCnt;   //!
+    // TBranch        *b_GLepClosePhotE;   //!
+    // TBranch        *b_GLepClosePhotId;   //!
+    // TBranch        *b_GLepClosePhotMother0Id;   //!
+    // TBranch        *b_GLepClosePhotMotherCnt;   //!
     TBranch        *b_GLepClosePhotSt;   //!
     
     TBranch        *b_GJetAk04Pt;   //!
@@ -239,6 +247,9 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_MuIdTight;   //!
     TBranch        *b_TrigHltMu;   //!
     TBranch        *b_MuPfIso;   //!
+
+    TBranch        *b_MuHltTrgPath1;
+    TBranch        *b_MuHltTrgPath2;
     
     TBranch        *b_JetAk04Pt;   //!
     TBranch        *b_JetAk04Eta;   //!
@@ -246,9 +257,15 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04E;   //!
     TBranch        *b_JetAk04Id;   //!
     TBranch        *b_JetAk04PuId;   //!
+    TBranch        *b_JetAk04PuIdLoose;
+    TBranch        *b_JetAk04PuIdMedium;
+    TBranch        *b_JetAk04PuIdTight; 
     TBranch        *b_JetAk04PuMva;   //!
     TBranch        *b_JetAk04BTagCsv;   //!
-    TBranch        *b_JetAk04BDiscCisvV2;   //!
+
+    // TBranch        *b_JetAk04BDiscCisvV2;   //!
+    TBranch        *b_JetAk04BDiscDeepCSV;
+
     TBranch        *b_JetAk04HadFlav;   //!
     TBranch        *b_JetAk04PartFlav;   //!
     //TBranch        *b_JetAk04JetBeta;   //!

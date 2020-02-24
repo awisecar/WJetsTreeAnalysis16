@@ -43,20 +43,32 @@ print 'Submit script finished, writing individual job scripts!'
 cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_LAST_GOOD_BVETO/CMSSW_7_6_0/src'
 # os.system('cd '+mtmpdir)
 
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54] #important files
-##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #everything
-##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
-## doWhat = [21, 22, 23, 24, 30] #Background
-## doWhat = [41, 42, 51, 52, 53, 54, 61, 62, 63] #W+jets MC
-#doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #BG + W+jets MC for syst. uncert.'s
-doWhat = [15]
-#
-#doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
-doQCD = [1]
-#
+##############################
+
+# NEW 2016 NTUPLES
+
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 61, 62, 63] #everything
+doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
 doSysRunning = [0] #nominal
-##doSysRunning = [2] #JES uncertainties
-##doSysRunning = [3, 4, 5, 6] #other uncertanties
+
+##############################
+
+# OLD 2016 NTUPLES
+
+# #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 51, 52, 53, 54] #important files
+# ##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #everything
+# ##doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
+# ## doWhat = [21, 22, 23, 24, 30] #Background
+# ## doWhat = [41, 42, 51, 52, 53, 54, 61, 62, 63] #W+jets MC
+# #doWhat = [21, 22, 23, 24, 30, 41, 42, 51, 52, 53, 54, 61, 62, 63] #BG + W+jets MC for syst. uncert.'s
+# doWhat = [15]
+# #
+# #doQCD = [0, 1, 2, 3] #signal + 3 control regions for QCD BG
+# doQCD = [1]
+# #
+# doSysRunning = [0] #nominal
+# ##doSysRunning = [2] #JES uncertainties
+# ##doSysRunning = [3, 4, 5, 6] #other uncertanties
 
 
 ##############################

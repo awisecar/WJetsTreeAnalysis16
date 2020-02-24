@@ -59,6 +59,8 @@ public:
     TH1D *h_pt_udsg_tagged;
 
 	TH1D *NEventsPassCuts;
+
+    TH1D *btagDiscScores_EvtSelection;
     
     //--- Jet multiplicity
     TH1D *ZNGoodJets_Zexc;

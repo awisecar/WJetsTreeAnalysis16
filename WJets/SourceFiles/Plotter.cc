@@ -287,46 +287,46 @@ void Plotter(string leptonFlavor = "Muons", int JetPtMin = 30,
 
             //andrew -- comment out this next block if you want to turn SFs off
 	    //else if (i == 4){ // ttbar is file #4 when QCD is turned off (ttbar study) -- see fileNames.h
-	    else if (i == 5){ //ttbar is file #5 when running usual distributions with bveto == -1
-                hist[i][j]->SetFillColor(Colors[i]);
-                hist[i][j]->SetLineColor(Colors[i]);
-                legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
+	 //   else if (i == 5){ //ttbar is file #5 when running usual distributions with bveto == -1
+         //       hist[i][j]->SetFillColor(Colors[i]);
+         //       hist[i][j]->SetLineColor(Colors[i]);
+         //       legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
 	
-                //the two sections below scale the jet multiplicities
-		if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
-                        //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
-			hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.04904374);
-			hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*0.99624372);
-			hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.97243212);
-			hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.94750793);
-			hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.92506162);
-		
-			hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.04904374);
-			hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*0.99624372);
-			hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.97243212);
-			hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.94750793);
-			hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.92506162);
-		}
-		else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
-			hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.28532061);
-			hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.02880218);
-			hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.98994466);
-			hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.95915763);
-			hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.93695869);
-			
-			hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.28532061);
-			hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.02880218);
-			hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.98994466);
-			hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.95915763);
-			hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.93695869);
-		}
-                else {
-                        //it is this line where we scale the ttbar MC for each of the histograms
-                        //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
-                        hist[i][j]->Scale(SFttbar);
-                }
+         //       //the two sections below scale the jet multiplicities
+	 //       if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
+         //               //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
+	 //       	hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.04904374);
+	 //       	hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*0.99624372);
+	 //       	hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.97243212);
+	 //       	hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.94750793);
+	 //       	hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.92506162);
+	 //       
+	 //       	hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.04904374);
+	 //       	hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*0.99624372);
+	 //       	hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.97243212);
+	 //       	hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.94750793);
+	 //       	hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.92506162);
+	 //       }
+	 //       else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
+	 //       	hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*1.28532061);
+	 //       	hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*1.02880218);
+	 //       	hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*0.98994466);
+	 //       	hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*0.95915763);
+	 //       	hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*0.93695869);
+	 //       	
+	 //       	hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*1.28532061);
+	 //       	hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*1.02880218);
+	 //       	hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*0.98994466);
+	 //       	hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*0.95915763);
+	 //       	hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*0.93695869);
+	 //       }
+         //       else {
+         //               //it is this line where we scale the ttbar MC for each of the histograms
+         //               //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
+         //               hist[i][j]->Scale(SFttbar);
+         //       }
 
-	    }
+	 //   }
             else {
                 //if it's any of the other MC, set fill/line colors and legends like normal
                 hist[i][j]->SetFillColor(Colors[i]);

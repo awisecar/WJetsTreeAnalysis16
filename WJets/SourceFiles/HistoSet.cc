@@ -384,8 +384,9 @@ HistoSet::HistoSet(string leptonFlavor)
 	NEventsPassCuts->GetXaxis()->SetBinLabel(4, "= PassLeptonRequirements");
 	NEventsPassCuts->GetXaxis()->SetBinLabel(5, "= PassMTcut");
 	NEventsPassCuts->GetXaxis()->SetBinLabel(6, "= PassBtagveto");
+
+    btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "DeepCSV Score", 100, 0., 1.);
 	
-    
     //--- Jet multiplicity -----------
     if ( doWJets ) ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 8, -0.5, 7.5);
     //if ( doWJets ) ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);

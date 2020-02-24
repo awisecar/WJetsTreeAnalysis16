@@ -286,7 +286,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
     std::cout << "-----> Begin loop on all entries! " << std::endl;
     std::cout << "-----> We will run on " << nentries << " events!" << std::endl;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    //  for (Long64_t jentry(0); jentry < 10000; jentry++){
+    //  for (Long64_t jentry(0); jentry < 3000000; jentry++){
         Long64_t ientry = LoadTree(jentry);
         if (ientry < 0) break;
 
@@ -362,41 +362,44 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         //---
 	
         if (hasRecoInfo){
-            if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) countEventpassTrig++;
+
+            // if (energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16))) countEventpassTrig++;
+            if (energy == "13TeV" && doW && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1))) countEventpassTrig++;
+
             if (doW && (METPt->size() > 0)) countEvtpassHasMET++;
         }
         //==========================================================================================================//
         //--- MET FILTERING ---
         //--- https://twiki.cern.ch/twiki/bin/viewauth/CMS/MissingETOptionalFiltersRun2#Moriond_2017
         //===================================//
-        bool passMETFILTER(true);
-        // MET filters for data
-        if (hasRecoInfo && isData && doMETFiltering){
-            passMETFILTER = (
-                        (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                        && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                        && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                        && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                        && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                        && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
-                        && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                        && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            );
-            if (passMETFILTER) nEventsPassMETFilter++ ;
-        }
-        // MET filters for reco MC
-        if (hasRecoInfo && !isData && doMETFiltering){
-            passMETFILTER = (
-                                (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
-                            && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
-                            && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
-                            && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
-                            && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
-                            && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
-                            && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
-            );
-            if (passMETFILTER) nEventsPassMETFilter++ ;
-        }
+        // bool passMETFILTER(true);
+        // // MET filters for data
+        // if (hasRecoInfo && isData && doMETFiltering){
+        //     passMETFILTER = (
+        //                 // (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+        //                 // && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+        //                 // && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+        //                 // && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+        //                 // && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+        //                 // && (TrigMETBit & 1LL<<15)  // Flag_eeBadScFilter -> ee badSC noise filter
+        //                 // && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+        //                 // && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+        //     );
+        //     if (passMETFILTER) nEventsPassMETFilter++ ;
+        // }
+        // // MET filters for reco MC
+        // if (hasRecoInfo && !isData && doMETFiltering){
+        //     passMETFILTER = (
+        //                     //     (TrigMETBit & 1LL<<3)   // Flag_HBHENoiseFilter -> HBHE noise filter
+        //                     // && (TrigMETBit & 1LL<<4)   // Flag_HBHENoiseIsoFilter -> HBHEiso noise filter
+        //                     // && (TrigMETBit & 1LL<<8)   // Flag_globalTightHalo2016Filter -> beam halo filter
+        //                     // && (TrigMETBit & 1LL<<12)  // Flag_EcalDeadCellTriggerPrimitiveFilter -> ECAL TP filter
+        //                     // && (TrigMETBit & 1LL<<14)  // Flag_goodVertices -> primary vertex filter
+        //                     // && (TrigMET & 1LL<<24)  // Flag_BadPFMuonFilter -> Bad PF Muon Filter
+        //                     // && (TrigMET & 1LL<<25)  // Flag_BadChargedCandidateFilter -> Bad Charged Hadron Filter
+        //     );
+        //     if (passMETFILTER) nEventsPassMETFilter++ ;
+        // }
 
 		//=======================================================================================================//
 
@@ -426,7 +429,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
         //         Retrieving leptons           //
         //====================================//
         bool doMuons(leptonFlavor == "Muons" || doW || doTT);
-        bool doElectrons(leptonFlavor == "Electrons" || doW || doTT);
+        // bool doElectrons(leptonFlavor == "Electrons" || doW || doTT);
         bool passesLeptonCut(0);
         bool passesLeptonReq(0), passesLeptonAndMT(0), passesBtagReq(1);
         unsigned short nTotLeptons(0), nLeptons(0), nMuons(0), nElectrons(0);
@@ -446,7 +449,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                 nTotLeptons = MuEta->size();
                 
                 // trigger cut - for WJets 13 TeV, triggers should be HLTIsoMu24 || HLTIsoTkMu24
-                if ( energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
+                // if ( energy == "13TeV" && doW && ((TrigHltMu & 1LL<<11) || (TrigHltMu & 1LL<<16)) ) eventTrigger = true;
+                if ( energy == "13TeV" && doW && ((MuHltTrgPath1->at(0) == 1) || (MuHltTrgPath2->at(0) == 1)) ) eventTrigger = true;
 
                 for (unsigned short i(0); i < nTotLeptons; i++) {
                     if (doMer) merUncer = Rand_MER_Gen->Gaus(0, (MuPt->at(i) * 0.006));
@@ -459,7 +463,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
                     bool muPassesEtaCut( ((doZ || doTT) && muPassesEtaLooseCut) || (doW && fabs(mu.eta) <= 2.4) );
                     // ID cut for muon
-                    bool muPassesIdCut((MuIdTight->at(i) & 1)); // this is for tight ID --> odd number
+                    bool muPassesIdCut( MuIdTight->at(i) == 1 );
                     // Iso cut for muon
                     bool muPassesIsoCut( (!doW && MuPfIso->at(i) < 0.2) || (doW && MuPfIso->at(i) < 0.15) );  
                     // Iso cut for muon (for doing QCD background)
@@ -485,32 +489,41 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
 
             //------ DO ELECTRONS -------
-            if (doElectrons) {
-                nTotLeptons = 0;
-                nTotLeptons = ElEta->size();
-                // if we don't really care to match both leptons to trigger
-                if (doW) eventTrigger = false;
+            // if (doElectrons) {
+            //     // nTotLeptons = 0;
+            //     // nTotLeptons = ElEta->size();
+            //     // if we don't really care to match both leptons to trigger
+            //     if (doW) eventTrigger = false;
                 
-                for (unsigned short i(0); i < nTotLeptons; i++){
-                    leptonStruct ele = {ElPt->at(i), ElEta->at(i), ElPhi->at(i), ElE->at(i),  ElCh->at(i), 0., ElEtaSc->at(i)};
-                    bool elePassesPtCut( ( !doW && ele.pt >= 20.)  || ( doW && ele.pt >= 30.));
-                    bool elePassesEtaLooseCut(fabs(ElEtaSc->at(i)) <= 1.4442 || (fabs(ElEtaSc->at(i)) >= 1.566 && fabs(ElEtaSc->at(i)) <= 2.4));
-                    bool elePassesEtaCut( ((doZ || doTT) && elePassesEtaLooseCut) || (doW && elePassesEtaLooseCut && fabs(ElEtaSc->at(i)) <= 2.1) );
-                    bool elePassesIdCut((ElId->at(i) & 1<<2)); ///// APICHART: medium ID
-                    bool elePassesIsoCut(ElPfIsoRho->at(i) < 0.15 );
 
-                    if (doW && fabs(ElEtaSc->at(i)) > 2.1) elePassesEtaCut = false ;
+
+
+            //     // for (unsigned short i(0); i < nTotLeptons; i++){
+            //     //     // leptonStruct ele = {ElPt->at(i), ElEta->at(i), ElPhi->at(i), ElE->at(i),  ElCh->at(i), 0., ElEtaSc->at(i)};
+            //     //     bool elePassesPtCut( ( !doW && ele.pt >= 20.)  || ( doW && ele.pt >= 30.));
+            //     //     bool elePassesEtaLooseCut(fabs(ElEtaSc->at(i)) <= 1.4442 || (fabs(ElEtaSc->at(i)) >= 1.566 && fabs(ElEtaSc->at(i)) <= 2.4));
+            //     //     bool elePassesEtaCut( ((doZ || doTT) && elePassesEtaLooseCut) || (doW && elePassesEtaLooseCut && fabs(ElEtaSc->at(i)) <= 2.1) );
+            //     //     bool elePassesIdCut((ElId->at(i) & 1<<2)); ///// APICHART: medium ID
+            //     //     bool elePassesIsoCut(ElPfIsoRho->at(i) < 0.15 );
+
+            //     //     if (doW && fabs(ElEtaSc->at(i)) > 2.1) elePassesEtaCut = false ;
                     
-                    if (elePassesPtCut && elePassesEtaCut && elePassesIdCut){
-                        //-- isolation Cut
-                        if (doQCD > 1  && !elePassesIsoCut && leptonFlavor != "SingleMuon") leptons.push_back(ele);
-                        if ( elePassesIsoCut ) {
-                            if (doQCD < 2 && leptonFlavor != "SingleMuon") leptons.push_back(ele);
-                            if (doTT) electrons.push_back(ele);
-                        }
-                    }
-                }//End of loop over all the electrons
-            }
+            //     //     if (elePassesPtCut && elePassesEtaCut && elePassesIdCut){
+            //     //         //-- isolation Cut
+            //     //         if (doQCD > 1  && !elePassesIsoCut && leptonFlavor != "SingleMuon") leptons.push_back(ele);
+            //     //         if ( elePassesIsoCut ) {
+            //     //             if (doQCD < 2 && leptonFlavor != "SingleMuon") leptons.push_back(ele);
+            //     //             if (doTT) electrons.push_back(ele);
+            //     //         }
+            //     //     }
+            //     // }//End of loop over all the electrons
+
+
+
+
+
+
+            // }
 
             nMuons = muons.size();
             nElectrons = electrons.size();
@@ -546,7 +559,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 
         if (hasGenInfo) {
             
-            nTotGenPhotons = GPhotEta->size();
+            nTotGenPhotons = GLepClosePhotEta->size();
             nTotGenLeptons = GLepBareEta->size();
             
             // getting PDG ID for the neutrino
@@ -585,9 +598,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int doQCD, bool doSSig
 
                          // loop over all photons
                         for (unsigned short j(0); j < nTotGenPhotons; j++){
-                            if( abs(GPhotSt->at(j)) != 1 || GPhotPt->at(j) < 0.000001 ) continue;
+                            if( abs(GLepClosePhotSt->at(j)) != 1 || GLepClosePhotPt->at(j) < 0.000001 ) continue;
                             TLorentzVector tmpGenPho;
-                            tmpGenPho.SetPtEtaPhiM(GPhotPt->at(j), GPhotEta->at(j), GPhotPhi->at(j), 0.);
+                            tmpGenPho.SetPtEtaPhiM(GLepClosePhotPt->at(j), GLepClosePhotEta->at(j), GLepClosePhotPhi->at(j), 0.);
                             int used(0);
                             for (unsigned short k(0); k < usedGenPho.size(); k++){
                                 if (j == usedGenPho[k]) used = 1;
@@ -714,228 +727,224 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 
                 //btagging criterion
                 //nominal btagging criterion
-                if (JetAk04BDiscCisvV2->at(i) >= 0.8484) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
+                // if (JetAk04BDiscCisvV2->at(i) >= 0.8484) passBJets = true; // Moriond17 for 13 TeV Btag POG recommended discriminator with medium wp cut
+                if (JetAk04BDiscDeepCSV->at(i) >= 0.6321) passBJets = true;
 
                 //************************* B-tag Veto Correction *******************************//
                 float this_rand = RandGen->Rndm(); // Get a random number.
                 float pt= JetAk04Pt->at(i);
                 float eta= JetAk04Eta->at(i);
                 // --------- Begin emulating btagging efficiencies in MC (MC only)
-                if (isData == false){
+
+                // NOTE: ALW 21 FEB 20
+                // have replaced old CSVv2 SFs with the new DeepCSV ones
+                // but still keep off for now...
+
+                // if (isData == false){
+
+                //     bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                //     bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
                     
-                    bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                    bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                //     // Get jet flavor (hadron definition)
+                //     int jetflavour = JetAk04HadFlav->at(i);
                     
-                    int jetflavour= JetAk04HadFlav->at(i);
+                //     // ---------------- For Truth-Level B-jets --------------- //
+                //     if (fabs(jetflavour)==5){
+
+                //         float effb = 1.;
+                //         if (pt < 30.)                 effb = 0.644505;
+                //         if (pt >= 30.  && pt < 50.)   effb = 0.644505;
+                //         if (pt >= 50.  && pt < 70.)   effb = 0.692229;
+                //         if (pt >= 70.  && pt < 100.)  effb = 0.711688;
+                //         if (pt >= 100. && pt < 140.)  effb = 0.714178;
+                //         if (pt >= 140. && pt < 200.)  effb = 0.704809;
+                //         if (pt >= 200. && pt < 300.)  effb = 0.677119;
+                //         if (pt >= 300. && pt < 600.)  effb = 0.637666;
+                //         if (pt >= 600. && pt < 1000.) effb = 0.549428;
+                //         if (pt >= 1000.)              effb = 0.549428;
+                        
+                //         // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, b-jets
+                //         float           SFb = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                //         if (pt < 20.)   SFb = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                //         if (pt > 1000.) SFb = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
+                        
+                //         float SFb_error = 0.0;
+                //         if (pt < 20.)                 SFb_error = 0.043795019388198853*2.;
+                //         if (pt >= 20.  && pt < 30.)   SFb_error = 0.043795019388198853;
+                //         if (pt >= 30.  && pt < 50.)   SFb_error = 0.015845479443669319;
+                //         if (pt >= 50.  && pt < 70.)   SFb_error = 0.014174085110425949;
+                //         if (pt >= 70.  && pt < 100.)  SFb_error = 0.013200919143855572;
+                //         if (pt >= 100. && pt < 140.)  SFb_error = 0.012912030331790447;
+                //         if (pt >= 140. && pt < 200.)  SFb_error = 0.019475525245070457;
+                //         if (pt >= 200. && pt < 300.)  SFb_error = 0.01628459244966507;
+                //         if (pt >= 300. && pt < 600.)  SFb_error = 0.034840557724237442;
+                //         if (pt >= 600. && pt < 1000.) SFb_error = 0.049875054508447647;
+                //         if (pt >= 1000.)              SFb_error = 0.049875054508447647*2.;
+                        
+                //         float SFb_up = SFb + SFb_error;
+                //         float SFb_down = SFb - SFb_error;
+                        
+                //         // F values for rand comparison
+                //         float f = 0.0;
+                //         float f_up = 0.0;
+                //         float f_down = 0.0;
+                        
+                //         if (SFb <1.0) f = (1.0 - SFb);
+                //         if (SFb_up <1.0) f_up = (1.0 - SFb_up);
+                //         if (SFb_down <1.0) f_down = (1.0 - SFb_down);
+                        
+                //         if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                //         if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                //         if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                        
+                //         passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                //         passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
+                        
+                //         // Untag a tagged jet
+                //         if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
+                //         if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                        
+                //         // Tag an untagged jet
+                //         if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
+                //         if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                        
+                //     } // end b-jet section
                     
-                    // ---------------- For Real B-jets --------------- //
-                    if (abs(jetflavour)==5){
-                        float effb = 0.67298;
-                        float effb_corr = 1;
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 effb = 0.67298  * effb_corr;
-                            if (pt >= 30.  && pt < 50.)   effb = 0.67298  * effb_corr;
-                            if (pt >= 50.  && pt < 70.)   effb = 0.70732  * effb_corr;
-                            if (pt >= 70.  && pt < 100.)  effb = 0.715349 * effb_corr;
-                            if (pt >= 100. && pt < 140.)  effb = 0.712663 * effb_corr;
-                            if (pt >= 140. && pt < 200.)  effb = 0.694916 * effb_corr;
-                            if (pt >= 200. && pt < 300.)  effb = 0.667261 * effb_corr;
-                            if (pt >= 300. && pt < 600.)  effb = 0.607964 * effb_corr;
-                            if (pt >= 600. && pt < 1000.) effb = 0.489927 * effb_corr;
-                            if (pt >= 1000.)              effb = 0.489927 * effb_corr;
-                        }
+                //     // ---------------- For Truth-Level C-jets--------------- //
+                //     if (fabs(jetflavour)==4){
+
+                //         float effc = 1.;
+                //         if (pt < 30.)                 effc = 0.117646;
+                //         if (pt >= 30.  && pt < 50.)   effc = 0.117646;
+                //         if (pt >= 50.  && pt < 70.)   effc = 0.11037;
+                //         if (pt >= 70.  && pt < 100.)  effc = 0.114895;
+                //         if (pt >= 100. && pt < 140.)  effc = 0.119415;
+                //         if (pt >= 140. && pt < 200.)  effc = 0.127047;
+                //         if (pt >= 200. && pt < 300.)  effc = 0.129395;
+                //         if (pt >= 300. && pt < 600.)  effc = 0.142779;
+                //         if (pt >= 600. && pt < 1000.) effc = 0.142482;
+                //         if (pt >= 1000.)              effc = 0.142482;
                         
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFb = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFb = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFb = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                //         // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, c-jets
+                //         float           SFc = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                //         if (pt < 20.)   SFc = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                //         if (pt > 1000.) SFc = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
                         
-                        float SFb_error = 0.0;
-                        if (pt < 20.)                 SFb_error = 0.040213499218225479*2.;
-                        if (pt >= 20.  && pt < 30.)   SFb_error = 0.040213499218225479;
-                        if (pt >= 30.  && pt < 50.)   SFb_error = 0.014046305790543556;
-                        if (pt >= 50.  && pt < 70.)   SFb_error = 0.012372690252959728;
-                        if (pt >= 70.  && pt < 100.)  SFb_error = 0.012274007312953472;
-                        if (pt >= 100. && pt < 140.)  SFb_error = 0.011465910822153091;
-                        if (pt >= 140. && pt < 200.)  SFb_error = 0.012079551815986633;
-                        if (pt >= 200. && pt < 300.)  SFb_error = 0.014995276927947998;
-                        if (pt >= 300. && pt < 600.)  SFb_error = 0.021414462476968765;
-                        if (pt >= 600. && pt < 1000.) SFb_error = 0.032377112656831741;
-                        if (pt >= 1000.)              SFb_error = 0.032377112656831741*2.;
+                //         float SFc_error = 0.0;
+                //         if (pt < 20.)                 SFc_error = 0.13138505816459656*2.;
+                //         if (pt >= 20.  && pt < 30.)   SFc_error = 0.13138505816459656;
+                //         if (pt >= 30.  && pt < 50.)   SFc_error = 0.047536440193653107;
+                //         if (pt >= 50.  && pt < 70.)   SFc_error = 0.042522255331277847;
+                //         if (pt >= 70.  && pt < 100.)  SFc_error = 0.039602756500244141;
+                //         if (pt >= 100. && pt < 140.)  SFc_error = 0.038736090064048767;
+                //         if (pt >= 140. && pt < 200.)  SFc_error = 0.058426573872566223;
+                //         if (pt >= 200. && pt < 300.)  SFc_error = 0.048853777348995209;
+                //         if (pt >= 300. && pt < 600.)  SFc_error = 0.10452167689800262;
+                //         if (pt >= 600. && pt < 1000.) SFc_error = 0.14962516725063324;
+                //         if (pt >= 1000.)              SFc_error = 0.14962516725063324*2.;
                         
-                        float SFb_up = SFb + SFb_error;
-                        float SFb_down = SFb - SFb_error;
+                //         float SFc_up = SFc + SFc_error;
+                //         float SFc_down = SFc - SFc_error;
                         
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
+                //         // F values for rand comparison
+                //         float f = 0.0;
+                //         float f_up = 0.0;
+                //         float f_down = 0.0;
                         
-                        if (SFb <1.0) f = (1.0 - SFb);
-                        if (SFb_up <1.0) f_up = (1.0 - SFb_up);
-                        if (SFb_down <1.0) f_down = (1.0 - SFb_down);
+                //         if (SFc <1.0) f = (1.0 - SFc);
+                //         if (SFc_up <1.0) f_up = (1.0 - SFc_up);
+                //         if (SFc_down <1.0) f_down = (1.0 - SFc_down);
                         
-                        if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
-                        if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
-                        if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                //         if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                //         if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                //         if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
                         
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                //         passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                //         passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                         
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                //         // Untag a tagged jet
+                //         if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
+                //         if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
                         
+                //         // Tag an untagged jet
+                //         if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
+                //         if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                         
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                        
-                    }
+                //     } // end c-jet section
                     
-                    // ---------------- For Real C-jets--------------- //
-                    if (abs(jetflavour)==4){
-                        float effc = 0.185922;
-                        float effc_corr = 1;
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 effc = 0.185922 * effc_corr;
-                            if (pt >= 30.  && pt < 50.)   effc = 0.185922 * effc_corr;
-                            if (pt >= 50.  && pt < 70.)   effc = 0.182578 * effc_corr;
-                            if (pt >= 70.  && pt < 100.)  effc = 0.18893 * effc_corr;
-                            if (pt >= 100. && pt < 140.)  effc = 0.189251 * effc_corr;
-                            if (pt >= 140. && pt < 200.)  effc = 0.186575 * effc_corr;
-                            if (pt >= 200. && pt < 300.)  effc = 0.194419 * effc_corr;
-                            if (pt >= 300. && pt < 600.)  effc = 0.171999 * effc_corr;
-                            if (pt >= 600. && pt < 1000.) effc = 0.143033 * effc_corr;
-                            if (pt >= 1000.)              effc = 0.143033 * effc_corr;
-                        }
+                //     // ---------------- For Truth-Level Light-jets --------------- //
+                //     if (fabs(jetflavour) < 4){
+
+                //         float eff_l = 1.;
+                //         if (pt < 30.)                 eff_l = 0.0112759;
+                //         if (pt >= 30.  && pt < 50.)   eff_l = 0.0112759;
+                //         if (pt >= 50.  && pt < 70.)   eff_l = 0.00951306;
+                //         if (pt >= 70.  && pt < 100.)  eff_l = 0.0103573;
+                //         if (pt >= 100. && pt < 140.)  eff_l = 0.0104005;
+                //         if (pt >= 140. && pt < 200.)  eff_l = 0.0122555;
+                //         if (pt >= 200. && pt < 300.)  eff_l = 0.0148327;
+                //         if (pt >= 300. && pt < 600.)  eff_l = 0.0217662;
+                //         if (pt >= 600. && pt < 1000.) eff_l = 0.0335962;
+                //         if (pt >= 1000.)              eff_l = 0.0335962;
                         
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFc = 0.561694*((1.+(0.31439*pt))/(1.+(0.17756*pt)));
-                        if (pt < 20.)   SFc = 0.561694*((1.+(0.31439*20))/(1.+(0.17756*20)));
-                        if (pt > 1000.) SFc = 0.561694*((1.+(0.31439*1000))/(1.+(0.17756*1000)));
+                //         // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "incl" values, light-jets
+                //         float           SFlight = 1.09286+(-0.00052597*pt)+(1.88225e-06*pt*pt)+(-1.27417e-09*pt*pt*pt);
+                //         if (pt < 20.)   SFlight = 1.09286+(-0.00052597*20.)+(1.88225e-06*20.*20.)+(-1.27417e-09*20.*20.*20.);
+                //         if (pt > 1000.) SFlight = 1.09286+(-0.00052597*1000.)+(1.88225e-06*1000.*1000.)+(-1.27417e-09*1000.*1000.*1000.);
                         
-                        float SFc_error = 0.0;
-                        if (pt < 20.)                 SFc_error = 0.12064050137996674*2.;
-                        if (pt >= 20.  && pt < 30.)   SFc_error = 0.12064050137996674;
-                        if (pt >= 30.  && pt < 50.)   SFc_error = 0.042138919234275818;
-                        if (pt >= 50.  && pt < 70.)   SFc_error = 0.03711806982755661;
-                        if (pt >= 70.  && pt < 100.)  SFc_error = 0.036822021007537842;
-                        if (pt >= 100. && pt < 140.)  SFc_error = 0.034397732466459274;
-                        if (pt >= 140. && pt < 200.)  SFc_error = 0.0362386554479599;
-                        if (pt >= 200. && pt < 300.)  SFc_error = 0.044985830783843994;
-                        if (pt >= 300. && pt < 600.)  SFc_error = 0.064243391156196594;
-                        if (pt >= 600. && pt < 1000.) SFc_error = 0.097131341695785522;
-                        if (pt >= 1000.)              SFc_error = 0.097131341695785522*2.;
+                //         float           SFlight_up = SFlight * (1+(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                //         if (pt < 20.)   SFlight_up = SFlight * (1+(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                //         if (pt > 1000.) SFlight_up = SFlight * (1+(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                         
-                        float SFc_up = SFc + SFc_error;
-                        float SFc_down = SFc - SFc_error;
+                //         float           SFlight_down = SFlight * (1-(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                //         if (pt < 20.)   SFlight_down = SFlight * (1-(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                //         if (pt > 1000.) SFlight_down = SFlight * (1-(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                         
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
+                //         // F values for rand comparison
+                //         float f = 0.0;
+                //         float f_up = 0.0;
+                //         float f_down = 0.0;
                         
-                        if (SFc <1.0) f = (1.0 - SFc);
-                        if (SFc_up <1.0) f_up = (1.0 - SFc_up);
-                        if (SFc_down <1.0) f_down = (1.0 - SFc_down);
+                //         if (SFlight <1.0) f = (1.0 - SFlight);
+                //         if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
+                //         if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
                         
-                        if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
-                        if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
-                        if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                //         if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
+                //         if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
+                //         if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
                         
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                //         passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                //         passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                         
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                //         // Untag a tagged jet
+                //         if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
+                //         if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
                         
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                        
-                    }
+                //         // Tag an untagged jet
+                //         if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
+                //         if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                //         if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                //     }   // end light jet section
                     
-                    // ---------------- For REAL Light-jets --------------- //
-                    if (abs(jetflavour)<4){
-                        float eff_l = 0.0200484;
-                        float eff_l_corr = 1;
-                        //if (fileName.find("WJets") != string::npos && fileName.find("SMu_") != string::npos){
-                        if (false) {
-                        }
-                        else{
-                            if (pt < 30.)                 eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 30.  && pt < 50.)   eff_l = 0.0200484 * eff_l_corr;
-                            if (pt >= 50.  && pt < 70.)   eff_l = 0.0171176 * eff_l_corr;
-                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0158081 * eff_l_corr;
-                            if (pt >= 100. && pt < 140.)  eff_l = 0.0155987 * eff_l_corr;
-                            if (pt >= 140. && pt < 200.)  eff_l = 0.0211239 * eff_l_corr;
-                            if (pt >= 200. && pt < 300.)  eff_l = 0.0223319 * eff_l_corr;
-                            if (pt >= 300. && pt < 600.)  eff_l = 0.030051  * eff_l_corr;
-                            if (pt >= 600. && pt < 1000.) eff_l = 0.0427809 * eff_l_corr;
-                            if (pt >= 1000.)              eff_l = 0.0427809 * eff_l_corr;
-                        }
-                        
-                        //--- CSVv2_Moriond17_B_H.csv values (run period independent)
-                        float           SFlight = 1.0589+(0.000382569*pt)+(-2.4252e-07*(pt*pt))+(2.20966e-10*(pt*pt*pt));
-                        if (pt < 20.)   SFlight = 1.0589+(0.000382569*20)+(-2.4252e-07*(20*20))+(2.20966e-10*(20*20*20));
-                        if (pt > 1000.) SFlight = 1.0589+(0.000382569*1000)+(-2.4252e-07*(1000*1000))+(2.20966e-10*(1000*1000*1000));
-                        
-                        float           SFlight_up = SFlight * (1+(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_up = SFlight * (1+(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
-                        float           SFlight_down = SFlight * (1-(0.100485+(3.95509e-05*pt)+(-4.90326e-08*(pt*pt))));
-                        if (pt < 20.)   SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*20)+(-4.90326e-08*(20*20)))));
-                        if (pt > 1000.) SFlight_down = SFlight * (1-(2*(0.100485+(3.95509e-05*1000)+(-4.90326e-08*(1000*1000)))));
-                        
-                        // F values for rand comparison
-                        float f = 0.0;
-                        float f_up = 0.0;
-                        float f_down = 0.0;
-                        
-                        if (SFlight <1.0) f = (1.0 - SFlight);
-                        if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
-                        if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
-                        
-                        if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
-                        if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
-                        if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
-                        
-                        passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                        passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
-                        
-                        // Untag a tagged jet
-                        if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
-                        if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                        if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
-                        
-                        // Tag an untagged jet
-                        if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
-                        if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                        if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                    }   ////////flavour lop
+                //     // for btagging SF systematics
+                //     if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                //     if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                     
-                    // for btagging SF systematics
-                    if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
-                    if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
-                    
-                    // Wb study
-                    if (abs(jetflavour)==5) countWbBjets++ ;
-                } // --------- End MC-only
+                //     // Wb study
+                //     if (fabs(jetflavour)==5) countWbBjets++;
+
+                // } // --------- End MC-only
+
+
                 //************************* End B-tag Veto Correction *******************************//
                
                 // grabbing reco jet information in the form of a jetStruct
-                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0};
+                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, JetAk04BDiscDeepCSV->at(i)};
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
                 double jetEnergyCorr = 0.; 
@@ -964,7 +973,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 // PF jet ID? (should be loose)
                 bool jetPassesIdCut(JetAk04Id->at(i) > 0);
                 // PU ID cut to help mitigate pileup jets
-                bool jetPassesPuIdCut((JetAk04PuId->at(i) & 1<<2));  //Kadir: jet loose pu ID
+                bool jetPassesPuIdCut(JetAk04PuIdLoose->at(i));
                 // PU MVA cut (only jets with pT below 100 GeV have to explicitly pass)
                 double tempMVA = JetAk04PuMva->at(i);
                 bool jetPassesMVACut(0);
@@ -1053,7 +1062,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
                 // getting getJet info in the form of a jetStruct
-                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0};
+                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0, 0.};
                 // genJet dR information (wrt lepton)
                 bool genJetPassesdRCut(1), genJetPassesdR02Cut(1);
                 for (unsigned short j(0); j < nGenLeptons; j++){ 
@@ -1149,7 +1158,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             
             METpt = METPt->at(whichMet);
             TLorentzVector tmpVecMet;
-            tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), METPz->at(whichMet), METE->at(whichMet));
+            // tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), METPz->at(whichMet), METE->at(whichMet));
+            tmpVecMet.SetPxPyPzE(METPx->at(whichMet), METPy->at(whichMet), 0., METE->at(whichMet));
             METphi = tmpVecMet.Phi();
 
             if (passesLeptonReq) {
@@ -1211,7 +1221,8 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 }
 
                 // Apply transverse mass and MET cut
-                if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
+                // if (METpt >= METcut && passMETFILTER && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
+                if (METpt >= METcut && (((doQCD % 2) == 0 && MT >= MTCut) || ((doQCD % 2) == 1 && MT < MTCut))) {
                     passesLeptonCut = true;
                     passesLeptonAndMT = true;
                     nEventsWithTwoGoodLeptons++;
@@ -1533,21 +1544,21 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
                     h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                     h_pt_b->Fill(jets[i].pt, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= 0.6321){
                         h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                         h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
                     }
                 }
                 else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
                     h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= 0.6321){
                         h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                     }
                 }
                 else {
                     h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                     h_pt_udsg->Fill(jets[i].pt, weightNoSF);
-                    if(JetAk04BDiscCisvV2->at(jet_ind) >= 0.800){
+                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= 0.6321){
                         h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
                         h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
                     }
@@ -1746,7 +1757,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     GLepBarePtZinc1jet->Fill(genLep2.Pt(), genWeight);
                     GLepBareEtaZinc1jet->Fill(genLep2.Eta(), genWeight);
                 }
-//                    genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
+            //                    genZPt_Zinc1jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc1jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc1jet->Fill(genZ.Eta(), genWeight);
                 
@@ -1797,7 +1808,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     GLepBarePtZinc2jet->Fill(genLep2.Pt(), genWeight);
                     GLepBareEtaZinc2jet->Fill(genLep2.Eta(), genWeight);
                 }
-//                    genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
+                //                    genZPt_Zinc2jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc2jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc2jet->Fill(genZ.Eta(), genWeight);
                 genFirstHighestJetPt_Zinc2jet->Fill(genLeadJ.Pt(), genWeight);
@@ -1872,79 +1883,79 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     
                 //andrew -- turning off EWK histograms due to memory issues with ROOT
                 //they don't seem relevant for the alpha_s analysis, at least for the moment
-    //            //--- START EWK ---
-    //            if (passesGenEWKJetPt){
-    //                // met histos
-    //                //
-    //                //METEWK_Zinc2jet->Fill(METpt, weight);
-    //                //METphiEWK_Zinc2jet->Fill(METphi,  weight);
-    //                //MTEWK_Zinc2jet->Fill(MT,  weight);
-    //                //          
-    //                // jet histos
-    //                genZNGoodJetsEWK_Zexc->Fill(nGoodGenJets, genWeight);
-    //                genFirstJetPtEWK_Zinc2jet->Fill(genJets[0].pt, genWeight);
-    //                genFirstJetEtaEWK_Zinc2jet->Fill(genJets[0].eta, genWeight);
-    //                genFirstJetPhiEWK_Zinc2jet->Fill(genJets[0].phi, genWeight);
+                //            //--- START EWK ---
+                //            if (passesGenEWKJetPt){
+                //                // met histos
+                //                //
+                //                //METEWK_Zinc2jet->Fill(METpt, weight);
+                //                //METphiEWK_Zinc2jet->Fill(METphi,  weight);
+                //                //MTEWK_Zinc2jet->Fill(MT,  weight);
+                //                //          
+                //                // jet histos
+                //                genZNGoodJetsEWK_Zexc->Fill(nGoodGenJets, genWeight);
+                //                genFirstJetPtEWK_Zinc2jet->Fill(genJets[0].pt, genWeight);
+                //                genFirstJetEtaEWK_Zinc2jet->Fill(genJets[0].eta, genWeight);
+                //                genFirstJetPhiEWK_Zinc2jet->Fill(genJets[0].phi, genWeight);
 
 
-    //                genSecondJetPtEWK_Zinc2jet->Fill(genJets[1].pt, genWeight);
-    //                genSecondJetEtaEWK_Zinc2jet->Fill(genJets[1].eta, genWeight);
-    //                genSecondJetPhiEWK_Zinc2jet->Fill(genJets[1].phi, genWeight);
-    //                int temIND(0), temIND1(1);
-    //                if (fabs(genJets[1].eta) > fabs(genJets[0].eta)){ 
-    //                    temIND = 1; 
-    //                    temIND1 = 0;
-    //                }
-    //                genForwardJetPtEWK_Zinc2jet->Fill(genJets[temIND].pt, genWeight);
-    //                genForwardJetEtaEWK_Zinc2jet->Fill(genJets[temIND].eta, genWeight);
-    //                genForwardJetPhiEWK_Zinc2jet->Fill(genJets[temIND].phi, genWeight);
+                //                genSecondJetPtEWK_Zinc2jet->Fill(genJets[1].pt, genWeight);
+                //                genSecondJetEtaEWK_Zinc2jet->Fill(genJets[1].eta, genWeight);
+                //                genSecondJetPhiEWK_Zinc2jet->Fill(genJets[1].phi, genWeight);
+                //                int temIND(0), temIND1(1);
+                //                if (fabs(genJets[1].eta) > fabs(genJets[0].eta)){ 
+                //                    temIND = 1; 
+                //                    temIND1 = 0;
+                //                }
+                //                genForwardJetPtEWK_Zinc2jet->Fill(genJets[temIND].pt, genWeight);
+                //                genForwardJetEtaEWK_Zinc2jet->Fill(genJets[temIND].eta, genWeight);
+                //                genForwardJetPhiEWK_Zinc2jet->Fill(genJets[temIND].phi, genWeight);
 
 
-    //                genCentralJetPtEWK_Zinc2jet->Fill(genJets[temIND1].pt, genWeight);
-    //                genCentralJetEtaEWK_Zinc2jet->Fill(genJets[temIND1].eta, genWeight);
-    //                genCentralJetPhiEWK_Zinc2jet->Fill(genJets[temIND1].phi, genWeight);
+                //                genCentralJetPtEWK_Zinc2jet->Fill(genJets[temIND1].pt, genWeight);
+                //                genCentralJetEtaEWK_Zinc2jet->Fill(genJets[temIND1].eta, genWeight);
+                //                genCentralJetPhiEWK_Zinc2jet->Fill(genJets[temIND1].phi, genWeight);
 
 
-    //                genJetsHTEWK_Zinc2jet->Fill(genJetsHT, genWeight);
-    //                genJetsMassEWK_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
+                //                genJetsHTEWK_Zinc2jet->Fill(genJetsHT, genWeight);
+                //                genJetsMassEWK_Zinc2jet->Fill(genJet1Plus2.M(), genWeight);
 
-    //                // multi jet variables
-    //                genSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() + genSecondJ.Eta()),  genWeight);
-    //                genAbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta()) + fabs(genSecondJ.Eta()),  genWeight);
-    //                genTwoJetsPtDiffEWK_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
-    //                genptBalEWK_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
-    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
-    //                gendEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() - genSecondJ.Eta()), genWeight);
-    //                genSpTJetsEWK_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
-    //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                //                // multi jet variables
+                //                genSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() + genSecondJ.Eta()),  genWeight);
+                //                genAbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta()) + fabs(genSecondJ.Eta()),  genWeight);
+                //                genTwoJetsPtDiffEWK_Zinc2jet->Fill(genJet1Minus2.Pt(), genWeight);
+                //                genptBalEWK_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
+                //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                //                gendEtaJetsEWK_Zinc2jet->Fill(fabs(genLeadJ.Eta() - genSecondJ.Eta()), genWeight);
+                //                genSpTJetsEWK_Zinc2jet->Fill(SpTsub(genLeadJ, genSecondJ), genWeight);
+                //                gendPhiJetsEWK_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
 
-    //                // find jet properties of the third jet that is  between the two leading jets
-    //                int nGoodJetsBtw(0.);
-    //                double jetsHTBtw(0.);
-    //                if (nGenJetsAdd > 2){
-    //                    genThirdJetPtEWKadd_Zinc2jet->Fill(genJetsAdditional[2].pt, genWeight);
-    //                    genThirdJetEtaEWKadd_Zinc2jet->Fill(genJetsAdditional[2].eta, genWeight);
-    //                    genThirdJetPhiEWKadd_Zinc2jet->Fill(genJetsAdditional[2].phi, genWeight);
-    //                    for (unsigned short i(2); i < nGenJetsAdd; i++) {
-    //                        if (genJetsAdditional[i].eta < max(genJets[0].eta,genJets[1].eta) -0.5 && genJetsAdditional[i].eta > min(genJets[0].eta,genJets[1].eta) + 0.5){
-    //                            jetsHTBtw += genJetsAdditional[i].pt;
-    //                            nGoodJetsBtw++;
-    //                            genAllJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
-    //                            genAllJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
-    //                            genAllJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
-    //                            if (nGoodJetsBtw == 1){
-    //                                genThirdJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
-    //                                genThirdJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
-    //                                genThirdJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
-    //                            }
-    //                        }
-    //                    }
-    //                    genJetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, genWeight);
-    //                    genZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, genWeight);
-    //                }
+                //                // find jet properties of the third jet that is  between the two leading jets
+                //                int nGoodJetsBtw(0.);
+                //                double jetsHTBtw(0.);
+                //                if (nGenJetsAdd > 2){
+                //                    genThirdJetPtEWKadd_Zinc2jet->Fill(genJetsAdditional[2].pt, genWeight);
+                //                    genThirdJetEtaEWKadd_Zinc2jet->Fill(genJetsAdditional[2].eta, genWeight);
+                //                    genThirdJetPhiEWKadd_Zinc2jet->Fill(genJetsAdditional[2].phi, genWeight);
+                //                    for (unsigned short i(2); i < nGenJetsAdd; i++) {
+                //                        if (genJetsAdditional[i].eta < max(genJets[0].eta,genJets[1].eta) -0.5 && genJetsAdditional[i].eta > min(genJets[0].eta,genJets[1].eta) + 0.5){
+                //                            jetsHTBtw += genJetsAdditional[i].pt;
+                //                            nGoodJetsBtw++;
+                //                            genAllJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+                //                            genAllJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+                //                            genAllJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+                //                            if (nGoodJetsBtw == 1){
+                //                                genThirdJetPtEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].pt, genWeight);
+                //                                genThirdJetEtaEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].eta, genWeight);
+                //                                genThirdJetPhiEWKbtw_Zinc2jet->Fill(genJetsAdditional[i].phi, genWeight);
+                //                            }
+                //                        }
+                //                    }
+                //                    genJetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, genWeight);
+                //                    genZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, genWeight);
+                //                }
 
-    //            }
-    //            //////////////////////// STOP EWK
+                //            }
+                //            //////////////////////// STOP EWK
                 
                 if (genZ.Pt() < 25){
                     genptBal_LowPt_Zinc2jet->Fill(genJet1Plus2PlusZ.Pt(), genWeight);
@@ -2079,7 +2090,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 genZNGoodJets_Zinc->Fill(3., genWeight);
                 genZNGoodJetsFull_Zinc->Fill(3., genWeight);
                 genZMass_Zinc3jet->Fill(genZ.M(), genWeight);
-//                    genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
+                //                    genZPt_Zinc3jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc3jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc3jet->Fill(genZ.Eta(), genWeight);
 
@@ -2123,7 +2134,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 genZNGoodJets_Zinc->Fill(4., genWeight);
                 genZNGoodJetsFull_Zinc->Fill(4., genWeight);
                 genZMass_Zinc4jet->Fill(genZ.M(), genWeight);
-//                    genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
+                //                    genZPt_Zinc4jet->Fill(genZ.Pt(), genWeight);
                 genZRapidity_Zinc4jet->Fill(genZ.Rapidity(), genWeight);
                 genZEta_Zinc4jet->Fill(genZ.Eta(), genWeight);
                 
@@ -2446,7 +2457,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 //MET_1_Zinc1jet->Fill(METpt, weight);
                 //METphi_Zinc1jet->Fill(METphi, weight);
                 MT_Zinc1jet->Fill(MT, weight);
-//                ZPt_Zinc1jet->Fill(Z.Pt(), weight);
+                //                ZPt_Zinc1jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc1jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc1jet->Fill(Z.Eta(), weight);
                 lepPt_Zinc1jet->Fill(lepton1.pt, weight);
@@ -2487,7 +2498,10 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     AllJetPt_Zinc1jet->Fill(jets[j].pt, weight);
                     AllJetEta_Zinc1jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc1jet->Fill(jets[j].phi, weight);
+
+                    btagDiscScores_EvtSelection->Fill(jets[j].btagDiscScore, weight);
                 }
+
                 if ( doW ) dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta - lepton1.eta), weight);
                 else dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta-Z.Eta()), weight);
                 for ( int i =0 ; i < NbinsEta2D - 1 ; i++){
@@ -2537,7 +2551,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 TwoJetsPtDiff_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
                 BestTwoJetsPtDiff_Zinc2jet->Fill(bestJet1Minus2.Pt(), weight);
                 JetsMass_Zinc2jet->Fill(jet1Plus2.M(), weight);
-//                ZPt_Zinc2jet->Fill(Z.Pt(), weight);
+                //                ZPt_Zinc2jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc2jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc2jet->Fill(Z.Eta(), weight);
                 lepPt_Zinc2jet->Fill(lepton1.pt, weight);
@@ -2623,174 +2637,174 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                     if ( fabs(jets[1].eta) >= j_Y_range[i] &&  fabs(jets[1].eta) < j_Y_range[i+1]) SecondJetPt_Zinc2jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
                 }
 
-     //           //andrew -- see explanation for turning off EWK histos above
-     //           //--- V + 2 jets EWK histograms
-     //           if (passesEWKJetPt){
-     //               // met histos
-     //               METEWK_Zinc2jet->Fill(METpt, weight);
-     //               //koMETphiEWK_Zinc2jet->Fill(METphi,  weight);
-     //               MTEWK_Zinc2jet->Fill(MT,  weight);
-     //               
-     //               // jet histos
-     //               ZNGoodJetsEWK_Zexc->Fill(nGoodJets, weight);
-     //               FirstJetPtEWK_Zinc2jet->Fill(jets[0].pt, weight);
-     //               FirstJetEtaEWK_Zinc2jet->Fill(jets[0].eta, weight);
-     //               FirstJetPhiEWK_Zinc2jet->Fill(jets[0].phi, weight);
-     //               
-     //               
-     //               SecondJetPtEWK_Zinc2jet->Fill(jets[1].pt, weight);
-     //               SecondJetEtaEWK_Zinc2jet->Fill(jets[1].eta, weight);
-     //               SecondJetPhiEWK_Zinc2jet->Fill(jets[1].phi, weight);
-     //               
-     //               int temIND (0), temIND1(1);
-     //               if (fabs(jets[1].eta) > fabs(jets[0].eta)){
-     //                   temIND = 1;
-     //                   temIND1 = 0;
-     //               }
-     //               ForwardJetPtEWK_Zinc2jet->Fill(jets[temIND].pt, weight);
-     //               ForwardJetEtaEWK_Zinc2jet->Fill(jets[temIND].eta, weight);
-     //               ForwardJetPhiEWK_Zinc2jet->Fill(jets[temIND].phi, weight);
-     //               
-     //               CentralJetPtEWK_Zinc2jet->Fill(jets[temIND1].pt, weight);
-     //               CentralJetEtaEWK_Zinc2jet->Fill(jets[temIND1].eta, weight);
-     //               CentralJetPhiEWK_Zinc2jet->Fill(jets[temIND1].phi, weight);
-     //               
-     //               JetsHTEWK_Zinc2jet->Fill(jetsHT, weight);
-     //               JetsMassEWK_Zinc2jet->Fill(jet1Plus2.M(), weight);
-     //               
-     //               // multi jet variables
-     //               SumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() + secondJ.Eta()),  weight);
-     //               AbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta()) + fabs(secondJ.Eta()),  weight);
-     //               TwoJetsPtDiffEWK_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
-     //               ptBalEWK_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
-     //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //               dEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
-     //               SpTJetsEWK_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
-     //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //               
-     //               // find jet properties of the third jet that is between the two leading jets
-     //               int nGoodJetsBtw(0.);
-     //               double jetsHTBtw(0.);
-     //               if (nJetsAdd > 2){
-     //                   ThirdJetPtEWKadd_Zinc2jet->Fill(jetsAdditional[2].pt, weight);
-     //                   ThirdJetEtaEWKadd_Zinc2jet->Fill(jetsAdditional[2].eta, weight);
-     //                   ThirdJetPhiEWKadd_Zinc2jet->Fill(jetsAdditional[2].phi, weight);
-     //                   
-     //                   for (unsigned short i(2); i < nJetsAdd; i++){
-     //                       int coutBtw = 0 ;
-     //                       if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
-     //                           && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5){
-     //                           jetsHTBtw += jetsAdditional[i].pt ;
-     //                           nGoodJetsBtw++;
-     //                           AllJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
-     //                           AllJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
-     //                           AllJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
-     //                           if (coutBtw == 0){
-     //                               ThirdJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
-     //                               ThirdJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
-     //                               ThirdJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
-     //                               coutBtw = 1;
-     //                           }
-     //                       }
-     //                   }
-     //               }
-     //               ZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, weight);
-     //               JetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, weight);
-     //               
-     //               // at least one forward jet
-     //               if (passesEWKJetFwdEta){
-     //                   METEWKfwd_Zinc2jet->Fill(METpt,  weight);
-     //                   //KoMETphiEWKfwd_Zinc2jet->Fill(METphi,  weight);
-     //                   MTEWKfwd_Zinc2jet->Fill(MT,  weight);
-     //                   
-     //                   // jet histos
-     //                   ZNGoodJetsEWKfwd_Zexc->Fill(nGoodJets, weight);
-     //                   FirstJetPtEWKfwd_Zinc2jet->Fill(jets[0].pt, weight);
-     //                   FirstJetEtaEWKfwd_Zinc2jet->Fill(jets[0].eta, weight);
-     //                   FirstJetPhiEWKfwd_Zinc2jet->Fill(jets[0].phi, weight);
-     //                   
-     //                   SecondJetPtEWKfwd_Zinc2jet->Fill(jets[1].pt, weight);
-     //                   SecondJetEtaEWKfwd_Zinc2jet->Fill(jets[1].eta, weight);
-     //                   SecondJetPhiEWKfwd_Zinc2jet->Fill(jets[1].phi, weight);
-     //                   
-     //                   JetsHTEWKfwd_Zinc2jet->Fill(jetsHT, weight);
-     //                   JetsMassEWKfwd_Zinc2jet->Fill(jet1Plus2.M(), weight);
-     //                   
-     //                   // multi jet variables
-     //                   SumEtaJetsEWKfwd_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(), weight);
-     //                   TwoJetsPtDiffEWKfwd_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
-     //                   ptBalEWKfwd_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
-     //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //                   dEtaJetsEWKfwd_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
-     //                   SpTJetsEWKfwd_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
-     //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //                   
-     //                   
-     //               }//--- end at least one forward jet
-     //               
-     //               if (jet1Plus2.M() > 1000.){
-     //                   METEWKmjj_Zinc2jet->Fill(METpt,  weight);
-     //                   //KoMETphiEWKmjj_Zinc2jet->Fill(METphi,  weight);
-     //                   MTEWKmjj_Zinc2jet->Fill(MT,  weight);
-     //                   short nGoodJetsAdd(nJetsAdd-2);
-     //                   double jetsHTAdd(0);
-     //                   // jet histos
-     //                   ZNGoodJetsEWKmjj_Zexc->Fill(nGoodJetsAdd, weight);
-     //                   FirstJetPtEWKmjj_Zinc2jet->Fill(jets[0].pt, weight);
-     //                   FirstJetEtaEWKmjj_Zinc2jet->Fill(jets[0].eta, weight);
-     //                   FirstJetPhiEWKmjj_Zinc2jet->Fill(jets[0].phi, weight);
-     //                   
-     //                   
-     //                   SecondJetPtEWKmjj_Zinc2jet->Fill(jets[1].pt, weight);
-     //                   SecondJetEtaEWKmjj_Zinc2jet->Fill(jets[1].eta, weight);
-     //                   SecondJetPhiEWKmjj_Zinc2jet->Fill(jets[1].phi, weight);
-     //                   
-     //                   JetsHTEWKmjj_Zinc2jet->Fill(jetsHT, weight);
-     //                   JetsMassEWKmjj_Zinc2jet->Fill(jet1Plus2.M(), weight);
-     //                   
-     //                   // multi jet variables
-     //                   SumEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(),  weight);
-     //                   TwoJetsPtDiffEWKmjj_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
-     //                   ptBalEWKmjj_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
-     //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //                   dEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() - secondJ.Eta(), weight);
-     //                   SpTJetsEWKmjj_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
-     //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
-     //                   
-     //                   // find jet properties of the third jet that is  between the two leading jets
-     //                   int nGoodJetsmjjBtw(0.);
-     //                   if (nJetsAdd > 2){
-     //                       double jetsHTmjjBtw(0.);
-     //                       for (unsigned short i(2); i < nJetsAdd; i++){
-     //                           if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
-     //                               && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5 ){
-     //                               jetsHTmjjBtw += jetsAdditional[i].pt ;
-     //                               nGoodJetsmjjBtw++;
-     //                           }
-     //                           jetsHTAdd += jetsAdditional[i].pt ;
-     //                       }
-     //                       
-     //                       ThirdJetPtEWKmjj_Zinc3jet->Fill(jetsAdditional[2].pt, weight);
-     //                       JetsHTEWKmjjAdd_Zinc2jet->Fill(jetsHTAdd, weight);
-     //                       TLorentzVector thirdJAdd;
-     //                       thirdJAdd.SetPtEtaPhiE(jetsAdditional[2].pt, jetsAdditional[2].eta, jetsAdditional[2].phi, jetsAdditional[2].energy);
-     //                       double tempRapidiy3Jet = thirdJAdd.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
-     //                       ThirdJetEtaEWKmjj_Zinc3jet->Fill(tempRapidiy3Jet, weight);
-     //                   }
-     //               }//--- end dijet mass > 1000
-     //               
-     //               //--- higher jet properties
-     //               if (nGoodJets > 2){
-     //                   METEWK_Zinc3jet->Fill(METpt, weight);
-     //                   //koMETphiEWK_Zinc3jet->Fill(METphi, weight);
-     //                   MTEWK_Zinc3jet->Fill(MT, weight);
-     //                   
-     //                   TLorentzVector thirdJ;
-     //                   thirdJ.SetPtEtaPhiE(jets[2].pt, jets[2].eta, jets[2].phi, jets[2].energy);
-     //                   double tempRapidiy3Jet = thirdJ.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
-     //                   EtaThirdJetsEWK_Zinc3jet->Fill(tempRapidiy3Jet, weight);
-     //               }
-     //           } ///END (passesEWKJetPt) loop
+                //           //andrew -- see explanation for turning off EWK histos above
+                //           //--- V + 2 jets EWK histograms
+                //           if (passesEWKJetPt){
+                //               // met histos
+                //               METEWK_Zinc2jet->Fill(METpt, weight);
+                //               //koMETphiEWK_Zinc2jet->Fill(METphi,  weight);
+                //               MTEWK_Zinc2jet->Fill(MT,  weight);
+                //               
+                //               // jet histos
+                //               ZNGoodJetsEWK_Zexc->Fill(nGoodJets, weight);
+                //               FirstJetPtEWK_Zinc2jet->Fill(jets[0].pt, weight);
+                //               FirstJetEtaEWK_Zinc2jet->Fill(jets[0].eta, weight);
+                //               FirstJetPhiEWK_Zinc2jet->Fill(jets[0].phi, weight);
+                //               
+                //               
+                //               SecondJetPtEWK_Zinc2jet->Fill(jets[1].pt, weight);
+                //               SecondJetEtaEWK_Zinc2jet->Fill(jets[1].eta, weight);
+                //               SecondJetPhiEWK_Zinc2jet->Fill(jets[1].phi, weight);
+                //               
+                //               int temIND (0), temIND1(1);
+                //               if (fabs(jets[1].eta) > fabs(jets[0].eta)){
+                //                   temIND = 1;
+                //                   temIND1 = 0;
+                //               }
+                //               ForwardJetPtEWK_Zinc2jet->Fill(jets[temIND].pt, weight);
+                //               ForwardJetEtaEWK_Zinc2jet->Fill(jets[temIND].eta, weight);
+                //               ForwardJetPhiEWK_Zinc2jet->Fill(jets[temIND].phi, weight);
+                //               
+                //               CentralJetPtEWK_Zinc2jet->Fill(jets[temIND1].pt, weight);
+                //               CentralJetEtaEWK_Zinc2jet->Fill(jets[temIND1].eta, weight);
+                //               CentralJetPhiEWK_Zinc2jet->Fill(jets[temIND1].phi, weight);
+                //               
+                //               JetsHTEWK_Zinc2jet->Fill(jetsHT, weight);
+                //               JetsMassEWK_Zinc2jet->Fill(jet1Plus2.M(), weight);
+                //               
+                //               // multi jet variables
+                //               SumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() + secondJ.Eta()),  weight);
+                //               AbsSumEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta()) + fabs(secondJ.Eta()),  weight);
+                //               TwoJetsPtDiffEWK_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+                //               ptBalEWK_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+                //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //               dEtaJetsEWK_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
+                //               SpTJetsEWK_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+                //               dPhiJetsEWK_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //               
+                //               // find jet properties of the third jet that is between the two leading jets
+                //               int nGoodJetsBtw(0.);
+                //               double jetsHTBtw(0.);
+                //               if (nJetsAdd > 2){
+                //                   ThirdJetPtEWKadd_Zinc2jet->Fill(jetsAdditional[2].pt, weight);
+                //                   ThirdJetEtaEWKadd_Zinc2jet->Fill(jetsAdditional[2].eta, weight);
+                //                   ThirdJetPhiEWKadd_Zinc2jet->Fill(jetsAdditional[2].phi, weight);
+                //                   
+                //                   for (unsigned short i(2); i < nJetsAdd; i++){
+                //                       int coutBtw = 0 ;
+                //                       if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
+                //                           && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5){
+                //                           jetsHTBtw += jetsAdditional[i].pt ;
+                //                           nGoodJetsBtw++;
+                //                           AllJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
+                //                           AllJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
+                //                           AllJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
+                //                           if (coutBtw == 0){
+                //                               ThirdJetPtEWKbtw_Zinc2jet->Fill(jetsAdditional[i].pt, weight);
+                //                               ThirdJetEtaEWKbtw_Zinc2jet->Fill(jetsAdditional[i].eta, weight);
+                //                               ThirdJetPhiEWKbtw_Zinc2jet->Fill(jetsAdditional[i].phi, weight);
+                //                               coutBtw = 1;
+                //                           }
+                //                       }
+                //                   }
+                //               }
+                //               ZNGoodJetsEWKbtw_Zexc->Fill(nGoodJetsBtw, weight);
+                //               JetsHTEWKbtw_Zinc2jet->Fill(jetsHTBtw, weight);
+                //               
+                //               // at least one forward jet
+                //               if (passesEWKJetFwdEta){
+                //                   METEWKfwd_Zinc2jet->Fill(METpt,  weight);
+                //                   //KoMETphiEWKfwd_Zinc2jet->Fill(METphi,  weight);
+                //                   MTEWKfwd_Zinc2jet->Fill(MT,  weight);
+                //                   
+                //                   // jet histos
+                //                   ZNGoodJetsEWKfwd_Zexc->Fill(nGoodJets, weight);
+                //                   FirstJetPtEWKfwd_Zinc2jet->Fill(jets[0].pt, weight);
+                //                   FirstJetEtaEWKfwd_Zinc2jet->Fill(jets[0].eta, weight);
+                //                   FirstJetPhiEWKfwd_Zinc2jet->Fill(jets[0].phi, weight);
+                //                   
+                //                   SecondJetPtEWKfwd_Zinc2jet->Fill(jets[1].pt, weight);
+                //                   SecondJetEtaEWKfwd_Zinc2jet->Fill(jets[1].eta, weight);
+                //                   SecondJetPhiEWKfwd_Zinc2jet->Fill(jets[1].phi, weight);
+                //                   
+                //                   JetsHTEWKfwd_Zinc2jet->Fill(jetsHT, weight);
+                //                   JetsMassEWKfwd_Zinc2jet->Fill(jet1Plus2.M(), weight);
+                //                   
+                //                   // multi jet variables
+                //                   SumEtaJetsEWKfwd_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(), weight);
+                //                   TwoJetsPtDiffEWKfwd_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+                //                   ptBalEWKfwd_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+                //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //                   dEtaJetsEWKfwd_Zinc2jet->Fill(fabs(leadJ.Eta() - secondJ.Eta()), weight);
+                //                   SpTJetsEWKfwd_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+                //                   dPhiJetsEWKfwd_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //                   
+                //                   
+                //               }//--- end at least one forward jet
+                //               
+                //               if (jet1Plus2.M() > 1000.){
+                //                   METEWKmjj_Zinc2jet->Fill(METpt,  weight);
+                //                   //KoMETphiEWKmjj_Zinc2jet->Fill(METphi,  weight);
+                //                   MTEWKmjj_Zinc2jet->Fill(MT,  weight);
+                //                   short nGoodJetsAdd(nJetsAdd-2);
+                //                   double jetsHTAdd(0);
+                //                   // jet histos
+                //                   ZNGoodJetsEWKmjj_Zexc->Fill(nGoodJetsAdd, weight);
+                //                   FirstJetPtEWKmjj_Zinc2jet->Fill(jets[0].pt, weight);
+                //                   FirstJetEtaEWKmjj_Zinc2jet->Fill(jets[0].eta, weight);
+                //                   FirstJetPhiEWKmjj_Zinc2jet->Fill(jets[0].phi, weight);
+                //                   
+                //                   
+                //                   SecondJetPtEWKmjj_Zinc2jet->Fill(jets[1].pt, weight);
+                //                   SecondJetEtaEWKmjj_Zinc2jet->Fill(jets[1].eta, weight);
+                //                   SecondJetPhiEWKmjj_Zinc2jet->Fill(jets[1].phi, weight);
+                //                   
+                //                   JetsHTEWKmjj_Zinc2jet->Fill(jetsHT, weight);
+                //                   JetsMassEWKmjj_Zinc2jet->Fill(jet1Plus2.M(), weight);
+                //                   
+                //                   // multi jet variables
+                //                   SumEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() + secondJ.Eta(),  weight);
+                //                   TwoJetsPtDiffEWKmjj_Zinc2jet->Fill(jet1Minus2.Pt(), weight);
+                //                   ptBalEWKmjj_Zinc2jet->Fill(jet1Plus2PlusZ.Pt(), weight);
+                //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //                   dEtaJetsEWKmjj_Zinc2jet->Fill(leadJ.Eta() - secondJ.Eta(), weight);
+                //                   SpTJetsEWKmjj_Zinc2jet->Fill(SpTsub(leadJ, secondJ), weight);
+                //                   dPhiJetsEWKmjj_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                //                   
+                //                   // find jet properties of the third jet that is  between the two leading jets
+                //                   int nGoodJetsmjjBtw(0.);
+                //                   if (nJetsAdd > 2){
+                //                       double jetsHTmjjBtw(0.);
+                //                       for (unsigned short i(2); i < nJetsAdd; i++){
+                //                           if (jetsAdditional[i].eta < max(jets[0].eta,jets[1].eta) - 0.5
+                //                               && jetsAdditional[i].eta > min(jets[0].eta,jets[1].eta) + 0.5 ){
+                //                               jetsHTmjjBtw += jetsAdditional[i].pt ;
+                //                               nGoodJetsmjjBtw++;
+                //                           }
+                //                           jetsHTAdd += jetsAdditional[i].pt ;
+                //                       }
+                //                       
+                //                       ThirdJetPtEWKmjj_Zinc3jet->Fill(jetsAdditional[2].pt, weight);
+                //                       JetsHTEWKmjjAdd_Zinc2jet->Fill(jetsHTAdd, weight);
+                //                       TLorentzVector thirdJAdd;
+                //                       thirdJAdd.SetPtEtaPhiE(jetsAdditional[2].pt, jetsAdditional[2].eta, jetsAdditional[2].phi, jetsAdditional[2].energy);
+                //                       double tempRapidiy3Jet = thirdJAdd.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
+                //                       ThirdJetEtaEWKmjj_Zinc3jet->Fill(tempRapidiy3Jet, weight);
+                //                   }
+                //               }//--- end dijet mass > 1000
+                //               
+                //               //--- higher jet properties
+                //               if (nGoodJets > 2){
+                //                   METEWK_Zinc3jet->Fill(METpt, weight);
+                //                   //koMETphiEWK_Zinc3jet->Fill(METphi, weight);
+                //                   MTEWK_Zinc3jet->Fill(MT, weight);
+                //                   
+                //                   TLorentzVector thirdJ;
+                //                   thirdJ.SetPtEtaPhiE(jets[2].pt, jets[2].eta, jets[2].phi, jets[2].energy);
+                //                   double tempRapidiy3Jet = thirdJ.Rapidity() - 0.5 * (leadJ.Rapidity() + secondJ.Rapidity());
+                //                   EtaThirdJetsEWK_Zinc3jet->Fill(tempRapidiy3Jet, weight);
+                //               }
+                //           } ///END (passesEWKJetPt) loop
                 
                 for (unsigned short j(0); j < nGoodJets; j++){
                     AllJetPt_Zinc2jet->Fill(jets[j].pt, weight);
@@ -2975,7 +2989,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 MET_Zinc3jet->Fill(METpt, weight);
                 //METphi_Zinc3jet->Fill(METphi, weight);
                 MT_Zinc3jet->Fill(MT, weight);
-//                ZPt_Zinc3jet->Fill(Z.Pt(), weight);
+                //                ZPt_Zinc3jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc3jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc3jet->Fill(Z.Eta(), weight);
                 lepPt_Zinc3jet->Fill(lepton1.pt, weight);
@@ -3059,7 +3073,7 @@ if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
                 ZNGoodJetsFull_Zinc->Fill(4., weight);
                 ZNGoodJets_Zinc_NoWeight->Fill(4.);
                 ZMass_Zinc4jet->Fill(Z.M(), weight);
-//                ZPt_Zinc4jet->Fill(Z.Pt(), weight);
+                //                ZPt_Zinc4jet->Fill(Z.Pt(), weight);
                 ZRapidity_Zinc4jet->Fill(Z.Rapidity(), weight);
                 ZEta_Zinc4jet->Fill(Z.Eta(), weight);
                 lepPt_Zinc4jet->Fill(lepton1.pt, weight);
@@ -3721,7 +3735,8 @@ ZJetsAndDPS::ZJetsAndDPS(string fileName_, float lumiScale_, float puScale_, boo
     string fullFileName =  "../Data_Z_5311_New/" + fileName;
     
     //string storageElement = "root://eoscms//eos/cms";
-    string storageElement = "/eos/cms";
+    // string storageElement = "/eos/cms";
+    string storageElement = "";
     string dirPath = "/tupel";
     string treeName = "/EventTree";
 
@@ -3860,22 +3875,22 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     GLepBareId = 0;
     GLepBareSt = 0;
     GLepBarePrompt = 0;
-    GLepBareTauProd = 0;
+    // GLepBareTauProd = 0;
     
-    GPhotPt = 0;
-    GPhotEta = 0;
-    GPhotPhi = 0;
-    GPhotE = 0;
-    GPhotMotherId = 0;
-    GPhotSt = 0;
+    // GPhotPt = 0;
+    // GPhotEta = 0;
+    // GPhotPhi = 0;
+    // GPhotE = 0;
+    // GPhotMotherId = 0;
+    // GPhotSt = 0;
 
     GLepClosePhotPt = 0;
     GLepClosePhotEta = 0;
     GLepClosePhotPhi = 0;
-    GLepClosePhotE = 0;
-    GLepClosePhotId = 0;
-    GLepClosePhotMother0Id = 0;
-    GLepClosePhotMotherCnt = 0;
+    // GLepClosePhotE = 0;
+    // GLepClosePhotId = 0;
+    // GLepClosePhotMother0Id = 0;
+    // GLepClosePhotMotherCnt = 0;
     GLepClosePhotSt = 0;
 
     GJetAk04Pt = 0;
@@ -3890,14 +3905,14 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     genMatchDPSpar = 0;
     dpsParton_dR = 0;
 
-    ElPt = 0;
-    ElEta = 0;
-    ElPhi = 0;
-    ElE = 0;
-    ElCh = 0;
-    ElId = 0;
-    ElPfIsoRho = 0;
-    ElEtaSc = 0;
+    // ElPt = 0;
+    // ElEta = 0;
+    // ElPhi = 0;
+    // ElE = 0;
+    // ElCh = 0;
+    // ElId = 0;
+    // ElPfIsoRho = 0;
+    // ElEtaSc = 0;
 
     MuPt = 0;
     MuEta = 0;
@@ -3907,8 +3922,11 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     MuCh = 0;
     MuDxy = 0;
     MuIdTight = 0;
-    TrigHltMu = 0;
+    // TrigHltMu = 0;
     MuPfIso = 0;
+
+    MuHltTrgPath1 = 0;
+    MuHltTrgPath2 = 0;
 
     JetAk04Pt = 0;   
     JetAk04Eta = 0;   
@@ -3916,19 +3934,25 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
     JetAk04E = 0;   
     JetAk04Id = 0;   
     JetAk04PuId = 0; 
+    JetAk04PuIdLoose = 0; 
+    JetAk04PuIdMedium = 0; 
+    JetAk04PuIdTight = 0; 
     JetAk04PuMva = 0;   
-    JetAk04BTagCsv = 0;   
-    JetAk04BDiscCisvV2 = 0;
-    JetAk04PartFlav = 0;
+    // JetAk04BTagCsv = 0;   
+
+    // JetAk04BDiscCisvV2 = 0;
+    JetAk04BDiscDeepCSV = 0;
+    
+    // JetAk04PartFlav = 0;
     JetAk04HadFlav = 0;
      
     METPt = 0 ;
     METPx = 0 ;
     METPy = 0 ;
-    METPz = 0 ;
+    // METPz = 0 ;
     METE = 0 ;
-    TrigMET = 0;
-    TrigMETBit = 0;
+    // TrigMET = 0;
+    // TrigMETBit = 0;
 
  if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     // Set branch addresses and branch pointers
@@ -3950,29 +3974,35 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
         fChain->SetBranchAddress("JetAk04Phi", &JetAk04Phi, &b_JetAk04Phi);
         fChain->SetBranchAddress("JetAk04Id", &JetAk04Id, &b_JetAk04Id);
         fChain->SetBranchAddress("JetAk04PuId", &JetAk04PuId, &b_JetAk04PuId);
+        fChain->SetBranchAddress("JetAk04PuIdLoose", &JetAk04PuIdLoose, &b_JetAk04PuIdLoose);
+        fChain->SetBranchAddress("JetAk04PuIdMedium", &JetAk04PuIdMedium, &b_JetAk04PuIdMedium);
+        fChain->SetBranchAddress("JetAk04PuIdTight", &JetAk04PuIdTight, &b_JetAk04PuIdTight);
         fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
-        fChain->SetBranchAddress("JetAk04BTagCsv", &JetAk04BTagCsv, &b_JetAk04BTagCsv);
-        fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
-        fChain->SetBranchAddress("JetAk04PartFlav", &JetAk04PartFlav, &b_JetAk04PartFlav);
+        // fChain->SetBranchAddress("JetAk04BTagCsv", &JetAk04BTagCsv, &b_JetAk04BTagCsv);
+
+        // fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
+        fChain->SetBranchAddress("JetAk04BDiscDeepCSV", &JetAk04BDiscDeepCSV, &b_JetAk04BDiscDeepCSV);
+
+        // fChain->SetBranchAddress("JetAk04PartFlav", &JetAk04PartFlav, &b_JetAk04PartFlav);
 	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav);
 
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);
         fChain->SetBranchAddress("METPx", &METPx, &b_METPx);
         fChain->SetBranchAddress("METPy", &METPy, &b_METPy);
-        fChain->SetBranchAddress("METPz", &METPz, &b_METPz);
+        // fChain->SetBranchAddress("METPz", &METPz, &b_METPz);
         fChain->SetBranchAddress("METE", &METE, &b_METE);
-        fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
-        fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
+        // fChain->SetBranchAddress("TrigMET", &TrigMET, &b_TrigMET);
+        // fChain->SetBranchAddress("TrigMETBit", &TrigMETBit, &b_TrigMETBit);
   
         if (leptonFlavor != "Muons"){
-            fChain->SetBranchAddress("ElPt", &ElPt, &b_ElPt);
-            fChain->SetBranchAddress("ElEta", &ElEta, &b_ElEta);
-            fChain->SetBranchAddress("ElPhi", &ElPhi, &b_ElPhi);
-            fChain->SetBranchAddress("ElE", &ElE, &b_ElE);
-            fChain->SetBranchAddress("ElCh", &ElCh, &b_ElCh);
-            fChain->SetBranchAddress("ElId", &ElId, &b_ElId);
-            fChain->SetBranchAddress("ElPfIsoRho", &ElPfIsoRho, &b_ElPfIsoRho); 
-            fChain->SetBranchAddress("ElEtaSc", &ElEtaSc, &b_ElEtaSc);
+            // fChain->SetBranchAddress("ElPt", &ElPt, &b_ElPt);
+            // fChain->SetBranchAddress("ElEta", &ElEta, &b_ElEta);
+            // fChain->SetBranchAddress("ElPhi", &ElPhi, &b_ElPhi);
+            // fChain->SetBranchAddress("ElE", &ElE, &b_ElE);
+            // fChain->SetBranchAddress("ElCh", &ElCh, &b_ElCh);
+            // fChain->SetBranchAddress("ElId", &ElId, &b_ElId);
+            // fChain->SetBranchAddress("ElPfIsoRho", &ElPfIsoRho, &b_ElPfIsoRho); 
+            // fChain->SetBranchAddress("ElEtaSc", &ElEtaSc, &b_ElEtaSc);
 
         }
         if (leptonFlavor != "Electrons"){
@@ -3983,7 +4013,11 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
             fChain->SetBranchAddress("MuCh", &MuCh, &b_MuCh);
             fChain->SetBranchAddress("MuDxy", &MuDxy, &b_MuDxy);
             fChain->SetBranchAddress("MuIdTight", &MuIdTight, &b_MuIdTight);
-            fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
+
+            // fChain->SetBranchAddress("TrigHltMu", &TrigHltMu, &b_TrigHltMu);
+            fChain->SetBranchAddress("MuHltTrgPath1", &MuHltTrgPath1, &b_MuHltTrgPath1);
+            fChain->SetBranchAddress("MuHltTrgPath2", &MuHltTrgPath2, &b_MuHltTrgPath2);
+
             fChain->SetBranchAddress("MuPfIso", &MuPfIso, &b_MuPfIso);
             fChain->SetBranchAddress("EvtWeights", &EvtWeights, &b_EvtWeights);
         }
@@ -4009,19 +4043,19 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo, bool hasPartonInfo){
             fChain->SetBranchAddress("GLepBareId", &GLepBareId, &b_GLepBareId);
             fChain->SetBranchAddress("GLepBareSt", &GLepBareSt, &b_GLepBareSt);
             fChain->SetBranchAddress("GLepBarePrompt", &GLepBarePrompt, &b_GLepBarePrompt);
-            fChain->SetBranchAddress("GLepBareTauProd", &GLepBareTauProd, &b_GLepBareTauProd);
+            // fChain->SetBranchAddress("GLepBareTauProd", &GLepBareTauProd, &b_GLepBareTauProd);
             
-            fChain->SetBranchAddress("GPhotPt", &GPhotPt, &b_GPhotPt);
-            fChain->SetBranchAddress("GPhotEta", &GPhotEta, &b_GPhotEta);
-            fChain->SetBranchAddress("GPhotPhi", &GPhotPhi, &b_GPhotPhi);
-            fChain->SetBranchAddress("GPhotE", &GPhotE, &b_GPhotE);
-            fChain->SetBranchAddress("GPhotMotherId", &GPhotMotherId, &b_GPhotMotherId);
-            fChain->SetBranchAddress("GPhotSt", &GPhotSt, &b_GPhotSt);
+            // fChain->SetBranchAddress("GPhotPt", &GPhotPt, &b_GPhotPt);
+            // fChain->SetBranchAddress("GPhotEta", &GPhotEta, &b_GPhotEta);
+            // fChain->SetBranchAddress("GPhotPhi", &GPhotPhi, &b_GPhotPhi);
+            // fChain->SetBranchAddress("GPhotE", &GPhotE, &b_GPhotE);
+            // fChain->SetBranchAddress("GPhotMotherId", &GPhotMotherId, &b_GPhotMotherId);
+            // fChain->SetBranchAddress("GPhotSt", &GPhotSt, &b_GPhotSt);
             
             fChain->SetBranchAddress("GLepClosePhotPt", &GLepClosePhotPt, &b_GLepClosePhotPt);
             fChain->SetBranchAddress("GLepClosePhotEta", &GLepClosePhotEta, &b_GLepClosePhotEta);
             fChain->SetBranchAddress("GLepClosePhotPhi", &GLepClosePhotPhi, &b_GLepClosePhotPhi);
-            fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
+            // fChain->SetBranchAddress("GLepClosePhotId", &GLepClosePhotId, &b_GLepClosePhotId);
             fChain->SetBranchAddress("GLepClosePhotSt", &GLepClosePhotSt, &b_GLepClosePhotSt);
 
             if (fileName.find("MiNLO") != string::npos || 
