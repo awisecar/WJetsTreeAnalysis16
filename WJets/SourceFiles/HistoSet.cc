@@ -400,8 +400,11 @@ HistoSet::HistoSet(string leptonFlavor)
 	NEventsPassCuts->GetXaxis()->SetBinLabel(4, "= PassLeptonRequirements");
 	NEventsPassCuts->GetXaxis()->SetBinLabel(5, "= PassMTcut");
 	NEventsPassCuts->GetXaxis()->SetBinLabel(6, "= PassBtagveto");
+
+    btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "b-Tag Score", 100, 0., 1.);
 	
     //--- Jet multiplicity -----------
+
     ZNGoodJets_Zexc = newTH1D("ZNGoodJets_Zexc","Jet Counter (excl.)", "N_{jets}", 11, -0.5, 10.5);
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
     ZNGoodJets_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
@@ -456,6 +459,35 @@ HistoSet::HistoSet(string leptonFlavor)
     
     hresponseZNGoodJets_Zexc = newTH2D("hresponseZNGoodJets_Zexc", "hresp ZNGoodJets_Zexc", 11, -0.5, 10.5, 11, -0.5, 10.5);
     hresponseZNGoodJets_Zinc = newTH2D("hresponseZNGoodJets_Zinc", "hresp ZNGoodJets_Zinc", 11, -0.5, 10.5, 11, -0.5, 10.5);
+
+    //--- B-Jet multiplicity -----------
+
+    ZNGoodBJets_Zexc = newTH1D("ZNGoodBJets_Zexc","B-Jet Counter (excl.)", "N_{b-jets}", 11, -0.5, 10.5);
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(4, "= 3");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(5, "= 4");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
+    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
+
+    ZNGoodBJets_Zinc = newTH1D("ZNGoodBJets_Zinc","B-Jet Counter (incl.)", "N_{b-jets}", 11, -0.5, 10.5);
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(1, "#geq 0");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(2, "#geq 1");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(3, "#geq 2");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(4, "#geq 3");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(5, "#geq 4");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(6, "#geq 5");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(7, "#geq 6");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(8, "#geq 7");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(9, "#geq 8");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(10,"#geq 9");
+    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10");
+    
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

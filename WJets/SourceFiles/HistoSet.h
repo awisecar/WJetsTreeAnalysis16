@@ -60,6 +60,8 @@ public:
     TH1D *NumRecoVtx_EvtSelection;
     TH1D *NumPUTruthVtx;
     TH1D *NumPUObsVtx;
+
+    TH1D *btagDiscScores_EvtSelection;
     
     //--- Jet multiplicity
     TH1D *ZNGoodJets_Zexc;
@@ -73,9 +75,15 @@ public:
     TH1D *ZNGoodJetsFull_Zexc;
     TH1D *genZNGoodJetsFull_Zexc;
     TH2D *hresponseZNGoodJetsFull_Zexc;
+
     TH1D *ZNGoodJetsFull_Zinc;
     TH1D *genZNGoodJetsFull_Zinc;
     TH2D *hresponseZNGoodJetsFull_Zinc;
+
+    //--- b-Jet multiplicity
+    TH1D *ZNGoodBJets_Zexc;
+    
+    TH1D *ZNGoodBJets_Zinc;
 
     //--- Jet pt
     TH1D *FirstJetPt_Zinc1jet;
