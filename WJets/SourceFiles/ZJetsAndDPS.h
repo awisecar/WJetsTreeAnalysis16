@@ -236,7 +236,7 @@ class ZJetsAndDPS: public HistoSet {
     vector<bool>   *JetAk04PuIdMedium;
     vector<bool>   *JetAk04PuIdTight;
     vector<float>  *JetAk04PuMva;
-    // vector<float>  *JetAk04BDiscCisvV2;
+    vector<float>  *JetAk04BDiscCisvV2;
     vector<float>  *JetAk04BDiscDeepCSV;
     vector<float>  *JetAk04HadFlav;
     vector<float>  *JetAk04JecUncUp;
@@ -252,7 +252,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04PuIdMedium;
     TBranch        *b_JetAk04PuIdTight; 
     TBranch        *b_JetAk04PuMva;   
-    // TBranch        *b_JetAk04BDiscCisvV2; 
+    TBranch        *b_JetAk04BDiscCisvV2; 
     TBranch        *b_JetAk04BDiscDeepCSV;   
     TBranch        *b_JetAk04HadFlav;  
     TBranch        *b_JetAk04JecUncUp;

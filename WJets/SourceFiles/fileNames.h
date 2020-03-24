@@ -47,11 +47,11 @@ const processInfoStruct ProcessInfo[] = {
     {"DYJets10toInf3_dR_5311_List",	              1.,         1,       1,         0.04,          kGreen-8,   " DY+jets"},          // 23
     {"DataQCD_dR_5311_List",	                      1.,         1,       1,         0.04,          kGreen+3,     " QCD multijet"},         // 24
 
-    //{"WJetsALL_MIX_UNFOLDING_dR_5311_List",        76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
-    //andrew -- 2016 update (from MIX to FxFx), these xsec numbers don't matter?
-    //{"WJets_FxFx_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    // --- W+Jets signal ----
+    // {"WJets_FxFx_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
     {"WJets_FxFx_012J_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
     // {"WJets_FxFx_Wpt_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    // ----------------------
 
     {"WJetsALL_MIX_dR_5311_List",                  76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},  // relative weight for mixed DY and WJ files are set inthe code
     {"WJetsALL_dR_5311_List",                      76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},

@@ -29,10 +29,10 @@ void calcBTagEffsMC(){
 
     // 2017 --
     // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, 0, 1); //no MET cut
-    // runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+    runCalcBTagEffsMC("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
 
     // 2018 --
-    runCalcBTagEffsMC("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
+    // runCalcBTagEffsMC("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, 0, 1); //no MET cut, no btag veto
 
 }
 

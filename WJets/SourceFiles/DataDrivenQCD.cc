@@ -98,22 +98,23 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             string FilenameTemp;
 
             if (year == 2016){
-                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-                if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-                if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-                if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-                if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-                if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-                if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-                if (j == 8) FilenameTemp = "WW_dR_5311_List";
-                if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
+                if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
+                if (j == 4) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+                if (j == 5) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+                if (j == 6) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+                if (j == 7) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 8) FilenameTemp =  "WW_dR_5311_List";
+                if (j == 9) FilenameTemp =  "WZ_dR_5311_List";
                 if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             }
             else if (year == 2017 || year == 2018){
-                //if (j == 0) FilenameTemp = "WJets_FxFx_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_dR_5311_List";
                 if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-                // if (j == 0) FilenameTemp = "WJets_FxFx_Wpt_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
                 if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
@@ -187,21 +188,22 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             string FilenameTemp;
 
             if (year == 2016){
-                if (j == 0) FilenameTemp = "WJets_FxFx_012J_dR_5311_List";
-                if (j == 1) FilenameTemp = "DYJets50toInf_dR_5311_List";
-                if (j == 2) FilenameTemp = "TTJets_dR_5311_List";
-                if (j == 3) FilenameTemp = "ST_s_channel_dR_5311_List";
-                if (j == 4) FilenameTemp = "ST_t_antitop_channel_dR_5311_List";
-                if (j == 5) FilenameTemp = "ST_t_top_channel_dR_5311_List";
-                if (j == 6) FilenameTemp = "ST_tW_top_channel_dR_5311_List";
-                if (j == 7) FilenameTemp = "ST_tW_antitop_channel_dR_5311_List";
-                if (j == 8) FilenameTemp = "WW_dR_5311_List";
-                if (j == 9) FilenameTemp = "WZ_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
+                if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
+                if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
+                if (j == 4) FilenameTemp =  "ST_t_antitop_channel_dR_5311_List";
+                if (j == 5) FilenameTemp =  "ST_t_top_channel_dR_5311_List";
+                if (j == 6) FilenameTemp =  "ST_tW_top_channel_dR_5311_List";
+                if (j == 7) FilenameTemp =  "ST_tW_antitop_channel_dR_5311_List";
+                if (j == 8) FilenameTemp =  "WW_dR_5311_List";
+                if (j == 9) FilenameTemp =  "WZ_dR_5311_List";
                 if (j == 10) FilenameTemp = "ZZ_dR_5311_List";
             }
             else if (year == 2017 || year == 2018){
-                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 0) FilenameTemp =   "WJets_FxFx_012J_dR_5311_List";
+                // if (j == 0) FilenameTemp =   "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =   "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =   "TT_FullHad_dR_5311_List";
                 if (j == 3) FilenameTemp =   "TT_SemiLep_dR_5311_List";

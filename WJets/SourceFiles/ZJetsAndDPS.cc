@@ -26,6 +26,7 @@ using namespace std;
 ClassImp(ZJetsAndDPS);
 
 void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, bool doSSign, bool doInvMassCut, int doBJets, int doPUStudy, bool doFlat, bool useRoch, bool doVarWidth){
+    std::cout << "\n=======================================================================================================" << std::endl;
     std::cout << "\n >>>>>>>>>> ZJetsAndDPS::Loop() >>>>>>>>>> " << std::endl;
 
     //--- Check weither it is 8 TeV or 13 TeV ---
@@ -189,45 +190,43 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
     //------------------------------------
     std::cout << "\n-----> Print out variables: " << std::endl;
+
     std::cout << "---> Switches -- " << std::endl;
     std::cout << "hasRecoInfo: " << hasRecoInfo << std::endl;
     std::cout << "hasGenInfo: " << hasGenInfo << std::endl;
     std::cout << "isData: " << isData << std::endl;
     std::cout << "lumiScale: " << lumiScale << std::endl;
     std::cout << "puScale: " << puScale << std::endl;
-
     std::cout << "year: " << year << std::endl;
-
-    std::cout << "doW: " << doW << std::endl;
-    std::cout << "doZ: " << doZ << std::endl;
-    std::cout << "doTT: " << doTT << std::endl;
-    std::cout << "LeptonID: " << LeptonID << std::endl;
+    // std::cout << "doW: " << doW << std::endl;
+    // std::cout << "doZ: " << doZ << std::endl;
+    // std::cout << "doTT: " << doTT << std::endl;
+    // std::cout << "LeptonID: " << LeptonID << std::endl;
     std::cout << "leptonFlavor: " << leptonFlavor << std::endl;
     std::cout << "energy: " << energy << std::endl;
     std::cout << "doQCD: " << doQCD << std::endl;
     std::cout << "doBJets: " << doBJets << std::endl;
-    std::cout << "doDR: " << doDR << std::endl;
+    // std::cout << "doDR: " << doDR << std::endl;
     std::cout << "useEfficiencyCorrection: " << useEfficiencyCorrection << std::endl;
     std::cout << "useTriggerCorrection: " << useTriggerCorrection << std::endl;
     std::cout << "doMETFiltering: " << doMETFiltering << std::endl;
-    std::cout << "doVarWidth: " << doVarWidth << std::endl;
-
-    std::cout << "doSSign: " << doSSign << std::endl;
+    // std::cout << "doVarWidth: " << doVarWidth << std::endl;
+    // std::cout << "doSSign: " << doSSign << std::endl;
     std::cout << "doPUStudy: " << doPUStudy << std::endl;
-    std::cout << "doFlat: " << doFlat << std::endl;
-    std::cout << "useRoch: " << useRoch << std::endl;
-    std::cout << "doInvMassCut: " << doInvMassCut << std::endl;
+    // std::cout << "doFlat: " << doFlat << std::endl;
+    // std::cout << "useRoch: " << useRoch << std::endl;
+    // std::cout << "doInvMassCut: " << doInvMassCut << std::endl;
 
     std::cout << "---> Phase Space -- " << std::endl;
     std::cout << "jetPtCutMin: " << jetPtCutMin << std::endl;
-    std::cout << "jetPtCutMax: " << jetPtCutMax << std::endl;
+    // std::cout << "jetPtCutMax: " << jetPtCutMax << std::endl;
     std::cout << "jetEtaCutMin: " << jetEtaCutMin/10. << std::endl;
     std::cout << "jetEtaCutMax: " << jetEtaCutMax/10. << std::endl;
     std::cout << "ZPtCutMin: " << ZPtCutMin << std::endl;
-    std::cout << "ZEtaCutMin: " << ZEtaCutMin << std::endl;
-    std::cout << "ZEtaCutMax: " << ZEtaCutMax << std::endl;
-    std::cout << "ZMCutLow: " << ZMCutLow << std::endl;
-    std::cout << "ZMCutHigh: " << ZMCutHigh << std::endl;
+    // std::cout << "ZEtaCutMin: " << ZEtaCutMin << std::endl;
+    // std::cout << "ZEtaCutMax: " << ZEtaCutMax << std::endl;
+    // std::cout << "ZMCutLow: " << ZMCutLow << std::endl;
+    // std::cout << "ZMCutHigh: " << ZMCutHigh << std::endl;
     std::cout << "METcut: " << METcut << std::endl;
     std::cout << "MTCut: " << MTCut << std::endl;
 
@@ -250,7 +249,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 50; jentry++){
+    // for (Long64_t jentry(0); jentry < 100000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -768,6 +767,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 	    int countDR02CutBJets(0), countDR04CutBJets(0);
         int countWbBjets(0); // Wb study
 
+
+        // ---------------- b-tagging switches ----------------
+        // choice of tagger: DeepCSV or CSVv2 (2017 only) -----
+        bool doDeepCSV = true;
+        // bool doDeepCSV = false;
+        // do b-tag efficiency SFs? ---------------------------
+        // bool doBTagSFs = true;
+        bool doBTagSFs = false;
+        // ----------------------------------------------------
+
+
         if (hasRecoInfo) {
             int countNJetsVSBeta[10] = {0};
             nTotJets = JetAk04Eta->size();
@@ -781,11 +791,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 double jetPtTemp(0.); // for calculating METscale
                 bool passBJets(0);
                 
-                //btagging criterion
-                //nominal btagging criterion
+                //nominal btagging criterion --------------------------
                 if ( (year == 2016) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                if ( (year == 2017) && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2017) && doDeepCSV  && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if ( (year == 2017) && !doDeepCSV && (JetAk04BDiscCisvV2->at(i)  >= 0.8838) ) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
                 if ( (year == 2018) && (JetAk04BDiscDeepCSV->at(i) >= 0.4184) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+
+                //fetch b-tag discriminant score itself
+                float jetAK4bDiscScore(0.);
+                if (doDeepCSV) jetAK4bDiscScore = JetAk04BDiscDeepCSV->at(i);
+                else jetAK4bDiscScore = JetAk04BDiscCisvV2->at(i);
+
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscCisvV2->at(i) = "  << JetAk04BDiscCisvV2->at(i) << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscDeepCSV->at(i) = " << JetAk04BDiscDeepCSV->at(i) << endl;
 
                 //************************* B-tag Veto Correction *******************************//
@@ -800,651 +817,869 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 //************************* Begin emulating btagging efficiencies in MC (MC only)********//
 
-
-
-                // NOTE: ALW 13 FEB 20
-                // Temporarily commenting out b-tag eff. SFs in order to troubleshoot problem b-tag veto dist.'s
-
-
-
                 // Correct for data/MC b-tag eff. discrepancy by updating b-tag score on jet-by-jet basis
-                // if (!isData){
-                //     if (year == 2016){
+                if (!isData && doBTagSFs){
+                    if (year == 2016){
                     
-                //         bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                //         bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
+                        bool passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                        bool passBJets_SFB_sys_down = passBJets; // Initialize the systematic_down as the central value
                         
-                //         // Get jet flavor (hadron definition)
-                //         int jetflavour = JetAk04HadFlav->at(i);
+                        // Get jet flavor (hadron definition)
+                        int jetflavour = JetAk04HadFlav->at(i);
                         
-                //         // ---------------- For Truth-Level B-jets --------------- //
-                //         if (fabs(jetflavour)==5){
+                        // ---------------- For Truth-Level B-jets --------------- //
+                        if (fabs(jetflavour)==5){
 
-                //             float effb = 1.;
-                //             if (pt < 30.)                 effb = 0.644505;
-                //             if (pt >= 30.  && pt < 50.)   effb = 0.644505;
-                //             if (pt >= 50.  && pt < 70.)   effb = 0.692229;
-                //             if (pt >= 70.  && pt < 100.)  effb = 0.711688;
-                //             if (pt >= 100. && pt < 140.)  effb = 0.714178;
-                //             if (pt >= 140. && pt < 200.)  effb = 0.704809;
-                //             if (pt >= 200. && pt < 300.)  effb = 0.677119;
-                //             if (pt >= 300. && pt < 600.)  effb = 0.637666;
-                //             if (pt >= 600. && pt < 1000.) effb = 0.549428;
-                //             if (pt >= 1000.)              effb = 0.549428;
+                            float effb = 1.;
+                            if (pt < 30.)                 effb = 0.644505;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.644505;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.692229;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.711688;
+                            if (pt >= 100. && pt < 140.)  effb = 0.714178;
+                            if (pt >= 140. && pt < 200.)  effb = 0.704809;
+                            if (pt >= 200. && pt < 300.)  effb = 0.677119;
+                            if (pt >= 300. && pt < 600.)  effb = 0.637666;
+                            if (pt >= 600. && pt < 1000.) effb = 0.549428;
+                            if (pt >= 1000.)              effb = 0.549428;
                             
-                //             // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, b-jets
-                //             float           SFb = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
-                //             if (pt < 20.)   SFb = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
-                //             if (pt > 1000.) SFb = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, b-jets
+                            float           SFb = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                            if (pt < 20.)   SFb = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                            if (pt > 1000.) SFb = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
                             
-                //             float SFb_error = 0.0;
-                //             if (pt < 20.)                 SFb_error = 0.043795019388198853*2.;
-                //             if (pt >= 20.  && pt < 30.)   SFb_error = 0.043795019388198853;
-                //             if (pt >= 30.  && pt < 50.)   SFb_error = 0.015845479443669319;
-                //             if (pt >= 50.  && pt < 70.)   SFb_error = 0.014174085110425949;
-                //             if (pt >= 70.  && pt < 100.)  SFb_error = 0.013200919143855572;
-                //             if (pt >= 100. && pt < 140.)  SFb_error = 0.012912030331790447;
-                //             if (pt >= 140. && pt < 200.)  SFb_error = 0.019475525245070457;
-                //             if (pt >= 200. && pt < 300.)  SFb_error = 0.01628459244966507;
-                //             if (pt >= 300. && pt < 600.)  SFb_error = 0.034840557724237442;
-                //             if (pt >= 600. && pt < 1000.) SFb_error = 0.049875054508447647;
-                //             if (pt >= 1000.)              SFb_error = 0.049875054508447647*2.;
+                            float SFb_error = 0.0;
+                            if (pt < 20.)                 SFb_error = 0.043795019388198853*2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.043795019388198853;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.015845479443669319;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.014174085110425949;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.013200919143855572;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.012912030331790447;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.019475525245070457;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.01628459244966507;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.034840557724237442;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.049875054508447647;
+                            if (pt >= 1000.)              SFb_error = 0.049875054508447647*2.;
                             
-                //             float SFb_up = SFb + SFb_error;
-                //             float SFb_down = SFb - SFb_error;
+                            float SFb_up = SFb + SFb_error;
+                            float SFb_down = SFb - SFb_error;
                             
-                //             // F values for rand comparison
-                //             float f = 0.0;
-                //             float f_up = 0.0;
-                //             float f_down = 0.0;
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
                             
-                //             if (SFb <1.0) f = (1.0 - SFb);
-                //             if (SFb_up <1.0) f_up = (1.0 - SFb_up);
-                //             if (SFb_down <1.0) f_down = (1.0 - SFb_down);
+                            if (SFb <1.0) f = (1.0 - SFb);
+                            if (SFb_up <1.0) f_up = (1.0 - SFb_up);
+                            if (SFb_down <1.0) f_down = (1.0 - SFb_down);
                             
-                //             if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
-                //             if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
-                //             if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                            if (SFb > 1.0) f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                            if (SFb_up > 1.0) f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                            if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
                             
-                //             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                //             passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
-                //             // Untag a tagged jet
-                //             if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
-                //             if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFb<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFb_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFb_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
                             
-                //             // Tag an untagged jet
-                //             if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
-                //             if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFb>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFb_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFb_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                             
-                //         } // end b-jet section
+                        } // end b-jet section
                         
-                //         // ---------------- For Truth-Level C-jets--------------- //
-                //         if (fabs(jetflavour)==4){
+                        // ---------------- For Truth-Level C-jets--------------- //
+                        if (fabs(jetflavour)==4){
 
-                //             float effc = 1.;
-                //             if (pt < 30.)                 effc = 0.117646;
-                //             if (pt >= 30.  && pt < 50.)   effc = 0.117646;
-                //             if (pt >= 50.  && pt < 70.)   effc = 0.11037;
-                //             if (pt >= 70.  && pt < 100.)  effc = 0.114895;
-                //             if (pt >= 100. && pt < 140.)  effc = 0.119415;
-                //             if (pt >= 140. && pt < 200.)  effc = 0.127047;
-                //             if (pt >= 200. && pt < 300.)  effc = 0.129395;
-                //             if (pt >= 300. && pt < 600.)  effc = 0.142779;
-                //             if (pt >= 600. && pt < 1000.) effc = 0.142482;
-                //             if (pt >= 1000.)              effc = 0.142482;
+                            float effc = 1.;
+                            if (pt < 30.)                 effc = 0.117646;
+                            if (pt >= 30.  && pt < 50.)   effc = 0.117646;
+                            if (pt >= 50.  && pt < 70.)   effc = 0.11037;
+                            if (pt >= 70.  && pt < 100.)  effc = 0.114895;
+                            if (pt >= 100. && pt < 140.)  effc = 0.119415;
+                            if (pt >= 140. && pt < 200.)  effc = 0.127047;
+                            if (pt >= 200. && pt < 300.)  effc = 0.129395;
+                            if (pt >= 300. && pt < 600.)  effc = 0.142779;
+                            if (pt >= 600. && pt < 1000.) effc = 0.142482;
+                            if (pt >= 1000.)              effc = 0.142482;
                             
-                //             // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, c-jets
-                //             float           SFc = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
-                //             if (pt < 20.)   SFc = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
-                //             if (pt > 1000.) SFc = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "comb" values, c-jets
+                            float           SFc = 0.653526*((1.+(0.220245*pt))/(1.+(0.14383*pt)));
+                            if (pt < 20.)   SFc = 0.653526*((1.+(0.220245*20.))/(1.+(0.14383*20.)));
+                            if (pt > 1000.) SFc = 0.653526*((1.+(0.220245*1000.))/(1.+(0.14383*1000.)));
                             
-                //             float SFc_error = 0.0;
-                //             if (pt < 20.)                 SFc_error = 0.13138505816459656*2.;
-                //             if (pt >= 20.  && pt < 30.)   SFc_error = 0.13138505816459656;
-                //             if (pt >= 30.  && pt < 50.)   SFc_error = 0.047536440193653107;
-                //             if (pt >= 50.  && pt < 70.)   SFc_error = 0.042522255331277847;
-                //             if (pt >= 70.  && pt < 100.)  SFc_error = 0.039602756500244141;
-                //             if (pt >= 100. && pt < 140.)  SFc_error = 0.038736090064048767;
-                //             if (pt >= 140. && pt < 200.)  SFc_error = 0.058426573872566223;
-                //             if (pt >= 200. && pt < 300.)  SFc_error = 0.048853777348995209;
-                //             if (pt >= 300. && pt < 600.)  SFc_error = 0.10452167689800262;
-                //             if (pt >= 600. && pt < 1000.) SFc_error = 0.14962516725063324;
-                //             if (pt >= 1000.)              SFc_error = 0.14962516725063324*2.;
+                            float SFc_error = 0.0;
+                            if (pt < 20.)                 SFc_error = 0.13138505816459656*2.;
+                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.13138505816459656;
+                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.047536440193653107;
+                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.042522255331277847;
+                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.039602756500244141;
+                            if (pt >= 100. && pt < 140.)  SFc_error = 0.038736090064048767;
+                            if (pt >= 140. && pt < 200.)  SFc_error = 0.058426573872566223;
+                            if (pt >= 200. && pt < 300.)  SFc_error = 0.048853777348995209;
+                            if (pt >= 300. && pt < 600.)  SFc_error = 0.10452167689800262;
+                            if (pt >= 600. && pt < 1000.) SFc_error = 0.14962516725063324;
+                            if (pt >= 1000.)              SFc_error = 0.14962516725063324*2.;
                             
-                //             float SFc_up = SFc + SFc_error;
-                //             float SFc_down = SFc - SFc_error;
+                            float SFc_up = SFc + SFc_error;
+                            float SFc_down = SFc - SFc_error;
                             
-                //             // F values for rand comparison
-                //             float f = 0.0;
-                //             float f_up = 0.0;
-                //             float f_down = 0.0;
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
                             
-                //             if (SFc <1.0) f = (1.0 - SFc);
-                //             if (SFc_up <1.0) f_up = (1.0 - SFc_up);
-                //             if (SFc_down <1.0) f_down = (1.0 - SFc_down);
+                            if (SFc <1.0) f = (1.0 - SFc);
+                            if (SFc_up <1.0) f_up = (1.0 - SFc_up);
+                            if (SFc_down <1.0) f_down = (1.0 - SFc_down);
                             
-                //             if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
-                //             if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
-                //             if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                            if (SFc > 1.0) f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                            if (SFc_up > 1.0) f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                            if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
                             
-                //             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                //             passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
-                //             // Untag a tagged jet
-                //             if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
-                //             if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFc<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFc_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFc_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
                             
-                //             // Tag an untagged jet
-                //             if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
-                //             if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFc>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFc_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFc_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
                             
-                //         } // end c-jet section
+                        } // end c-jet section
                         
-                //         // ---------------- For Truth-Level Light-jets --------------- //
-                //         if (fabs(jetflavour) < 4){
+                        // ---------------- For Truth-Level Light-jets --------------- //
+                        if (fabs(jetflavour) < 4){
 
-                //             float eff_l = 1.;
-                //             if (pt < 30.)                 eff_l = 0.0112759;
-                //             if (pt >= 30.  && pt < 50.)   eff_l = 0.0112759;
-                //             if (pt >= 50.  && pt < 70.)   eff_l = 0.00951306;
-                //             if (pt >= 70.  && pt < 100.)  eff_l = 0.0103573;
-                //             if (pt >= 100. && pt < 140.)  eff_l = 0.0104005;
-                //             if (pt >= 140. && pt < 200.)  eff_l = 0.0122555;
-                //             if (pt >= 200. && pt < 300.)  eff_l = 0.0148327;
-                //             if (pt >= 300. && pt < 600.)  eff_l = 0.0217662;
-                //             if (pt >= 600. && pt < 1000.) eff_l = 0.0335962;
-                //             if (pt >= 1000.)              eff_l = 0.0335962;
+                            float eff_l = 1.;
+                            if (pt < 30.)                 eff_l = 0.0112759;
+                            if (pt >= 30.  && pt < 50.)   eff_l = 0.0112759;
+                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00951306;
+                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0103573;
+                            if (pt >= 100. && pt < 140.)  eff_l = 0.0104005;
+                            if (pt >= 140. && pt < 200.)  eff_l = 0.0122555;
+                            if (pt >= 200. && pt < 300.)  eff_l = 0.0148327;
+                            if (pt >= 300. && pt < 600.)  eff_l = 0.0217662;
+                            if (pt >= 600. && pt < 1000.) eff_l = 0.0335962;
+                            if (pt >= 1000.)              eff_l = 0.0335962;
                             
-                //             // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "incl" values, light-jets
-                //             float           SFlight = 1.09286+(-0.00052597*pt)+(1.88225e-06*pt*pt)+(-1.27417e-09*pt*pt*pt);
-                //             if (pt < 20.)   SFlight = 1.09286+(-0.00052597*20.)+(1.88225e-06*20.*20.)+(-1.27417e-09*20.*20.*20.);
-                //             if (pt > 1000.) SFlight = 1.09286+(-0.00052597*1000.)+(1.88225e-06*1000.*1000.)+(-1.27417e-09*1000.*1000.*1000.);
+                            // --- DeepCSV_2016LegacySF_WP_V1.csv values (run period independent), DeepCSV medium WP, "incl" values, light-jets
+                            float           SFlight = 1.09286+(-0.00052597*pt)+(1.88225e-06*pt*pt)+(-1.27417e-09*pt*pt*pt);
+                            if (pt < 20.)   SFlight = 1.09286+(-0.00052597*20.)+(1.88225e-06*20.*20.)+(-1.27417e-09*20.*20.*20.);
+                            if (pt > 1000.) SFlight = 1.09286+(-0.00052597*1000.)+(1.88225e-06*1000.*1000.)+(-1.27417e-09*1000.*1000.*1000.);
                             
-                //             float           SFlight_up = SFlight * (1+(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
-                //             if (pt < 20.)   SFlight_up = SFlight * (1+(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
-                //             if (pt > 1000.) SFlight_up = SFlight * (1+(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
+                            float           SFlight_up = SFlight * (1+(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                            if (pt < 20.)   SFlight_up = SFlight * (1+(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                            if (pt > 1000.) SFlight_up = SFlight * (1+(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                             
-                //             float           SFlight_down = SFlight * (1-(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
-                //             if (pt < 20.)   SFlight_down = SFlight * (1-(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
-                //             if (pt > 1000.) SFlight_down = SFlight * (1-(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
+                            float           SFlight_down = SFlight * (1-(0.101915+(0.000192134*pt)+(-1.94974e-07*pt*pt)));
+                            if (pt < 20.)   SFlight_down = SFlight * (1-(0.101915+(0.000192134*20.)+(-1.94974e-07*20.*20.)));
+                            if (pt > 1000.) SFlight_down = SFlight * (1-(0.101915+(0.000192134*1000.)+(-1.94974e-07*1000.*1000.)));
                             
-                //             // F values for rand comparison
-                //             float f = 0.0;
-                //             float f_up = 0.0;
-                //             float f_down = 0.0;
+                            // F values for rand comparison
+                            float f = 0.0;
+                            float f_up = 0.0;
+                            float f_down = 0.0;
                             
-                //             if (SFlight <1.0) f = (1.0 - SFlight);
-                //             if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
-                //             if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
+                            if (SFlight <1.0) f = (1.0 - SFlight);
+                            if (SFlight_up <1.0) f_up = (1.0 - SFlight_up);
+                            if (SFlight_down <1.0) f_down = (1.0 - SFlight_down);
                             
-                //             if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
-                //             if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
-                //             if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
+                            if (SFlight > 1.0) f = (1.0 - SFlight)/(1.0 - 1.0/eff_l);
+                            if (SFlight_up > 1.0) f_up = (1.0 - SFlight_up)/(1.0 - 1.0/eff_l);
+                            if (SFlight_down > 1.0) f_down = (1.0 - SFlight_down)/(1.0 - 1.0/eff_l);
                             
-                //             passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
-                //             passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
+                            passBJets_SFB_sys_up = passBJets;     // Initialize the systematic_up as the central value
+                            passBJets_SFB_sys_down = passBJets;   // Initialize the systematic_down as the central value
                             
-                //             // Untag a tagged jet
-                //             if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
-                //             if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
+                            // Untag a tagged jet
+                            if ((passBJets==true) && (SFlight<1.0) && (this_rand < f)) passBJets = false; // for central value
+                            if ((passBJets_SFB_sys_up==true)   && (SFlight_up<1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((passBJets_SFB_sys_down==true) && (SFlight_down<1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = false; // for sytematic_down
                             
-                //             // Tag an untagged jet
-                //             if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
-                //             if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                //         }   // end light jet section
+                            // Tag an untagged jet
+                            if ((passBJets==false) && (SFlight>1.0) && (this_rand < f)) passBJets = true; // for central value
+                            if ((passBJets_SFB_sys_up==false)   && (SFlight_up>1.0) && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((passBJets_SFB_sys_down==false) && (SFlight_down>1.0) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                        }   // end light jet section
                         
-                //         // for btagging SF systematics
-                //         if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
-                //         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
+                        // for btagging SF systematics
+                        if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                        if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
-                //         // Wb study
-                //         if (fabs(jetflavour)==5) countWbBjets++;
+                        // Wb study
+                        if (fabs(jetflavour)==5) countWbBjets++;
 
-                //     } // end b-tag efficiency SFs for 2016 MC
-                //     else if (year == 2017){
+                    } // end b-tag efficiency SFs for 2016 MC
+
+                    else if (year == 2017){
+
+                        if (doDeepCSV){
+
+                            // Get jet flavor (hadron definition)
+                            int jetflavour = JetAk04HadFlav->at(i);
+
+                            // Initialize the systematic variations as the central value
+                            bool passBJets_SFB_sys_up = passBJets; 
+                            bool passBJets_SFB_sys_down = passBJets;  
+                            
+                            // ---------------- For Truth-Level B-jets --------------- //
+                            if (fabs(jetflavour)==5){
+
+                                // Set the b-tag eff's determined in MC for truth b jets
+                                float effb = 1.;
+                                if (pt < 30.)                 effb = 0.68635;
+                                if (pt >= 30.  && pt < 50.)   effb = 0.68635;
+                                if (pt >= 50.  && pt < 70.)   effb = 0.734214;
+                                if (pt >= 70.  && pt < 100.)  effb = 0.755399;
+                                if (pt >= 100. && pt < 140.)  effb = 0.757332;
+                                if (pt >= 140. && pt < 200.)  effb = 0.740454;
+                                if (pt >= 200. && pt < 300.)  effb = 0.692885;
+                                if (pt >= 300. && pt < 600.)  effb = 0.592282;
+                                if (pt >= 600. && pt < 1000.) effb = 0.395662;
+                                if (pt >= 1000.)              effb = 0.395662;
+                                
+                                // Get the central SF -----
+                                // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, b-jets
+                                // SFs are given as functions of pT
+                                float           SFb = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
+                                if (pt < 20.)   SFb = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
+                                if (pt > 1000.) SFb = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
+                                
+                                // Grab SF errors for use in systematic variations
+                                // Errors listed in the .csv file are symmetric
+                                float SFb_error = 0.;
+                                if (pt < 20.)                 SFb_error = 0.038731977343559265 * 2.;
+                                if (pt >= 20.  && pt < 30.)   SFb_error = 0.038731977343559265;
+                                if (pt >= 30.  && pt < 50.)   SFb_error = 0.015137125737965107;
+                                if (pt >= 50.  && pt < 70.)   SFb_error = 0.013977443799376488;
+                                if (pt >= 70.  && pt < 100.)  SFb_error = 0.012607076205313206;
+                                if (pt >= 100. && pt < 140.)  SFb_error = 0.013979751616716385;
+                                if (pt >= 140. && pt < 200.)  SFb_error = 0.015011214651167393;
+                                if (pt >= 200. && pt < 300.)  SFb_error = 0.034551065415143967;
+                                if (pt >= 300. && pt < 600.)  SFb_error = 0.040168888866901398;
+                                if (pt >= 600. && pt < 1000.) SFb_error = 0.054684814065694809;
+                                if (pt >= 1000.)              SFb_error = 0.054684814065694809 * 2.;
+                                float SFb_up = SFb + SFb_error;
+                                float SFb_down = SFb - SFb_error;
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SFb < 1.0)           f = (1.0 - SFb);
+                                if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
+                                if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                                if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                                if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                                
+                            } // end b-jet section
+
+                            // ---------------- For Truth-Level C-jets--------------- //
+                            if (fabs(jetflavour)==4){
+
+                                // Set the b-tag eff's determined in MC for truth c jets
+                                float effc = 1.;
+                                if (pt < 30.)                 effc = 0.101402;
+                                if (pt >= 30.  && pt < 50.)   effc = 0.101402;
+                                if (pt >= 50.  && pt < 70.)   effc = 0.107145;
+                                if (pt >= 70.  && pt < 100.)  effc = 0.120956;
+                                if (pt >= 100. && pt < 140.)  effc = 0.128843;
+                                if (pt >= 140. && pt < 200.)  effc = 0.136532;
+                                if (pt >= 200. && pt < 300.)  effc = 0.129016;
+                                if (pt >= 300. && pt < 600.)  effc = 0.10803;
+                                if (pt >= 600. && pt < 1000.) effc = 0.0488107;
+                                if (pt >= 1000.)              effc = 0.0488107;
+                                
+                                // Get the central SF -----
+                                // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, c-jets
+                                // SFs are given as functions of pT
+                                float           SFc = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
+                                if (pt < 20.)   SFc = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
+                                if (pt > 1000.) SFc = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
+                                
+                                // Grab SF errors for use in systematic variations
+                                // Errors listed in the .csv file are symmetric
+                                float SFc_error = 0.;
+                                if (pt < 20.)                 SFc_error = 0.1161959320306778 * 2.;
+                                if (pt >= 20.  && pt < 30.)   SFc_error = 0.1161959320306778;
+                                if (pt >= 30.  && pt < 50.)   SFc_error = 0.045411378145217896;
+                                if (pt >= 50.  && pt < 70.)   SFc_error = 0.041932329535484314;
+                                if (pt >= 70.  && pt < 100.)  SFc_error = 0.037821229547262192;
+                                if (pt >= 100. && pt < 140.)  SFc_error = 0.041939254850149155;
+                                if (pt >= 140. && pt < 200.)  SFc_error = 0.045033644884824753;
+                                if (pt >= 200. && pt < 300.)  SFc_error = 0.1036531925201416;
+                                if (pt >= 300. && pt < 600.)  SFc_error = 0.12050666660070419;
+                                if (pt >= 600. && pt < 1000.) SFc_error = 0.16405443847179413;
+                                if (pt >= 1000.)              SFc_error = 0.16405443847179413 * 2.;
+                                float SFc_up = SFc + SFc_error;
+                                float SFc_down = SFc - SFc_error;
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SFc < 1.0)           f = (1.0 - SFc);
+                                if (SFc_up < 1.0)     f_up = (1.0 - SFc_up);
+                                if (SFc_down < 1.0) f_down = (1.0 - SFc_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SFc < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SFc_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SFc_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SFc > 1.0)           f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                                if (SFc_up > 1.0)     f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                                if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SFc > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SFc_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SFc_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+
+                            } // end c-jet section
+
+                            // ---------------- For Truth-Level Light-jets --------------- //
+                            if (fabs(jetflavour) < 4){
+
+                                // Set the b-tag eff's determined in MC for truth light jets
+                                float eff_l = 1.;
+                                if (pt < 30.)                 eff_l = 0.00580523;
+                                if (pt >= 30.  && pt < 50.)   eff_l = 0.00580523;
+                                if (pt >= 50.  && pt < 70.)   eff_l = 0.00690804;
+                                if (pt >= 70.  && pt < 100.)  eff_l = 0.00954291;
+                                if (pt >= 100. && pt < 140.)  eff_l = 0.0105542;
+                                if (pt >= 140. && pt < 200.)  eff_l = 0.0114382;
+                                if (pt >= 200. && pt < 300.)  eff_l = 0.0117215;
+                                if (pt >= 300. && pt < 600.)  eff_l = 0.0112139;
+                                if (pt >= 600. && pt < 1000.) eff_l = 0.00976563;
+                                if (pt >= 1000.)              eff_l = 0.00976563;
+                                
+                                // Get the central SF and variations -----
+                                // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "incl" values, light-jets
+                                // SFs are given as functions of pT
+                                float           SF_l = 0.972902+(0.000201811*pt)+(3.96396e-08*pt*pt)+(-4.53965e-10*pt*pt*pt);
+                                if (pt < 20.)   SF_l = 0.972902+(0.000201811*20.)+(3.96396e-08*20.*20.)+(-4.53965e-10*20.*20.*20.);
+                                if (pt > 1000.) SF_l = 0.972902+(0.000201811*1000.)+(3.96396e-08*1000.*1000.)+(-4.53965e-10*1000.*1000.*1000.);
+
+                                float           SF_l_up = SF_l * (1+(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
+                                if (pt < 20.)   SF_l_up = SF_l * (1+(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
+                                if (pt > 1000.) SF_l_up = SF_l * (1+(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
+
+                                float           SF_l_down = SF_l * (1-(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
+                                if (pt < 20.)   SF_l_down = SF_l * (1-(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
+                                if (pt > 1000.) SF_l_down = SF_l * (1-(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SF_l < 1.0)           f = (1.0 - SF_l);
+                                if (SF_l_up < 1.0)     f_up = (1.0 - SF_l_up);
+                                if (SF_l_down < 1.0) f_down = (1.0 - SF_l_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SF_l < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SF_l_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SF_l_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SF_l > 1.0)           f = (1.0 - SF_l)/(1.0 - 1.0/eff_l);
+                                if (SF_l_up > 1.0)     f_up = (1.0 - SF_l_up)/(1.0 - 1.0/eff_l);
+                                if (SF_l_down > 1.0) f_down = (1.0 - SF_l_down)/(1.0 - 1.0/eff_l);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SF_l > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SF_l_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SF_l_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+
+                            } // end light jet section
+
+                            // for btagging SF systematics
+                            if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                            if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
+                            
+                            // Wb study
+                            if (fabs(jetflavour)==5) countWbBjets++;
+
+                        } // end DeepCSV b-tag SFs for 2017
+
+                        else{
+                            
+                            // Get jet flavor (hadron definition)
+                            int jetflavour= JetAk04HadFlav->at(i);
+
+                            // Initialize the systematic variations as the central value
+                            bool passBJets_SFB_sys_up = passBJets; 
+                            bool passBJets_SFB_sys_down = passBJets;  
+                            
+                            // ---------------- For Truth-Level B-jets --------------- //
+                            if (abs(jetflavour)==5){
+
+                                // Set the b-tag eff's determined in MC for truth b jets
+                                float effb = 1.;
+                                if (pt < 30.)                 effb = 0.624885;
+                                if (pt >= 30.  && pt < 50.)   effb = 0.624885;
+                                if (pt >= 50.  && pt < 70.)   effb = 0.673144;
+                                if (pt >= 70.  && pt < 100.)  effb = 0.694114;
+                                if (pt >= 100. && pt < 140.)  effb = 0.687739;
+                                if (pt >= 140. && pt < 200.)  effb = 0.663262;
+                                if (pt >= 200. && pt < 300.)  effb = 0.616566;
+                                if (pt >= 300. && pt < 600.)  effb = 0.541383;
+                                if (pt >= 600. && pt < 1000.) effb = 0.438860;
+                                if (pt >= 1000.)              effb = 0.438860;
+                                
+                                // Get the central SF -----
+                                // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, b-jets
+                                // SFs are given as functions of pT
+                                float           SFb = 1.09079*((1.+(0.180764*pt))/(1.+(0.216797*pt)));
+                                if (pt < 20.)   SFb = 1.09079*((1.+(0.180764*20.))/(1.+(0.216797*20.)));
+                                if (pt > 1000.) SFb = 1.09079*((1.+(0.180764*1000.))/(1.+(0.216797*1000.)));
+                                
+                                // Grab SF errors for use in systematic variations
+                                // Errors listed in the .csv file are symmetric
+                                float SFb_error = 0.;
+                                if (pt < 20.)                 SFb_error = 0.048631865531206131 * 2.;
+                                if (pt >= 20.  && pt < 30.)   SFb_error = 0.048631865531206131;
+                                if (pt >= 30.  && pt < 50.)   SFb_error = 0.014063102193176746;
+                                if (pt >= 50.  && pt < 70.)   SFb_error = 0.013459851965308189;
+                                if (pt >= 70.  && pt < 100.)  SFb_error = 0.012704650871455669;
+                                if (pt >= 100. && pt < 140.)  SFb_error = 0.014372736215591431;
+                                if (pt >= 140. && pt < 200.)  SFb_error = 0.015085947699844837;
+                                if (pt >= 200. && pt < 300.)  SFb_error = 0.033626105636358261;
+                                if (pt >= 300. && pt < 600.)  SFb_error = 0.045323032885789871;
+                                if (pt >= 600. && pt < 1000.) SFb_error = 0.058395344763994217;
+                                if (pt >= 1000.)              SFb_error = 0.058395344763994217 * 2.;
+                                float SFb_up = SFb + SFb_error;
+                                float SFb_down = SFb - SFb_error;
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SFb < 1.0)           f = (1.0 - SFb);
+                                if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
+                                if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                                if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                                if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                                
+                            } // end b-jet section
+
+                            // ---------------- For Truth-Level C-jets--------------- //
+                            if (abs(jetflavour)==4){
+
+                                // Set the b-tag eff's determined in MC for truth c jets
+                                float effc = 1.;
+                                if (pt < 30.)                 effc = 0.1167410;
+                                if (pt >= 30.  && pt < 50.)   effc = 0.1167410;
+                                if (pt >= 50.  && pt < 70.)   effc = 0.1156690;
+                                if (pt >= 70.  && pt < 100.)  effc = 0.1231580;
+                                if (pt >= 100. && pt < 140.)  effc = 0.1250250;
+                                if (pt >= 140. && pt < 200.)  effc = 0.1183740;
+                                if (pt >= 200. && pt < 300.)  effc = 0.1084660;
+                                if (pt >= 300. && pt < 600.)  effc = 0.1017420;
+                                if (pt >= 600. && pt < 1000.) effc = 0.0881154;
+                                if (pt >= 1000.)              effc = 0.0881154;
+                                
+                                // Get the central SF -----
+                                // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "comb" values, c-jets
+                                // SFs are given as functions of pT
+                                float           SFc = 1.09079*((1.+(0.180764*pt))/(1.+(0.216797*pt)));
+                                if (pt < 20.)   SFc = 1.09079*((1.+(0.180764*20.))/(1.+(0.216797*20.)));
+                                if (pt > 1000.) SFc = 1.09079*((1.+(0.180764*1000.))/(1.+(0.216797*1000.)));
+                                
+                                // Grab SF errors for use in systematic variations
+                                // Errors listed in the .csv file are symmetric
+                                float SFc_error = 0.;
+                                if (pt < 20.)                 SFc_error = 0.14589560031890869 * 2.;
+                                if (pt >= 20.  && pt < 30.)   SFc_error = 0.14589560031890869;
+                                if (pt >= 30.  && pt < 50.)   SFc_error = 0.042189307510852814;
+                                if (pt >= 50.  && pt < 70.)   SFc_error = 0.040379554033279419;
+                                if (pt >= 70.  && pt < 100.)  SFc_error = 0.038113951683044434;
+                                if (pt >= 100. && pt < 140.)  SFc_error = 0.043118208646774292;
+                                if (pt >= 140. && pt < 200.)  SFc_error = 0.045257844030857086;
+                                if (pt >= 200. && pt < 300.)  SFc_error = 0.10087831318378448;
+                                if (pt >= 300. && pt < 600.)  SFc_error = 0.13596910238265991;
+                                if (pt >= 600. && pt < 1000.) SFc_error = 0.17518603801727295;
+                                if (pt >= 1000.)              SFc_error = 0.17518603801727295 * 2.;
+                                float SFc_up = SFc + SFc_error;
+                                float SFc_down = SFc - SFc_error;
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SFc < 1.0)           f = (1.0 - SFc);
+                                if (SFc_up < 1.0)     f_up = (1.0 - SFc_up);
+                                if (SFc_down < 1.0) f_down = (1.0 - SFc_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SFc < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SFc_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SFc_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SFc > 1.0)           f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                                if (SFc_up > 1.0)     f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                                if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SFc > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SFc_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SFc_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+
+                            } // end c-jet section
+
+                            // ---------------- For Truth-Level Light-jets --------------- //
+                            if (abs(jetflavour) < 4){
+
+                                // Set the b-tag eff's determined in MC for truth light jets
+                                float eff_l = 1.;
+                                if (pt < 30.)                 eff_l = 0.00465021;
+                                if (pt >= 30.  && pt < 50.)   eff_l = 0.00465021;
+                                if (pt >= 50.  && pt < 70.)   eff_l = 0.00562437;
+                                if (pt >= 70.  && pt < 100.)  eff_l = 0.00791489;
+                                if (pt >= 100. && pt < 140.)  eff_l = 0.00857474;
+                                if (pt >= 140. && pt < 200.)  eff_l = 0.00937996;
+                                if (pt >= 200. && pt < 300.)  eff_l = 0.00940644;
+                                if (pt >= 300. && pt < 600.)  eff_l = 0.01284070;
+                                if (pt >= 600. && pt < 1000.) eff_l = 0.01378930;
+                                if (pt >= 1000.)              eff_l = 0.01378930;
+                                
+                                // Get the central SF and variations -----
+                                // From: CSVv2_94XSF_WP_V2_B_F.csv (run period independent), CSVv2 medium WP, "incl" values, light-jets
+                                // SFs are given as functions of pT
+                                float           SF_l = 0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt);
+                                if (pt < 20.)   SF_l = 0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.);
+                                if (pt > 1000.) SF_l = 0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.);
+
+                                float           SF_l_up = (0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt))          * (1+(0.115123+(0.000153114*pt)+(-1.72111e-07*pt*pt)));
+                                if (pt < 20.)   SF_l_up = (0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.))       * (1+(0.115123+(0.000153114*20.)+(-1.72111e-07*20.*20.)));
+                                if (pt > 1000.) SF_l_up = (0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.)) * (1+(0.115123+(0.000153114*1000.)+(-1.72111e-07*1000.*1000.)));
+
+                                float           SF_l_down = (0.949449+(0.000516201*pt)   +(7.13398e-08*pt*pt)      +(-3.55644e-10*pt*pt*pt))          * (1-(0.115123+(0.000153114*pt)+(-1.72111e-07*pt*pt)));
+                                if (pt < 20.)   SF_l_down = (0.949449+(0.000516201*20.)  +(7.13398e-08*20.*20.)    +(-3.55644e-10*20.*20.*20.))       * (1-(0.115123+(0.000153114*20.)+(-1.72111e-07*20.*20.)));
+                                if (pt > 1000.) SF_l_down = (0.949449+(0.000516201*1000.)+(7.13398e-08*1000.*1000.)+(-3.55644e-10*1000.*1000.*1000.)) * (1-(0.115123+(0.000153114*1000.)+(-1.72111e-07*1000.*1000.)));
+                                
+                                // f values (jet fractions) for comparison to rand
+                                // method of computation depends on wheter SF < 1, or SF > 1
+                                float f = 0.;
+                                float f_up = 0.;
+                                float f_down = 0.;
+                            
+                                // If SF < 1, randomly untag a tagged jet ------
+                                // Compute the untag fraction
+                                if (SF_l < 1.0)           f = (1.0 - SF_l);
+                                if (SF_l_up < 1.0)     f_up = (1.0 - SF_l_up);
+                                if (SF_l_down < 1.0) f_down = (1.0 - SF_l_down);
+                                // We untag a fraction f of the tagged jets
+                                if ((SF_l < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                                if ((SF_l_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                                if ((SF_l_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                                
+                                // If SF > 1, randomly tag an untagged jet ------
+                                // Compute the re-tag fraction
+                                if (SF_l > 1.0)           f = (1.0 - SF_l)/(1.0 - 1.0/eff_l);
+                                if (SF_l_up > 1.0)     f_up = (1.0 - SF_l_up)/(1.0 - 1.0/eff_l);
+                                if (SF_l_down > 1.0) f_down = (1.0 - SF_l_down)/(1.0 - 1.0/eff_l);
+                                // We re-tag a fraction f of the untagged jets
+                                if ((SF_l > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                                if ((SF_l_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                                if ((SF_l_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+
+                            } // end light jet section
+
+                            // for btagging SF systematics
+                            if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                            if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
+                            
+                            // Wb study
+                            if (abs(jetflavour)==5) countWbBjets++;
+                            
+                        } // end CSVv2 b-tag SFs for 2017
+
+                    } // end b-tag efficiency SFs for 2017 MC
+
+                    else{
+
+                        // Get jet flavor (hadron definition)
+                        int jetflavour = JetAk04HadFlav->at(i);
+
+                        // Initialize the systematic variations as the central value
+                        bool passBJets_SFB_sys_up = passBJets; 
+                        bool passBJets_SFB_sys_down = passBJets;  
                         
-                //         // Get jet flavor (hadron definition)
-                //         int jetflavour = JetAk04HadFlav->at(i);
+                        // ---------------- For Truth-Level B-jets --------------- //
+                        if (fabs(jetflavour)==5){
 
-                //         // Initialize the systematic variations as the central value
-                //         bool passBJets_SFB_sys_up = passBJets; 
-                //         bool passBJets_SFB_sys_down = passBJets;  
+                            // Set the b-tag eff's determined in MC for truth b jets
+                            float effb = 1.;
+                            if (pt < 30.)                 effb = 0.696166;
+                            if (pt >= 30.  && pt < 50.)   effb = 0.696166;
+                            if (pt >= 50.  && pt < 70.)   effb = 0.740113;
+                            if (pt >= 70.  && pt < 100.)  effb = 0.760797;
+                            if (pt >= 100. && pt < 140.)  effb = 0.763481;
+                            if (pt >= 140. && pt < 200.)  effb = 0.752109;
+                            if (pt >= 200. && pt < 300.)  effb = 0.709139;
+                            if (pt >= 300. && pt < 600.)  effb = 0.623167;
+                            if (pt >= 600. && pt < 1000.) effb = 0.445619;
+                            if (pt >= 1000.)              effb = 0.445619;
+                            
+                            // Get the central SF -----
+                            // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "comb" values, b-jets
+                            // SFs are given as functions of pT
+                            float           SFb = 0.909339+(0.00354*(log(pt+19)*(log(pt+18)*(3-(0.471623*log(pt+18))))));
+                            if (pt < 20.)   SFb = 0.909339+(0.00354*(log(20.+19)*(log(20.+18)*(3-(0.471623*log(20.+18))))));
+                            if (pt > 1000.) SFb = 0.909339+(0.00354*(log(1000.+19)*(log(1000.+18)*(3-(0.471623*log(1000.+18))))));
+                            
+                            // Grab SF errors for use in systematic variations
+                            // Errors listed in the .csv file are symmetric
+                            float SFb_error = 0.;
+                            if (pt < 20.)                 SFb_error = 0.065904870629310608 * 2.;
+                            if (pt >= 20.  && pt < 30.)   SFb_error = 0.065904870629310608;
+                            if (pt >= 30.  && pt < 50.)   SFb_error = 0.015055687166750431;
+                            if (pt >= 50.  && pt < 70.)   SFb_error = 0.013506759889423847;
+                            if (pt >= 70.  && pt < 100.)  SFb_error = 0.015106724575161934;
+                            if (pt >= 100. && pt < 140.)  SFb_error = 0.014620178379118443;
+                            if (pt >= 140. && pt < 200.)  SFb_error = 0.012161554768681526;
+                            if (pt >= 200. && pt < 300.)  SFb_error = 0.016239689663052559;
+                            if (pt >= 300. && pt < 600.)  SFb_error = 0.039990410208702087;
+                            if (pt >= 600. && pt < 1000.) SFb_error = 0.068454340100288391;
+                            if (pt >= 1000.)              SFb_error = 0.068454340100288391 * 2.;
+                            float SFb_up = SFb + SFb_error;
+                            float SFb_down = SFb - SFb_error;
+                            
+                            // f values (jet fractions) for comparison to rand
+                            // method of computation depends on wheter SF < 1, or SF > 1
+                            float f = 0.;
+                            float f_up = 0.;
+                            float f_down = 0.;
                         
-                //         // ---------------- For Truth-Level B-jets --------------- //
-                //         if (fabs(jetflavour)==5){
+                            // If SF < 1, randomly untag a tagged jet ------
+                            // Compute the untag fraction
+                            if (SFb < 1.0)           f = (1.0 - SFb);
+                            if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
+                            if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
+                            // We untag a fraction f of the tagged jets
+                            if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                            if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                            
+                            // If SF > 1, randomly tag an untagged jet ------
+                            // Compute the re-tag fraction
+                            if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
+                            if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
+                            if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
+                            // We re-tag a fraction f of the untagged jets
+                            if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                            if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            
+                        } // end b-jet section
 
-                //             // Set the b-tag eff's determined in MC for truth b jets
-                //             float effb = 1.;
-                //             if (pt < 30.)                 effb = 0.68635;
-                //             if (pt >= 30.  && pt < 50.)   effb = 0.68635;
-                //             if (pt >= 50.  && pt < 70.)   effb = 0.734214;
-                //             if (pt >= 70.  && pt < 100.)  effb = 0.755399;
-                //             if (pt >= 100. && pt < 140.)  effb = 0.757332;
-                //             if (pt >= 140. && pt < 200.)  effb = 0.740454;
-                //             if (pt >= 200. && pt < 300.)  effb = 0.692885;
-                //             if (pt >= 300. && pt < 600.)  effb = 0.592282;
-                //             if (pt >= 600. && pt < 1000.) effb = 0.395662;
-                //             if (pt >= 1000.)              effb = 0.395662;
+                        // ---------------- For Truth-Level C-jets--------------- //
+                        if (fabs(jetflavour)==4){
+
+                            // Set the b-tag eff's determined in MC for truth c jets
+                            float effc = 1.;
+                            if (pt < 30.)                 effc = 0.123559;
+                            if (pt >= 30.  && pt < 50.)   effc = 0.123559;
+                            if (pt >= 50.  && pt < 70.)   effc = 0.125201;
+                            if (pt >= 70.  && pt < 100.)  effc = 0.137898;
+                            if (pt >= 100. && pt < 140.)  effc = 0.146794;
+                            if (pt >= 140. && pt < 200.)  effc = 0.154294;
+                            if (pt >= 200. && pt < 300.)  effc = 0.148055;
+                            if (pt >= 300. && pt < 600.)  effc = 0.124821;
+                            if (pt >= 600. && pt < 1000.) effc = 0.0768057;
+                            if (pt >= 1000.)              effc = 0.0768057;
                             
-                //             // Get the central SF -----
-                //             // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, b-jets
-                //             // SFs are given as functions of pT
-                //             float           SFb = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
-                //             if (pt < 20.)   SFb = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
-                //             if (pt > 1000.) SFb = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
+                            // Get the central SF -----
+                            // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "comb" values, c-jets
+                            // SFs are given as functions of pT
+                            float           SFc = 0.909339+(0.00354*(log(pt+19)*(log(pt+18)*(3-(0.471623*log(pt+18))))));
+                            if (pt < 20.)   SFc = 0.909339+(0.00354*(log(20.+19)*(log(20.+18)*(3-(0.471623*log(20.+18))))));
+                            if (pt > 1000.) SFc = 0.909339+(0.00354*(log(1000.+19)*(log(1000.+18)*(3-(0.471623*log(1000.+18))))));
                             
-                //             // Grab SF errors for use in systematic variations
-                //             // Errors listed in the .csv file are symmetric
-                //             float SFb_error = 0.;
-                //             if (pt < 20.)                 SFb_error = 0.038731977343559265 * 2.;
-                //             if (pt >= 20.  && pt < 30.)   SFb_error = 0.038731977343559265;
-                //             if (pt >= 30.  && pt < 50.)   SFb_error = 0.015137125737965107;
-                //             if (pt >= 50.  && pt < 70.)   SFb_error = 0.013977443799376488;
-                //             if (pt >= 70.  && pt < 100.)  SFb_error = 0.012607076205313206;
-                //             if (pt >= 100. && pt < 140.)  SFb_error = 0.013979751616716385;
-                //             if (pt >= 140. && pt < 200.)  SFb_error = 0.015011214651167393;
-                //             if (pt >= 200. && pt < 300.)  SFb_error = 0.034551065415143967;
-                //             if (pt >= 300. && pt < 600.)  SFb_error = 0.040168888866901398;
-                //             if (pt >= 600. && pt < 1000.) SFb_error = 0.054684814065694809;
-                //             if (pt >= 1000.)              SFb_error = 0.054684814065694809 * 2.;
-                //             float SFb_up = SFb + SFb_error;
-                //             float SFb_down = SFb - SFb_error;
+                            // Grab SF errors for use in systematic variations
+                            // Errors listed in the .csv file are symmetric
+                            float SFc_error = 0.;
+                            if (pt < 20.)                 SFc_error = 0.19771461188793182 * 2.;
+                            if (pt >= 20.  && pt < 30.)   SFc_error = 0.19771461188793182;
+                            if (pt >= 30.  && pt < 50.)   SFc_error = 0.045167062431573868;
+                            if (pt >= 50.  && pt < 70.)   SFc_error = 0.040520280599594116;
+                            if (pt >= 70.  && pt < 100.)  SFc_error = 0.045320175588130951;
+                            if (pt >= 100. && pt < 140.)  SFc_error = 0.043860536068677902;
+                            if (pt >= 140. && pt < 200.)  SFc_error = 0.036484666168689728;
+                            if (pt >= 200. && pt < 300.)  SFc_error = 0.048719070851802826;
+                            if (pt >= 300. && pt < 600.)  SFc_error = 0.11997123062610626;
+                            if (pt >= 600. && pt < 1000.) SFc_error = 0.20536302030086517;
+                            if (pt >= 1000.)              SFc_error = 0.20536302030086517 * 2.;
+                            float SFc_up = SFc + SFc_error;
+                            float SFc_down = SFc - SFc_error;
                             
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
+                            // f values (jet fractions) for comparison to rand
+                            // method of computation depends on wheter SF < 1, or SF > 1
+                            float f = 0.;
+                            float f_up = 0.;
+                            float f_down = 0.;
                         
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SFb < 1.0)           f = (1.0 - SFb);
-                //             if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
-                //             if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                            // If SF < 1, randomly untag a tagged jet ------
+                            // Compute the untag fraction
+                            if (SFc < 1.0)           f = (1.0 - SFc);
+                            if (SFc_up < 1.0)     f_up = (1.0 - SFc_up);
+                            if (SFc_down < 1.0) f_down = (1.0 - SFc_down);
+                            // We untag a fraction f of the tagged jets
+                            if ((SFc < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                            if ((SFc_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((SFc_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
                             
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
-                //             if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
-                //             if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                            
-                //         } // end b-jet section
+                            // If SF > 1, randomly tag an untagged jet ------
+                            // Compute the re-tag fraction
+                            if (SFc > 1.0)           f = (1.0 - SFc)/(1.0 - 1.0/effc);
+                            if (SFc_up > 1.0)     f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
+                            if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
+                            // We re-tag a fraction f of the untagged jets
+                            if ((SFc > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                            if ((SFc_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((SFc_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
 
-                //         // ---------------- For Truth-Level C-jets--------------- //
-                //         if (fabs(jetflavour)==4){
+                        } // end c-jet section
 
-                //             // Set the b-tag eff's determined in MC for truth c jets
-                //             float effc = 1.;
-                //             if (pt < 30.)                 effc = 0.101402;
-                //             if (pt >= 30.  && pt < 50.)   effc = 0.101402;
-                //             if (pt >= 50.  && pt < 70.)   effc = 0.107145;
-                //             if (pt >= 70.  && pt < 100.)  effc = 0.120956;
-                //             if (pt >= 100. && pt < 140.)  effc = 0.128843;
-                //             if (pt >= 140. && pt < 200.)  effc = 0.136532;
-                //             if (pt >= 200. && pt < 300.)  effc = 0.129016;
-                //             if (pt >= 300. && pt < 600.)  effc = 0.10803;
-                //             if (pt >= 600. && pt < 1000.) effc = 0.0488107;
-                //             if (pt >= 1000.)              effc = 0.0488107;
-                            
-                //             // Get the central SF -----
-                //             // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "comb" values, c-jets
-                //             // SFs are given as functions of pT
-                //             float           SFc = 2.22144*((1.+(0.540134*pt))/(1.+(1.30246*pt)));
-                //             if (pt < 20.)   SFc = 2.22144*((1.+(0.540134*20.))/(1.+(1.30246*20.)));
-                //             if (pt > 1000.) SFc = 2.22144*((1.+(0.540134*1000.))/(1.+(1.30246*1000.)));
-                            
-                //             // Grab SF errors for use in systematic variations
-                //             // Errors listed in the .csv file are symmetric
-                //             float SFc_error = 0.;
-                //             if (pt < 20.)                 SFc_error = 0.1161959320306778 * 2.;
-                //             if (pt >= 20.  && pt < 30.)   SFc_error = 0.1161959320306778;
-                //             if (pt >= 30.  && pt < 50.)   SFc_error = 0.045411378145217896;
-                //             if (pt >= 50.  && pt < 70.)   SFc_error = 0.041932329535484314;
-                //             if (pt >= 70.  && pt < 100.)  SFc_error = 0.037821229547262192;
-                //             if (pt >= 100. && pt < 140.)  SFc_error = 0.041939254850149155;
-                //             if (pt >= 140. && pt < 200.)  SFc_error = 0.045033644884824753;
-                //             if (pt >= 200. && pt < 300.)  SFc_error = 0.1036531925201416;
-                //             if (pt >= 300. && pt < 600.)  SFc_error = 0.12050666660070419;
-                //             if (pt >= 600. && pt < 1000.) SFc_error = 0.16405443847179413;
-                //             if (pt >= 1000.)              SFc_error = 0.16405443847179413 * 2.;
-                //             float SFc_up = SFc + SFc_error;
-                //             float SFc_down = SFc - SFc_error;
-                            
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
-                        
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SFc < 1.0)           f = (1.0 - SFc);
-                //             if (SFc_up < 1.0)     f_up = (1.0 - SFc_up);
-                //             if (SFc_down < 1.0) f_down = (1.0 - SFc_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SFc < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SFc_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SFc_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
-                            
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SFc > 1.0)           f = (1.0 - SFc)/(1.0 - 1.0/effc);
-                //             if (SFc_up > 1.0)     f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
-                //             if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SFc > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SFc_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SFc_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                        // ---------------- For Truth-Level Light-jets --------------- //
+                        if (fabs(jetflavour) < 4){
 
-                //         } // end c-jet section
-
-                //         // ---------------- For Truth-Level Light-jets --------------- //
-                //         if (fabs(jetflavour) < 4){
-
-                //             // Set the b-tag eff's determined in MC for truth light jets
-                //             float eff_l = 1.;
-                //             if (pt < 30.)                 eff_l = 0.00580523;
-                //             if (pt >= 30.  && pt < 50.)   eff_l = 0.00580523;
-                //             if (pt >= 50.  && pt < 70.)   eff_l = 0.00690804;
-                //             if (pt >= 70.  && pt < 100.)  eff_l = 0.00954291;
-                //             if (pt >= 100. && pt < 140.)  eff_l = 0.0105542;
-                //             if (pt >= 140. && pt < 200.)  eff_l = 0.0114382;
-                //             if (pt >= 200. && pt < 300.)  eff_l = 0.0117215;
-                //             if (pt >= 300. && pt < 600.)  eff_l = 0.0112139;
-                //             if (pt >= 600. && pt < 1000.) eff_l = 0.00976563;
-                //             if (pt >= 1000.)              eff_l = 0.00976563;
+                            // Set the b-tag eff's determined in MC for truth light jets
+                            float eff_l = 1.;
+                            if (pt < 30.)                 eff_l = 0.00789529;
+                            if (pt >= 30.  && pt < 50.)   eff_l = 0.00789529;
+                            if (pt >= 50.  && pt < 70.)   eff_l = 0.00822757;
+                            if (pt >= 70.  && pt < 100.)  eff_l = 0.0109697;
+                            if (pt >= 100. && pt < 140.)  eff_l = 0.0122805;
+                            if (pt >= 140. && pt < 200.)  eff_l = 0.0135863;
+                            if (pt >= 200. && pt < 300.)  eff_l = 0.0144828;
+                            if (pt >= 300. && pt < 600.)  eff_l = 0.0174909;
+                            if (pt >= 600. && pt < 1000.) eff_l = 0.0168763;
+                            if (pt >= 1000.)              eff_l = 0.0168763;
                             
-                //             // Get the central SF and variations -----
-                //             // From: DeepCSV_94XSF_WP_V4_B_F.csv (run period independent), DeepCSV medium WP, "incl" values, light-jets
-                //             // SFs are given as functions of pT
-                //             float           SF_l = 0.972902+(0.000201811*pt)+(3.96396e-08*pt*pt)+(-4.53965e-10*pt*pt*pt);
-                //             if (pt < 20.)   SF_l = 0.972902+(0.000201811*20.)+(3.96396e-08*20.*20.)+(-4.53965e-10*20.*20.*20.);
-                //             if (pt > 1000.) SF_l = 0.972902+(0.000201811*1000.)+(3.96396e-08*1000.*1000.)+(-4.53965e-10*1000.*1000.*1000.);
-
-                //             float           SF_l_up = SF_l * (1+(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
-                //             if (pt < 20.)   SF_l_up = SF_l * (1+(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
-                //             if (pt > 1000.) SF_l_up = SF_l * (1+(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
-
-                //             float           SF_l_down = SF_l * (1-(0.101236+(0.000212696*pt)+(-1.71672e-07*pt*pt)));
-                //             if (pt < 20.)   SF_l_down = SF_l * (1-(0.101236+(0.000212696*20.)+(-1.71672e-07*20.*20.)));
-                //             if (pt > 1000.) SF_l_down = SF_l * (1-(0.101236+(0.000212696*1000.)+(-1.71672e-07*1000.*1000.)));
-                            
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
-                        
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SF_l < 1.0)           f = (1.0 - SF_l);
-                //             if (SF_l_up < 1.0)     f_up = (1.0 - SF_l_up);
-                //             if (SF_l_down < 1.0) f_down = (1.0 - SF_l_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SF_l < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SF_l_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SF_l_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
-                            
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SF_l > 1.0)           f = (1.0 - SF_l)/(1.0 - 1.0/eff_l);
-                //             if (SF_l_up > 1.0)     f_up = (1.0 - SF_l_up)/(1.0 - 1.0/eff_l);
-                //             if (SF_l_down > 1.0) f_down = (1.0 - SF_l_down)/(1.0 - 1.0/eff_l);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SF_l > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SF_l_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SF_l_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-
-                //         } // end light jet section
-
-                //         // for btagging SF systematics
-                //         if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
-                //         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
-                        
-                //         // Wb study
-                //         if (fabs(jetflavour)==5) countWbBjets++;
-                        
-                //     } // end b-tag efficiency SFs for 2017 MC
-                //     else{
-
-                //         // Get jet flavor (hadron definition)
-                //         int jetflavour = JetAk04HadFlav->at(i);
-
-                //         // Initialize the systematic variations as the central value
-                //         bool passBJets_SFB_sys_up = passBJets; 
-                //         bool passBJets_SFB_sys_down = passBJets;  
-                        
-                //         // ---------------- For Truth-Level B-jets --------------- //
-                //         if (fabs(jetflavour)==5){
-
-                //             // Set the b-tag eff's determined in MC for truth b jets
-                //             float effb = 1.;
-                //             if (pt < 30.)                 effb = 0.696166;
-                //             if (pt >= 30.  && pt < 50.)   effb = 0.696166;
-                //             if (pt >= 50.  && pt < 70.)   effb = 0.740113;
-                //             if (pt >= 70.  && pt < 100.)  effb = 0.760797;
-                //             if (pt >= 100. && pt < 140.)  effb = 0.763481;
-                //             if (pt >= 140. && pt < 200.)  effb = 0.752109;
-                //             if (pt >= 200. && pt < 300.)  effb = 0.709139;
-                //             if (pt >= 300. && pt < 600.)  effb = 0.623167;
-                //             if (pt >= 600. && pt < 1000.) effb = 0.445619;
-                //             if (pt >= 1000.)              effb = 0.445619;
-                            
-                //             // Get the central SF -----
-                //             // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "comb" values, b-jets
-                //             // SFs are given as functions of pT
-                //             float           SFb = 0.909339+(0.00354*(log(pt+19)*(log(pt+18)*(3-(0.471623*log(pt+18))))));
-                //             if (pt < 20.)   SFb = 0.909339+(0.00354*(log(20.+19)*(log(20.+18)*(3-(0.471623*log(20.+18))))));
-                //             if (pt > 1000.) SFb = 0.909339+(0.00354*(log(1000.+19)*(log(1000.+18)*(3-(0.471623*log(1000.+18))))));
-                            
-                //             // Grab SF errors for use in systematic variations
-                //             // Errors listed in the .csv file are symmetric
-                //             float SFb_error = 0.;
-                //             if (pt < 20.)                 SFb_error = 0.065904870629310608 * 2.;
-                //             if (pt >= 20.  && pt < 30.)   SFb_error = 0.065904870629310608;
-                //             if (pt >= 30.  && pt < 50.)   SFb_error = 0.015055687166750431;
-                //             if (pt >= 50.  && pt < 70.)   SFb_error = 0.013506759889423847;
-                //             if (pt >= 70.  && pt < 100.)  SFb_error = 0.015106724575161934;
-                //             if (pt >= 100. && pt < 140.)  SFb_error = 0.014620178379118443;
-                //             if (pt >= 140. && pt < 200.)  SFb_error = 0.012161554768681526;
-                //             if (pt >= 200. && pt < 300.)  SFb_error = 0.016239689663052559;
-                //             if (pt >= 300. && pt < 600.)  SFb_error = 0.039990410208702087;
-                //             if (pt >= 600. && pt < 1000.) SFb_error = 0.068454340100288391;
-                //             if (pt >= 1000.)              SFb_error = 0.068454340100288391 * 2.;
-                //             float SFb_up = SFb + SFb_error;
-                //             float SFb_down = SFb - SFb_error;
-                            
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
-                        
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SFb < 1.0)           f = (1.0 - SFb);
-                //             if (SFb_up < 1.0)     f_up = (1.0 - SFb_up);
-                //             if (SFb_down < 1.0) f_down = (1.0 - SFb_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SFb < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SFb_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SFb_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
-                            
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SFb > 1.0)           f = (1.0 - SFb)/(1.0 - 1.0/effb);
-                //             if (SFb_up > 1.0)     f_up = (1.0 - SFb_up)/(1.0 - 1.0/effb);
-                //             if (SFb_down > 1.0) f_down = (1.0 - SFb_down)/(1.0 - 1.0/effb);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SFb > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SFb_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SFb_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-                            
-                //         } // end b-jet section
-
-                //         // ---------------- For Truth-Level C-jets--------------- //
-                //         if (fabs(jetflavour)==4){
-
-                //             // Set the b-tag eff's determined in MC for truth c jets
-                //             float effc = 1.;
-                //             if (pt < 30.)                 effc = 0.123559;
-                //             if (pt >= 30.  && pt < 50.)   effc = 0.123559;
-                //             if (pt >= 50.  && pt < 70.)   effc = 0.125201;
-                //             if (pt >= 70.  && pt < 100.)  effc = 0.137898;
-                //             if (pt >= 100. && pt < 140.)  effc = 0.146794;
-                //             if (pt >= 140. && pt < 200.)  effc = 0.154294;
-                //             if (pt >= 200. && pt < 300.)  effc = 0.148055;
-                //             if (pt >= 300. && pt < 600.)  effc = 0.124821;
-                //             if (pt >= 600. && pt < 1000.) effc = 0.0768057;
-                //             if (pt >= 1000.)              effc = 0.0768057;
-                            
-                //             // Get the central SF -----
-                //             // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "comb" values, c-jets
-                //             // SFs are given as functions of pT
-                //             float           SFc = 0.909339+(0.00354*(log(pt+19)*(log(pt+18)*(3-(0.471623*log(pt+18))))));
-                //             if (pt < 20.)   SFc = 0.909339+(0.00354*(log(20.+19)*(log(20.+18)*(3-(0.471623*log(20.+18))))));
-                //             if (pt > 1000.) SFc = 0.909339+(0.00354*(log(1000.+19)*(log(1000.+18)*(3-(0.471623*log(1000.+18))))));
-                            
-                //             // Grab SF errors for use in systematic variations
-                //             // Errors listed in the .csv file are symmetric
-                //             float SFc_error = 0.;
-                //             if (pt < 20.)                 SFc_error = 0.19771461188793182 * 2.;
-                //             if (pt >= 20.  && pt < 30.)   SFc_error = 0.19771461188793182;
-                //             if (pt >= 30.  && pt < 50.)   SFc_error = 0.045167062431573868;
-                //             if (pt >= 50.  && pt < 70.)   SFc_error = 0.040520280599594116;
-                //             if (pt >= 70.  && pt < 100.)  SFc_error = 0.045320175588130951;
-                //             if (pt >= 100. && pt < 140.)  SFc_error = 0.043860536068677902;
-                //             if (pt >= 140. && pt < 200.)  SFc_error = 0.036484666168689728;
-                //             if (pt >= 200. && pt < 300.)  SFc_error = 0.048719070851802826;
-                //             if (pt >= 300. && pt < 600.)  SFc_error = 0.11997123062610626;
-                //             if (pt >= 600. && pt < 1000.) SFc_error = 0.20536302030086517;
-                //             if (pt >= 1000.)              SFc_error = 0.20536302030086517 * 2.;
-                //             float SFc_up = SFc + SFc_error;
-                //             float SFc_down = SFc - SFc_error;
-                            
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
-                        
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SFc < 1.0)           f = (1.0 - SFc);
-                //             if (SFc_up < 1.0)     f_up = (1.0 - SFc_up);
-                //             if (SFc_down < 1.0) f_down = (1.0 - SFc_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SFc < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SFc_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SFc_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
-                            
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SFc > 1.0)           f = (1.0 - SFc)/(1.0 - 1.0/effc);
-                //             if (SFc_up > 1.0)     f_up = (1.0 - SFc_up)/(1.0 - 1.0/effc);
-                //             if (SFc_down > 1.0) f_down = (1.0 - SFc_down)/(1.0 - 1.0/effc);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SFc > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SFc_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SFc_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
-
-                //         } // end c-jet section
-
-                //         // ---------------- For Truth-Level Light-jets --------------- //
-                //         if (fabs(jetflavour) < 4){
-
-                //             // Set the b-tag eff's determined in MC for truth light jets
-                //             float eff_l = 1.;
-                //             if (pt < 30.)                 eff_l = 0.00789529;
-                //             if (pt >= 30.  && pt < 50.)   eff_l = 0.00789529;
-                //             if (pt >= 50.  && pt < 70.)   eff_l = 0.00822757;
-                //             if (pt >= 70.  && pt < 100.)  eff_l = 0.0109697;
-                //             if (pt >= 100. && pt < 140.)  eff_l = 0.0122805;
-                //             if (pt >= 140. && pt < 200.)  eff_l = 0.0135863;
-                //             if (pt >= 200. && pt < 300.)  eff_l = 0.0144828;
-                //             if (pt >= 300. && pt < 600.)  eff_l = 0.0174909;
-                //             if (pt >= 600. && pt < 1000.) eff_l = 0.0168763;
-                //             if (pt >= 1000.)              eff_l = 0.0168763;
-                            
-                //             // Get the central SF and variations -----
-                //             // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "incl" values, light-jets
-                //             // SFs are given as functions of pT
-                //             float           SF_l = 1.6329+(-0.00160255*pt)+(1.9899e-06*pt*pt)+(-6.72613e-10*pt*pt*pt);
-                //             if (pt < 20.)   SF_l = 1.6329+(-0.00160255*20.)+(1.9899e-06*20.*20.)+(-6.72613e-10*20.*20.*20.);
-                //             if (pt > 1000.) SF_l = 1.6329+(-0.00160255*1000.)+(1.9899e-06*1000.*1000.)+(-6.72613e-10*1000.*1000.*1000.);
+                            // Get the central SF and variations -----
+                            // From: DeepCSV_102XSF_WP_V1.csv (run period independent), DeepCSV medium WP, "incl" values, light-jets
+                            // SFs are given as functions of pT
+                            float           SF_l = 1.6329+(-0.00160255*pt)+(1.9899e-06*pt*pt)+(-6.72613e-10*pt*pt*pt);
+                            if (pt < 20.)   SF_l = 1.6329+(-0.00160255*20.)+(1.9899e-06*20.*20.)+(-6.72613e-10*20.*20.*20.);
+                            if (pt > 1000.) SF_l = 1.6329+(-0.00160255*1000.)+(1.9899e-06*1000.*1000.)+(-6.72613e-10*1000.*1000.*1000.);
                                                 
-                //             float           SF_l_up = SF_l * (1+(0.122811+(0.000162564*pt)+(-1.66422e-07*pt*pt)));
-                //             if (pt < 20.)   SF_l_up = SF_l * (1+(0.122811+(0.000162564*20.)+(-1.66422e-07*20.*20.)));
-                //             if (pt > 1000.) SF_l_up = SF_l * (1+(0.122811+(0.000162564*1000.)+(-1.66422e-07*1000.*1000.)));
+                            float           SF_l_up = SF_l * (1+(0.122811+(0.000162564*pt)+(-1.66422e-07*pt*pt)));
+                            if (pt < 20.)   SF_l_up = SF_l * (1+(0.122811+(0.000162564*20.)+(-1.66422e-07*20.*20.)));
+                            if (pt > 1000.) SF_l_up = SF_l * (1+(0.122811+(0.000162564*1000.)+(-1.66422e-07*1000.*1000.)));
 
-                //             float           SF_l_down = SF_l * (1-(0.122811+(0.000162564*pt)+(-1.66422e-07*pt*pt)));
-                //             if (pt < 20.)   SF_l_down = SF_l * (1-(0.122811+(0.000162564*20.)+(-1.66422e-07*20.*20.)));
-                //             if (pt > 1000.) SF_l_down = SF_l * (1-(0.122811+(0.000162564*1000.)+(-1.66422e-07*1000.*1000.)));
+                            float           SF_l_down = SF_l * (1-(0.122811+(0.000162564*pt)+(-1.66422e-07*pt*pt)));
+                            if (pt < 20.)   SF_l_down = SF_l * (1-(0.122811+(0.000162564*20.)+(-1.66422e-07*20.*20.)));
+                            if (pt > 1000.) SF_l_down = SF_l * (1-(0.122811+(0.000162564*1000.)+(-1.66422e-07*1000.*1000.)));
 
-                //             // f values (jet fractions) for comparison to rand
-                //             // method of computation depends on wheter SF < 1, or SF > 1
-                //             float f = 0.;
-                //             float f_up = 0.;
-                //             float f_down = 0.;
+                            // f values (jet fractions) for comparison to rand
+                            // method of computation depends on wheter SF < 1, or SF > 1
+                            float f = 0.;
+                            float f_up = 0.;
+                            float f_down = 0.;
                         
-                //             // If SF < 1, randomly untag a tagged jet ------
-                //             // Compute the untag fraction
-                //             if (SF_l < 1.0)           f = (1.0 - SF_l);
-                //             if (SF_l_up < 1.0)     f_up = (1.0 - SF_l_up);
-                //             if (SF_l_down < 1.0) f_down = (1.0 - SF_l_down);
-                //             // We untag a fraction f of the tagged jets
-                //             if ((SF_l < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
-                //             if ((SF_l_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
-                //             if ((SF_l_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
+                            // If SF < 1, randomly untag a tagged jet ------
+                            // Compute the untag fraction
+                            if (SF_l < 1.0)           f = (1.0 - SF_l);
+                            if (SF_l_up < 1.0)     f_up = (1.0 - SF_l_up);
+                            if (SF_l_down < 1.0) f_down = (1.0 - SF_l_down);
+                            // We untag a fraction f of the tagged jets
+                            if ((SF_l < 1.0)      && (passBJets==true)              && (this_rand < f))       passBJets = false; // for central value
+                            if ((SF_l_up < 1.0)   && (passBJets_SFB_sys_up==true)   && (this_rand < f_up))    passBJets_SFB_sys_up = false; // for systematic_up
+                            if ((SF_l_down < 1.0) && (passBJets_SFB_sys_down==true) && (this_rand < f_down))  passBJets_SFB_sys_down = false; // for sytematic_down
                             
-                //             // If SF > 1, randomly tag an untagged jet ------
-                //             // Compute the re-tag fraction
-                //             if (SF_l > 1.0)           f = (1.0 - SF_l)/(1.0 - 1.0/eff_l);
-                //             if (SF_l_up > 1.0)     f_up = (1.0 - SF_l_up)/(1.0 - 1.0/eff_l);
-                //             if (SF_l_down > 1.0) f_down = (1.0 - SF_l_down)/(1.0 - 1.0/eff_l);
-                //             // We re-tag a fraction f of the untagged jets
-                //             if ((SF_l > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
-                //             if ((SF_l_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
-                //             if ((SF_l_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
+                            // If SF > 1, randomly tag an untagged jet ------
+                            // Compute the re-tag fraction
+                            if (SF_l > 1.0)           f = (1.0 - SF_l)/(1.0 - 1.0/eff_l);
+                            if (SF_l_up > 1.0)     f_up = (1.0 - SF_l_up)/(1.0 - 1.0/eff_l);
+                            if (SF_l_down > 1.0) f_down = (1.0 - SF_l_down)/(1.0 - 1.0/eff_l);
+                            // We re-tag a fraction f of the untagged jets
+                            if ((SF_l > 1.0)      && (passBJets==false)              && (this_rand < f))      passBJets = true; // for central value
+                            if ((SF_l_up > 1.0)   && (passBJets_SFB_sys_up==false)   && (this_rand < f_up))   passBJets_SFB_sys_up = true; // for systematic_up
+                            if ((SF_l_down > 1.0) && (passBJets_SFB_sys_down==false) && (this_rand < f_down)) passBJets_SFB_sys_down = true; // for sytematic_down
 
-                //         } // end light jet section
+                        } // end light jet section
 
-                //         // for btagging SF systematics
-                //         if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
-                //         if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
+                        // for btagging SF systematics
+                        if (sysBtagSF ==  1) passBJets = passBJets_SFB_sys_up;
+                        if (sysBtagSF == -1) passBJets = passBJets_SFB_sys_down;
                         
-                //         // Wb study
-                //         if (fabs(jetflavour)==5) countWbBjets++;
+                        // Wb study
+                        if (fabs(jetflavour)==5) countWbBjets++;
                         
-                //     } // end b-tag efficiency SFs for 2018 MC
-                // } // --------- End MC-only b-tag efficiency SF section
+                    } // end b-tag efficiency SFs for 2018 MC
+
+                } // --------- End MC-only b-tag efficiency SF section
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
 
                 //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
-                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, JetAk04BDiscDeepCSV->at(i)};
+                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, jetAK4bDiscScore};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk04Pt->at(i) << ", " << JetAk04Eta->at(i) << endl;
+
+                // loose pT cut (keep at 20 GeV here)
+                // there are some histos that we fill later on using jet collections that start at pT >= 20 GeV
+                bool jetPassesLoosePtCut(jet.pt >= 20.); // for MET uncertainty should the cut be before or aftes adding unc.?????
+                // also define analysis pT cut at 30 GeV
+                bool jetPassesPtCut(jet.pt >= 30.);
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
                 double jetEnergyCorr = 0.; 
-                bool jetPassesPtCut(jet.pt >= 20.); // for MET uncertainty should the cut be before or aftes adding unc.?????
                 jetEnergyCorr = TableJESunc.getEfficiency(jet.pt, jet.eta);
 
                 jetPtTemp = jet.pt; // for calculating METscale
@@ -1515,33 +1750,48 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) {
                     cout << __LINE__ << " PRINTEVENTINFO: Jet analysis cuts --- " << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPtCut = " << jetPassesPtCut << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesEtaCut = " << jetPassesEtaCut << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesIdCut = " << jetPassesIdCut << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPuIdCut = " << jetPassesPuIdCut << endl;
-                    // cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesMVACut = " << jetPassesMVACut << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesdRCut = " << jetPassesdRCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesLoosePtCut = " << jetPassesLoosePtCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesEtaCut = "     << jetPassesEtaCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesIdCut = "      << jetPassesIdCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesPuIdCut = "    << jetPassesPuIdCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesMVACut = "     << jetPassesMVACut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetPassesdRCut = "      << jetPassesdRCut << endl;
                 }
-                // rapidity, PF ID, PU ID, and Pt Cut (lower than analysis cut at 10 GeV)
-                if ( jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesPtCut) {
-                    // getting information about Bjets if doBJets is not 0
-                    // passBJets is the marker for if a jet is btagged or not
-					if ( fabs(doBJets) > 0 && passBJets == true) countBJets++ ;// count BJets, used for BVeto
-					if ( fabs(doBJets) > 0 && passBJets == true && jetPassesdRCut)   countDR04CutBJets++ ;
-					if ( fabs(doBJets) > 0 && passBJets == true && jetPassesdR02Cut) countDR02CutBJets++ ;
+
+                // pT Cut, rapidity, PF ID, and PU ID (pT cut here lower than nominal analysis cut at 20 GeV)
+                if ( jetPassesLoosePtCut && jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut ) {
+
+                    // Getting information about number of b-jets
+                    // passBJets is the marker for if a jet is b-tagged or not
+                    // Note: Count the number of b-tagged jets even if doBJets == 0
+                    if (jetPassesPtCut){ // demand analysis selection jet pT cut when counting b-jets
+                        // N.B. jetPassesPtCut and jetPassesLoosePtCut are evaluated before the JES uncertainties, so
+                        // currently the way we are counting b-jets will not be affected by the JES uncertainties
+                        if (passBJets == true)                     countBJets++; // currently used as the b-tag count for event vetoing
+                        if (passBJets == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
+                        if (passBJets == true && jetPassesdR02Cut) countDR02CutBJets++;
+                    }
 				
+                    // ALW 6 MARCH 20
+                    // jetsNoDRCut is the actual collection that will further be used to define
+                    // the final jet collections that pass analysis cuts that are used to fill histos
+                    // jetsNoDRCut are the jets that go through gen-reco matching for the JER pT-smearing (see below)
+                    // After this pT smearing, the final pT and dR analysis cuts are then done
+
                     // PU MVA cut
-					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut) jetsNoDRCut.push_back(jet);
+					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut) jetsNoDRCut.push_back(jet); 
+
                     // PU MVA cut and dR 0.4 cut
 					if (energy == "13TeV" && doPUStudy < 0  && jetPassesMVACut && jetPassesdRCut) jets.push_back(jet);
                 }
+
                 // for jetsPuMva
-                // rapidity, PF ID, PU ID, dR 0.4 cut, analysis pT cut (30 GeV)
+                // analysis pT cut (30 GeV), rapidity, PF ID, PU ID, dR 0.4 cut
                 // w/ no PU MVA ID cut yet
-                if (jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut && jet.pt >= jetPtCutMin) {
+                if ( (jet.pt >= jetPtCutMin) && jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut ) {
 					jetsPuMva.push_back(jet);
 				}
-                if (jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut && jet.pt >=  15.) jetsAdditional.push_back(jet);
+                if ( (jet.pt >=  15.) && jetPassesEtaCut && jetPassesIdCut && jetPassesPuIdCut && jetPassesdRCut ) jetsAdditional.push_back(jet);
 				
                 if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
             } //--- End of loop over all the jets ---
@@ -1644,6 +1894,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if ( (year == 2016) && (JetAk08BDiscDeepCSV->at(i) >= 0.6321)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if ( (year == 2017) && (JetAk08BDiscDeepCSV->at(i) >= 0.4941)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if ( (year == 2018) && (JetAk08BDiscDeepCSV->at(i) >= 0.4184)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
+
+                //fetch b-tag discriminant score itself
+                float jetAK8bDiscScore(0.);
+                if (doDeepCSV) jetAK8bDiscScore = JetAk08BDiscDeepCSV->at(i);
+                // else jetAK8bDiscScore = JetAk08BDiscCisvV2->at(i); // AK8 jet CSVv2 b-tag score not available in 2017 ntuples right now...
+                else jetAK8bDiscScore = 0.;
+
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk08BDiscDeepCSV->at(i) = " << JetAk08BDiscDeepCSV->at(i) << endl;
                 
                 // ~~~~~ B-TAGGING SCALE FACTOR CORRECTIONS ~~~~~
@@ -1653,7 +1910,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJetsAK8 = " << passBJetsAK8 << endl;
                 //end btagging section -------
 
-                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, JetAk08BDiscDeepCSV->at(i)};
+                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk08Pt->at(i) << ", " << JetAk08Eta->at(i) << endl;
 
                 // ------------------------------------------------
@@ -1664,15 +1921,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
 
                 // Now do reco AK8 jet event selection cuts -----
+                
                 // pt cut
                 bool jetAK8PassesPtCut(jetAK8.pt >= 200.);
+                
                 // abs(rap) cut
                 TLorentzVector jetAK8r;
                 jetAK8r.SetPtEtaPhiE(jetAK8.pt, jetAK8.eta, jetAK8.phi, jetAK8.energy);
                 bool jetAK8PassesEtaCut( (jetAK8r.Rapidity() >= jetEtaCutMin/10.) && (jetAK8r.Rapidity() <= jetEtaCutMax/10.) );
+                
                 // PF jet ID
                 bool jetAK8PassesIdCut(JetAk08Id->at(i) > 0);
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk08Id->at(i) = " << JetAk08Id->at(i) << endl;
+                
                 // jet dR cut (wrt to muons)
                 bool jetAK8PassesdRCut(1);
                 unsigned short nRemovedLep = min(int(nLeptons), doW ? 1:2);
@@ -1693,12 +1954,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesdRCut = " << jetAK8PassesdRCut << endl;
                 }
 
-                // Rapidity, PF ID, and Pt Cut
+                // pT, Rapidity, and PF ID cuts 
                 if ( jetAK8PassesPtCut && jetAK8PassesEtaCut && jetAK8PassesIdCut ) {
-                    // getting information about Bjets if doBJets is not 0
+
+                    // Getting information about number of AK8 b-jets
                     // passBJetsAK8 is the marker for if a jet is btagged or not
-					if ( fabs(doBJets) > 0 && passBJetsAK8 == true) countBJetsAK8++ ;// count BJets, used for BVeto
-					if ( fabs(doBJets) > 0 && passBJetsAK8 == true && jetAK8PassesdRCut) countDR04CutBJetsAK8++ ;
+                    // Note: Count the number of AK8 b-tagged jets even if doBJets == 0
+					if (passBJetsAK8 == true)                      countBJetsAK8++; // count BJets, used for BVeto
+					if (passBJetsAK8 == true && jetAK8PassesdRCut) countDR04CutBJetsAK8++;
 				
 					jetsAK8NoDRCut.push_back(jetAK8);
                 }
@@ -2010,14 +2273,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // AK4 jets -------------------------------------------------------------------------------------------------------------------
             vector<jetStruct> tmpJets;
             for (unsigned short i(0); i < nJetsNoDRCut; i++){
+
                 // the jetsNoDRCut collection are the jets that have been smeared for JER
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: Final reco AK4 jet selections --- " << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jetsNoDRCut #" << i << ", jetsNoDRCut[i].pt = " << jetsNoDRCut[i].pt << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jetsNoDRCut #" << i << ", jetsNoDRCut[i].passDR04 = " << jetsNoDRCut[i].passDR04 << endl;
+
                 if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR04) tmpJets.push_back(jetsNoDRCut[i]);
                 if (jetsNoDRCut[i].pt >= 20.         && jetsNoDRCut[i].passDR04) jets_20.push_back(jetsNoDRCut[i]);
 				if (jetsNoDRCut[i].pt >= jetPtCutMin && jetsNoDRCut[i].passDR02) jetsDR02.push_back(jetsNoDRCut[i]);
 				if (jetsNoDRCut[i].pt >= 100.        && jetsNoDRCut[i].passDR04) jetsPt100DR04.push_back(jetsNoDRCut[i]);
+
             }
             jets.clear(); 
             jets = tmpJets; 
@@ -2307,50 +2573,111 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (passesLeptonCut) puMVA->Fill(JetAk04PuMva->at(jetsPuMva[i].patIndex), weight);
             }
           
-            //--- For calculating b-tagging efficiency-------------------------
-            float btagWP(1.);
-            if (year == 2016) btagWP = 0.6321;
-            else if (year == 2017) btagWP = 0.4941;
-            else btagWP = 0.4184;
+            /////////////////////////////////////////////////////////////////////
+            // --- For calculating b-tagging efficiency -------------------------
 
-            // advantage of using analysis-cuts jets is that we
-            // cut out many jets from pileup
-            for (unsigned short i(0); i < nGoodJets; i++){
-                int jet_ind = jets[i].patIndex;
+            // try requiring the lepton selection cuts for the analysis to see how this changes the tagging efficiencies (was not ON before)
+            // the number of jets that pass analysis cuts is still nGoodJets here, and the jet collection is still "jets"
+            if (passesLeptonCut){ 
 
-                // b-flavor jet
-                if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
-                    h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                    h_pt_b->Fill(jets[i].pt, weightNoSF);
-                    // track which reco b-jets pass the btag score requirement
-                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                        h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                        h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                float btagWP(1.);
+
+                // --- Using DeepCSV ------------------------------------------------
+                if (doDeepCSV){
+                    if (year == 2016) btagWP = 0.6321;
+                    else if (year == 2017) btagWP = 0.4941;
+                    else btagWP = 0.4184;
+
+                    // advantage of using analysis-cuts jets is that
+                    // we cut out many jets from pileup
+                    // also, I believe that we group usdg jets together because 
+                    // when using the hadron definition for jet flavor, there's no
+                    // distinguishing between jets initiated from the light partons (udsg)
+                    for (unsigned short i(0); i < nGoodJets; i++){
+                        int jet_ind = jets[i].patIndex;
+
+                        // b-flavor jet
+                        if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                            h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets[i].pt, weightNoSF);
+                            // track which reco b-jets pass the btag score requirement
+                            if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                                h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // c-flavor jet
+                        else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                            h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets[i].pt, weightNoSF);
+                            // track which reco c-jets pass the btag score requirement
+                            if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                                h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // light jet (up, down, strange, gluon)
+                        else {
+                            h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                            // track which reco light jets pass the btag score requirement
+                            if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                                h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
                     }
                 }
 
-                // c-flavor jet
-                else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
-                    h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                    h_pt_c->Fill(jets[i].pt, weightNoSF);
-                    // track which reco c-jets pass the btag score requirement
-                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                        h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                        h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                // --- Using CSVv2 --------------------------------------------------
+                else{
+                    if (year == 2017) btagWP = 0.8838;
+
+                    // advantage of using analysis-cuts jets is that
+                    // we cut out many jets from pileup
+                    for (unsigned short i(0); i < nGoodJets; i++){
+                        int jet_ind = jets[i].patIndex;
+
+                        // b-flavor jet
+                        if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                            h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets[i].pt, weightNoSF);
+                            // track which reco b-jets pass the btag score requirement
+                            if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                                h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // c-flavor jet
+                        else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                            h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets[i].pt, weightNoSF);
+                            // track which reco c-jets pass the btag score requirement
+                            if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                                h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // light jet (up, down, strange, gluon)
+                        else {
+                            h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                            // track which reco light jets pass the btag score requirement
+                            if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                                h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                            }
+                        }
                     }
                 }
 
-                // light jet (up, down, strange, gluon)
-                else {
-                    h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                    h_pt_udsg->Fill(jets[i].pt, weightNoSF);
-                    // track which reco light jets pass the btag score requirement
-                    if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                        h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                        h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
-                    }
-                }
             }
+            /////////////////////////////////////////////////////////////////////
+            
 
             //--- For histos for PU reweighting-------------------------
             // NOTE: in this section we have not required any trigger decisions/analysis cuts on our MC
@@ -2377,24 +2704,36 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // B-tagging veto/acceptance for event selection
         if (hasRecoInfo){
 
-            // Note: if doBJets == 0, then we're agnostic to btags in terms of event selection
-            // doBJets < 0 is a btag veto
+            // For doBJets == 0, then we're agnostic to btags in terms of event selection
+            // i.e. we do not veto/keep the event based on the number of b-tags
+
+            // Note: Why are we using countBJets instead of countDR04CutBJets?
+            // countDR04CutBJets requires the additional dR(mu,j) > 0.4 cut on top of countBJets,
+            // which is needed for the nominal selection for analysis jets
+
+            // ALW 12 MARCH 20 -- trying out the countDR04CutBJets counter now
+
+            // doBJets < 0 is a btag veto -----
             // if doBJets == -1, then veto event if one or more bjets
             // if doBJets == -2, then veto if two or more
-            if (doBJets < 0 && countBJets >= fabs(doBJets)){
+            // if (doBJets < 0 && countBJets >= fabs(doBJets)){
+            if (doBJets < 0 && countDR04CutBJets >= fabs(doBJets)){
                 passesLeptonCut = 0;
                 passesBtagReq = false;
                 nEventsIncBJets++;
             }
 
-            // doBJets > 0 is a btag requirement
+            // doBJets > 0 is a btag requirement -----
             // if doBJets == 2, then veto event if there's not at least two btags
             // used for moving to the ttbar control region for estimating ttbar SFs
-            if (doBJets > 0 && doBJets < 99 && countBJets < fabs(doBJets) ){
+            // if (doBJets > 0 && doBJets < 99 && countBJets < fabs(doBJets) ){
+            if (doBJets > 0 && doBJets < 99 && countDR04CutBJets < fabs(doBJets) ){
                 passesLeptonCut = 0;
                 passesBtagReq = false;
             }
-            if (doBJets == 101 && countBJets != 1){
+
+            // if (doBJets == 101 && countBJets != 1){
+            if (doBJets == 101 && countDR04CutBJets != 1){
                 passesLeptonCut = 0;
                 passesBtagReq = false;
             }
@@ -3071,13 +3410,44 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     MuPlusEta->Fill(lepton2.eta, weight);
                 }
             }
+
             nEventsIncl0Jets++;
+
+            // jet multiplicity (AK4)
             ZNGoodJetsNVtx_Zexc->Fill(nGoodJets, EvtVtxCnt, weight);
             ZNGoodJets_Zinc->Fill(0., weight);
             ZNGoodJetsFull_Zinc->Fill(0., weight);
             ZNGoodJets_Zexc->Fill(nGoodJets, weight);
             ZNGoodJetsFull_Zexc->Fill(nGoodJets, weight);
             ZNGoodJets_Zinc_NoWeight->Fill(0.);
+
+            // ------------------------------
+            // b-jet multiplicity (AK4) -----
+
+            // using countBJets here...
+            // ZNGoodBJets_Zexc->Fill(countBJets, weight);
+            // ZNGoodBJets_Zinc->Fill(0., weight);
+            // if (countBJets >= 1) ZNGoodBJets_Zinc->Fill(1., weight);
+            // if (countBJets >= 2) ZNGoodBJets_Zinc->Fill(2., weight);
+            // if (countBJets >= 3) ZNGoodBJets_Zinc->Fill(3., weight);
+            // if (countBJets >= 4) ZNGoodBJets_Zinc->Fill(4., weight);
+            // if (countBJets >= 5) ZNGoodBJets_Zinc->Fill(5., weight);
+            // if (countBJets >= 6) ZNGoodBJets_Zinc->Fill(6., weight);
+            // if (countBJets >= 7) ZNGoodBJets_Zinc->Fill(7., weight);
+
+            // ALW 12 MARCH 20 -- try using countDR04CutBJets instead of countBJets...
+            ZNGoodBJets_Zexc->Fill(countDR04CutBJets, weight);
+            ZNGoodBJets_Zinc->Fill(0., weight);
+            if (countDR04CutBJets >= 1) ZNGoodBJets_Zinc->Fill(1., weight);
+            if (countDR04CutBJets >= 2) ZNGoodBJets_Zinc->Fill(2., weight);
+            if (countDR04CutBJets >= 3) ZNGoodBJets_Zinc->Fill(3., weight);
+            if (countDR04CutBJets >= 4) ZNGoodBJets_Zinc->Fill(4., weight);
+            if (countDR04CutBJets >= 5) ZNGoodBJets_Zinc->Fill(5., weight);
+            if (countDR04CutBJets >= 6) ZNGoodBJets_Zinc->Fill(6., weight);
+            if (countDR04CutBJets >= 7) ZNGoodBJets_Zinc->Fill(7., weight);
+            // ------------------------------
+
+
             ZMass_Zinc0jet->Fill(Z.M(), weight);
             MET_Zinc0jet->Fill(METpt, weight);
             //MET_1_Zinc0jet->Fill(METpt, weight);
@@ -4443,6 +4813,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     } //End of loop over all the events!
     
     //==========================================================================================================//
+
 	NEventsPassCuts->Fill(0., nEvents*1.0);
 	NEventsPassCuts->Fill(1., nEventsPassMETFilter*1.0);
 	NEventsPassCuts->Fill(2., countEventpassTrig*1.0);
@@ -4484,7 +4855,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         delete listOfHistograms[i];
 
     }
-    std::cout << "\nAll histograms written! Yay!" << std::endl;
+    std::cout << "\nAll histograms written!" << std::endl;
     
     std::cout << "Writing the output file..." << std::endl;
     outputFile->Write();
@@ -4494,30 +4865,34 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     
     //==========================================================================================================//
 
-    std::cout << "\nPrinting events' information:" << std::endl;
+    std::cout << "\n          --- Printing event information ---" << std::endl;
+
     cout << "Number of events                               : " << nEvents << endl;
-    cout << "Number of events pass HasMET                   : " << countEvtpassHasMET << endl;
+    // cout << "Number of events pass HasMET                   : " << countEvtpassHasMET << endl;
     cout << "Number of events pass MET Filter               : " << nEventsPassMETFilter << endl;
     cout << "Number of events pass trigger                  : " << countEventpassTrig << endl;
     cout << "Number of events pass Lepton requirements      : " << countEventpassLepReq << endl;
     cout << "Number of events pass MT cut                   : " << nEventsWithTwoGoodLeptons << endl;
     cout << "Number of events pass Btag veto                : " << countEventpassBveto << endl;
-    cout << "Total GEN weight of all events                 : " << TotalGenWeight << endl;
-    cout << "Total GEN pass: RECO weight of all events      : " << TotalGenWeightPassGENPU << endl;
-    cout << "Total GEN pass: GEN weight of all events       : " << TotalGenWeightPassGEN << endl;
-    cout << "Total RECO pass: RECO weight of all events     : " << TotalRecoWeightPassRECO << endl;
-    cout << "Total RECO pass: GEN weight of all events      : " << TotalGenWeightPassRECO << endl;
-    cout << "# Events: 0 jets inclusive                     : " << nEventsIncl0Jets << endl;
-    cout << "# Events: 0 jets exclusive                     : " << nEventsExcl0Jets << endl;
-    cout << "# Events: 1 jet exclusive                      : " << nEventsExcl1Jets << endl;
-    cout << "# Events: 2 jets exclusive                     : " << nEventsExcl2Jets << endl;
-    cout << "# Events: 3 jets exclusive                     : " << nEventsExcl3Jets << endl;
-    cout << "# Events: 1 B-jet inclusive                    : " << nEventsIncBJets << endl;
-    cout << "# GEN Events: 0 jets inclusive                 : " << GENnEventsIncl0Jets << endl;
-    cout << "# GEN Events: 1 jets inclusive                 : " << GENnEventsIncl1Jets << endl;
-    cout << "# GEN Events: 2 jets inclusive                 : " << GENnEventsIncl2Jets << endl;
-    cout << "# GEN Events: 3 jets inclusive                 : " << GENnEventsIncl3Jets << endl;
+
+    // cout << "Total GEN weight of all events                 : " << TotalGenWeight << endl;
+    // cout << "Total GEN pass: RECO weight of all events      : " << TotalGenWeightPassGENPU << endl;
+    // cout << "Total GEN pass: GEN weight of all events       : " << TotalGenWeightPassGEN << endl;
+    // cout << "Total RECO pass: RECO weight of all events     : " << TotalRecoWeightPassRECO << endl;
+    // cout << "Total RECO pass: GEN weight of all events      : " << TotalGenWeightPassRECO << endl;
+    // cout << "# Events: 0 jets inclusive                     : " << nEventsIncl0Jets << endl;
+    // cout << "# Events: 0 jets exclusive                     : " << nEventsExcl0Jets << endl;
+    // cout << "# Events: 1 jet exclusive                      : " << nEventsExcl1Jets << endl;
+    // cout << "# Events: 2 jets exclusive                     : " << nEventsExcl2Jets << endl;
+    // cout << "# Events: 3 jets exclusive                     : " << nEventsExcl3Jets << endl;
+    // cout << "# Events: 1 B-jet inclusive                    : " << nEventsIncBJets << endl;
+    // cout << "# GEN Events: 0 jets inclusive                 : " << GENnEventsIncl0Jets << endl;
+    // cout << "# GEN Events: 1 jets inclusive                 : " << GENnEventsIncl1Jets << endl;
+    // cout << "# GEN Events: 2 jets inclusive                 : " << GENnEventsIncl2Jets << endl;
+    // cout << "# GEN Events: 3 jets inclusive                 : " << GENnEventsIncl3Jets << endl;
+
     cout << "Total MC weight (sumEventW)                    : " << sumEventW << endl;
+
     std::cout << "\n=======================================================================================================" << std::endl;
 }
 
@@ -4767,7 +5142,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     JetAk04PuIdMedium = 0; 
     JetAk04PuIdTight = 0; 
     JetAk04PuMva = 0;   
-    // JetAk04BDiscCisvV2 = 0;
+    JetAk04BDiscCisvV2 = 0;
     JetAk04BDiscDeepCSV = 0;
     JetAk04HadFlav = 0;
     JetAk04JecUncUp = 0;
@@ -4855,7 +5230,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("JetAk04PuIdMedium", &JetAk04PuIdMedium, &b_JetAk04PuIdMedium);
         fChain->SetBranchAddress("JetAk04PuIdTight", &JetAk04PuIdTight, &b_JetAk04PuIdTight);
         fChain->SetBranchAddress("JetAk04PuMva", &JetAk04PuMva, &b_JetAk04PuMva);
-        // fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
+        fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
         fChain->SetBranchAddress("JetAk04BDiscDeepCSV", &JetAk04BDiscDeepCSV, &b_JetAk04BDiscDeepCSV); 
 	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
         fChain->SetBranchAddress("JetAk04JecUncUp", &JetAk04JecUncUp, &b_JetAk04JecUncUp); 

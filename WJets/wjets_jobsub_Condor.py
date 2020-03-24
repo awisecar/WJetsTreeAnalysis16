@@ -28,7 +28,8 @@ submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
 # submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
 # submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
 # submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
-submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
+# submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
+submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
 
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 submit += 'queue argument in 1'
@@ -59,30 +60,38 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 
 ##############################
 
-### Running full 2017 data/MC, incl. QCD BG
-## # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # full set of files
-## # doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
-## #doWhat = [61, 62, 63] # just W+jets MC
-## doWhat = [213]
-## #doQCD = [0, 1, 2, 3]
-## #doQCD = [0] #signal region
-## #doQCD = [1, 2, 3] #control regions
-## doQCD = [1]
-## doSysRunning = [0]
-## years = [2017]
+# Running full 2017 data/MC, incl. QCD BG
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # full set of files, w+jets jet-binned
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 52, 53, 54] # full set of files, w+jets pT-binned
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] # only data
+# doWhat = [211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # only MC, w+jets jet-binned
+#doWhat = [13, 14, 23, 27, 30, 63]
+#doWhat = [23, 27, 63]
+# doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
+#doWhat = [61, 62, 63] # just W+jets MC
+# doWhat = [14]
+
+doQCD = [0, 1, 2, 3] # signal and control regions
+# doQCD = [0] # signal region
+# doQCD = [1, 2, 3] # control regions
+# doQCD = [0, 1]
+
+doSysRunning = [0]
+
+years = [2017]
 
 ##############################
 
 ## Running full 2018 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # full set of files
-# doWhat = [211, 212, 213]
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 30, 61, 62, 63] 
-# doWhat = [213]
-doQCD = [0, 1, 2, 3] #signal and control regions
-# doQCD = [0, 1]
-# doQCD = [0] #signal region
-doSysRunning = [0]
-years = [2018]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # full set of files
+# # doWhat = [211, 212, 213]
+# # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 30, 61, 62, 63] 
+# # doWhat = [213]
+# doQCD = [0, 1, 2, 3] #signal and control regions
+# # doQCD = [0, 1]
+# # doQCD = [0] #signal region
+# doSysRunning = [0]
+# years = [2018]
 
 ##############################
 ## Systematics ---
@@ -173,5 +182,5 @@ moveFile = 'mv '+submitName+' '+mtmpdir+'/'+submitName
 print '\nCleaning up...'
 print moveFile
 os.system(moveFile)
-print 'Finished!'
+print '\nFinished!\n'
 

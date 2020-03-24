@@ -78,6 +78,18 @@
     // // getStatistics("SMu", 2017, 30, 0, false, true, 3, false, false, 0, 0, false, false); // no MET cut, no b-tag requirements, doQCD=3, doTTScale=False, no QCD BG
 
 
+
+
+
+    // running signal region with no btag veto, no ttBar SFs
+    Plotter("SMu", 2017, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
+    getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
+
+    // running signal region with btag veto, no ttBar SFs
+    // Plotter("SMu", 2017, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, b-tag veto, doQCD=0
+    // getStatistics("SMu", 2017, 30, 0, false, true, 0, false, false, 0, -1, false, true); //no MET cut, b-tag veto, doQCD=0, doTTScale=False, incl QCD BG
+
+
     // for ttbar studies
     // before rescaling...
     // Plotter("SMu", 2017, 30, 0, 0, 0, 0,  2, 0, -999999, 999999, 0, 0, 1); //no MET cut, doBJets = 2
@@ -103,8 +115,8 @@
     //////////////////////////////////
 
     // running signal region with no btag veto, no ttBar SFs
-     Plotter("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
-     getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
+     //Plotter("SMu", 2018, 30, 0, 0, 0, 0, 0, 0, -999999, 999999, 0, 0, 1); //no MET cut, no b-tag requirements, doQCD=0
+     //getStatistics("SMu", 2018, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
     
     // running signal region with btag veto, but no ttBar SFs
     // Plotter("SMu", 2018, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, b-tag veto, doQCD=0

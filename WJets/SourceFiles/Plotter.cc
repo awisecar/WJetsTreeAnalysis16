@@ -60,7 +60,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         isDoubleLep = 0;
 
         nFiles = NFILESTTBARWJETS; // the nominal switch incl. QCD
-        // nFiles = NFILESTTBARWJETS_NOQCD; // // turn off QCD, used for ttbar studies
+         //nFiles = NFILESTTBARWJETS_NOQCD; // // turn off QCD, used for ttbar studies
         // nFiles = NFILESTTBARWJETS_NOQCD_NOTTBAR; // 
         //nFiles = NFILESTTBARWJETS_DATAQCDVV; // just run QCD and VV
 
@@ -71,7 +71,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         int fileSelect = 0;
 
         if (!isDoubleLep) fileSelect = FilesTTbarWJets[i]; // the nominal switch incl. QCD
-        // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // turn off QCD, used for ttbar studies
+         //if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD[i]; // turn off QCD, used for ttbar studies
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_NoQCD_NoTTBar[i]; // andrew -- 2 sept 2019 -- turn off QCD for now
         // if (!isDoubleLep) fileSelect = FilesTTbarWJets_DataQCDVV[i]; // just run QCD and VV
 
@@ -128,8 +128,9 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
     cout << "\nOutput directory is: " << outputFileName << endl;
     cout << "Output root file is: " << outputFileRoot << endl;
 
-    TFile *outputFile = new TFile(outputFileRoot.c_str(), "RECREATE");
-    outputFile->cd();
+    // NOTE: commenting out outputFile for now
+    // TFile *outputFile = new TFile(outputFileRoot.c_str(), "RECREATE");
+    // outputFile->cd();
 
     //-----------------------------------------------------
     // Preparing to loop over all hists ---
@@ -623,8 +624,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 
         string outputFilePDF = outputFileName + "/" + histoName[i] + ".pdf";
         canvas[i]->Print(outputFilePDF.c_str());
-        outputFile->cd();
-        canvas[i]->Write();
+        // outputFile->cd();
+        // canvas[i]->Write(); // write TCanvas to the outputFile
 
         // Next section prints out the same plots on a linear scale -----
       //  histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
@@ -642,8 +643,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
       //  tmpCanvas->Write();
     }
 
-    outputFile->cd();
-    outputFile->Close();
+    // outputFile->cd();
+    // outputFile->Close();
 
     cout << "\nClosing all files..." << endl;
     for (unsigned short i(0); i < nFiles; i++) closeFile(file[i]);

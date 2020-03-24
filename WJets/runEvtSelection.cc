@@ -22,8 +22,8 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
     //  int doWhat       = 213;
     // int doWhat       = 100;
-    //   int doWhat       = 63;
-    //  int doWhat       = 25;
+    //    int doWhat       = 14;
+      //int doWhat       = 27;
                               // 100 - all samples; 200 - all MC samples 
                               // 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
                               // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
@@ -31,11 +31,11 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
 
 
-    //   int doQCD        = 0;
+        // int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
 
         
-    //   int doSysRunning = 0;
+        // int doSysRunning = 0;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
                              // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
@@ -51,7 +51,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                             
     //   int year        = 2016;
-    //  int year        = 2017;
+    //    int year        = 2017;
       // int year        = 2018;
                            // 2016, 2017, or 2018 data/MC
 
@@ -538,7 +538,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     }
 
     else if (year == 2017){
-        std::cout << " >>>>>>>>> Doing 2017 data/MC! >>>>>>>>>>" << std::endl;
+        std::cout << " >>>>>>>>>> Doing 2017 data/MC! >>>>>>>>>>>>>>>>>" << std::endl;
 
         // Data
         if (doWhat == 10 || doWhat == 100) {
@@ -774,6 +774,78 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
            
         }
 
+        // W+jets FxFx W pT-binned signal sample - 0 to 50 pT
+        // ...
+        if ( doWhat == 51 || doWhat == 100 || doWhat == 200){
+           int doGen = 0 ;
+           if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
+           
+           for (unsigned int i(0); i < NSystWJets; i++){
+               if (!doGen) continue;
+               if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
+               if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               
+               ZJetsAndDPS DMuWJFxFx_Wpt1(lepSelection+"_13TeV_WJets_FxFx_Wpt-0To50_dR_5311_List", year, muLumi * 57297.39, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt1.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+           }
+        }
+
+        // W+jets FxFx W pT-binned signal sample - 50 to 100 pT
+        // /WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if ( doWhat == 52 || doWhat == 100 || doWhat == 200){
+           int doGen = 0 ;
+           if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
+           
+           for (unsigned int i(0); i < NSystWJets; i++){
+               if (!doGen) continue;
+               if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
+               if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               
+               ZJetsAndDPS DMuWJFxFx_Wpt2(lepSelection+"_13TeV_WJets_FxFx_Wpt-50To100_dR_5311_List", year, muLumi * 3298.37, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt2.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+           }
+        }
+
+        // W+jets FxFx W pT-binned signal sample - 100 to 250 pT
+        // /WJetsToLNu_Pt-100To250_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if ( doWhat == 53 || doWhat == 100 || doWhat == 200){
+           int doGen = 0 ;
+           if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
+           
+           for (unsigned int i(0); i < NSystWJets; i++){
+               if (!doGen) continue;
+               if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
+               if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               
+               ZJetsAndDPS DMuWJFxFx_Wpt3(lepSelection+"_13TeV_WJets_FxFx_Wpt-100To250_dR_5311_List", year, muLumi * 689.75, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt3.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+           }
+        }
+
+        // W+jets FxFx W pT-binned signal sample - 250 to Inf pT
+        // /WJetsToLNu_Pt-250To400_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        // /WJetsToLNu_Pt-400To600_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        // /WJetsToLNu_Pt-600ToInf_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
+        if ( doWhat == 54 || doWhat == 100 || doWhat == 200){
+           int doGen = 0 ;
+           if ( (lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0 ) && lepSelection.find("SMuE") == -1 )  doGen = 1 ;
+           
+           for (unsigned int i(0); i < NSystWJets; i++){
+               if (!doGen) continue;
+               if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue; // xsec -- not done for SMu ---
+               if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+               
+               ZJetsAndDPS DMuWJFxFx_Wpt4(lepSelection+"_13TeV_WJets_FxFx_Wpt-250To400_dR_5311_List", year, muLumi * 24.507, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt4.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+
+               ZJetsAndDPS DMuWJFxFx_Wpt5(lepSelection+"_13TeV_WJets_FxFx_Wpt-400To600_dR_5311_List", year, muLumi * 3.1101, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt5.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+
+               ZJetsAndDPS DMuWJFxFx_Wpt6(lepSelection+"_13TeV_WJets_FxFx_Wpt-600ToInf_dR_5311_List", year, muLumi * 0.46832, 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+               DMuWJFxFx_Wpt6.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth); //FxFx with NLO normalization
+
+           }
+        }
 
         // W+jets FxFx jet-binned signal sample - W+0J
         // /WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM

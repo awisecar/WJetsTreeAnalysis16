@@ -401,7 +401,7 @@ HistoSet::HistoSet(string leptonFlavor)
 	NEventsPassCuts->GetXaxis()->SetBinLabel(5, "= PassMTcut");
 	NEventsPassCuts->GetXaxis()->SetBinLabel(6, "= PassBtagveto");
 
-    btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "b-Tag Score", 100, 0., 1.);
+    btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "b-Tag Score", 50, 0., 1.);
 	
     //--- Jet multiplicity -----------
 
@@ -462,7 +462,7 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //--- B-Jet multiplicity -----------
 
-    ZNGoodBJets_Zexc = newTH1D("ZNGoodBJets_Zexc","B-Jet Counter (excl.)", "N_{b-jets}", 11, -0.5, 10.5);
+    ZNGoodBJets_Zexc = newTH1D("ZNGoodBJets_Zexc","B-Jet Counter (excl.)", "N_{ b-jets}", 8, -0.5, 7.5);
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(1, "= 0");
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(2, "= 1");
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(3, "= 2");
@@ -471,11 +471,8 @@ HistoSet::HistoSet(string leptonFlavor)
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(6, "= 5");
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(7, "= 6");
     ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(8, "= 7");
-    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(9, "= 8");
-    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(10,"= 9");
-    ZNGoodBJets_Zexc->GetXaxis()->SetBinLabel(11,"= 10");
 
-    ZNGoodBJets_Zinc = newTH1D("ZNGoodBJets_Zinc","B-Jet Counter (incl.)", "N_{b-jets}", 11, -0.5, 10.5);
+    ZNGoodBJets_Zinc = newTH1D("ZNGoodBJets_Zinc","B-Jet Counter (incl.)", "N_{ b-jets}", 8, -0.5, 7.5);
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(1, "#geq 0");
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(2, "#geq 1");
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(3, "#geq 2");
@@ -484,9 +481,6 @@ HistoSet::HistoSet(string leptonFlavor)
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(6, "#geq 5");
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(7, "#geq 6");
     ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(8, "#geq 7");
-    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(9, "#geq 8");
-    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(10,"#geq 9");
-    ZNGoodBJets_Zinc->GetXaxis()->SetBinLabel(11,"#geq 10");
     
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
