@@ -40,6 +40,11 @@ public:
     //***************************** Basic plots for Wjets *****************************//
 
     TH1D *NEventsPassCuts;
+
+    TH1D *NumRecoVtx;
+    TH1D *NumRecoVtx_EvtSelection;
+    TH1D *NumPUTruthVtx;
+    TH1D *NumPUObsVtx;
     
     //--- For calculating b-tagging efficiencies---
     TH2D *h_pt_eta_b;
@@ -56,12 +61,11 @@ public:
     TH1D *h_pt_udsg;
     TH1D *h_pt_udsg_tagged;
 
-    TH1D *NumRecoVtx;
-    TH1D *NumRecoVtx_EvtSelection;
-    TH1D *NumPUTruthVtx;
-    TH1D *NumPUObsVtx;
-
     TH1D *btagDiscScores_EvtSelection;
+    
+    TH1D *svflightDistAK4;
+    TH1D *svflightDistSigAK4;
+    TH1D *svMassAK4;
     
     //--- Jet multiplicity
     TH1D *ZNGoodJets_Zexc;

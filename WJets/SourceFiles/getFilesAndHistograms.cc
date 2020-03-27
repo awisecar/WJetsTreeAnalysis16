@@ -20,7 +20,7 @@ string getEnergy()
     }
     else 
     {
-        std::cout << "WARNING ! Impossible to retrieve te energy from the current location !" << std::endl;
+        std::cout << "WARNING ! Impossible to retrieve te energy from the current location ! " << std::endl;
         energy = "Unknown";
     }
     fileBeingProcessed.str("");

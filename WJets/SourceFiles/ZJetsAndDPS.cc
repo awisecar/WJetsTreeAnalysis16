@@ -769,12 +769,20 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
 
         // ---------------- b-tagging switches ----------------
-        // choice of tagger: DeepCSV or CSVv2 (2017 only) -----
-        bool doDeepCSV = true;
-        // bool doDeepCSV = false;
+
+        // choice of tagger: 
+        // 0 == DeepCSV
+        // 1 == CSVv2 (2017 only)
+        // 2 == SV inside jet (reco'd using IVF algorithm)
+        int whichBTagger = 0; // DeepCSV
+        // int whichBTagger = 1; // CSVv2
+        // int whichBTagger = 2; // SV inside jet
+
         // do b-tag efficiency SFs? ---------------------------
         // bool doBTagSFs = true;
         bool doBTagSFs = false;
+        if (whichBTagger == 2) doBTagSFs = false; // there are no efficiency SFs for the SV veto
+
         // ----------------------------------------------------
 
 
@@ -793,14 +801,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 //nominal btagging criterion --------------------------
                 if ( (year == 2016) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                if ( (year == 2017) && doDeepCSV  && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                if ( (year == 2017) && !doDeepCSV && (JetAk04BDiscCisvV2->at(i)  >= 0.8838) ) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
+                if (year == 2017){
+                    if ( whichBTagger == 0  && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                    if ( whichBTagger == 1  && (JetAk04BDiscCisvV2->at(i)  >= 0.8838) ) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
+                    if ( whichBTagger == 2 ) passBJets = false; // fail everything when using SV veto
+                }
                 if ( (year == 2018) && (JetAk04BDiscDeepCSV->at(i) >= 0.4184) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
 
                 //fetch b-tag discriminant score itself
                 float jetAK4bDiscScore(0.);
-                if (doDeepCSV) jetAK4bDiscScore = JetAk04BDiscDeepCSV->at(i);
-                else jetAK4bDiscScore = JetAk04BDiscCisvV2->at(i);
+                if (whichBTagger == 0) jetAK4bDiscScore = JetAk04BDiscDeepCSV->at(i);
+                else if (whichBTagger == 1) jetAK4bDiscScore = JetAk04BDiscCisvV2->at(i);
+                else jetAK4bDiscScore = 0.;
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscCisvV2->at(i) = "  << JetAk04BDiscCisvV2->at(i) << endl;
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk04BDiscDeepCSV->at(i) = " << JetAk04BDiscDeepCSV->at(i) << endl;
@@ -1021,7 +1033,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                     else if (year == 2017){
 
-                        if (doDeepCSV){
+                        if (whichBTagger == 0){
 
                             // Get jet flavor (hadron definition)
                             int jetflavour = JetAk04HadFlav->at(i);
@@ -1234,7 +1246,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                         } // end DeepCSV b-tag SFs for 2017
 
-                        else{
+                        if (whichBTagger == 1){
                             
                             // Get jet flavor (hadron definition)
                             int jetflavour= JetAk04HadFlav->at(i);
@@ -1666,17 +1678,25 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
 
+                // Check to see if jet has SV that passes some quality cuts ---
+                bool hasSVPassesCuts(false);
+                if (JetAk04hasGoodSV->at(i)){
+                    if (JetAk04SVflightDistSig->at(i) >= 4.) hasSVPassesCuts = true;
+                    else hasSVPassesCuts = false;
+                }
+                else hasSVPassesCuts = false;
+
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", hasSVPassesCuts = " << hasSVPassesCuts << endl;
+
                 //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
-                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, jetAK4bDiscScore};
+                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, jetAK4bDiscScore, hasSVPassesCuts};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk04Pt->at(i) << ", " << JetAk04Eta->at(i) << endl;
 
                 // loose pT cut (keep at 20 GeV here)
                 // there are some histos that we fill later on using jet collections that start at pT >= 20 GeV
                 bool jetPassesLoosePtCut(jet.pt >= 20.); // for MET uncertainty should the cut be before or aftes adding unc.?????
-                // also define analysis pT cut at 30 GeV
-                bool jetPassesPtCut(jet.pt >= 30.);
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
                 double jetEnergyCorr = 0.; 
@@ -1764,12 +1784,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // Getting information about number of b-jets
                     // passBJets is the marker for if a jet is b-tagged or not
                     // Note: Count the number of b-tagged jets even if doBJets == 0
-                    if (jetPassesPtCut){ // demand analysis selection jet pT cut when counting b-jets
-                        // N.B. jetPassesPtCut and jetPassesLoosePtCut are evaluated before the JES uncertainties, so
-                        // currently the way we are counting b-jets will not be affected by the JES uncertainties
-                        if (passBJets == true)                     countBJets++; // currently used as the b-tag count for event vetoing
+
+                    // N.B. jetPassesLoosePtCut is evaluated before the JES uncertainties and the JER pT smearing,
+                    // so currently the way we are counting b-jets will not be affected by the either variation
+
+                    // We use the passBJets switch if using DeepCSV or CSVv2 tagger
+                    if ( (whichBTagger == 0) || (whichBTagger == 1) ){
+                        if (passBJets == true)                     countBJets++;        // currently used as the b-tag count for event vetoing
                         if (passBJets == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
                         if (passBJets == true && jetPassesdR02Cut) countDR02CutBJets++;
+                    }
+                    // Or can use presence of "good" SV in jet to veto
+                    else{
+                        if (jet.hasGoodSV == true)                     countBJets++;        // currently used as the b-tag count for event vetoing
+                        if (jet.hasGoodSV == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
+                        if (jet.hasGoodSV == true && jetPassesdR02Cut) countDR02CutBJets++;
                     }
 				
                     // ALW 6 MARCH 20
@@ -1830,7 +1859,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
                 // getting getJet info in the form of a jetStruct
-                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0, 0.};
+                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0, 0., 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For genJet #" << i << ": pT, eta = " << GJetAk04Pt->at(i) << ", " << GJetAk04Eta->at(i) << endl;
                 // genJet dR information (wrt lepton)
                 bool genJetPassesdRCut(1), genJetPassesdR02Cut(1);
@@ -1897,8 +1926,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 //fetch b-tag discriminant score itself
                 float jetAK8bDiscScore(0.);
-                if (doDeepCSV) jetAK8bDiscScore = JetAk08BDiscDeepCSV->at(i);
-                // else jetAK8bDiscScore = JetAk08BDiscCisvV2->at(i); // AK8 jet CSVv2 b-tag score not available in 2017 ntuples right now...
+                if (whichBTagger == 0) jetAK8bDiscScore = JetAk08BDiscDeepCSV->at(i);
+                // else if (whichBTagger == 1) jetAK8bDiscScore = JetAk08BDiscCisvV2->at(i); // AK8 jet CSVv2 b-tag score not available in 2017 ntuples right now...
+                else if (whichBTagger == 1) jetAK8bDiscScore = 0.;
                 else jetAK8bDiscScore = 0.;
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", JetAk08BDiscDeepCSV->at(i) = " << JetAk08BDiscDeepCSV->at(i) << endl;
@@ -1910,7 +1940,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJetsAK8 = " << passBJetsAK8 << endl;
                 //end btagging section -------
 
-                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore};
+                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore, 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk08Pt->at(i) << ", " << JetAk08Eta->at(i) << endl;
 
                 // ------------------------------------------------
@@ -1988,7 +2018,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //-- retrieving generated AK8 jets
             for (unsigned short i(0); i < nTotGenJetsAK8; i++){
 
-                jetStruct genJetAK8 = {GJetAk08Pt->at(i), GJetAk08Eta->at(i), GJetAk08Phi->at(i), GJetAk08E->at(i), i, 0, 0, 0, 0.};
+                jetStruct genJetAK8 = {GJetAk08Pt->at(i), GJetAk08Eta->at(i), GJetAk08Phi->at(i), GJetAk08E->at(i), i, 0, 0, 0, 0., 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For genJet #" << i << ": pT, eta = " << GJetAk08Pt->at(i) << ", " << GJetAk08Eta->at(i) << endl;
 
                 // genJet dR information (wrt lepton)
@@ -2368,7 +2398,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             }
 	        jetsHT_20 = 0;
             for (unsigned short i(0); i < nGoodJets_20; i++){
-                jetsHT_20 += jets[i].pt;  
+                jetsHT_20 += jets_20[i].pt;  
             }
             // AK8 jets
             jetsAK8HT = 0.;
@@ -2425,9 +2455,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 TLorentzVector gjetr;
                 gjetr.SetPtEtaPhiE(genJetsNoDRCut[i].pt, genJetsNoDRCut[i].eta, genJetsNoDRCut[i].phi, genJetsNoDRCut[i].energy);
                 if (genJetsNoDRCut[i].pt >= jetPtCutMin && fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR04) tmpJets.push_back(genJetsNoDRCut[i]);
-                if (genJetsNoDRCut[i].pt >= 20          && fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR04) genJets_20.push_back(genJetsNoDRCut[i]);
+                if (genJetsNoDRCut[i].pt >= 20.         && fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR04) genJets_20.push_back(genJetsNoDRCut[i]);
 				if (genJetsNoDRCut[i].pt >= jetPtCutMin && fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR02) genJetsDR02.push_back(genJetsNoDRCut[i]);
-				if (genJetsNoDRCut[i].pt >= 100			&& fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR04) genJetsPt100DR04.push_back(genJetsNoDRCut[i]);
+				if (genJetsNoDRCut[i].pt >= 100.		&& fabs(gjetr.Rapidity()) <= 0.1*jetEtaCutMax && genJetsNoDRCut[i].passDR04) genJetsPt100DR04.push_back(genJetsNoDRCut[i]);
             }
             genJets.clear();
             genJets = tmpJets; 
@@ -2509,7 +2539,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             }
             genJetsHT_20 = 0.;
             for (unsigned short i(0); i < nGoodGenJets_20; i++){
-                genJetsHT_20 += genJets[i].pt;  
+                genJetsHT_20 += genJets_20[i].pt;  
             }
             genJetsAK8HT = 0.;
             for (unsigned short i(0); i < nGoodGenJetsAK8; i++){
@@ -2582,8 +2612,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 float btagWP(1.);
 
+                // ---------------------------------------------------------------------------
+                // NOTE: this section below uses a jet collection with a min jet pT of 20 GeV
+                //       done because our pT cut for b-tag counting is 20 GeV, and we need to
+                //       calculate the tagging efficiencies down to this threshold
+                // ---------------------------------------------------------------------------
+
                 // --- Using DeepCSV ------------------------------------------------
-                if (doDeepCSV){
+                if (whichBTagger == 0){
                     if (year == 2016) btagWP = 0.6321;
                     else if (year == 2017) btagWP = 0.4941;
                     else btagWP = 0.4184;
@@ -2593,87 +2629,264 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // also, I believe that we group usdg jets together because 
                     // when using the hadron definition for jet flavor, there's no
                     // distinguishing between jets initiated from the light partons (udsg)
-                    for (unsigned short i(0); i < nGoodJets; i++){
-                        int jet_ind = jets[i].patIndex;
+                    for (unsigned short i(0); i < nGoodJets_20; i++){
+                        int jet_ind = jets_20[i].patIndex;
 
                         // b-flavor jet
                         if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
-                            h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_b->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco b-jets pass the btag score requirement
                             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                                h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
 
                         // c-flavor jet
                         else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
-                            h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_c->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco c-jets pass the btag score requirement
                             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                                h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
 
                         // light jet (up, down, strange, gluon)
                         else {
-                            h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco light jets pass the btag score requirement
                             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
-                                h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
                     }
                 }
 
                 // --- Using CSVv2 --------------------------------------------------
-                else{
+                else if (whichBTagger == 1){
                     if (year == 2017) btagWP = 0.8838;
 
                     // advantage of using analysis-cuts jets is that
                     // we cut out many jets from pileup
-                    for (unsigned short i(0); i < nGoodJets; i++){
-                        int jet_ind = jets[i].patIndex;
+                    for (unsigned short i(0); i < nGoodJets_20; i++){
+                        int jet_ind = jets_20[i].patIndex;
 
                         // b-flavor jet
                         if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
-                            h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_b->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco b-jets pass the btag score requirement
                             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
-                                h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
 
                         // c-flavor jet
                         else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
-                            h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_c->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco c-jets pass the btag score requirement
                             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
-                                h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
 
                         // light jet (up, down, strange, gluon)
                         else {
-                            h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                            h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                            h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
                             // track which reco light jets pass the btag score requirement
                             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
-                                h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
-                                h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                                h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
                         }
                     }
                 }
+                
+                // --- Using presence of SV in jet as tagger ------------------------
+                else{
+                    for (unsigned short i(0); i < nGoodJets_20; i++){
+                        int jet_ind = jets_20[i].patIndex;
+
+                        // b-flavor jet
+                        if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                            h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSV){
+                                h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // c-flavor jet
+                        else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                            h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSV){
+                                h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // light jet (up, down, strange, gluon)
+                        else {
+                            h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSV){
+                                h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+                    }
+                }
+
+                // ---------------------------------------------------------------------------
+                // NOTE: this section below uses a jet collection with a min jet pT of 30 GeV
+                // ---------------------------------------------------------------------------
+
+                // --- Using DeepCSV ------------------------------------------------
+                // if (whichBTagger == 0){
+                //     if (year == 2016) btagWP = 0.6321;
+                //     else if (year == 2017) btagWP = 0.4941;
+                //     else btagWP = 0.4184;
+
+                //     // advantage of using analysis-cuts jets is that
+                //     // we cut out many jets from pileup
+                //     // also, I believe that we group usdg jets together because 
+                //     // when using the hadron definition for jet flavor, there's no
+                //     // distinguishing between jets initiated from the light partons (udsg)
+                //     for (unsigned short i(0); i < nGoodJets; i++){
+                //         int jet_ind = jets[i].patIndex;
+
+                //         // b-flavor jet
+                //         if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                //             h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_b->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco b-jets pass the btag score requirement
+                //             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // c-flavor jet
+                //         else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                //             h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_c->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco c-jets pass the btag score requirement
+                //             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // light jet (up, down, strange, gluon)
+                //         else {
+                //             h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco light jets pass the btag score requirement
+                //             if(JetAk04BDiscDeepCSV->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+                //     }
+                // }
+
+                // // --- Using CSVv2 --------------------------------------------------
+                // else if (whichBTagger == 1){
+                //     if (year == 2017) btagWP = 0.8838;
+
+                //     // advantage of using analysis-cuts jets is that
+                //     // we cut out many jets from pileup
+                //     for (unsigned short i(0); i < nGoodJets; i++){
+                //         int jet_ind = jets[i].patIndex;
+
+                //         // b-flavor jet
+                //         if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                //             h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_b->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco b-jets pass the btag score requirement
+                //             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // c-flavor jet
+                //         else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                //             h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_c->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco c-jets pass the btag score requirement
+                //             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // light jet (up, down, strange, gluon)
+                //         else {
+                //             h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+                //             // track which reco light jets pass the btag score requirement
+                //             if(JetAk04BDiscCisvV2->at(jet_ind) >= btagWP){
+                //                 h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+                //     }
+                // }
+                
+                // // --- Using presence of SV in jet as tagger ------------------------
+                // else{
+                //     for (unsigned short i(0); i < nGoodJets; i++){
+                //         int jet_ind = jets[i].patIndex;
+
+                //         // b-flavor jet
+                //         if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                //             h_pt_eta_b->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_b->Fill(jets[i].pt, weightNoSF);
+
+                //             if(jets[i].hasGoodSV){
+                //                 h_pt_eta_b_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_b_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // c-flavor jet
+                //         else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                //             h_pt_eta_c->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_c->Fill(jets[i].pt, weightNoSF);
+
+                //             if(jets[i].hasGoodSV){
+                //                 h_pt_eta_c_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_c_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+
+                //         // light jet (up, down, strange, gluon)
+                //         else {
+                //             h_pt_eta_udsg->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //             h_pt_udsg->Fill(jets[i].pt, weightNoSF);
+
+                //             if(jets[i].hasGoodSV){
+                //                 h_pt_eta_udsg_tagged->Fill(jets[i].pt, jets[i].eta, weightNoSF);
+                //                 h_pt_udsg_tagged->Fill(jets[i].pt, weightNoSF);
+                //             }
+                //         }
+                //     }
+                // }
 
             }
             /////////////////////////////////////////////////////////////////////
@@ -3731,10 +3944,20 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 				dPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(lep1, newLeadJ), weight);
                 
                 for (unsigned short j(0); j < nGoodJets; j++){
+
                     AllJetPt_Zinc1jet->Fill(jets[j].pt, weight);
                     AllJetEta_Zinc1jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc1jet->Fill(jets[j].phi, weight);
+
                     btagDiscScores_EvtSelection->Fill(jets[j].btagDiscScore, weight);
+
+                    if (jets[j].hasGoodSV == true){
+                        int jet_ind = jets[j].patIndex;
+                        svflightDistAK4->Fill(JetAk04SVflightDist->at(jet_ind), weight);
+                        svflightDistSigAK4->Fill(JetAk04SVflightDistSig->at(jet_ind), weight);
+                        svMassAK4->Fill(JetAk04SVmass->at(jet_ind), weight);
+                    }
+
                 }
 
                 if ( doW ) dEtaBosonJet_Zinc1jet->Fill(fabs(jets[0].eta - lepton1.eta), weight);
@@ -5145,6 +5368,12 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     JetAk04BDiscCisvV2 = 0;
     JetAk04BDiscDeepCSV = 0;
     JetAk04HadFlav = 0;
+
+    JetAk04hasGoodSV = 0; 
+    JetAk04SVflightDist = 0; 
+    JetAk04SVflightDistSig = 0; 
+    JetAk04SVmass = 0; 
+
     JetAk04JecUncUp = 0;
     JetAk04JecUncDwn = 0;
 
@@ -5233,6 +5462,12 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("JetAk04BDiscCisvV2", &JetAk04BDiscCisvV2, &b_JetAk04BDiscCisvV2); 
         fChain->SetBranchAddress("JetAk04BDiscDeepCSV", &JetAk04BDiscDeepCSV, &b_JetAk04BDiscDeepCSV); 
 	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
+
+        fChain->SetBranchAddress("JetAk04hasGoodSV", &JetAk04hasGoodSV, &b_JetAk04hasGoodSV); 
+        fChain->SetBranchAddress("JetAk04SVflightDist", &JetAk04SVflightDist, &b_JetAk04SVflightDist); 
+        fChain->SetBranchAddress("JetAk04SVflightDistSig", &JetAk04SVflightDistSig, &b_JetAk04SVflightDistSig); 
+        fChain->SetBranchAddress("JetAk04SVmass", &JetAk04SVmass, &b_JetAk04SVmass); 
+
         fChain->SetBranchAddress("JetAk04JecUncUp", &JetAk04JecUncUp, &b_JetAk04JecUncUp); 
         fChain->SetBranchAddress("JetAk04JecUncDwn", &JetAk04JecUncDwn, &b_JetAk04JecUncDwn); 
 

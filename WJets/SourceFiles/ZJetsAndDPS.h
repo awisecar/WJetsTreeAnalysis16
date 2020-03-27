@@ -239,6 +239,12 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *JetAk04BDiscCisvV2;
     vector<float>  *JetAk04BDiscDeepCSV;
     vector<float>  *JetAk04HadFlav;
+
+    vector<bool>   *JetAk04hasGoodSV;
+    vector<float>  *JetAk04SVflightDist;
+    vector<float>  *JetAk04SVflightDistSig;
+    vector<float>  *JetAk04SVmass;
+
     vector<float>  *JetAk04JecUncUp;
     vector<float>  *JetAk04JecUncDwn;
 
@@ -255,6 +261,12 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04BDiscCisvV2; 
     TBranch        *b_JetAk04BDiscDeepCSV;   
     TBranch        *b_JetAk04HadFlav;  
+
+    TBranch        *b_JetAk04hasGoodSV;
+    TBranch        *b_JetAk04SVflightDist;
+    TBranch        *b_JetAk04SVflightDistSig;
+    TBranch        *b_JetAk04SVmass;
+
     TBranch        *b_JetAk04JecUncUp;
     TBranch        *b_JetAk04JecUncDwn;
     

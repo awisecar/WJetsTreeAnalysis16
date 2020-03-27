@@ -376,8 +376,8 @@ HistoSet::HistoSet(string leptonFlavor)
     //***************************** Basic plots for Wjets *****************************//
 
     //--- For calculating b-tagging efficiency---
-    int npt_b_range(8);
-    double pt_b_range[9] = {30, 50, 70, 100, 140, 200, 300, 600, 1000};
+    int npt_b_range(9);
+    double pt_b_range[10] = {20, 30, 50, 70, 100, 140, 200, 300, 600, 1000};
 
     h_pt_eta_b           = newTH2D("h_pt_eta_b",             "h_pt_eta_b",           npt_b_range,  pt_b_range,   10,-2.4,2.4);
     h_pt_eta_b_tagged    = newTH2D("h_pt_eta_b_tagged",      "h_pt_eta_b_tagged",    npt_b_range,  pt_b_range,   10,-2.4,2.4);
@@ -402,6 +402,10 @@ HistoSet::HistoSet(string leptonFlavor)
 	NEventsPassCuts->GetXaxis()->SetBinLabel(6, "= PassBtagveto");
 
     btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "b-Tag Score", 50, 0., 1.);
+    svflightDistAK4 = newTH1D("svflightDistAK4", "svflightDistAK4", "SV_{flightDist}", 25, 0., 2.5);
+    svflightDistSigAK4 = newTH1D("svflightDistSigAK4", "svflightDistSigAK4", "SV_{flightDistSig}", 38, 2., 40.);
+    svMassAK4 = newTH1D("svMassAK4", "svMassAK4", "SV_{mass}", 60, 0., 6.);
+
 	
     //--- Jet multiplicity -----------
 
