@@ -628,19 +628,19 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         // canvas[i]->Write(); // write TCanvas to the outputFile
 
         // Next section prints out the same plots on a linear scale -----
-      //  histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
-      //  TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
-      //  tmpCanvas->cd();
-      //  tmpCanvas->Draw();
-      //  TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
-      //  tmpPad->SetLogy(0);
-      //  histoName[i] += "_Lin";
-      //  tmpCanvas->SetTitle(histoName[i].c_str());
-      //  tmpCanvas->SetName(histoName[i].c_str());
-      //  string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
-      //  tmpCanvas->Print(outputFileLinPDF.c_str());
-      //  outputFile->cd();
-      //  tmpCanvas->Write();
+        histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
+        TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
+        tmpCanvas->cd();
+        tmpCanvas->Draw();
+        TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
+        tmpPad->SetLogy(0);
+        histoName[i] += "_Lin";
+        tmpCanvas->SetTitle(histoName[i].c_str());
+        tmpCanvas->SetName(histoName[i].c_str());
+        string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
+        tmpCanvas->Print(outputFileLinPDF.c_str());
+        //outputFile->cd();
+        //tmpCanvas->Write();
     }
 
     // outputFile->cd();
