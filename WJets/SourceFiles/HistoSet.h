@@ -67,7 +67,9 @@ public:
     TH1D *svflightDistSigAK4;
     TH1D *svMassAK4;
     
-    //--- Jet multiplicity
+    // --- Jet multiplicity ---
+
+    // AK4 --
     TH1D *ZNGoodJets_Zexc;
     TH1D *genZNGoodJets_Zexc;
     TH2D *hresponseZNGoodJets_Zexc;
@@ -83,6 +85,11 @@ public:
     TH1D *ZNGoodJetsFull_Zinc;
     TH1D *genZNGoodJetsFull_Zinc;
     TH2D *hresponseZNGoodJetsFull_Zinc;
+
+    // AK8 --
+    TH1D *ZNGoodJetsAK8_Zexc;
+
+    TH1D *ZNGoodJetsAK8_Zinc;
 
     //--- b-Jet multiplicity
     TH1D *ZNGoodBJets_Zexc;
@@ -811,6 +818,7 @@ public:
     TH1D *dPhiLepJet3_Zinc3jet;
     TH1D *dPhiLepJet4_Zinc4jet;
     TH1D *dPhiLepJet5_Zinc5jet;
+    TH1D *dPhiLepJet6_Zinc6jet;
     TH1D *dPhiLepJet1_2_Zinc1jet;
     TH1D *dPhiLepJet2_2_Zinc2jet;
     TH1D *dPhiLepJet3_2_Zinc3jet;
@@ -838,6 +846,22 @@ public:
     TH2D *hresponsedPhiLepJet3_2_Zinc3jet;
     TH2D *hresponsedPhiLepJet4_2_Zinc4jet;
     TH2D *hresponsedPhiLepJet5_2_Zinc5jet;
+
+    //--- dRapidity (muon, nth_jet)
+    TH1D *dRapidityLepJet1_Zinc1jet;
+    TH1D *dRapidityLepJet2_Zinc2jet;
+    TH1D *dRapidityLepJet3_Zinc3jet;
+    TH1D *dRapidityLepJet4_Zinc4jet;
+    TH1D *dRapidityLepJet5_Zinc5jet;
+    TH1D *dRapidityLepJet6_Zinc6jet;
+
+    //--- dR (muon, nth_jet)
+    TH1D *dRLepJet1_Zinc1jet;
+    TH1D *dRLepJet2_Zinc2jet;
+    TH1D *dRLepJet3_Zinc3jet;
+    TH1D *dRLepJet4_Zinc4jet;
+    TH1D *dRLepJet5_Zinc5jet;
+    TH1D *dRLepJet6_Zinc6jet;
     	
 	//--- dR (muon, closest jet)
 	TH1D *dRLepCloseJet_Zinc1jet;
@@ -947,6 +971,7 @@ public:
     TH1D *ThirdJetAbsRapidity_Zinc3jet;
     TH1D *FourthJetAbsRapidity_Zinc4jet;
     TH1D *FifthJetAbsRapidity_Zinc5jet;
+    TH1D *SixthJetAbsRapidity_Zinc6jet;
     TH1D *genFirstJetAbsRapidity_Zinc1jet;
     TH1D *genSecondJetAbsRapidity_Zinc2jet;
     TH1D *genThirdJetAbsRapidity_Zinc3jet;
@@ -1132,11 +1157,6 @@ public:
     TH1D *lepEta_Zexc5jet;
     TH2D *lepEtaEta_Zinc0jet;
 
-    TH1D *lepChargePlusEta_Zinc1jet;
-    TH1D *lepChargeMinusEta_Zinc1jet;
-    TH1D *lepChargePlusPhi_Zinc1jet;
-    TH1D *lepChargeMinusPhi_Zinc1jet;
-
     TH1D *FirstJetEtaFull_Zinc1jet;
     TH1D *SecondJetEtaFull_Zinc2jet;
     TH1D *ThirdJetEtaFull_Zinc3jet;
@@ -1192,8 +1212,26 @@ public:
     TH1D *lepPt_Zexc4jet;
     TH1D *lepPt_Zexc5jet;
 
+    // ---
+    // (muon) charge separated --
+    TH1D *ZNGoodJetsChargePlus_Zinc;
+    TH1D *ZNGoodJetsChargeMinus_Zinc;
+
+    TH1D *FirstJetPtChargePlus_Zinc1jet;
+    TH1D *FirstJetPtChargeMinus_Zinc1jet;
+    TH1D *FirstJetAbsRapidityChargePlus_Zinc1jet;
+    TH1D *FirstJetAbsRapidityChargeMinus_Zinc1jet;
+    
     TH1D *lepChargePlusPt_Zinc1jet;
     TH1D *lepChargeMinusPt_Zinc1jet;
+    TH1D *lepChargePlusEta_Zinc1jet;
+    TH1D *lepChargeMinusEta_Zinc1jet;
+    TH1D *lepChargePlusPhi_Zinc1jet;
+    TH1D *lepChargeMinusPhi_Zinc1jet;
+
+    TH1D *ZPtChargePlus_Zinc1jet;
+    TH1D *ZPtChargeMinus_Zinc1jet;
+    // ---
 
     TH1D *dPhiLeptons_Zexc0jet;
     TH1D *dPhiLeptons_Zexc1jet;
