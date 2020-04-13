@@ -151,7 +151,8 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
     TLatex *jetCuts[nHist];
     TLatex *intLumi[nHist];
 
-    int nHistNoGen=0;
+    int nHistNoGen = 0;
+    std::cout << "\nLooping over " << nHist << " histograms" << std::endl;
     for (unsigned short i(0); i < nHist; i++) {
         // Doublechecking that this histo is useable
         histoNameTemp = file[0]->GetListOfKeys()->At(i)->GetName();
@@ -216,7 +217,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         nHistNoGen++;
     } 
     nHist = nHistNoGen; 
-    cout <<"\nNumber of histograms to plot: " << nHistNoGen << endl;
+    cout << "Number of histograms to plot: " << nHistNoGen << endl;
 
     ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,6 +229,9 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 
         //Looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
         for (int j = 0; j < nHistNoGen ; j++) {
+
+            std::cout << histoName[j] << std::endl;
+
             hist[i][j] = getHisto(file[i], histoName[j]);
             hist[i][j]->SetTitle(histoTitle[j].c_str());
 
@@ -539,9 +543,10 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
         cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
        
-        if (yearStr == "2016") intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
+        if (yearStr == "2016")      intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
         else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71,0.955, "41.5 fb^{-1} (13 TeV)");
-        else intLumi[i]->DrawLatex(0.71,0.955, "59.7 fb^{-1} (13 TeV)");
+        else if (yearStr == "2018") intLumi[i]->DrawLatex(0.71,0.955, "59.7 fb^{-1} (13 TeV)");
+        else intLumi[i]->DrawLatex(0.71,0.955, "137.16 fb^{-1} (13 TeV)");
 
         if (histoName[i].find("inc0") == string::npos){
             if (histoName[i].find("AK8") != string::npos){
@@ -596,7 +601,7 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         // hist[0][i]->GetYaxis()->SetRangeUser(0.01, 1.99);
 
         hist[0][i]->GetYaxis()->SetNdivisions(5,5,0);
-        hist[0][i]->GetYaxis()->SetTitle("Simulation/Data");
+        hist[0][i]->GetYaxis()->SetTitle("Prediction/Data");
         hist[0][i]->GetYaxis()->SetTitleFont(42);
         hist[0][i]->GetYaxis()->SetTitleSize(0.104); //0.1
         hist[0][i]->GetYaxis()->SetTitleOffset(0.48); //0.5
@@ -628,17 +633,17 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         // canvas[i]->Write(); // write TCanvas to the outputFile
 
         // Next section prints out the same plots on a linear scale -----
-        histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
-        TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
-        tmpCanvas->cd();
-        tmpCanvas->Draw();
-        TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
-        tmpPad->SetLogy(0);
-        histoName[i] += "_Lin";
-        tmpCanvas->SetTitle(histoName[i].c_str());
-        tmpCanvas->SetName(histoName[i].c_str());
-        string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
-        tmpCanvas->Print(outputFileLinPDF.c_str());
+    //    histSumMC[i]->SetMaximum(1.5*histSumMC[i]->GetMaximum());
+    //    TCanvas *tmpCanvas = (TCanvas*) canvas[i]->Clone();
+    //    tmpCanvas->cd();
+    //    tmpCanvas->Draw();
+    //    TPad *tmpPad = (TPad*) tmpCanvas->GetPrimitive("pad1");
+    //    tmpPad->SetLogy(0);
+    //    histoName[i] += "_Lin";
+    //    tmpCanvas->SetTitle(histoName[i].c_str());
+    //    tmpCanvas->SetName(histoName[i].c_str());
+    //    string outputFileLinPDF = outputFileName + "/" + histoName[i] + ".pdf";
+    //    tmpCanvas->Print(outputFileLinPDF.c_str());
         //outputFile->cd();
         //tmpCanvas->Write();
     }
