@@ -12,17 +12,17 @@
 
 using namespace std;
 
-void barre_de_progression(int pourcentage){
-    string progression = "[";
-    for (int i=0; i<pourcentage; i++){ progression += "="; }
-    for (int i=0; i<(100-pourcentage); i++){ progression += " "; }
-    progression += "]";
-    ostringstream oss; oss << pourcentage;
-    string pourcentage_str = oss.str();
-    for (int i=0; i < (int) pourcentage_str.size(); i++){ progression[49+i] = pourcentage_str[i]; }
-    if (pourcentage<100) cout << "\t" << progression << "\r" ;
-    else cout << "\t" << progression << endl;
-}
+// void barre_de_progression(int pourcentage){
+//     string progression = "[";
+//     for (int i=0; i<pourcentage; i++){ progression += "="; }
+//     for (int i=0; i<(100-pourcentage); i++){ progression += " "; }
+//     progression += "]";
+//     ostringstream oss; oss << pourcentage;
+//     string pourcentage_str = oss.str();
+//     for (int i=0; i < (int) pourcentage_str.size(); i++){ progression[49+i] = pourcentage_str[i]; }
+//     if (pourcentage<100) cout << "\t" << progression << "\r" ;
+//     else cout << "\t" << progression << endl;
+// }
 
 bool LepDescendingOrder(leptonStruct l1, leptonStruct l2){
     return (l1.pt > l2.pt);
@@ -631,6 +631,18 @@ vector<double> buildVecFineBin( int nStdBin, double arrStdBin[], int factChop)
     }
     vecTemp.push_back(arrStdBin[nStdBin]);
     return vecTemp;
+}
+
+void splitBinsInTwoForTUnfold(int nBinsOriginal, double originalArray[], double splitArray[]){
+
+    int j(0);
+    for(int i(0); i < nBinsOriginal; i++){
+        splitArray[j] = originalArray[i];
+        splitArray[j+1] = originalArray[i] + (originalArray[i+1] - originalArray[i])/2.;
+        if (i == nBinsOriginal - 1) splitArray[j+2] = originalArray[i+1];
+        j += 2;
+    }
+    
 }
 
 void welcomeMessage(){

@@ -225,12 +225,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 	
     //looping over files
     for (int i = 0; i < nFiles; i++) {
-        cout << "File #" << i << ": " << legendNames[i] << endl;
+        //cout << "File #" << i << ": " << legendNames[i] << endl;
 
         //Looping over histograms (nHistNoGen is all of the found histograms, without double counting the gen ones)
         for (int j = 0; j < nHistNoGen ; j++) {
 
-            std::cout << histoName[j] << std::endl;
+            //std::cout << histoName[j] << std::endl;
 
             hist[i][j] = getHisto(file[i], histoName[j]);
             hist[i][j]->SetTitle(histoTitle[j].c_str());

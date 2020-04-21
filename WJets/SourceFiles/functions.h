@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void barre_de_progression(int);
+// void barre_de_progression(int);
 
 struct leptonStruct{
     double pt, eta, phi, energy, charge, iso, scEta ;
@@ -81,6 +81,8 @@ void bestTwoJetsCandidatesPt(vector<jetStruct>, pair<TLorentzVector, TLorentzVec
 void bestTwoJetsCandidatesPhi(vector<jetStruct>, pair<TLorentzVector, TLorentzVector>&);
 
 vector<double> buildVecFineBin(int nStdBin, double arrStdBin[], int factChop);
+
+void splitBinsInTwoForTUnfold(int nBinsOriginal, double originalArray[], double splitArray[]);
 
 void welcomeMessage();
 void bTagVetoMessage(int doBJets);

@@ -1719,6 +1719,24 @@ public:
     TH1D *SecondJetPt_Zinc2jet_Eta[10];
     TH1D *genSecondJetPt_Zinc2jet_Eta[10];
 
+
+    //************************************************************** Begin TUnfold histos *********************************************************************************//
+    
+    TH1D *FirstJetPt_Zinc1jet_TUnfold;
+    TH1D *genFirstJetPt_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold;
+
+    TH1D *FirstJetAbsRapidity_Zinc1jet_TUnfold;
+    TH1D *genFirstJetAbsRapidity_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold;
+
+    TH1D *dPhiLepJet1_Zinc1jet_TUnfold;
+    TH1D *gendPhiLepJet1_Zinc1jet_TUnfold;
+    TH2D *hresponsedPhiLepJet1_Zinc1jet_TUnfold;
+
+    //*************************************************************** End TUnfold histos **********************************************************************************//
+
+
     ClassDef(HistoSet,0);
 };
 

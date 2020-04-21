@@ -25,8 +25,7 @@ void runMergeTT(){
 
 }
 
-void mergeTT(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
-{
+void mergeTT(TString lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets){
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
 
