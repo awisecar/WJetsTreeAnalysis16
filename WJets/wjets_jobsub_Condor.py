@@ -27,9 +27,9 @@ submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
 ##submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
 # submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
 # submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
-# submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
+submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
 # submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
-submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
+#submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
 
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 submit += 'queue argument in 1'
