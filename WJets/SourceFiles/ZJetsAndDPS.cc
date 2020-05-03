@@ -249,7 +249,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 1000000; jentry++){
+    // for (Long64_t jentry(0); jentry < 1000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -521,6 +521,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     // eta cut for muon
                     bool muPassesEtaLooseCut(fabs(mu.eta) <= 2.4);
                     bool muPassesEtaCut(doW && fabs(mu.eta) <= 2.4);
+                    // HLT-offline muon matching requirement
+                    bool muHasGoodHLTMatch( MuHltMatch->at(i) );
                     // ID cut for muon
                     bool muPassesIdCut( MuIdTight->at(i) == 1 ); // muon tight ID
                     if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << " MuIdTight->at(i) = " << MuIdTight->at(i) << endl;
@@ -546,8 +548,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesIsoCut = " << muPassesIsoCut << endl;
                         cout << __LINE__ << " PRINTEVENTINFO: For mu #" << i << ", muPassesQCDIsoCut = " << muPassesQCDIsoCut << endl;
                     }
-                    // check if muon passes all required event cuts
-                    if (muPassesPtCut && muPassesEtaCut && muPassesIdCut && (!useTriggerCorrection || eventTrigger)){
+                    // check if muon passes all required event cuts!
+                    if (muPassesPtCut && muPassesEtaCut && muPassesIdCut && muHasGoodHLTMatch && (!useTriggerCorrection || eventTrigger)){
                         // analysis iso cut
                         if (muPassesIsoCut){  
                             if (doQCD < 2) {
@@ -769,18 +771,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
         // ---------------- b-tagging switches ----------------
 
-        // choice of tagger: 
-        // 0 == DeepCSV
-        // 1 == CSVv2 (2017 only)
-        // 2 == SV inside jet (reco'd using IVF algorithm)
-        int whichBTagger = 0; // DeepCSV
-        // int whichBTagger = 1; // CSVv2
-        // int whichBTagger = 2; // SV inside jet
+        // --- Choice of tagger ---
+        int whichBTagger = 0; // 0 == DeepCSV
+        // int whichBTagger = 1; // 1 == CSVv2 (2017 only)
+        // int whichBTagger = 2; // 2 == SV inside jet (reco'd using IVF algorithm)
+        // int whichBTagger = 3; // 3 == SV inside jet (reco'd using SSV algorithm)
+        // int whichBTagger = 4; // 4 == SV inside jet (both IVF & SSV)
 
-        // do b-tag efficiency SFs? ---------------------------
+        // Do b-tag efficiency SFs? ---------------------------
         // bool doBTagSFs = true;
         bool doBTagSFs = false;
-        if (whichBTagger == 2) doBTagSFs = false; // there are no efficiency SFs for the SV veto
+        if ( (whichBTagger == 2) || (whichBTagger == 3) || (whichBTagger == 4) ) doBTagSFs = false; // there are no efficiency SFs for the SV veto
 
         // ----------------------------------------------------
 
@@ -796,16 +797,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //--- loop over all the jets ----------
             for (unsigned short i(0); i < nTotJets; i++) {
                 double jetPtTemp(0.); // for calculating METscale
-                bool passBJets(0);
+                bool passBJets(false);
                 
                 //nominal btagging criterion --------------------------
-                if ( (year == 2016) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                if (year == 2017){
-                    if ( whichBTagger == 0  && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
-                    if ( whichBTagger == 1  && (JetAk04BDiscCisvV2->at(i)  >= 0.8838) ) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
-                    if ( whichBTagger == 2 ) passBJets = false; // fail everything when using SV veto
+                if (year == 2016){
+                    if ( (whichBTagger == 0) && (JetAk04BDiscDeepCSV->at(i) >= 0.6321) )  passBJets = true; // btag medium wp cut for DeepCSV tagger
                 }
-                if ( (year == 2018) && (JetAk04BDiscDeepCSV->at(i) >= 0.4184) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                if (year == 2017){
+                    if ( (whichBTagger == 0) && (JetAk04BDiscDeepCSV->at(i) >= 0.4941) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                    if ( (whichBTagger == 1) && (JetAk04BDiscCisvV2->at(i)  >= 0.8838) ) passBJets = true; // btag medium wp cut for CombinedSecondaryVertexv2 tagger
+                }
+                if (year == 2018){
+                    if ( (whichBTagger == 0) && (JetAk04BDiscDeepCSV->at(i) >= 0.4184) ) passBJets = true; // btag medium wp cut for DeepCSV tagger
+                    
+                }
+                if ( (whichBTagger == 2) || (whichBTagger == 3) || (whichBTagger == 4) ) passBJets = false; // fail everything when using SV veto
 
                 //fetch b-tag discriminant score itself
                 float jetAK4bDiscScore(0.);
@@ -1692,20 +1698,31 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJets = " << passBJets << endl;
 
-                // Check to see if jet has SV that passes some quality cuts ---
-                bool hasSVPassesCuts(false);
-                if (JetAk04hasGoodSV->at(i)){
-                    if (JetAk04SVflightDistSig->at(i) >= 4.) hasSVPassesCuts = true;
-                    else hasSVPassesCuts = false;
-                }
-                else hasSVPassesCuts = false;
+                // --- Check for Secondary Vertices (SVs)! ---
 
-                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", hasSVPassesCuts = " << hasSVPassesCuts << endl;
+                // Check to see if jet has SV that passes some quality cuts, IVF tagger ---
+                bool hasSVIVFPassesCuts(false);
+                if (JetAk04hasGoodSVIVF->at(i)){
+                    if (JetAk04SVIVFflightDistSig->at(i) >= 4.) hasSVIVFPassesCuts = true;
+                    else hasSVIVFPassesCuts = false;
+                }
+                else hasSVIVFPassesCuts = false;
+
+                // Check to see if jet has SV that passes some quality cuts, SSV tagger ---
+                bool hasSVSSVPassesCuts(false);
+                if (JetAk04hasGoodSVSSV->at(i)){
+                    if (JetAk04SVSSVflightDistSig->at(i) >= 4.) hasSVSSVPassesCuts = true;
+                    else hasSVSSVPassesCuts = false;
+                }
+                else hasSVSSVPassesCuts = false;
+
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", hasSVIVFPassesCuts = " << hasSVIVFPassesCuts << endl;
+                if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", hasSVSSVPassesCuts = " << hasSVSSVPassesCuts << endl;
 
                 //************************* End B-tag Veto Correction ***********************************//
                
                 // grabbing reco jet information in the form of a jetStruct
-                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, jetAK4bDiscScore, hasSVPassesCuts};
+                jetStruct jet = {JetAk04Pt->at(i), JetAk04Eta->at(i), JetAk04Phi->at(i), JetAk04E->at(i), i, passBJets, 0, 0, jetAK4bDiscScore, hasSVIVFPassesCuts, hasSVSSVPassesCuts};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk04Pt->at(i) << ", " << JetAk04Eta->at(i) << endl;
 
                 // loose pT cut (keep at 20 GeV here)
@@ -1808,13 +1825,25 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                         if (passBJets == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
                         if (passBJets == true && jetPassesdR02Cut) countDR02CutBJets++;
                     }
-                    // Or can use presence of "good" SV in jet to veto
-                    else{
-                        if (jet.hasGoodSV == true)                     countBJets++;        // currently used as the b-tag count for event vetoing
-                        if (jet.hasGoodSV == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
-                        if (jet.hasGoodSV == true && jetPassesdR02Cut) countDR02CutBJets++;
+                    // Presence of IVF SV in jet
+                    else if (whichBTagger == 2){
+                        if (jet.hasGoodSVIVF == true)                     countBJets++;        // currently used as the b-tag count for event vetoing
+                        if (jet.hasGoodSVIVF == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
+                        if (jet.hasGoodSVIVF == true && jetPassesdR02Cut) countDR02CutBJets++;
                     }
-				
+                    // Presence of SSV SV in jet
+                    else if (whichBTagger == 3){
+                        if (jet.hasGoodSVSSV == true)                     countBJets++;        // currently used as the b-tag count for event vetoing
+                        if (jet.hasGoodSVSSV == true && jetPassesdRCut)   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
+                        if (jet.hasGoodSVSSV == true && jetPassesdR02Cut) countDR02CutBJets++;
+                    }
+                    // Presence of both IVF and SSV SV in jet
+                    else{
+                        if ( (jet.hasGoodSVIVF == true) && (jet.hasGoodSVSSV == true) )                     countBJets++;        // currently used as the b-tag count for event vetoing
+                        if ( (jet.hasGoodSVIVF == true) && (jet.hasGoodSVSSV == true) && jetPassesdRCut )   countDR04CutBJets++; // ALW 12 MARCH 20 -- ...but switching to this one for testing
+                        if ( (jet.hasGoodSVIVF == true) && (jet.hasGoodSVSSV == true) && jetPassesdR02Cut ) countDR02CutBJets++;
+                    }
+
                     // ALW 6 MARCH 20
                     // jetsNoDRCut is the actual collection that will further be used to define
                     // the final jet collections that pass analysis cuts that are used to fill histos
@@ -1873,7 +1902,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //-- retrieving generated jets
             for (unsigned short i(0); i < nTotGenJets; i++){
                 // getting getJet info in the form of a jetStruct
-                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0, 0., 0};
+                jetStruct genJet = {GJetAk04Pt->at(i), GJetAk04Eta->at(i), GJetAk04Phi->at(i), GJetAk04E->at(i), i, 0, 0, 0, 0., 0, 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For genJet #" << i << ": pT, eta = " << GJetAk04Pt->at(i) << ", " << GJetAk04Eta->at(i) << endl;
                 // genJet dR information (wrt lepton)
                 bool genJetPassesdRCut(1), genJetPassesdR02Cut(1);
@@ -1954,7 +1983,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", passBJetsAK8 = " << passBJetsAK8 << endl;
                 //end btagging section -------
 
-                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore, 0};
+                jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore, 0, 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk08Pt->at(i) << ", " << JetAk08Eta->at(i) << endl;
 
                 // ------------------------------------------------
@@ -2032,7 +2061,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             //-- retrieving generated AK8 jets
             for (unsigned short i(0); i < nTotGenJetsAK8; i++){
 
-                jetStruct genJetAK8 = {GJetAk08Pt->at(i), GJetAk08Eta->at(i), GJetAk08Phi->at(i), GJetAk08E->at(i), i, 0, 0, 0, 0., 0};
+                jetStruct genJetAK8 = {GJetAk08Pt->at(i), GJetAk08Eta->at(i), GJetAk08Phi->at(i), GJetAk08E->at(i), i, 0, 0, 0, 0., 0, 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For genJet #" << i << ": pT, eta = " << GJetAk08Pt->at(i) << ", " << GJetAk08Eta->at(i) << endl;
 
                 // genJet dR information (wrt lepton)
@@ -2727,8 +2756,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     }
                 }
                 
-                // --- Using presence of SV in jet as tagger ------------------------
-                else{
+                // --- Using presence of IVF SV in jet as tagger ------------------------
+                else if (whichBTagger == 2){
                     for (unsigned short i(0); i < nGoodJets_20; i++){
                         int jet_ind = jets_20[i].patIndex;
 
@@ -2737,7 +2766,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                             h_pt_b->Fill(jets_20[i].pt, weightNoSF);
 
-                            if(jets_20[i].hasGoodSV){
+                            if(jets_20[i].hasGoodSVIVF){
                                 h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                                 h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
@@ -2748,7 +2777,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                             h_pt_c->Fill(jets_20[i].pt, weightNoSF);
 
-                            if(jets_20[i].hasGoodSV){
+                            if(jets_20[i].hasGoodSVIVF){
                                 h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                                 h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
@@ -2759,7 +2788,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                             h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                             h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
 
-                            if(jets_20[i].hasGoodSV){
+                            if(jets_20[i].hasGoodSVIVF){
                                 h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
                                 h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
                             }
@@ -2767,6 +2796,85 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     }
                 }
 
+                // --- Using presence of SSV SV in jet as tagger ------------------------
+                else if (whichBTagger == 3){
+                    for (unsigned short i(0); i < nGoodJets_20; i++){
+                        int jet_ind = jets_20[i].patIndex;
+
+                        // b-flavor jet
+                        if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                            h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // c-flavor jet
+                        else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                            h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // light jet (up, down, strange, gluon)
+                        else {
+                            h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+                    }
+                }
+
+                // --- Using presence of IVF SV & SSV SV in jet as tagger ------------------------
+                else{
+                    for (unsigned short i(0); i < nGoodJets_20; i++){
+                        int jet_ind = jets_20[i].patIndex;
+
+                        // b-flavor jet
+                        if(fabs(JetAk04HadFlav->at(jet_ind)) == 5){
+                            h_pt_eta_b->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_b->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVIVF && jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_b_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_b_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // c-flavor jet
+                        else if(fabs(JetAk04HadFlav->at(jet_ind)) == 4){
+                            h_pt_eta_c->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_c->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVIVF && jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_c_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_c_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+
+                        // light jet (up, down, strange, gluon)
+                        else {
+                            h_pt_eta_udsg->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                            h_pt_udsg->Fill(jets_20[i].pt, weightNoSF);
+
+                            if(jets_20[i].hasGoodSVIVF && jets_20[i].hasGoodSVSSV){
+                                h_pt_eta_udsg_tagged->Fill(jets_20[i].pt, jets_20[i].eta, weightNoSF);
+                                h_pt_udsg_tagged->Fill(jets_20[i].pt, weightNoSF);
+                            }
+                        }
+                    }
+                }
             }
             /////////////////////////////////////////////////////////////////////
             
@@ -3852,17 +3960,29 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 dRLepJet1_Zinc1jet->Fill(deltaRYPhi(lep1, newLeadJ), weight);
                 
                 for (unsigned short j(0); j < nGoodJets; j++){
+                    int jet_ind = jets[j].patIndex;
+
+                    // basic jet kinematics
                     AllJetPt_Zinc1jet->Fill(jets[j].pt, weight);
                     AllJetEta_Zinc1jet->Fill(jets[j].eta, weight);
                     AllJetPhi_Zinc1jet->Fill(jets[j].phi, weight);
 
+                    // b-tag discriminant
                     btagDiscScores_EvtSelection->Fill(jets[j].btagDiscScore, weight);
 
-                    if (jets[j].hasGoodSV == true){
-                        int jet_ind = jets[j].patIndex;
-                        svflightDistAK4->Fill(JetAk04SVflightDist->at(jet_ind), weight);
-                        svflightDistSigAK4->Fill(JetAk04SVflightDistSig->at(jet_ind), weight);
-                        svMassAK4->Fill(JetAk04SVmass->at(jet_ind), weight);
+                    // Fill IVF SV properties
+                    if (jets[j].hasGoodSVIVF == true){
+                        svIVFflightDist->Fill(JetAk04SVIVFflightDist->at(jet_ind), weight);
+                        svIVFflightDistSig->Fill(JetAk04SVIVFflightDistSig->at(jet_ind), weight);
+                        svIVFmass->Fill(JetAk04SVIVFmass->at(jet_ind), weight);
+                        svIVFnumTracks->Fill(JetAk04SVIVFnumTracks->at(jet_ind), weight);
+                    }
+                    // Fill SSV SV properties
+                    if (jets[j].hasGoodSVSSV == true){
+                        svSSVflightDist->Fill(JetAk04SVSSVflightDist->at(jet_ind), weight);
+                        svSSVflightDistSig->Fill(JetAk04SVSSVflightDistSig->at(jet_ind), weight);
+                        svSSVmass->Fill(JetAk04SVSSVmass->at(jet_ind), weight);
+                        svSSVnumTracks->Fill(JetAk04SVSSVnumTracks->at(jet_ind), weight);
                     }
                 }
 
@@ -5303,6 +5423,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     MuHltTrgPath1 = 0;
     MuHltTrgPath2 = 0;
     MuHltTrgPath3 = 0;
+    MuHltMatch = 0;
     
     METPt = 0;
     METPx = 0;
@@ -5331,10 +5452,17 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     JetAk04BDiscDeepCSV = 0;
     JetAk04HadFlav = 0;
 
-    JetAk04hasGoodSV = 0; 
-    JetAk04SVflightDist = 0; 
-    JetAk04SVflightDistSig = 0; 
-    JetAk04SVmass = 0; 
+    JetAk04hasGoodSVIVF = 0; 
+    JetAk04SVIVFflightDist = 0; 
+    JetAk04SVIVFflightDistSig = 0; 
+    JetAk04SVIVFmass = 0; 
+    JetAk04SVIVFnumTracks = 0;
+
+    JetAk04hasGoodSVSSV = 0; 
+    JetAk04SVSSVflightDist = 0; 
+    JetAk04SVSSVflightDistSig = 0; 
+    JetAk04SVSSVmass = 0; 
+    JetAk04SVSSVnumTracks = 0;
 
     JetAk04JecUncUp = 0;
     JetAk04JecUncDwn = 0;
@@ -5395,6 +5523,7 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("MuHltTrgPath1", &MuHltTrgPath1, &b_MuHltTrgPath1);
         fChain->SetBranchAddress("MuHltTrgPath2", &MuHltTrgPath2, &b_MuHltTrgPath2);
         fChain->SetBranchAddress("MuHltTrgPath3", &MuHltTrgPath3, &b_MuHltTrgPath3);
+        fChain->SetBranchAddress("MuHltMatch", &MuHltMatch, &b_MuHltMatch);
         
         //MET, MET filters
         fChain->SetBranchAddress("METPt", &METPt, &b_METPt);
@@ -5425,10 +5554,17 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
         fChain->SetBranchAddress("JetAk04BDiscDeepCSV", &JetAk04BDiscDeepCSV, &b_JetAk04BDiscDeepCSV); 
 	    fChain->SetBranchAddress("JetAk04HadFlav", &JetAk04HadFlav, &b_JetAk04HadFlav); 
 
-        fChain->SetBranchAddress("JetAk04hasGoodSV", &JetAk04hasGoodSV, &b_JetAk04hasGoodSV); 
-        fChain->SetBranchAddress("JetAk04SVflightDist", &JetAk04SVflightDist, &b_JetAk04SVflightDist); 
-        fChain->SetBranchAddress("JetAk04SVflightDistSig", &JetAk04SVflightDistSig, &b_JetAk04SVflightDistSig); 
-        fChain->SetBranchAddress("JetAk04SVmass", &JetAk04SVmass, &b_JetAk04SVmass); 
+        fChain->SetBranchAddress("JetAk04hasGoodSVIVF", &JetAk04hasGoodSVIVF, &b_JetAk04hasGoodSVIVF); 
+        fChain->SetBranchAddress("JetAk04SVIVFflightDist", &JetAk04SVIVFflightDist, &b_JetAk04SVIVFflightDist); 
+        fChain->SetBranchAddress("JetAk04SVIVFflightDistSig", &JetAk04SVIVFflightDistSig, &b_JetAk04SVIVFflightDistSig); 
+        fChain->SetBranchAddress("JetAk04SVIVFmass", &JetAk04SVIVFmass, &b_JetAk04SVIVFmass); 
+        fChain->SetBranchAddress("JetAk04SVIVFnumTracks", &JetAk04SVIVFnumTracks, &b_JetAk04SVIVFnumTracks); 
+
+        fChain->SetBranchAddress("JetAk04hasGoodSVSSV", &JetAk04hasGoodSVSSV, &b_JetAk04hasGoodSVSSV); 
+        fChain->SetBranchAddress("JetAk04SVSSVflightDist", &JetAk04SVSSVflightDist, &b_JetAk04SVSSVflightDist); 
+        fChain->SetBranchAddress("JetAk04SVSSVflightDistSig", &JetAk04SVSSVflightDistSig, &b_JetAk04SVSSVflightDistSig); 
+        fChain->SetBranchAddress("JetAk04SVSSVmass", &JetAk04SVSSVmass, &b_JetAk04SVSSVmass); 
+        fChain->SetBranchAddress("JetAk04SVSSVnumTracks", &JetAk04SVSSVnumTracks, &b_JetAk04SVSSVnumTracks); 
 
         fChain->SetBranchAddress("JetAk04JecUncUp", &JetAk04JecUncUp, &b_JetAk04JecUncUp); 
         fChain->SetBranchAddress("JetAk04JecUncDwn", &JetAk04JecUncDwn, &b_JetAk04JecUncDwn); 

@@ -1,0 +1,1 @@
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v3/MC/CRAB_PrivateMC/crab_WJetsToLNu_Pt-400To600_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu/200426_144929/0000/Bonzai-WJetsToLNu_Pt-400To600_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-VJetPruner-SMu_1.root

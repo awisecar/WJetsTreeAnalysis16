@@ -49,8 +49,8 @@ const processInfoStruct ProcessInfo[] = {
 
     // --- W+Jets signal ----
     // {"WJets_FxFx_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
-    {"WJets_FxFx_012J_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
-    // {"WJets_FxFx_Wpt_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    // {"WJets_FxFx_012J_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
+    {"WJets_FxFx_Wpt_dR_5311_List",       76102995.,  36864.,  1,         0.03,          kOrange,       " W(#mu#nu)+jets"},       // 25
     // ----------------------
 
     {"WJetsALL_MIX_dR_5311_List",                  76102995.,  36864.,  1,         0.03,          kPink,       " W(#mu#nu)+jets"},  // relative weight for mixed DY and WJ files are set inthe code

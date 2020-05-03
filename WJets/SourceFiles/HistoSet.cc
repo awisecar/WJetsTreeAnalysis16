@@ -390,10 +390,16 @@ HistoSet::HistoSet(string leptonFlavor)
 	NEventsPassCuts->GetXaxis()->SetBinLabel(6, "= PassBtagveto");
 
     btagDiscScores_EvtSelection = newTH1D("btagDiscScores_EvtSelection", "btagDiscScores_EvtSelection", "b-Tag Score", 50, 0., 1.);
-    svflightDistAK4 = newTH1D("svflightDistAK4", "svflightDistAK4", "SV_{flightDist}", 25, 0., 2.5);
-    svflightDistSigAK4 = newTH1D("svflightDistSigAK4", "svflightDistSigAK4", "SV_{flightDistSig}", 38, 2., 40.);
-    svMassAK4 = newTH1D("svMassAK4", "svMassAK4", "SV_{mass}", 60, 0., 6.);
 
+    svIVFflightDist = newTH1D("svIVFflightDist", "svIVFflightDist", "SV_{IVF} Flight Dist", 15, 0., 3.);
+    svIVFflightDistSig = newTH1D("svIVFflightDistSig", "svIVFflightDistSig", "SV_{IVF} Flight Dist. Sig.", 48, 2., 50.);
+    svIVFmass = newTH1D("svIVFmass", "svIVFmass", "SV_{IVF} Mass", 30, 0., 6.);
+    svIVFnumTracks = newTH1D("svIVFnumTracks", "svIVFnumTracks", "SV_{IVF} #tracks", 10, 0, 10);
+
+    svSSVflightDist = newTH1D("svSSVflightDist", "svSSVflightDist", "SV_{SSV} Flight Dist", 15, 0., 3.);
+    svSSVflightDistSig = newTH1D("svSSVflightDistSig", "svSSVflightDistSig", "SV_{SSV} Flight Dist. Sig.", 48, 2., 50.);
+    svSSVmass = newTH1D("svSSVmass", "svSSVmass", "SV_{SSV} Mass", 30, 0., 6.);
+    svSSVnumTracks = newTH1D("svSSVnumTracks", "svSSVnumTracks", "SV_{SSV} #tracks", 10, 0, 10);
 	
     //--- Jet multiplicity -----------
     // AK4 ---

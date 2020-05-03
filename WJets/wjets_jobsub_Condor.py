@@ -50,13 +50,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ##############################
 
 ### Running full 2016 data/MC, incl. QCD BG
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 61, 62, 63] # full set of files
-# #doWhat = [21]
-# #doWhat = [11]
-# doQCD = [0, 1, 2, 3]
-# #doQCD = [0]
-# doSysRunning = [0]
-# years = [2016]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54, 61, 62, 63] # full set of files
+#doWhat = [21]
+#doWhat = [11]
+
+doQCD = [0, 1, 2, 3]
+# doQCD = [1,2,3]
+
+doSysRunning = [0]
+
+years = [2016]
 
 ##############################
 
@@ -69,16 +72,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 #doWhat = [23, 27, 63]
 # doWhat = [211, 212, 213, 22, 23, 24, 30, 61, 62, 63] # just MC
 #doWhat = [61, 62, 63] # just W+jets MC
-doWhat = [213]
+# doWhat = [213]
 
 #doQCD = [0, 1, 2, 3] # signal and control regions
 # doQCD = [0] # signal region
 # doQCD = [1, 2, 3] # control regions
-doQCD = [2,3]
+# doQCD = [2,3]
 
-doSysRunning = [0]
+# doSysRunning = [0]
 
-years = [2017]
+# years = [2017]
 
 ##############################
 

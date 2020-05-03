@@ -21,7 +21,8 @@ struct jetStruct{
 	bool passDR04;
 	bool passDR02;
     float btagDiscScore;
-    bool hasGoodSV;
+    bool hasGoodSVIVF;
+    bool hasGoodSVSSV;
 };
 
 bool LepDescendingOrder(leptonStruct, leptonStruct);

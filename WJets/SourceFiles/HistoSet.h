@@ -63,9 +63,15 @@ public:
 
     TH1D *btagDiscScores_EvtSelection;
     
-    TH1D *svflightDistAK4;
-    TH1D *svflightDistSigAK4;
-    TH1D *svMassAK4;
+    TH1D *svIVFflightDist;
+    TH1D *svIVFflightDistSig;
+    TH1D *svIVFmass;
+    TH1D *svIVFnumTracks;
+
+    TH1D *svSSVflightDist;
+    TH1D *svSSVflightDistSig;
+    TH1D *svSSVmass;
+    TH1D *svSSVnumTracks;
     
     // --- Jet multiplicity ---
 

@@ -30,8 +30,8 @@
 using namespace std;
 
 const int NQCD = 4;
-// const int NMC = 17; // 2016
-const int NMC = 19; // 2017, 2018
+const int NMC = 17; // 2016
+// const int NMC = 19; // 2017, 2018
 
 //string energy = getEnergy();
 string energy = "13TeV";
@@ -98,8 +98,8 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             string FilenameTemp;
 
             if (year == 2016){
-                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
                 if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
@@ -119,8 +119,8 @@ void FuncOpenAllFiles(TFile *fData[], TFile *fMC[][NMC], string leptonFlavor, in
             }
             else if (year == 2017 || year == 2018){
                 // if (j == 0) FilenameTemp =  "WJets_FxFx_dR_5311_List";
-                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =  "TT_FullHad_dR_5311_List";
                 if (j == 3) FilenameTemp =  "TT_SemiLep_dR_5311_List";
@@ -194,8 +194,8 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
             string FilenameTemp;
 
             if (year == 2016){
-                if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
-                // if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
+                // if (j == 0) FilenameTemp =  "WJets_FxFx_012J_dR_5311_List";
+                if (j == 0) FilenameTemp =  "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =  "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =  "TTJets_dR_5311_List";
                 if (j == 3) FilenameTemp =  "ST_s_channel_dR_5311_List";
@@ -214,8 +214,8 @@ void FuncDataDrivenQCD(string variable, TFile *fData[], TFile *fMC[][NMC], TFile
                 if (j == 16) FilenameTemp = "ttH_non_bb_channel_dR_5311_List";
             }
             else if (year == 2017 || year == 2018){
-                if (j == 0) FilenameTemp =   "WJets_FxFx_012J_dR_5311_List";
-                // if (j == 0) FilenameTemp =   "WJets_FxFx_Wpt_dR_5311_List";
+                // if (j == 0) FilenameTemp =   "WJets_FxFx_012J_dR_5311_List";
+                if (j == 0) FilenameTemp =   "WJets_FxFx_Wpt_dR_5311_List";
                 if (j == 1) FilenameTemp =   "DYJets50toInf_dR_5311_List";
                 if (j == 2) FilenameTemp =   "TT_FullHad_dR_5311_List";
                 if (j == 3) FilenameTemp =   "TT_SemiLep_dR_5311_List";

@@ -177,6 +177,7 @@ class ZJetsAndDPS: public HistoSet {
     vector<bool>         *MuHltTrgPath1;
     vector<bool>         *MuHltTrgPath2;
     vector<bool>         *MuHltTrgPath3;
+    vector<bool>         *MuHltMatch;
 
     TBranch        *b_MuPt;   //!
     TBranch        *b_MuEta;   //!
@@ -197,6 +198,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_MuHltTrgPath1;   //!
     TBranch        *b_MuHltTrgPath2;   //!
     TBranch        *b_MuHltTrgPath3;   //!
+    TBranch        *b_MuHltMatch;   //!
     
     //MET, MET filters
     vector<float>  *METPt;
@@ -240,10 +242,17 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *JetAk04BDiscDeepCSV;
     vector<float>  *JetAk04HadFlav;
 
-    vector<bool>   *JetAk04hasGoodSV;
-    vector<float>  *JetAk04SVflightDist;
-    vector<float>  *JetAk04SVflightDistSig;
-    vector<float>  *JetAk04SVmass;
+    vector<bool>   *JetAk04hasGoodSVIVF;
+    vector<float>  *JetAk04SVIVFflightDist;
+    vector<float>  *JetAk04SVIVFflightDistSig;
+    vector<float>  *JetAk04SVIVFmass;
+    vector<int>    *JetAk04SVIVFnumTracks;
+
+    vector<bool>   *JetAk04hasGoodSVSSV;
+    vector<float>  *JetAk04SVSSVflightDist;
+    vector<float>  *JetAk04SVSSVflightDistSig;
+    vector<float>  *JetAk04SVSSVmass;
+    vector<int>    *JetAk04SVSSVnumTracks;
 
     vector<float>  *JetAk04JecUncUp;
     vector<float>  *JetAk04JecUncDwn;
@@ -262,10 +271,17 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04BDiscDeepCSV;   
     TBranch        *b_JetAk04HadFlav;  
 
-    TBranch        *b_JetAk04hasGoodSV;
-    TBranch        *b_JetAk04SVflightDist;
-    TBranch        *b_JetAk04SVflightDistSig;
-    TBranch        *b_JetAk04SVmass;
+    TBranch        *b_JetAk04hasGoodSVIVF;
+    TBranch        *b_JetAk04SVIVFflightDist;
+    TBranch        *b_JetAk04SVIVFflightDistSig;
+    TBranch        *b_JetAk04SVIVFmass;
+    TBranch        *b_JetAk04SVIVFnumTracks;
+
+    TBranch        *b_JetAk04hasGoodSVSSV;
+    TBranch        *b_JetAk04SVSSVflightDist;
+    TBranch        *b_JetAk04SVSSVflightDistSig;
+    TBranch        *b_JetAk04SVSSVmass;
+    TBranch        *b_JetAk04SVSSVnumTracks;
 
     TBranch        *b_JetAk04JecUncUp;
     TBranch        *b_JetAk04JecUncDwn;
