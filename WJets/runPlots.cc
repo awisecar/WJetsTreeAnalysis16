@@ -36,7 +36,7 @@
     // getStatistics("SMu", 2016, 30, 0, false, true, 0, false, false, 0, 0, false, true); //no MET cut, no b-tag requirements, doQCD=0, doTTScale=False, incl QCD BG
 
     // running signal region with btag veto, no ttBar SFs
-    //Plotter("SMu", 2016, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, b-tag veto, doQCD=0
+    // Plotter("SMu", 2016, 30, 0, 0, 0, 0, -1, 0, -999999, 999999, 0, 0, 1); //no MET cut, b-tag veto, doQCD=0
     // getStatistics("SMu", 2016, 30, 0, false, true, 0, false, false, 0, -1, false, true); //no MET cut, b-tag veto, doQCD=0, doTTScale=False, incl QCD BG
 
 

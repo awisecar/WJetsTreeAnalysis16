@@ -1,1 +1,0 @@
-/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v1/MC/CRAB_PrivateMC/crab_ZZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu/191117_224101/0000/Bonzai-ZZ_TuneCUETP8M1_13TeV-pythia8-VJetPruner-SMu_1.root

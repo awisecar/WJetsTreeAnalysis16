@@ -50,12 +50,12 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ##############################
 
 ### Running full 2016 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54, 61, 62, 63] # full set of files
-#doWhat = [21]
-#doWhat = [11]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
+doWhat = [52]
 
-doQCD = [0, 1, 2, 3]
-# doQCD = [1,2,3]
+# doQCD = [0, 1, 2, 3] # all regions
+doQCD = [3]
 
 doSysRunning = [0]
 

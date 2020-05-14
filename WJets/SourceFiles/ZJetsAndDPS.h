@@ -241,19 +241,16 @@ class ZJetsAndDPS: public HistoSet {
     vector<float>  *JetAk04BDiscCisvV2;
     vector<float>  *JetAk04BDiscDeepCSV;
     vector<float>  *JetAk04HadFlav;
-
     vector<bool>   *JetAk04hasGoodSVIVF;
     vector<float>  *JetAk04SVIVFflightDist;
     vector<float>  *JetAk04SVIVFflightDistSig;
     vector<float>  *JetAk04SVIVFmass;
     vector<int>    *JetAk04SVIVFnumTracks;
-
     vector<bool>   *JetAk04hasGoodSVSSV;
     vector<float>  *JetAk04SVSSVflightDist;
     vector<float>  *JetAk04SVSSVflightDistSig;
     vector<float>  *JetAk04SVSSVmass;
     vector<int>    *JetAk04SVSSVnumTracks;
-
     vector<float>  *JetAk04JecUncUp;
     vector<float>  *JetAk04JecUncDwn;
 
@@ -270,19 +267,16 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk04BDiscCisvV2; 
     TBranch        *b_JetAk04BDiscDeepCSV;   
     TBranch        *b_JetAk04HadFlav;  
-
     TBranch        *b_JetAk04hasGoodSVIVF;
     TBranch        *b_JetAk04SVIVFflightDist;
     TBranch        *b_JetAk04SVIVFflightDistSig;
     TBranch        *b_JetAk04SVIVFmass;
     TBranch        *b_JetAk04SVIVFnumTracks;
-
     TBranch        *b_JetAk04hasGoodSVSSV;
     TBranch        *b_JetAk04SVSSVflightDist;
     TBranch        *b_JetAk04SVSSVflightDistSig;
     TBranch        *b_JetAk04SVSSVmass;
     TBranch        *b_JetAk04SVSSVnumTracks;
-
     TBranch        *b_JetAk04JecUncUp;
     TBranch        *b_JetAk04JecUncDwn;
     

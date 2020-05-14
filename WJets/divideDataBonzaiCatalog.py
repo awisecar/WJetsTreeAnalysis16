@@ -11,9 +11,11 @@ print("\nBegin!")
 
 # Select number of sublists, year
 numSubLists = 10
-year = 2016
+# year = 2016
 # year = 2017
-# year = 2018
+year = 2018
+
+####################################
 
 directory = "DataW_txt_" + str(year) + "/"
 
@@ -28,8 +30,8 @@ textAll = (textAll.split('\n')) #split full text into a list where each element 
 del textAll[-1] # delete last element of list (empty line from file read in)
 
 numFiles = len(textAll)
-print("\n#files: "+str(numFiles))
-print("#separate lists: "+str(numSubLists))
+print("\n#files total: "+str(numFiles))
+print("#separate lists specified: "+str(numSubLists))
 
 # see how many lines per file we will make
 # if we divide by int then the result rounds down (in python2 it always rounds down to the "floor")
@@ -48,10 +50,10 @@ print("\nDivided all filenames into "+str(len(contentList))+" sublists!")
 for fileIdx in range(0, numSubLists):
     fileOutName = "SMu_13TeV_Data_dR_5311_List_"+str(fileIdx)+".txt"
     print('\nMaking list: '+fileOutName)
-    print('#files: '+str(len(contentList[fileIdx])))
+    print('#files to write: '+str(len(contentList[fileIdx])))
     outFile = open(directory + fileOutName, "w") # open output file
     for iLine, line in enumerate(contentList[fileIdx]):
-        print(line)
+        # print(line)
         outFile.write(line+"\n")
     outFile.close() # close output file
 

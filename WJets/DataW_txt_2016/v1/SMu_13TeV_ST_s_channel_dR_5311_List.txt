@@ -1,1 +1,0 @@
-/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v1/MC/CRAB_PrivateMC/crab_ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-VJetPruner-SMu/191117_223742/0000/Bonzai-ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-VJetPruner-SMu_1.root
