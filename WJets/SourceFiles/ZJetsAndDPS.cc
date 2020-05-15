@@ -79,13 +79,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
     //       Load efficiency tables        //
     //====================================//
-    table TableJESunc, LeptIso, LeptID, LeptTrig;
+    // table TableJESunc, LeptIso, LeptID, LeptTrig;
+    table LeptIso, LeptID, LeptTrig;
     table jerSFs_AK4PFchs, jerSFs_AK8PFPuppi;
 
     if (energy == "13TeV"){
         if (year == 2016){
-            table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
-            TableJESunc = TableJESUncertainties;
+            // table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            // TableJESunc = TableJESUncertainties;
             if (leptonFlavor == "SingleMuon"){
                 // 2016 legacy rereco tables
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2016Legacy_SMu_SFs_TightId_13TeV_EtaPt.txt");
@@ -98,8 +99,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         }
         else if (year == 2017){
             // using 2016 JES uncertainties for now
-            table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
-            TableJESunc = TableJESUncertainties;
+            // table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            // TableJESunc = TableJESUncertainties;
             if (leptonFlavor == "SingleMuon"){
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2017_SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/2017_SMu_SFs_TightISO_13TeV_EtaPt.txt");
@@ -111,8 +112,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         }
         else{
             // using 2016 JES uncertainties for now
-            table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
-            TableJESunc = TableJESUncertainties;
+            // table TableJESUncertainties("EfficiencyTables/OLD_2016_JECUncertainty_Summer16_23Sep2016V4_AK4PF.txt");
+            // TableJESunc = TableJESUncertainties;
             if (leptonFlavor == "SingleMuon"){
                 table SF_Muon_TightID_ReReco("EfficiencyTables/2018_SMu_SFs_TightId_13TeV_EtaPt.txt");
                 table SF_Muon_TightISO_ReReco("EfficiencyTables/2018_SMu_SFs_TightISO_13TeV_EtaPt.txt");
@@ -1715,21 +1716,47 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 bool jetPassesLoosePtCut(jet.pt >= 20.); // for MET uncertainty should the cut be before or aftes adding unc.?????
 
                 //-- apply jet energy scale uncertainty (need to change the scale when initiating the object)
-                double jetEnergyCorr = 0.; 
-                jetEnergyCorr = TableJESunc.getEfficiency(jet.pt, jet.eta);
+                // old method using table files
+                // double jetEnergyCorr = 0.; 
+                // jetEnergyCorr = TableJESunc.getEfficiency(jet.pt, jet.eta);
 
                 jetPtTemp = jet.pt; // for calculating METscale
                 // scale is 0 unless JES uncertainty turned on
                 // if JES uncertainty, vary pT and energy by a pT, eta-dependent uncertainty
-                jet.pt *= (1 + scale * jetEnergyCorr);
-                jet.energy *= (1 + scale * jetEnergyCorr);
-				
+
+                // old method using table files
+                // jet.pt *= (1 + scale * jetEnergyCorr);
+                // jet.energy *= (1 + scale * jetEnergyCorr);
+
+                // new method using JEC information directly from miniAOD
+                if (scale > 0){
+                    jet.pt *= JetAk04JecUncUp->at(i);
+                    jet.energy *= JetAk04JecUncUp->at(i);
+                }
+                if (scale < 0){
+                    jet.pt *= JetAk04JecUncDwn->at(i);
+                    jet.energy *= JetAk04JecUncDwn->at(i);
+                }
+
 				// for MET scale (JES uncertainty)
                 // if "scale" is non-zero then we need to re-calculate MET to take the JES uncertainties into account
 				if (fabs(scale) > 0.){
+
+                    // old method using table files
                     // summed up for all of the jets looped over in the event
-					XMETscale += ( scale * jetEnergyCorr * jetPtTemp * cos(jet.phi) ) ;
-					YMETscale += ( scale * jetEnergyCorr * jetPtTemp * sin(jet.phi) ) ;
+					// XMETscale += ( scale * jetEnergyCorr * jetPtTemp * cos(jet.phi) ) ;
+					// YMETscale += ( scale * jetEnergyCorr * jetPtTemp * sin(jet.phi) ) ;
+
+                    // new method using JEC information directly from miniAOD
+                    if (scale > 0){
+                        XMETscale += ( (JetAk04JecUncUp->at(i) - 1.) * jetPtTemp * cos(jet.phi) ) ;
+					    YMETscale += ( (JetAk04JecUncUp->at(i) - 1.) * jetPtTemp * sin(jet.phi) ) ;
+                    }
+                    if (scale < 0){
+                        XMETscale += ( (JetAk04JecUncDwn->at(i) - 1.) * jetPtTemp * cos(jet.phi) ) ;
+					    YMETscale += ( (JetAk04JecUncDwn->at(i) - 1.) * jetPtTemp * sin(jet.phi) ) ;
+                    }
+
 				}
 				
                 // Now do reco jet event selection cuts
@@ -1934,7 +1961,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         vector<jetStruct> jetsAK8, jetsAK8NoDRCut; 
 
         int countBJetsAK8(0);
-        int countDR04CutBJetsAK8(0);
+        int countDR08CutBJetsAK8(0);
 
         if (hasRecoInfo) {
             nTotJetsAK8 = JetAk08Eta->size();
@@ -1947,7 +1974,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 //begin btagging section -------
                 //nominal btagging criterion
-                bool passBJetsAK8(0);
+                bool passBJetsAK8(false);
                 if ( (year == 2016) && (JetAk08BDiscDeepCSV->at(i) >= 0.6321)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if ( (year == 2017) && (JetAk08BDiscDeepCSV->at(i) >= 0.4941)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
                 if ( (year == 2018) && (JetAk08BDiscDeepCSV->at(i) >= 0.4184)) passBJetsAK8 = true; // btag medium wp cut for DeepCSV tagger
@@ -1970,18 +1997,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 jetStruct jetAK8 = {JetAk08Pt->at(i), JetAk08Eta->at(i), JetAk08Phi->at(i), JetAk08E->at(i), i, passBJetsAK8, 0, 0, jetAK8bDiscScore, 0, 0};
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk08Pt->at(i) << ", " << JetAk08Eta->at(i) << endl;
-
-                // ------------------------------------------------
-                //
-                // ~~~~~ Jet Energy Scale Uncertainty section ~~~~~
-                //
-                // ------------------------------------------------
-
-
-                // Now do reco AK8 jet event selection cuts -----
                 
-                // pt cut
-                bool jetAK8PassesPtCut(jetAK8.pt >= 200.);
+                // loose pt cut
+                bool jetAK8PassesLoosePtCut(jetAK8.pt >= 180.);
+
+                // AK8 JES uncertainties (if scale =/= 0) ----
+                // NOTE: not recalculating MET when re-scaling AK8 jets here, because
+                // currently basing MET calculation off of AK4 jet collection
+                if (scale > 0){
+                    jetAK8.pt *= JetAk08JecUncUp->at(i);
+                    jetAK8.energy *= JetAk08JecUncUp->at(i);
+                }
+                if (scale < 0){
+                    jetAK8.pt *= JetAk08JecUncDwn->at(i);
+                    jetAK8.energy *= JetAk08JecUncDwn->at(i);
+                }
                 
                 // abs(rap) cut
                 TLorentzVector jetAK8r;
@@ -2006,20 +2036,20 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if (PRINTEVENTINFO && jentry == eventOfInterest) {
                     cout << __LINE__ << " PRINTEVENTINFO: AK8 jet analysis cuts --- " << endl;
-                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesPtCut = " << jetAK8PassesPtCut << endl;
+                    cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesLoosePtCut = " << jetAK8PassesLoosePtCut << endl;
                     cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesEtaCut = " << jetAK8PassesEtaCut << endl;
                     cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesIdCut = " << jetAK8PassesIdCut << endl;
                     cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ", jetAK8PassesdRCut = " << jetAK8PassesdRCut << endl;
                 }
 
                 // pT, Rapidity, and PF ID cuts 
-                if ( jetAK8PassesPtCut && jetAK8PassesEtaCut && jetAK8PassesIdCut ) {
+                if ( jetAK8PassesLoosePtCut && jetAK8PassesEtaCut && jetAK8PassesIdCut ) {
 
                     // Getting information about number of AK8 b-jets
                     // passBJetsAK8 is the marker for if a jet is btagged or not
                     // Note: Count the number of AK8 b-tagged jets even if doBJets == 0
 					if (passBJetsAK8 == true)                      countBJetsAK8++; // count BJets, used for BVeto
-					if (passBJetsAK8 == true && jetAK8PassesdRCut) countDR04CutBJetsAK8++;
+					if (passBJetsAK8 == true && jetAK8PassesdRCut) countDR08CutBJetsAK8++;
 				
 					jetsAK8NoDRCut.push_back(jetAK8);
                 }
