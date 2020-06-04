@@ -1731,14 +1731,20 @@ public:
     TH1D *FirstJetPt_Zinc1jet_TUnfold;
     TH1D *genFirstJetPt_Zinc1jet_TUnfold;
     TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold;
+    TH1D *fakesFirstJetPt_Zinc1jet_TUnfold;
+    TH1D *missesFirstJetPt_Zinc1jet_TUnfold;
 
     TH1D *FirstJetAbsRapidity_Zinc1jet_TUnfold;
     TH1D *genFirstJetAbsRapidity_Zinc1jet_TUnfold;
     TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold;
+    TH1D *fakesFirstJetAbsRapidity_Zinc1jet_TUnfold;
+    TH1D *missesFirstJetAbsRapidity_Zinc1jet_TUnfold;
 
     TH1D *dPhiLepJet1_Zinc1jet_TUnfold;
     TH1D *gendPhiLepJet1_Zinc1jet_TUnfold;
     TH2D *hresponsedPhiLepJet1_Zinc1jet_TUnfold;
+    TH1D *fakesdPhiLepJet1_Zinc1jet_TUnfold;
+    TH1D *missesdPhiLepJet1_Zinc1jet_TUnfold;
 
     // --- AK4 jet-based distributions for jet-multiplicity ratios ---
 
@@ -1752,6 +1758,12 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
 
     // exclusive
     TH1D *LepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
@@ -1763,6 +1775,12 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
 
     // --- AK8 jet-based distributions for jet-multiplicity ratios ---
 
@@ -1776,6 +1794,12 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
 
     // exclusive 
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
@@ -1787,6 +1811,12 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
+    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
+    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
     
 
     //*************************************************************** End TUnfold histos **********************************************************************************//

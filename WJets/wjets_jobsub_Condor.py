@@ -24,12 +24,12 @@ submit += 'output = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).out\n'
 submit += 'error = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).err\n'
 submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n\n'
 
-##submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
+# submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
 # submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
-# submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
-submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
+# submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
 # submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
-#submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
+submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
+# submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
 
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 submit += 'queue argument in 1'
@@ -52,10 +52,10 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ### Running full 2016 data/MC, incl. QCD BG
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
-doWhat = [52]
+doWhat = [42, 51, 52, 53, 54, 61, 62, 63] # W+jets files
 
 # doQCD = [0, 1, 2, 3] # all regions
-doQCD = [3]
+doQCD = [0]
 
 doSysRunning = [0]
 
@@ -105,14 +105,14 @@ years = [2016]
 #doSysRunning = [1]
 
 ########## JES Syst
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
-#doQCD = [0]
-#doSysRunning = [2]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
+# doQCD = [0]
+# doSysRunning = [2]
 
 ########## XSec Syst
-#doWhat = [21, 22, 23, 24, 30] #Background
-#doQCD = [0]
-#doSysRunning = [3]
+# doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
+# doQCD = [0]
+# doSysRunning = [3]
 
 ########## JER Syst
 #doWhat = [51, 52, 53, 54] #W+jets MC

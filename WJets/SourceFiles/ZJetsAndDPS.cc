@@ -246,7 +246,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 1000; jentry++){
+    // for (Long64_t jentry(0); jentry < 2000000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -758,8 +758,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // int whichBTagger = 4; // 4 == SV inside jet (both IVF & SSV)
 
         // --- Do b-tag efficiency SFs? ---
-        bool doBTagSFs = true;
-        // bool doBTagSFs = false;
+        // bool doBTagSFs = true;
+        bool doBTagSFs = false;
         if ( (whichBTagger == 2) || (whichBTagger == 3) || (whichBTagger == 4) ) doBTagSFs = false; // there are no efficiency SFs for the SV veto
 
         // ----------------------------------------------------
@@ -4660,12 +4660,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             }
 
         } // end filling reco histos
-
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
         
         //=======================================================================================================//
-        //      Filling unfolding histos      //
-        //====================================//
+        //      Filling response matrices      //
+        //=====================================//
         if (hasRecoInfo && hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling hresponse histos --- " << endl;
             cout << __LINE__ << " PRINTEVENTINFO: hasRecoInfo = " << hasRecoInfo << endl;
@@ -5121,22 +5119,128 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseZNGoodJets_Zinc->Fill(10., 10., weight);
             }
             
-        } // end filling unfolding histos
-        
-        if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
-        
+        } // end filling hresponse histos
+
+        //=======================================================================================================//
+        //           Filling fakes             //
+        //=====================================//
+        if (hasRecoInfo && hasGenInfo && !passesGenLeptonCut && passesLeptonCut){
+
+            // AK4 jet collection, pT > 20 GeV cut ---
+            if (nGoodJets_20 >= 1){
+                fakesFirstJetPt_Zinc1jet_TUnfold->Fill(jets_20[0].pt, weight);
+                fakesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                if (nGoodJets_20 == 1){
+                    fakesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
+            }
+            if (nGoodJets_20 >= 2){
+                fakesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                if (nGoodJets_20 == 2){
+                    fakesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
+            }
+            if (nGoodJets_20 >= 3){
+                fakesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                if (nGoodJets_20 == 3){
+                    fakesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
+                }
+            }
+
+            // AK4 jet collection, pT > 30 GeV cut (NOMINAL EVENT SELECTION) ---
+            if (nGoodJets >= 1){
+                fakesFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(newLeadJ.Rapidity()), weight);
+                fakesdPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(lep1, newLeadJ), weight);
+            }
+
+            // AK8 jet collection, pT > 200 GeV cut (?) ---
+            if (nGoodJetsAK8 >= 1){
+                fakesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                if (nGoodJetsAK8 == 1){
+                    fakesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                }
+            }
+            if (nGoodJetsAK8 >= 2){
+                fakesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                if (nGoodJetsAK8 == 2){
+                    fakesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                }
+            }
+            if (nGoodJetsAK8 >= 3){
+                fakesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                if (nGoodJetsAK8 == 3){
+                    fakesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
+                }
+            }
+
+        } // end filling fakes
+
+        //=======================================================================================================//
+        //          Filling misses             //
+        //=====================================//
+        if (hasRecoInfo && hasGenInfo && passesGenLeptonCut && !passesLeptonCut){
+
+            // AK4 gen jet collection, pT > 20 GeV cut ---
+            if (nGoodGenJets_20 >= 1){
+                missesFirstJetPt_Zinc1jet_TUnfold->Fill(genJets_20[0].pt, genWeight);
+                missesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                if (nGoodGenJets_20 == 1){
+                    missesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
+            }
+            if (nGoodGenJets_20 >= 2){
+                missesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                if (nGoodGenJets_20 == 2){
+                    missesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
+            }
+            if (nGoodGenJets_20 >= 3){
+                missesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                if (nGoodGenJets_20 == 3){
+                    missesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
+                }
+            }
+
+            // AK4 gen jet collection, pT > 30 GeV cut (NOMINAL EVENT SELECTION) ---
+            if (nGoodGenJets >= 1){
+                missesFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+                missesdPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+            }
+
+            // AK8 gen jet collection, pT > 200 GeV cut (?) ---
+            if (nGoodGenJetsAK8 >= 1){
+                missesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                if (nGoodGenJetsAK8 == 1){
+                    missesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                }
+            }
+            if (nGoodGenJetsAK8 >= 2){
+                missesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                if (nGoodGenJetsAK8 == 2){
+                    missesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                }
+            }
+            if (nGoodGenJetsAK8 >= 3){
+                missesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                if (nGoodGenJetsAK8 == 3){
+                    missesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                }
+            }
+
+        } // end filling misses
+
         //=======================================================================================================//
 
     } // -- END LOOP OVER ALL EVENTS ---
     
     //==========================================================================================================//
 
-	NEventsPassCuts->Fill(0., nEvents*1.0);
-	NEventsPassCuts->Fill(1., nEventsPassMETFilter*1.0);
-	NEventsPassCuts->Fill(2., countEventpassTrig*1.0);
-	NEventsPassCuts->Fill(3., countEventpassLepReq*1.0);
-	NEventsPassCuts->Fill(4., nEventsWithTwoGoodLeptons*1.0);
-	NEventsPassCuts->Fill(5., countEventpassBveto*1.0);
+	NEventsPassCuts->Fill(0., nEvents * 1.0);
+	NEventsPassCuts->Fill(1., nEventsPassMETFilter * 1.0);
+	NEventsPassCuts->Fill(2., countEventpassTrig * 1.0);
+	NEventsPassCuts->Fill(3., countEventpassLepReq * 1.0);
+	NEventsPassCuts->Fill(4., nEventsWithTwoGoodLeptons * 1.0);
+	NEventsPassCuts->Fill(5., countEventpassBveto * 1.0);
 
     if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
     //==========================================================================================================//
@@ -5159,7 +5263,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     
     for(unsigned short i(0); i < numbOfHistograms; i++){
         string hName = listOfHistograms[i]->GetName();
-        if ( !hasGenInfo && (hName.find("gen") != string::npos) ){
+        if ( !hasGenInfo && ((hName.find("gen") != string::npos) || (hName.find("hresponse") != string::npos) || (hName.find("fakes") != string::npos) || (hName.find("misses") != string::npos)) ){
             delete listOfHistograms[i];
             continue; 
         }
