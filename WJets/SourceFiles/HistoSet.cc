@@ -2325,19 +2325,46 @@ HistoSet::HistoSet(string leptonFlavor)
     genFirstJetPt_Zinc1jet_TUnfold       = newTH1D("genFirstJetPt_Zinc1jet_TUnfold",    "gen 1st jet p_{T} (N_{jets} #geq 1)",  "p_{T}(j_{1}) [GeV]",   nJetPt_Zinc1jet, jetPt_Zinc1jet);
     hresponseFirstJetPt_Zinc1jet_TUnfold = newTH2D("hresponseFirstJetPt_Zinc1jet_TUnfold", "hresp 1st jet pt", 2 * nJetPt_Zinc1jet, jetPt_Zinc1jet_SPLIT, nJetPt_Zinc1jet, jetPt_Zinc1jet);
     fakesFirstJetPt_Zinc1jet_TUnfold     = newTH1D("fakesFirstJetPt_Zinc1jet_TUnfold",       "fakes 1st jet p_{T} (N_{jets} #geq 1)",    "p_{T}(j_{1}) [GeV]",  2 * nJetPt_Zinc1jet, jetPt_Zinc1jet_SPLIT);
-    missesFirstJetPt_Zinc1jet_TUnfold = newTH1D("missesFirstJetPt_Zinc1jet_TUnfold",    "misses 1st jet p_{T} (N_{jets} #geq 1)",  "p_{T}(j_{1}) [GeV]",   nJetPt_Zinc1jet, jetPt_Zinc1jet);
+    missesFirstJetPt_Zinc1jet_TUnfold    = newTH1D("missesFirstJetPt_Zinc1jet_TUnfold",    "misses 1st jet p_{T} (N_{jets} #geq 1)",  "p_{T}(j_{1}) [GeV]",   nJetPt_Zinc1jet, jetPt_Zinc1jet);
 
     FirstJetAbsRapidity_Zinc1jet_TUnfold          = newTH1D("FirstJetAbsRapidity_Zinc1jet_TUnfold",          "1st jet |y| (N_{jets} #geq 1)",       "|y(j_{1})|",  48, 0, 2.4);
     genFirstJetAbsRapidity_Zinc1jet_TUnfold       = newTH1D("genFirstJetAbsRapidity_Zinc1jet_TUnfold",       "gen 1st jet |y| (N_{jets} #geq 1)",   "|y(j_{1})|",  24, 0, 2.4);
     hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold = newTH2D("hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold",   "hresp 1st jet |y| (N_{jets} #geq 1)", 48, 0, 2.4, 24, 0, 2.4);
     fakesFirstJetAbsRapidity_Zinc1jet_TUnfold     = newTH1D("fakesFirstJetAbsRapidity_Zinc1jet_TUnfold",          "fakes 1st jet |y| (N_{jets} #geq 1)",       "|y(j_{1})|",  48, 0, 2.4);
-    missesFirstJetAbsRapidity_Zinc1jet_TUnfold = newTH1D("missesFirstJetAbsRapidity_Zinc1jet_TUnfold",       "misses 1st jet |y| (N_{jets} #geq 1)",   "|y(j_{1})|",  24, 0, 2.4);
+    missesFirstJetAbsRapidity_Zinc1jet_TUnfold    = newTH1D("missesFirstJetAbsRapidity_Zinc1jet_TUnfold",       "misses 1st jet |y| (N_{jets} #geq 1)",   "|y(j_{1})|",  24, 0, 2.4);
 
     dPhiLepJet1_Zinc1jet_TUnfold          = newTH1D("dPhiLepJet1_Zinc1jet_TUnfold",     "#Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 80,  0, PI);
     gendPhiLepJet1_Zinc1jet_TUnfold       = newTH1D("gendPhiLepJet1_Zinc1jet_TUnfold",     "gen #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 40,  0, PI);
     hresponsedPhiLepJet1_Zinc1jet_TUnfold = newTH2D("hresponsedPhiLepJet1_Zinc1jet_TUnfold", "hresp #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", 80,  0, PI, 40,  0, PI);
     fakesdPhiLepJet1_Zinc1jet_TUnfold     = newTH1D("fakesdPhiLepJet1_Zinc1jet_TUnfold",     "fakes #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 80,  0, PI);
-    missesdPhiLepJet1_Zinc1jet_TUnfold = newTH1D("missesdPhiLepJet1_Zinc1jet_TUnfold",     "misses #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 40,  0, PI);
+    missesdPhiLepJet1_Zinc1jet_TUnfold    = newTH1D("missesdPhiLepJet1_Zinc1jet_TUnfold",     "misses #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 40,  0, PI);
+
+    // ---------------------------------------------------------------------------
+    // NOTE, these are special distributions for x-checking the unfolding procedure (closure test on reco MC)
+    // These have suffix "_NOEFFWEIGHTS", which means that the reco and fakes dist's are filled with event weights that do not contain the eff_DATA/MC weights in them
+    // So the structure (ie binning) of these dist's will be the same as it is above nominally, just when we fill, we use the "genWeight" for the reco/fakes histos instead of "weight"
+    // Moreover, if we were to plot data vs stacked MC with these, we would see what the MC would look like before all of the efficiency corrections we add to it to make it better model/describe data
+    // CURRENTLY, should only use these distributions to check closure on the unfolding (since we're only unfolding the W+jets reco MC in this case, i.e. no background subtraction required)
+
+    FirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS          = newTH1D("FirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS",       "1st jet p_{T} (N_{jets} #geq 1)",    "p_{T}(j_{1}) [GeV]",  2 * nJetPt_Zinc1jet, jetPt_Zinc1jet_SPLIT);
+    genFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS       = newTH1D("genFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS",    "gen 1st jet p_{T} (N_{jets} #geq 1)",  "p_{T}(j_{1}) [GeV]",   nJetPt_Zinc1jet, jetPt_Zinc1jet);
+    hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp 1st jet pt", 2 * nJetPt_Zinc1jet, jetPt_Zinc1jet_SPLIT, nJetPt_Zinc1jet, jetPt_Zinc1jet);
+    fakesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS     = newTH1D("fakesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS",       "fakes 1st jet p_{T} (N_{jets} #geq 1)",    "p_{T}(j_{1}) [GeV]",  2 * nJetPt_Zinc1jet, jetPt_Zinc1jet_SPLIT);
+    missesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS    = newTH1D("missesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS",    "misses 1st jet p_{T} (N_{jets} #geq 1)",  "p_{T}(j_{1}) [GeV]",   nJetPt_Zinc1jet, jetPt_Zinc1jet);
+
+    FirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS          = newTH1D("FirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",          "1st jet |y| (N_{jets} #geq 1)",       "|y(j_{1})|",  48, 0, 2.4);
+    genFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS       = newTH1D("genFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",       "gen 1st jet |y| (N_{jets} #geq 1)",   "|y(j_{1})|",  24, 0, 2.4);
+    hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",   "hresp 1st jet |y| (N_{jets} #geq 1)", 48, 0, 2.4, 24, 0, 2.4);
+    fakesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS     = newTH1D("fakesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",          "fakes 1st jet |y| (N_{jets} #geq 1)",       "|y(j_{1})|",  48, 0, 2.4);
+    missesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS    = newTH1D("missesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",       "misses 1st jet |y| (N_{jets} #geq 1)",   "|y(j_{1})|",  24, 0, 2.4);
+
+    dPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS          = newTH1D("dPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS",     "#Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 80,  0, PI);
+    gendPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS       = newTH1D("gendPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS",     "gen #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 40,  0, PI);
+    hresponsedPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", 80,  0, PI, 40,  0, PI);
+    fakesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS     = newTH1D("fakesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS",     "fakes #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 80,  0, PI);
+    missesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS    = newTH1D("missesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS",     "misses #Delta#phi btwn muon jet1 (N_{jets} #geq 1)", "#Delta#phi(#mu,j_{1})", 40,  0, PI);
+
+    // ---------------------------------------------------------------------------
 
     // --- AK4 jet-based distributions for jet-multiplicity ratios ---
     double lepJetPt_INCLUDELOWPT_gen_ZRatios_SPLIT[ (2 * nLepJetPt_INCLUDELOWPT_gen_ZRatios) + 1 ];

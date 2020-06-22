@@ -11,13 +11,13 @@ void runMergeVV(){
     //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
     // mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
-      //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
-      //mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
-      //mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
-      //mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
+      mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+      mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+      mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+      mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
-      mergeVV("SMu",  3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-      mergeVV("SMu", -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+      //mergeVV("SMu",  3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+      //mergeVV("SMu", -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
 
      //mergeVV("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
      //mergeVV("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1

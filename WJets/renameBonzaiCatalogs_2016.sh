@@ -3,8 +3,10 @@
 cd DataW_txt_2016
 echo $PWD
 
+# data
 mv Bonzais-SingleMuon-all-VJetPruner-SMu.txt SMu_13TeV_Data_dR_5311_List.txt 
 
+# signal 
 mv Bonzais-WToLNu_0J_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt                           SMu_13TeV_WJets_FxFx_0J_dR_5311_List.txt
 mv Bonzais-WToLNu_1J_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt                           SMu_13TeV_WJets_FxFx_1J_dR_5311_List.txt
 mv Bonzais-WToLNu_2J_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt                           SMu_13TeV_WJets_FxFx_2J_dR_5311_List.txt
@@ -16,6 +18,7 @@ mv Bonzais-WJetsToLNu_Pt-400To600_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJ
 mv Bonzais-WJetsToLNu_Pt-600ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-600ToInf_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-all-VJetPruner-SMu.txt              SMu_13TeV_WJets_MLM_dR_5311_List.txt
 
+# background
 mv Bonzais-DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt                             SMu_13TeV_DYJets50toInf_dR_5311_List.txt 
 mv Bonzais-ST_s-channel_4f_leptonDecays_13TeV-amcatnlo-pythia8_TuneCUETP8M1-all-VJetPruner-SMu.txt                    SMu_13TeV_ST_s_channel_dR_5311_List.txt
 mv Bonzais-ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1-all-VJetPruner-SMu.txt SMu_13TeV_ST_t_antitop_channel_dR_5311_List.txt

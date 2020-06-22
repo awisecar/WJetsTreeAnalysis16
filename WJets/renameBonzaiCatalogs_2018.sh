@@ -15,7 +15,7 @@ echo $PWD
 mv Bonzais-WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt          SMu_13TeV_WJets_FxFx_0J_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt          SMu_13TeV_WJets_FxFx_1J_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt          SMu_13TeV_WJets_FxFx_2J_dR_5311_List.txt
-# missing 0 to 50 W pT file
+mv Bonzais-WJetsToLNu_Wpt-0To50_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt   SMu_13TeV_WJets_FxFx_Wpt-0To50_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt  SMu_13TeV_WJets_FxFx_Wpt-50To100_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_Pt-100To250_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-100To250_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_Pt-250To400_TuneCP5_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-250To400_dR_5311_List.txt

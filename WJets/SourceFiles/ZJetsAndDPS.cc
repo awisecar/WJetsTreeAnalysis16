@@ -184,8 +184,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     TRandom3* Rand_MER_Gen = new TRandom3();
     //==========================================================================================================//
 
-    double sumEventW = 0. ;
-    cout << "\nMC initial weight: " << sumEventW <<endl;
+    double sumEventW(0.);
+    cout << "\nsumEventW = " << sumEventW <<endl;
 
     //------------------------------------
     std::cout << "\n-----> Print out variables: " << std::endl;
@@ -246,7 +246,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 1001;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 2000000; jentry++){
+    // for (Long64_t jentry(0); jentry < 10000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -699,7 +699,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     else genMT = -99.0;
                     
                     //MT cut and MET cut on the neutrino
-                    if (genMT >= MTCut && genLepton2.pt >= METcut) passesGenLeptonCut = 1;
+                    if (genMT >= MTCut && genLepton2.pt >= METcut) passesGenLeptonCut = 1; // ALW 10 JUNE 20 -- this is the NOMINAL CUT
+                    // if (genMT >= 30. && genLepton2.pt >= METcut) passesGenLeptonCut = 1; // ALW 10 JUNE 20 -- this is a cut used to study migrations across MT boundary for unfolding
 
                     if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: genMT = " << genMT << endl;
                     if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: MET from neutrino = " << genLepton2.pt << endl;
@@ -2960,7 +2961,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
         //        Filling gen histos          //
         //====================================//
-        if (hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+        if (hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest){
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling gen histos --- " << endl;
             cout << __LINE__ << " PRINTEVENTINFO: hasGenInfo = " << hasGenInfo << endl;
             cout << __LINE__ << " PRINTEVENTINFO: passesGenLeptonCut = " << passesGenLeptonCut << endl;
@@ -2981,7 +2982,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             
             if (nGoodGenJets_20 >= 1){
                 genFirstJetPt_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
+
                 genFirstJetPt_Zinc1jet_TUnfold->Fill(genJets_20[0].pt, genWeight);
+                genFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(genJets_20[0].pt, genWeight);
+
                 genFirstJetPt_1_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 genFirstJetPt_2_Zinc1jet->Fill(genJets_20[0].pt, genWeight);
                 genJetsHT_20_Zinc1jet->Fill(genJetsHT_20, genWeight);
@@ -3178,7 +3182,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genFirstJetEta_2_Zinc1jet->Fill(fabs(genLeadJ.Eta()), genWeight);
 
                 genFirstJetAbsRapidity_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+
                 genFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+                genFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+
                 genFirstJetAbsRapidity_2_Zinc1jet->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
                 genFirstJetRapidityFull_Zinc1jet->Fill(genNewLeadJ.Rapidity(), genWeight);
 
@@ -3192,7 +3199,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genJetsHT_2_Zinc1jet->Fill(genJetsHT, genWeight);
                 
                 gendPhiLepJet1_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+
                 gendPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+                gendPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+
                 gendPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
 
                 genMT_Zinc1jet->Fill(genMT, genWeight);
@@ -3593,13 +3603,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
         //        Filling reco histos         //
         //====================================//
-        if (hasRecoInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+        if (hasRecoInfo && PRINTEVENTINFO && jentry == eventOfInterest){
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling reco histos --- " << endl;
             cout << __LINE__ << " PRINTEVENTINFO: hasRecoInfo = " << hasRecoInfo << endl;
             cout << __LINE__ << " PRINTEVENTINFO: passesLeptonCut = " << passesLeptonCut << endl;
             cout << __LINE__ << " PRINTEVENTINFO: passesJetCut = " << passesJetCut << "\n" << endl;
         }
-        if (hasRecoInfo && passesLeptonCut && passesJetCut) {
+        if (hasRecoInfo && passesLeptonCut && passesJetCut){
             //=======================================================================================================//
             
             if (DEBUG) cout << "Stop after line " << __LINE__ << endl;
@@ -3713,7 +3723,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             
             if (nGoodJets_20 >= 1){
                 FirstJetPt_Zinc1jet->Fill(jets_20[0].pt, weight);
+
                 FirstJetPt_Zinc1jet_TUnfold->Fill(jets_20[0].pt, weight);
+                FirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(jets_20[0].pt, genWeight);
+
                 FirstJetPt_1_Zinc1jet->Fill(jets_20[0].pt, weight);
                 FirstJetPt_2_Zinc1jet->Fill(jets_20[0].pt, weight);
                 if (lepton1.charge > 0) FirstJetPtChargePlus_Zinc1jet->Fill(jets_20[0].pt, weight);
@@ -3946,7 +3959,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 FirstJetEtaFull_Zinc1jet->Fill(jets[0].eta, weight);
 
                 FirstJetAbsRapidity_Zinc1jet->Fill(fabs(newLeadJ.Rapidity()), weight);
+
                 FirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(newLeadJ.Rapidity()), weight);
+                FirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJ.Rapidity()), genWeight);
+
                 FirstJetAbsRapidity_2_Zinc1jet->Fill(fabs(newLeadJ.Rapidity()), weight);
                 FirstJetRapidityFull_Zinc1jet->Fill(newLeadJ.Rapidity(), weight);
 
@@ -3962,7 +3978,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 JetsHT_2_Zinc1jet->Fill(jetsHT, weight);
                 
 				dPhiLepJet1_Zinc1jet->Fill(deltaPhi(lep1, newLeadJ), weight);
+
                 dPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(lep1, newLeadJ), weight);
+                dPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(lep1, newLeadJ), genWeight);
+
 				dPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(lep1, newLeadJ), weight);
                 dRapidityLepJet1_Zinc1jet->Fill(fabs(lep1.Rapidity() - newLeadJ.Rapidity()), weight);
                 dRLepJet1_Zinc1jet->Fill(deltaRYPhi(lep1, newLeadJ), weight);
@@ -4664,7 +4683,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
         //      Filling response matrices      //
         //=====================================//
-        if (hasRecoInfo && hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest) {
+        if (hasRecoInfo && hasGenInfo && PRINTEVENTINFO && jentry == eventOfInterest){
             cout << __LINE__ << " PRINTEVENTINFO: Requirements for filling hresponse histos --- " << endl;
             cout << __LINE__ << " PRINTEVENTINFO: hasRecoInfo = " << hasRecoInfo << endl;
             cout << __LINE__ << " PRINTEVENTINFO: hasGenInfo = " << hasGenInfo << endl;
@@ -4680,7 +4699,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             
             if (nGoodGenJets_20 >= 1 && nGoodJets_20 >= 1){
                 hresponseFirstJetPt_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+
                 hresponseFirstJetPt_Zinc1jet_TUnfold->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
+                hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(jets_20[0].pt, genJets_20[0].pt, genWeight);
+
                 hresponseFirstJetPt_1_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseFirstJetPt_2_Zinc1jet->Fill(jets_20[0].pt, genJets_20[0].pt, weight);
                 hresponseJetsHT_20_Zinc1jet->Fill(jetsHT_20, genJetsHT_20, weight);
@@ -4900,11 +4922,17 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseJetsHT_2_Zinc1jet->Fill(jetsHT, genJetsHT, weight);
                 
 				hresponsedPhiLepJet1_Zinc1jet->Fill(deltaPhi(lep1, newLeadJ), deltaPhi(genLep1, genNewLeadJ), weight);
+
                 hresponsedPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(lep1, newLeadJ), deltaPhi(genLep1, genNewLeadJ), weight);
+                hresponsedPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(lep1, newLeadJ), deltaPhi(genLep1, genNewLeadJ), genWeight);
+
 				hresponsedPhiLepJet1_2_Zinc1jet->Fill(deltaPhi(lep1, newLeadJ), deltaPhi(genLep1, genNewLeadJ), weight);
                 
                 hresponseFirstJetAbsRapidity_Zinc1jet->Fill(fabs(newLeadJ.Rapidity()), fabs(genNewLeadJ.Rapidity()), weight);
+
                 hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(newLeadJ.Rapidity()), fabs(genNewLeadJ.Rapidity()), weight);
+                hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJ.Rapidity()), fabs(genNewLeadJ.Rapidity()), genWeight);
+
                 hresponseFirstJetAbsRapidity_2_Zinc1jet->Fill(fabs(newLeadJ.Rapidity()), fabs(genNewLeadJ.Rapidity()), weight);
 
                 hresponseLepPt_Zinc1jet->Fill(lepton1.pt, genLep1.Pt(), weight);
@@ -5128,7 +5156,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             // AK4 jet collection, pT > 20 GeV cut ---
             if (nGoodJets_20 >= 1){
+
                 fakesFirstJetPt_Zinc1jet_TUnfold->Fill(jets_20[0].pt, weight);
+                fakesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(jets_20[0].pt, genWeight);
+
                 fakesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
                 if (nGoodJets_20 == 1){
                     fakesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold->Fill(lepton1.pt + jets_20[0].pt, weight);
@@ -5149,8 +5180,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             // AK4 jet collection, pT > 30 GeV cut (NOMINAL EVENT SELECTION) ---
             if (nGoodJets >= 1){
+
                 fakesFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(newLeadJ.Rapidity()), weight);
+                fakesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJ.Rapidity()), genWeight);
+
                 fakesdPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(lep1, newLeadJ), weight);
+                fakesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(lep1, newLeadJ), genWeight);
+
             }
 
             // AK8 jet collection, pT > 200 GeV cut (?) ---
@@ -5182,7 +5218,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             // AK4 gen jet collection, pT > 20 GeV cut ---
             if (nGoodGenJets_20 >= 1){
+
                 missesFirstJetPt_Zinc1jet_TUnfold->Fill(genJets_20[0].pt, genWeight);
+                missesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(genJets_20[0].pt, genWeight);
+
                 missesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
                 if (nGoodGenJets_20 == 1){
                     missesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold->Fill(genLep1.Pt()+genJets_20[0].pt, genWeight);
@@ -5203,8 +5242,13 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             // AK4 gen jet collection, pT > 30 GeV cut (NOMINAL EVENT SELECTION) ---
             if (nGoodGenJets >= 1){
+
                 missesFirstJetAbsRapidity_Zinc1jet_TUnfold->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+                missesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(genNewLeadJ.Rapidity()), genWeight);
+
                 missesdPhiLepJet1_Zinc1jet_TUnfold->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+                missesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(genLep1, genNewLeadJ), genWeight);
+
             }
 
             // AK8 gen jet collection, pT > 200 GeV cut (?) ---

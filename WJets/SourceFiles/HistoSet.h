@@ -1746,6 +1746,29 @@ public:
     TH1D *fakesdPhiLepJet1_Zinc1jet_TUnfold;
     TH1D *missesdPhiLepJet1_Zinc1jet_TUnfold;
 
+    // ---------------------------------------------------------------------------
+    // histos to troubleshoot unfolding closure test on W+jets reco MC (see HistoSet.cc for explanation)
+
+    TH1D *FirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;   
+    TH1D *genFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;   
+    TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
+    TH1D *fakesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
+    TH1D *missesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
+
+    TH1D *FirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;         
+    TH1D *genFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
+    TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
+    TH1D *fakesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
+    TH1D *missesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
+
+    TH1D *dPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;      
+    TH1D *gendPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
+    TH2D *hresponsedPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
+    TH1D *fakesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
+    TH1D *missesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
+
+    // ---------------------------------------------------------------------------
+
     // --- AK4 jet-based distributions for jet-multiplicity ratios ---
 
     // inclusive
