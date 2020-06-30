@@ -12,18 +12,6 @@
 
 using namespace std;
 
-// void barre_de_progression(int pourcentage){
-//     string progression = "[";
-//     for (int i=0; i<pourcentage; i++){ progression += "="; }
-//     for (int i=0; i<(100-pourcentage); i++){ progression += " "; }
-//     progression += "]";
-//     ostringstream oss; oss << pourcentage;
-//     string pourcentage_str = oss.str();
-//     for (int i=0; i < (int) pourcentage_str.size(); i++){ progression[49+i] = pourcentage_str[i]; }
-//     if (pourcentage<100) cout << "\t" << progression << "\r" ;
-//     else cout << "\t" << progression << endl;
-// }
-
 bool LepDescendingOrder(leptonStruct l1, leptonStruct l2){
     return (l1.pt > l2.pt);
 }
@@ -264,20 +252,19 @@ double table::getEfficiency(double pt, double eta, int sysLepSF){
     //LepSF variation up
     else if (sysLepSF == 1){
         for (unsigned int i=0; i != recd.size(); i++) {
-            if((recd[i]).belongTo(pt, eta)) return recd[i].effi+recd[i].effiErrorHigh;
-            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi+recd[i].effiErrorHigh;
+            if((recd[i]).belongTo(pt, eta)) return recd[i].effi + recd[i].effiErrorHigh;
+            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi + recd[i].effiErrorHigh;
         }
         return hiPtBin;
     }
     //LepSF variation down
     else if (sysLepSF == -1){
         for (unsigned int i=0; i != recd.size(); i++) {
-            if((recd[i]).belongTo(pt, eta)) return recd[i].effi-recd[i].effiErrorLow;
-            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi-recd[i].effiErrorLow;
+            if((recd[i]).belongTo(pt, eta)) return recd[i].effi - recd[i].effiErrorLow;
+            if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi - recd[i].effiErrorLow;
         }
         return hiPtBin;
     }
-    else return 1;
 }
 
 //used for the smear factors for JES
