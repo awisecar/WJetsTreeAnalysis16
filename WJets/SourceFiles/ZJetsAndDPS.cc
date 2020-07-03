@@ -165,11 +165,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     if (systematics == 7 && direction ==  1) muScale = 1.002;
     if (systematics == 7 && direction == -1) muScale = 0.998;
     
-    bool doMer(false); // the number used for MER : 0.006
+    bool doMer(false);
     double merUncer(0);
     if (systematics == 8 && direction ==  1) doMer = true;
     
-    // Wb study
     bool doWbsyst(false);
     double WbSystSF(1.3);
     if (systematics == 9 && direction ==  1) doWbsyst = true;
@@ -177,6 +176,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // bool doRespSyst(false);
     // if (systematics == 10 && direction ==  1) doRespSyst = true;
     
+    int sysL1Prefire(0); // L1Prefire
+    if (systematics == 11 && direction ==  1) sysL1Prefire =  1;
+    if (systematics == 11 && direction == -1) sysL1Prefire = -1;
+
     TRandom3* RandGen = new TRandom3();
     RandGen->SetSeed(12345678);
     if (sysBtagSF != 0) RandGen->SetSeed(23456789);
@@ -436,9 +439,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // only want to reweight MC events
         // the applied weight represents the probability for an event not to prefire,
         // which is calculated using all of the offline photons and jets found in the event
-        double L1prefireweight(1.);
+        double L1prefireweight(1.0);
         if (hasRecoInfo && !isData){
-            if ( (year == 2016) || (year == 2017) ) L1prefireweight = PreFiringWeight;
+            if ( (year == 2016) || (year == 2017) ){
+                // systematic variations
+                if (sysL1Prefire > 0)      L1prefireweight = PreFiringWeightUp;
+                else if (sysL1Prefire < 0) L1prefireweight = PreFiringWeightDown;
+                // nominal weight
+                else                       L1prefireweight = PreFiringWeight;
+            }
             // ALW 13 DEC 19
             weight *= L1prefireweight;
         }
@@ -2292,32 +2301,31 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 lep2.SetPtEtaPhiM(METpt, 0, METphi, 0);
                 Z = lep1 + lep2; //reco Z or W boson
                 
-                // correct for identification and isolation efficiencies if required by useEfficiencyCorrection
-                // and then trigger efficiencies if useTriggerCorrection
+                // Correct for identification and isolation efficiencies if required by useEfficiencyCorrection
                 // Applying scale factors only on reco MC
 
 
                 // ALW 13 DEC 19
                 if (useEfficiencyCorrection){
-                    double effWeight = 1.;
-                    if (leptonFlavor == "SingleMuon") {
+                    double effWeight(1.0);
+                    if (leptonFlavor == "SingleMuon"){
                         // std::cout << "\npt = " << lepton1.pt << ", eta = " << lepton1.eta << ", sysLepSF = " << sysLepSF << std::endl;
                         if (year == 2016){
                             // tables sorted by eta, not by abs(eta), for 2016
-                            effWeight = LeptID.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
+                            effWeight  = LeptID.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
                             effWeight *= LeptIso.getEfficiency(lepton1.pt, lepton1.eta, sysLepSF);
                             // no Trig/Iso SF's yet for 2016 legacy, so use SFs for old rereco
-                            if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                            effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
                         else if (year == 2017){
-                            effWeight = LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                            effWeight  = LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                             effWeight *= LeptIso.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
-                            if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                            effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
                         else{
-                            effWeight = LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                            effWeight  = LeptID.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                             effWeight *= LeptIso.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
-                            if (useTriggerCorrection) effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
+                            effWeight *= LeptTrig.getEfficiency(lepton1.pt, fabs(lepton1.eta), sysLepSF);
                         }
                     }
                     // std::cout << ">>> effWeight = " << effWeight << std::endl;

@@ -237,7 +237,7 @@ double table::getEfficiency(double pt, double eta, int sysLepSF){
     //nominal
     if (sysLepSF == 0){
         // std::cout << " ===== table::getEfficiency =====" << std::endl;
-        for (unsigned int i=0; i != recd.size(); i++) {
+        for (unsigned int i=0; i != recd.size(); i++){
 
             // look inside elements of "recd" as it's being accessed by table::getEfficiency
             // std::cout << "new line of recd:  ";
@@ -251,7 +251,7 @@ double table::getEfficiency(double pt, double eta, int sysLepSF){
     } 
     //LepSF variation up
     else if (sysLepSF == 1){
-        for (unsigned int i=0; i != recd.size(); i++) {
+        for (unsigned int i=0; i != recd.size(); i++){
             if((recd[i]).belongTo(pt, eta)) return recd[i].effi + recd[i].effiErrorHigh;
             if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi + recd[i].effiErrorHigh;
         }
@@ -259,12 +259,13 @@ double table::getEfficiency(double pt, double eta, int sysLepSF){
     }
     //LepSF variation down
     else if (sysLepSF == -1){
-        for (unsigned int i=0; i != recd.size(); i++) {
+        for (unsigned int i=0; i != recd.size(); i++){
             if((recd[i]).belongTo(pt, eta)) return recd[i].effi - recd[i].effiErrorLow;
             if((recd[i]).belongTo(0.5*(recd[i].ptHi + recd[i].ptLow), eta)) hiPtBin = recd[i].effi - recd[i].effiErrorLow;
         }
         return hiPtBin;
     }
+    else return 1.;
 }
 
 //used for the smear factors for JES

@@ -40,7 +40,8 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         // int doSysRunning = 2;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
-                             // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP
+                             // 6 - BtagSF, 7 - MES, 8 - MER, 9 - WB, 10 - RESP,
+                             // 11 - L1Prefire
 
         
     // int doBJets      = -1; //normal btag veto
@@ -121,73 +122,73 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     int jetEtaMin = -24;
     int jetEtaMax = 24;
 
-    const int NSystData(3), NSystMC(12); // set NSystMC to 5 if you want to do only PU, XSEC
-    const int NSystWJets(16), NSystDYJets(14);
+    const int NSystData(3), NSystMC(14); // set NSystMC to 5 if you want to do only PU, XSEC
+    const int NSystWJets(18), NSystDYJets(16);
 
     // systematic variation tags for data --- 
     short dataSyst[NSystData]  = {0, 2, 2};
     short dataDir[NSystData]   = {0,-1, 1};
 
     //systematic variation tags for background (generic)
-    short bgSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short bgDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float bgScale[NSystMC]     = {1, 1, 1,   0.,   0.,  1, 1, 1, 1, 1, 1, 1};
+    short bgSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short bgDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float bgScale[NSystMC]     = {1, 1, 1,   0.,   0.,  1, 1, 1, 1, 1, 1, 1, 1, 1};
  
     // systematic variations for background (ttbar, diboson, single top, DY+jets) ---
 
     // --- DY+jets
-    short dySyst[NSystDYJets]  = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 4, 4, 8};
-    short dyDir[NSystDYJets]   = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1,-1, 1, 1};
-    float dyScale[NSystDYJets] = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1};
+    short dySyst[NSystDYJets]  = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 4, 4, 8, 11, 11};
+    short dyDir[NSystDYJets]   = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float dyScale[NSystDYJets] = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     // --- ttBar
-    short ttSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short ttDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float ttScale[NSystMC]     = {1, 1, 1,  0.07,  0.07,  1, 1, 1, 1, 1, 1, 1};
+    short ttSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short ttDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float ttScale[NSystMC]     = {1, 1, 1,  0.07,  0.07,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     // --- single top
-    short tcsSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short tcsDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float tcsScale[NSystMC]    = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1};
+    short tcsSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short tcsDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float tcsScale[NSystMC]    = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1};
     
-    short tctSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short tctDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float tctScale[NSystMC]    = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1};
+    short tctSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short tctDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float tctScale[NSystMC]    = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1};
     
-    short tcwSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short tcwDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float tcwScale[NSystMC]    = {1, 1, 1, 0.07, 0.07,  1, 1, 1, 1, 1, 1, 1};
+    short tcwSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short tcwDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float tcwScale[NSystMC]    = {1, 1, 1, 0.07, 0.07,  1, 1, 1, 1, 1, 1, 1, 1, 1};
     
     // --- diboson (WW, WZ, ZZ)
-    short wwSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short wwDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float wwScale[NSystMC]     = {1, 1, 1, 0.03, 0.03,  1, 1, 1, 1, 1, 1, 1};
+    short wwSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short wwDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float wwScale[NSystMC]     = {1, 1, 1, 0.03, 0.03,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    short wzSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short wzDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float wzScale[NSystMC]     = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1};
+    short wzSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short wzDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float wzScale[NSystMC]     = {1, 1, 1, 0.04, 0.04,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    short zzSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short zzDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float zzScale[NSystMC]     = {1, 1, 1, 0.03, 0.03,  1, 1, 1, 1, 1, 1, 1};
+    short zzSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short zzDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float zzScale[NSystMC]     = {1, 1, 1, 0.03, 0.03,  1, 1, 1, 1, 1, 1, 1, 1, 1};
         
     // --- ttV (ttW, ttZ, ttH)
-    short ttWSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8};
-    short ttWDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float ttWScale[NSystMC]    = {1, 1, 1, 0.01, 0.01,  1, 1, 1, 1, 1, 1, 1};
+    short ttWSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
+    short ttWDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float ttWScale[NSystMC]    = {1, 1, 1, 0.01, 0.01,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    short ttZSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8}; 
-    short ttZDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1}; 
-    float ttZScale[NSystMC]    = {1, 1, 1, 0.01, 0.01,  1, 1, 1, 1, 1, 1, 1};
+    short ttZSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11}; 
+    short ttZDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1}; 
+    float ttZScale[NSystMC]    = {1, 1, 1, 0.01, 0.01,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-    short ttHSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8}; 
-    short ttHDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1};
-    float ttHScale[NSystMC]    = {1, 1, 1, 0.15, 0.15,  1, 1, 1, 1, 1, 1, 1};
+    short ttHSyst[NSystMC]     = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11}; 
+    short ttHDir[NSystMC]      = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    float ttHScale[NSystMC]    = {1, 1, 1, 0.15, 0.15,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     // systematic variations for signal (W+jets) ---
-    short wjSyst[NSystWJets]   = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 4, 4, 8, 9, 10};
-    short wjDir[NSystWJets]    = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1,-1, 1, 1, 1,  1};
-    float wjScale[NSystWJets]  = {1, 1, 1, 1., 1.,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1}; // we do not systematically vary the BG on the signal
+    short wjSyst[NSystWJets]   = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 4, 4, 8, 9, 10, 11, 11};
+    short wjDir[NSystWJets]    = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1,-1, 1, 1, 1,  1, -1, 1};
+    float wjScale[NSystWJets]  = {1, 1, 1, 1., 1.,  1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1}; // we do not systematically vary the BG on the signal
         
     //------------------------------------
 
@@ -543,7 +544,6 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         }
 
     }
-
     else if (year == 2017){
         std::cout << " >>>>>>>>>> Doing 2017 data/MC! >>>>>>>>>>>>>>>>>" << std::endl;
 
@@ -920,7 +920,6 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         }
 
     }
-    
     else{
         std::cout << " >>>>>>>>> Doing 2018 data/MC! >>>>>>>>>>" << std::endl;
 
@@ -1303,5 +1302,5 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         }
        
     }
-
+    
 }
