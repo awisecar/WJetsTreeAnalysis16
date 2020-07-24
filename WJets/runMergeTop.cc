@@ -9,34 +9,30 @@ void mergeTop(TString lepSelection = "SMu", int systematics = 0, int jetPtCutMin
 
 void runMergeTop(){
 
-    //central ---
+    // central --
     // mergeTop_BVeto("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet 
     // mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
     // mergeTop("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
-       mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
-       mergeTop("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
-       mergeTop("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
-       mergeTop("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
+    // mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+    // mergeTop("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+    // mergeTop("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+    // mergeTop("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
-       //mergeTop("SMu",  3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-       //mergeTop("SMu", -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    // mergeTop("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
+    // mergeTop("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
+    // mergeTop("SMu", 0, 30, 2, 0, -1); // btag veto, doQCD=2
+    // mergeTop("SMu", 0, 30, 3, 0, -1); // btag veto, doQCD=3
 
-
-     //mergeTop("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
-     //mergeTop("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
-     //mergeTop("SMu", 0, 30, 2, 0, -1); // btag veto, doQCD=2
-     //mergeTop("SMu", 0, 30, 3, 0, -1); // btag veot, doQCD=3
-
-    //systematics ---
-//     runMergeTop_BVeto("SMu", 1, 30, 0, 0);
-//     runMergeTop_BVeto("SMu", -1, 30, 0, 0);
-//     runMergeTop_BVeto("SMu", 3, 30, 0, 0);
-//     runMergeTop_BVeto("SMu", -3, 30, 0, 0);
-//   //  runMergeTop_BVeto("SMu", 5, 30, 0, 0);
-//   //  runMergeTop_BVeto("SMu", -5, 30, 0, 0);
-//     runMergeTop_BVeto("SMu", 6, 30, 0, 0);
-//     runMergeTop_BVeto("SMu", -6, 30, 0, 0);
+    // systematics --
+    mergeTop("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeTop("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeTop("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeTop("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeTop("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeTop("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeTop("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+    mergeTop("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
 
 }
 
@@ -71,6 +67,8 @@ void mergeTop(TString lepSelection, int systematics, int jetPtCutMin, int doQCD,
     else if (systematics == -5) syst = "Syst_5_Down_"; 
     else if (systematics == 6) syst = "Syst_6_Up_"; 
     else if (systematics == -6) syst = "Syst_6_Down_"; 
+    else if (systematics == 11) syst = "Syst_11_Up_"; 
+    else if (systematics == -11) syst = "Syst_11_Down_";
   
     cout << "lepSelection = " << lepSelection << endl;
     cout << "syst = " << syst << endl;

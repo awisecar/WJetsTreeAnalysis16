@@ -143,7 +143,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
     // --- ttBar
     short ttSyst[NSystMC]      = {0, 1, 1,    3,    3,  5, 5, 6, 6, 7, 7, 8, 11, 11};
-    short ttDir[NSystMC]       = {0,-1, 1,   -1,    1, -1, 1,-1, 1,-1, 1, 1, -1, 1};
+    short ttDir[NSystMC]       = {0,-1, 1,   -1,    1, 1, -1,-1, 1,-1, 1, 1, -1, 1};
     float ttScale[NSystMC]     = {1, 1, 1,  0.07,  0.07,  1, 1, 1, 1, 1, 1, 1, 1, 1};
 
     // --- single top

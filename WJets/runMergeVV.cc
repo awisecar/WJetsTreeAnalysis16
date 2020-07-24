@@ -11,18 +11,28 @@ void runMergeVV(){
     //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
     // mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
-      mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
-      mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
-      mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
-      mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
+    // central --
+    // mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+    // mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+    // mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+    // mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
-      //mergeVV("SMu",  3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-      //mergeVV("SMu", -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    // mergeVV("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
+    // mergeVV("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
+    // mergeVV("SMu", 0, 30, 2, 0, -1); // btag veto, doQCD=2
+    // mergeVV("SMu", 0, 30, 3, 0, -1); // btag veto, doQCD=3
 
-     //mergeVV("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
-     //mergeVV("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
-     //mergeVV("SMu", 0, 30, 2, 0, -1); // btag veto, doQCD=2
-     //mergeVV("SMu", 0, 30, 3, 0, -1); // btag veto, doQCD=3
+    // systematics --
+    mergeVV("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeVV("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeVV("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeVV("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeVV("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeVV("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeVV("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+    mergeVV("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+
+    
 }
 
 void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, int METcut, int doBJets)
@@ -52,6 +62,10 @@ void mergeVV(string lepSelection, int systematics, int jetPtCutMin, int doQCD, i
     else if (systematics == -1) syst = "Syst_1_Down_"; 
     else if (systematics == 3) syst = "Syst_3_Up_"; 
     else if (systematics == -3) syst = "Syst_3_Down_"; 
+    else if (systematics == 5) syst = "Syst_5_Up_"; 
+    else if (systematics == -5) syst = "Syst_5_Down_"; 
+    else if (systematics == 11) syst = "Syst_11_Up_"; 
+    else if (systematics == -11) syst = "Syst_11_Down_"; 
 
     cout << "lepSelection = " << lepSelection << endl;
     cout << "syst = " << syst << endl;

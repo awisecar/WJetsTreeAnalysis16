@@ -1728,44 +1728,97 @@ public:
 
     //************************************************************** Begin TUnfold histos *********************************************************************************//
     
+    // jet multiplicities (AK4, AK8)
+    
+    TH1D *ZNGoodJets_Zexc_TUnfold;
+    TH1D *genZNGoodJets_Zexc_TUnfold;
+    TH2D *hresponseZNGoodJets_Zexc_TUnfold;
+    TH2D *hresponseZNGoodJets_Zexc_TUnfold_NOEFFWEIGHTS;
+
+    // TH1D *ZNGoodJets_Zinc_TUnfold;
+    // TH1D *genZNGoodJets_Zinc_TUnfold;
+    // TH2D *hresponseZNGoodJets_Zinc_TUnfold;
+    // TH2D *hresponseZNGoodJets_Zinc_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *ZNGoodJetsAK8_Zexc_TUnfold;
+    TH1D *genZNGoodJetsAK8_Zexc_TUnfold;
+    TH2D *hresponseZNGoodJetsAK8_Zexc_TUnfold;
+    TH2D *hresponseZNGoodJetsAK8_Zexc_TUnfold_NOEFFWEIGHTS;
+
+    // TH1D *ZNGoodJetsAK8_Zinc_TUnfold;
+    // TH1D *genZNGoodJetsAK8_Zinc_TUnfold;
+    // TH2D *hresponseZNGoodJetsAK8_Zinc_TUnfold;
+    // TH2D *hresponseZNGoodJetsAK8_Zinc_TUnfold_NOEFFWEIGHTS;
+
+    // ---------------------------------------------------------------------------
+
+    // --- AK4 jet kinematics ---
+
+    // 1st jet kinematics (AK4 jet)
     TH1D *FirstJetPt_Zinc1jet_TUnfold;
     TH1D *genFirstJetPt_Zinc1jet_TUnfold;
     TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold;
-    TH1D *fakesFirstJetPt_Zinc1jet_TUnfold;
-    TH1D *missesFirstJetPt_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
 
     TH1D *FirstJetAbsRapidity_Zinc1jet_TUnfold;
     TH1D *genFirstJetAbsRapidity_Zinc1jet_TUnfold;
     TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold;
-    TH1D *fakesFirstJetAbsRapidity_Zinc1jet_TUnfold;
-    TH1D *missesFirstJetAbsRapidity_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
 
     TH1D *dPhiLepJet1_Zinc1jet_TUnfold;
     TH1D *gendPhiLepJet1_Zinc1jet_TUnfold;
     TH2D *hresponsedPhiLepJet1_Zinc1jet_TUnfold;
-    TH1D *fakesdPhiLepJet1_Zinc1jet_TUnfold;
-    TH1D *missesdPhiLepJet1_Zinc1jet_TUnfold;
-
-    // ---------------------------------------------------------------------------
-    // histos to troubleshoot unfolding closure test on W+jets reco MC (see HistoSet.cc for explanation)
-
-    TH1D *FirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;   
-    TH1D *genFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;   
-    TH2D *hresponseFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
-    TH1D *fakesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
-    TH1D *missesFirstJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
-
-    TH1D *FirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;         
-    TH1D *genFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
-    TH2D *hresponseFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
-    TH1D *fakesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
-    TH1D *missesFirstJetAbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;  
-
-    TH1D *dPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;      
-    TH1D *gendPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
     TH2D *hresponsedPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
-    TH1D *fakesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS;    
-    TH1D *missesdPhiLepJet1_Zinc1jet_TUnfold_NOEFFWEIGHTS; 
+
+    // 2nd jet kinematics (AK4 jet)
+    TH1D *SecondJetPt_Zinc2jet_TUnfold;
+    TH1D *genSecondJetPt_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetPt_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetPt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *SecondJetAbsRapidity_Zinc2jet_TUnfold;
+    TH1D *genSecondJetAbsRapidity_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dPhiLepJet2_Zinc2jet_TUnfold;
+    TH1D *gendPhiLepJet2_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiLepJet2_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    // --- AK8 jet kinematics ---
+
+    // 1st jet kinematics (AK8 jet)
+    TH1D *FirstJetAK8Pt_Zinc1jet_TUnfold;
+    TH1D *genFirstJetAK8Pt_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAK8Pt_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *FirstJetAK8AbsRapidity_Zinc1jet_TUnfold;
+    TH1D *genFirstJetAK8AbsRapidity_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold;
+    TH2D *hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dPhiLepJet1AK8_Zinc1jet_TUnfold;
+    TH1D *gendPhiLepJet1AK8_Zinc1jet_TUnfold;
+    TH2D *hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold;
+    TH2D *hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
+    // 2nd jet kinematics (AK8 jet)
+    TH1D *SecondJetAK8Pt_Zinc2jet_TUnfold;
+    TH1D *genSecondJetAK8Pt_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAK8Pt_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *SecondJetAK8AbsRapidity_Zinc2jet_TUnfold;
+    TH1D *genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold;
+    TH2D *hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dPhiLepJet2AK8_Zinc2jet_TUnfold;
+    TH1D *gendPhiLepJet2AK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
     // ---------------------------------------------------------------------------
 
@@ -1781,12 +1834,9 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zinc1jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zinc2jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zinc3jet_TUnfold_NOEFFWEIGHTS;
 
     // exclusive
     TH1D *LepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
@@ -1798,12 +1848,9 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zexc1jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zexc2jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetPt_Zexc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zexc1jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zexc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetPt_Zexc3jet_TUnfold_NOEFFWEIGHTS;
 
     // --- AK8 jet-based distributions for jet-multiplicity ratios ---
 
@@ -1817,12 +1864,9 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS;
 
     // exclusive 
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
@@ -1834,12 +1878,9 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
-    TH1D *fakesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
-    TH1D *missesLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold_NOEFFWEIGHTS;
     
 
     //*************************************************************** End TUnfold histos **********************************************************************************//
