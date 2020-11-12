@@ -111,8 +111,7 @@ years = [2016]
 ## Systematics ---
 
 ########## PU Syst
-#doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
-#doWhat = [51, 52, 53, 54] #W+jets MC
+#doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
 #doQCD = [0]
 #doSysRunning = [1]
 
@@ -122,9 +121,9 @@ years = [2016]
 #doSysRunning = [2]
 
 ########## XSec Syst
-# doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
-# doQCD = [0]
-# doSysRunning = [3]
+#doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
+#doQCD = [0]
+#doSysRunning = [3]
 
 ########## JER Syst
 #doWhat = [51, 52, 53, 54] #W+jets MC
@@ -132,11 +131,9 @@ years = [2016]
 #doSysRunning = [4]
 
 ########### LepSF Syst
-# doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
-# doWhat = [51, 52, 53, 54] #W+jets MC
-# doWhat = [21]
-# doQCD = [0]
-# doSysRunning = [5]
+#doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
+#doQCD = [0]
+#doSysRunning = [5]
 
 ########### BTagSF Syst
 # doWhat = [21, 22, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
@@ -144,8 +141,7 @@ years = [2016]
 # doSysRunning = [6]
 
 ########### L1Prefire Syst
-# doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
-# doWhat = [51, 52, 53, 54] #W+jets MC
+# doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
 # doQCD = [0]
 # doSysRunning = [11]
 

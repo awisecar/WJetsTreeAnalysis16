@@ -1868,6 +1868,15 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS;
 
+    TH1D *LepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH1D *LepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH1D *genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH1D *genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS;
+
     // exclusive 
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
