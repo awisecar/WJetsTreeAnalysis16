@@ -2364,10 +2364,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         // Needed to smear the jets to account for JER
 
 	    double mindRjmu(99999), mindRj04Pt100mu(99999);
-        double  mindRdijet04Pt100mu(99999);
+        double mindRdijet04Pt100mu(99999);
+        double mindRj04Pt30mu(99999);
+        double mindRAK8j08Pt200mu(99999);
+
 	    int IndClosestDR02Jet(-1), IndEvtClosestDR04Jet(-1), IndEvtClosestDR04DiJet(-1);
+
 	    double genMindRjmu(99999), genMindRj04Pt100mu(99999); 
         double genMindRdijet04Pt100mu(99999);
+
 	    int genIndClosestDR02Jet(-1), genIndEvtClosestDR04Jet(-1), genIndEvtClosestDR04DiJet(-1);
 
         if (hasRecoInfo){
@@ -2466,6 +2471,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             if (nGoodJetsAK8 >= 1) newLeadJAK8.SetPtEtaPhiE(jetsAK8[0].pt, jetsAK8[0].eta, jetsAK8[0].phi, jetsAK8[0].energy);
             if (nGoodJetsAK8 >= 2) newSecondJAK8.SetPtEtaPhiE(jetsAK8[1].pt, jetsAK8[1].eta, jetsAK8[1].phi, jetsAK8[1].energy);
 
+
+
             // Next three little sections grab the jet H_T's for the event
             // AK4 jets
 	        jetsHT = 0;
@@ -2482,7 +2489,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 jetsAK8HT += jetsAK8[i].pt;
             }
 
-			// calculate the closest jet w.r.t to the muon for jetsDR02 collection
+
+
+            // min dR(mu, jet) calculations for AK4 jet collections ------
+            // calculate the closest jet w.r.t to the muon for "jets" collection
+            if (nGoodJets >= 1 && passesLeptonReq){
+				for (unsigned short i(0); i < nGoodJets; i++){
+					double dRjmu(9999);
+					dRjmu = fabs(deltaR(jets[i].phi, jets[i].eta, lepton1.phi, lepton1.eta));
+					if (dRjmu < mindRj04Pt30mu) mindRj04Pt30mu = dRjmu;
+				}
+			}
+			// calculate the closest jet w.r.t to the muon for "jetsDR02" collection
 			if (nJetsDR02Cut >= 1 && passesLeptonReq){
 				for (unsigned short i(0); i < nJetsDR02Cut; i++){
 					double dRjmu(9999);
@@ -2493,7 +2511,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 					}
 				}
 			}
-			// calculate the closest jet w.r.t to the muon for jetsPt100DR04 collection
+			// calculate the closest jet w.r.t to the muon for "jetsPt100DR04" collection
 			if (nJetsPt100DR04 >= 1 && passesLeptonReq){
 				for (unsigned short i(0); i < nJetsPt100DR04; i++){
 					double dRjmu(9999);
@@ -2504,8 +2522,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 					}
 				}
 			}
-
-			// calculate the closest jet in dijet w.r.t to the muon for jetsPt100DR04 collection
+			// calculate the closest jet in dijet w.r.t to the muon for "jetsPt100DR04" collection
 			if (nJetsPt100DR04 >= 2 && passesLeptonReq){
                 double dRj1mu(9999);
                 double dRj2mu(9999);
@@ -2521,6 +2538,19 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     IndEvtClosestDR04DiJet = 1;
                 }
             }
+
+            // min dR(mu, jet) calculations for AK8 jet collections ------
+            // calculate the closest AK8 jet w.r.t to the muon for "jetsAK8" collection
+            if (nGoodJetsAK8 >= 1 && passesLeptonReq){
+				for (unsigned short i(0); i < nGoodJetsAK8; i++){
+					double dRjmu(9999);
+					dRjmu = fabs(deltaR(jetsAK8[i].phi, jetsAK8[i].eta, lepton1.phi, lepton1.eta));
+					if (dRjmu < mindRAK8j08Pt200mu) mindRAK8j08Pt200mu = dRjmu;
+				}
+			}
+
+
+
         } //end if hasRecoInfo
 
         if (hasGenInfo){
@@ -3295,8 +3325,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genSecondJetAbsRapidity_Zinc2jet_TUnfold->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
                 genSecondJetAbsRapidity_2_Zinc2jet->Fill(fabs(genNewSecondJ.Rapidity()), genWeight);
                 genSecondJetRapidityFull_Zinc2jet->Fill(genNewSecondJ.Rapidity(), genWeight);
+
                 gendRapidityJets_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
                 gendRapidityJets_2_Zinc2jet->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+                gendRapidityJets_Zinc2jet_TUnfold->Fill(fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
                 
                 gendRapidityJetsFB_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
                 gendRapidityJetsFB_2_Zinc2jet->Fill(genForwardJetRapidity - genBackwardJetRapidity, genWeight);
@@ -3468,6 +3500,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 genSecondJetAK8Pt_Zinc2jet_TUnfold->Fill(genJetsAK8[1].pt, genWeight);
                 genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold->Fill(fabs(genNewSecondJAK8.Rapidity()), genWeight);
                 gendPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(genLep1, genNewSecondJAK8), genWeight);
+
+                gendRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), genWeight);
 
                 if (nGoodGenJetsAK8 == 2){
                     genLeadingJetAK8Pt_Zexc2jet->Fill(genJetsAK8[0].pt, genWeight);
@@ -4061,6 +4095,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     if ( fabs(jets[0].eta) >= j_Y_range[i] &&  fabs(jets[0].eta) < j_Y_range[i+1] ) FirstJetPt_Zinc1jet_Eta[i]->Fill(fabs(jets[0].pt), weight);
                 }
 
+                if (jets[0].pt > 300.) dRLepCloseJetCo300dR04_Zinc1jet_TUnfold->Fill(mindRj04Pt30mu, weight);
+                if (jets[0].pt > 500.) dRLepCloseJetCo500dR04_Zinc1jet_TUnfold->Fill(mindRj04Pt30mu, weight);
+
                 if (nGoodJets == 1){
                     // compute Delta pt between Z and jets
                     if (Z.Pt() > 0.8 * jetPtCutMin  && jets[0].pt/Z.Pt() < 1.2 && jets[0].pt/Z.Pt() > 0.8 && deltaPhi(leadJ, Z) > 2.7){
@@ -4107,6 +4144,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 FirstJetAK8Pt_Zinc1jet_TUnfold->Fill(jetsAK8[0].pt, weight);
                 FirstJetAK8AbsRapidity_Zinc1jet_TUnfold->Fill(fabs(newLeadJAK8.Rapidity()), weight);
                 dPhiLepJet1AK8_Zinc1jet_TUnfold->Fill(deltaPhi(lep1, newLeadJAK8), weight);
+
+                if (jetsAK8[0].pt > 300.) dRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold->Fill(mindRAK8j08Pt200mu, weight);
+                if (jetsAK8[0].pt > 500.) dRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold->Fill(mindRAK8j08Pt200mu, weight);
 
                 if (nGoodJetsAK8 == 1){
                     LeadingJetAK8Pt_Zexc1jet->Fill(jetsAK8[0].pt, weight);
@@ -4160,8 +4200,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 SecondJetRapidityFull_Zinc2jet->Fill(newSecondJ.Rapidity(), weight);
                 SecondJetmass_Zinc2jet->Fill(newSecondJ.M(), weight);
                 SecondJetmass_1_Zinc2jet->Fill(newSecondJ.M(), weight);
+
                 dRapidityJets_Zinc2jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), weight);
                 dRapidityJets_2_Zinc2jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), weight);
+                dRapidityJets_Zinc2jet_TUnfold->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), weight);
                 
                 dRapidityJetsFB_Zinc2jet->Fill(ForwardJetRapidity - BackwardJetRapidity, weight);
                 dRapidityJetsFB_2_Zinc2jet->Fill(ForwardJetRapidity - BackwardJetRapidity, weight);
@@ -4416,6 +4458,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 SecondJetAK8Pt_Zinc2jet_TUnfold->Fill(jetsAK8[1].pt, weight);
                 SecondJetAK8AbsRapidity_Zinc2jet_TUnfold->Fill(fabs(newSecondJAK8.Rapidity()), weight);
                 dPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(lep1, newSecondJAK8), weight);
+
+                dRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), weight);
 
                 if (nGoodJetsAK8 == 2){
                     LeadingJetAK8Pt_Zexc2jet->Fill(jetsAK8[0].pt, weight);
@@ -5054,7 +5098,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 hresponsedRapidityJets_Zinc2jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), weight);
                 hresponsedRapidityJets_2_Zinc2jet->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), weight);
-                
+                hresponsedRapidityJets_Zinc2jet_TUnfold->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), weight);
+	            hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJ.Rapidity() - newSecondJ.Rapidity()), fabs(genNewLeadJ.Rapidity() - genNewSecondJ.Rapidity()), genWeight);
+
                 hresponsedRapidityJetsFB_Zinc2jet->Fill(ForwardJetRapidity - BackwardJetRapidity, genForwardJetRapidity - genBackwardJetRapidity, weight);
                 hresponsedRapidityJetsFB_2_Zinc2jet->Fill(ForwardJetRapidity - BackwardJetRapidity, genForwardJetRapidity - genBackwardJetRapidity, weight);
                 
@@ -5105,6 +5151,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newSecondJAK8.Rapidity()), fabs(genNewSecondJAK8.Rapidity()), genWeight);
                 hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(lep1, newSecondJAK8), deltaPhi(genLep1, genNewSecondJAK8), weight);
                 hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(lep1, newSecondJAK8), deltaPhi(genLep1, genNewSecondJAK8), genWeight);
+
+                hresponsedRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), weight);
+	            hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), genWeight);
 
                 if (nGoodGenJetsAK8 == 2 && nGoodJetsAK8 == 2){
                     hresponseLeadingJetAK8Pt_Zexc2jet->Fill(jetsAK8[0].pt, genJetsAK8[0].pt, weight);

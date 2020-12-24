@@ -61,7 +61,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     //------------------
 
     // printout about b-tag veto info
-    bTagVetoMessage(doBJets);
+    // bTagVetoMessage(doBJets);
 
     string lepSelection = "SMu";
 

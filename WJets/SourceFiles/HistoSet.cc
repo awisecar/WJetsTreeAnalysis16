@@ -168,7 +168,7 @@ HistoSet::HistoSet(string leptonFlavor)
     int nJetPt_Zinc1jet(15);
     double jetPt_Zinc1jet[16] =  {20, 24, 30, 39, 49, 62, 79, 105, 138, 181, 231, 294, 375, 550, 900, 1500};
     int nJetPt_Zinc2jet(15);
-    double jetPt_Zinc2jet[16] =  {20, 24, 30, 39, 49, 62, 78, 105, 142, 185, 235, 300, 380, 500, 650, 900};
+    double jetPt_Zinc2jet[16] =  {20, 24, 30, 39, 49, 62, 78, 105, 142, 185, 235, 300, 380, 500, 650, 1000};
     int nJetPt_Zinc3jet(10);
     double jetPt_Zinc3jet[11] =  {20, 24, 30, 41, 59, 81, 110, 152, 200, 300, 550};
     int nJetPt_Zinc4jet(9);
@@ -323,40 +323,29 @@ HistoSet::HistoSet(string leptonFlavor)
 
     // ----------- AK8 Jet based distributions -----------
 
-    //use for LJ pt and HT,2/2 -----
-    // int nJetAK8Pt_ZRatios(5);
-    // double jetAK8Pt_ZRatios[6] = {200, 235, 300, 400, 550, 900};
-    // int nJetAK8Pt_2_ZRatios(10);
-    // double jetAK8Pt_2_ZRatios[11] = {200, 217.5, 235, 267.5, 300, 350, 400, 475, 550, 725, 900};
-
-    // change the binning a little
-    int nJetAK8Pt_ZRatios(12);
-    double jetAK8Pt_ZRatios[13] = {200, 210, 220, 235, 250, 275, 310, 355, 405, 470, 570, 720, 1000};
+    //use for jet pt -----
+    // ---
+    int nJetAK8Pt_ZRatios(6);
+    double jetAK8Pt_ZRatios[7] = {200, 250, 350, 450, 600, 800, 1200};
+    // ---
     int nJetAK8Pt_2_ZRatios(24);
     double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
-    //use for lep pt + LJ pt, and lep pt + HT,2/2 -----
-    // int nLepJetAK8Pt_ZRatios(5);
-    // double lepJetAK8Pt_ZRatios[6] = {225, 260, 300, 400, 550, 900};
-    // int nLepJetAK8Pt_2_ZRatios(10);
-    // double lepJetAK8Pt_2_ZRatios[11] = {225, 242.5, 260, 280, 300, 350, 400, 475, 550, 725, 900};
-    // change the binning a little
-    // int nLepJetAK8Pt_ZRatios(10);
-    // double lepJetAK8Pt_ZRatios[11] = {225, 235, 250, 275, 310, 355, 405, 470, 570, 720, 1000};
-    // new binning... 12 nov 20
-    int nLepJetAK8Pt_ZRatios(8);
-    double lepJetAK8Pt_ZRatios[9] = {225, 250, 355, 405, 470, 570, 720, 1000, 1500};
-
+    //use for lep pt + LJ pt -----
+    // ---
+    int nLepJetAK8Pt_ZRatios(6);
+    double lepJetAK8Pt_ZRatios[7] = {250, 300, 450, 600, 800, 1100, 1500};
+    // ---
     int nLepJetAK8Pt_2_ZRatios(20);
     double lepJetAK8Pt_2_ZRatios[21] = {225, 230, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
-    //use for W pt based things -----
-    // int nWBosonJetAK8Pt_ZRatios(4);
-    // double wBosonJetAK8Pt_ZRatios[5] = {235, 300, 400, 550, 900};
-    // int nWBosonJetAK8Pt_2_ZRatios(8);
-    // double wBosonJetAK8Pt_2_ZRatios[9] = {235, 267.5, 300, 350, 400, 475, 550, 725, 900};
+    //use for lep pt + HT,2/2 -----
+    // ---
+    int nLepJetAK8HTover2_ZRatios(6);
+    double lepJetAK8HTover2_ZRatios[7] = {300, 400, 550, 700, 900, 1200, 1600};
+    // ---
 
-    //change binning a little
+    //use for W pt based things -----
     int nWBosonJetAK8Pt_ZRatios(7);
     double wBosonJetAK8Pt_ZRatios[8] = {220, 250, 300, 370, 470, 570, 720, 1000};
     int nWBosonJetAK8Pt_2_ZRatios(14);
@@ -2314,6 +2303,12 @@ HistoSet::HistoSet(string leptonFlavor)
     }
 
 
+
+
+
+
+
+
     //************************************************************** Begin TUnfold histos *********************************************************************************//
 
     // --- Jet multiplicities (AK4, AK8) ---
@@ -2447,10 +2442,26 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold              = newTH2D("hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold",   "hresp 2nd jet |y| (N_{jets} #geq 2)", 24, 0, 2.4, 12, 0, 2.4);
     hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseSecondJetAbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS",   "hresp 2nd jet |y| (N_{jets} #geq 2)", 24, 0, 2.4, 12, 0, 2.4);
 
-    dPhiLepJet2_Zinc2jet_TUnfold                       = newTH1D("dPhiLepJet2_Zinc2jet_TUnfold",     "#Delta#phi btwn muon jet2 (N_{jets} #geq 2)", "#Delta#phi(#mu,j_{2})", 40,  0, PI);
-    gendPhiLepJet2_Zinc2jet_TUnfold                    = newTH1D("gendPhiLepJet2_Zinc2jet_TUnfold",     "gen #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", "#Delta#phi(#mu,j_{2})", 20,  0, PI);
-    hresponsedPhiLepJet2_Zinc2jet_TUnfold              = newTH2D("hresponsedPhiLepJet2_Zinc2jet_TUnfold", "hresp #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", 40,  0, PI, 20,  0, PI);
-    hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", 40,  0, PI, 20,  0, PI);
+    dPhiLepJet2_Zinc2jet_TUnfold                       = newTH1D("dPhiLepJet2_Zinc2jet_TUnfold",     "#Delta#phi btwn muon jet2 (N_{jets} #geq 2)", "#Delta#phi(#mu,j_{2})", 36,  0, PI);
+    gendPhiLepJet2_Zinc2jet_TUnfold                    = newTH1D("gendPhiLepJet2_Zinc2jet_TUnfold",     "gen #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", "#Delta#phi(#mu,j_{2})", 18,  0, PI);
+    hresponsedPhiLepJet2_Zinc2jet_TUnfold              = newTH2D("hresponsedPhiLepJet2_Zinc2jet_TUnfold", "hresp #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", 36,  0, PI, 18,  0, PI);
+    hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", 36,  0, PI, 18,  0, PI);
+
+    // --- other AK4 dist's --
+    dRapidityJets_Zinc2jet_TUnfold = newTH1D("dRapidityJets_Zinc2jet_TUnfold", "#Delta y btwn jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})", 24, 0, 4.8);
+	gendRapidityJets_Zinc2jet_TUnfold = newTH1D("gendRapidityJets_Zinc2jet_TUnfold", "gen #Delta y btwn jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})", 12, 0, 4.8);
+	hresponsedRapidityJets_Zinc2jet_TUnfold = newTH2D("hresponsedRapidityJets_Zinc2jet_TUnfold", "hresp #Delta y btwn jets (N_{jets} #geq 2)", 24, 0, 4.8, 12, 0, 4.8);
+	hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta y btwn jets (N_{jets} #geq 2)", 24, 0, 4.8, 12, 0, 4.8);
+
+    dRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH1D("dRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "#Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.4, 4.);
+	gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH1D("gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.4, 4.);
+	hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
+	hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
+
+    dRLepCloseJetCo500dR04_Zinc1jet_TUnfold = newTH1D("dRLepCloseJetCo500dR04_Zinc1jet_TUnfold", "#Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.4, 4.);
+	gendRLepCloseJetCo500dR04_Zinc1jet_TUnfold = newTH1D("gendRLepCloseJetCo500dR04_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.4, 4.);
+	hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
+	hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
 
     // --- First Jet Kinematics (AK8) ---
     double jetAK8Pt_ZRatios_SPLIT[ (2 * nJetAK8Pt_ZRatios) + 1 ];
@@ -2461,16 +2472,15 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseFirstJetAK8Pt_Zinc1jet_TUnfold              = newTH2D("hresponseFirstJetAK8Pt_Zinc1jet_TUnfold", "hresp 1st AK8 jet pt", 2 * nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios_SPLIT, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
     hresponseFirstJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseFirstJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp 1st AK8 jet pt", 2 * nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios_SPLIT, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
 
-    FirstJetAK8AbsRapidity_Zinc1jet_TUnfold                       = newTH1D("FirstJetAK8AbsRapidity_Zinc1jet_TUnfold",          "1st AK8 jet |y| (N_{jets, AK8} #geq 1)",       "|y(j_{1})|",  24, 0, 2.4);
-    genFirstJetAK8AbsRapidity_Zinc1jet_TUnfold                    = newTH1D("genFirstJetAK8AbsRapidity_Zinc1jet_TUnfold",       "gen 1st AK8 jet |y| (N_{jets, AK8} #geq 1)",   "|y(j_{1})|",  12, 0, 2.4);
-    hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold              = newTH2D("hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold",   "hresp 1st AK8 jet |y| (N_{jets, AK8} #geq 1)", 24, 0, 2.4, 12, 0, 2.4);
-    hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",   "hresp 1st AK8 jet |y| (N_{jets, AK8} #geq 1)", 24, 0, 2.4, 12, 0, 2.4);
+    FirstJetAK8AbsRapidity_Zinc1jet_TUnfold                       = newTH1D("FirstJetAK8AbsRapidity_Zinc1jet_TUnfold",          "1st AK8 jet |y| (N_{jets, AK8} #geq 1)",       "|y(j_{1})|",  20, 0, 2.4);
+    genFirstJetAK8AbsRapidity_Zinc1jet_TUnfold                    = newTH1D("genFirstJetAK8AbsRapidity_Zinc1jet_TUnfold",       "gen 1st AK8 jet |y| (N_{jets, AK8} #geq 1)",   "|y(j_{1})|",  10, 0, 2.4);
+    hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold              = newTH2D("hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold",   "hresp 1st AK8 jet |y| (N_{jets, AK8} #geq 1)", 20, 0, 2.4, 10, 0, 2.4);
+    hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseFirstJetAK8AbsRapidity_Zinc1jet_TUnfold_NOEFFWEIGHTS",   "hresp 1st AK8 jet |y| (N_{jets, AK8} #geq 1)", 20, 0, 2.4, 10, 0, 2.4);
 
     dPhiLepJet1AK8_Zinc1jet_TUnfold                       = newTH1D("dPhiLepJet1AK8_Zinc1jet_TUnfold",     "#Delta#phi btwn muon AK8 jet1 (N_{jets, AK8} #geq 1)", "#Delta#phi(#mu,j_{1})", 20,  0, PI);
     gendPhiLepJet1AK8_Zinc1jet_TUnfold                    = newTH1D("gendPhiLepJet1AK8_Zinc1jet_TUnfold",     "gen #Delta#phi btwn muon AK8 jet1 (N_{jets, AK8} #geq 1)", "#Delta#phi(#mu,j_{1})", 10,  0, PI);
     hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold              = newTH2D("hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold", "hresp #Delta#phi btwn muon AK8 jet1 (N_{jets, AK8} #geq 1)", 20,  0, PI, 10,  0, PI);
     hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet1AK8_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon AK8 jet1 (N_{jets, AK8} #geq 1)", 20,  0, PI, 10,  0, PI);
-
 
     // --- Second Jet Kinematics (AK8) ---
     // NOTE: currently using the same binning as the first AK8 jet pT distribution above
@@ -2480,16 +2490,31 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseSecondJetAK8Pt_Zinc2jet_TUnfold              = newTH2D("hresponseSecondJetAK8Pt_Zinc2jet_TUnfold", "hresp 2nd AK8 jet pt", 2 * nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios_SPLIT, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
     hresponseSecondJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseSecondJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp 2nd AK8 jet pt", 2 * nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios_SPLIT, nJetAK8Pt_ZRatios, jetAK8Pt_ZRatios);
 
-    SecondJetAK8AbsRapidity_Zinc2jet_TUnfold                       = newTH1D("SecondJetAK8AbsRapidity_Zinc2jet_TUnfold",          "2nd AK8 jet |y| (N_{jets, AK8} #geq 2)",       "|y(j_{2})|",  24, 0, 2.4);
-    genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold                    = newTH1D("genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold",       "gen 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)",   "|y(j_{2})|",  12, 0, 2.4);
-    hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold              = newTH2D("hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold",   "hresp 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)", 24, 0, 2.4, 12, 0, 2.4);
-    hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS",   "hresp 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)", 24, 0, 2.4, 12, 0, 2.4);
+    SecondJetAK8AbsRapidity_Zinc2jet_TUnfold                       = newTH1D("SecondJetAK8AbsRapidity_Zinc2jet_TUnfold",          "2nd AK8 jet |y| (N_{jets, AK8} #geq 2)",       "|y(j_{2})|",  20, 0, 2.4);
+    genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold                    = newTH1D("genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold",       "gen 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)",   "|y(j_{2})|",  10, 0, 2.4);
+    hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold              = newTH2D("hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold",   "hresp 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)", 20, 0, 2.4, 10, 0, 2.4);
+    hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS",   "hresp 2nd AK8 jet |y| (N_{jets, AK8} #geq 2)", 20, 0, 2.4, 10, 0, 2.4);
 
     dPhiLepJet2AK8_Zinc2jet_TUnfold                       = newTH1D("dPhiLepJet2AK8_Zinc2jet_TUnfold",     "#Delta#phi btwn muon AK8 jet2 (N_{jets, AK8} #geq 2)", "#Delta#phi(#mu,j_{2})", 20,  0, PI);
     gendPhiLepJet2AK8_Zinc2jet_TUnfold                    = newTH1D("gendPhiLepJet2AK8_Zinc2jet_TUnfold",     "gen #Delta#phi btwn muon AK8 jet2 (N_{jets, AK8} #geq 2)", "#Delta#phi(#mu,j_{2})", 10,  0, PI);
     hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold              = newTH2D("hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold", "hresp #Delta#phi btwn muon AK8 jet2 (N_{jets, AK8} #geq 2)", 20,  0, PI, 10,  0, PI);
     hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon AK8 jet2 (N_{jets, AK8} #geq 2)", 20,  0, PI, 10,  0, PI);
 
+    // other AK8 dist's --
+    dRapidityJetsAK8_Zinc2jet_TUnfold = newTH1D("dRapidityJetsAK8_Zinc2jet_TUnfold", "#Delta y btwn AK8 jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})",  20, 0, 4.8);
+	gendRapidityJetsAK8_Zinc2jet_TUnfold = newTH1D("gendRapidityJetsAK8_Zinc2jet_TUnfold", "gen #Delta y btwn AK8 jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})",  10, 0, 4.8);
+	hresponsedRapidityJetsAK8_Zinc2jet_TUnfold = newTH2D("hresponsedRapidityJetsAK8_Zinc2jet_TUnfold", "hresp #Delta y btwn AK8 jets (N_{jets} #geq 2)", 20, 0, 4.8, 10, 0, 4.8);
+	hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta y btwn AK8 jets (N_{jets} #geq 2)", 20, 0, 4.8, 10, 0, 4.8);
+
+    dRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold = newTH1D("dRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold", "#Delta R btwn muon closest AK8 jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.8, 4.4);
+	// gendRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold = newTH1D("gendRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest AK8 jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.8, 4.4);
+	// hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest AK8 jet Co 300 (N_{jets} #geq 1)", 36,  0.8, 4.4, 18,  0.8, 4.4);
+	// hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest AK8 jet Co 300 (N_{jets} #geq 1)", 36,  0.8, 4.4, 18,  0.8, 4.4);
+
+    dRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold = newTH1D("dRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold", "#Delta R btwn muon closest AK8 jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.8, 4.4);
+	// gendRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold = newTH1D("gendRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest AK8 jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.8, 4.4);
+	// hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest AK8 jet Co 500 (N_{jets} #geq 1)", 36,  0.8, 4.4, 18,  0.8, 4.4);
+	// hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest AK8 jet Co 500 (N_{jets} #geq 1)", 36,  0.8, 4.4, 18,  0.8, 4.4);
 
     // ---------------------------------------------------------------------------
 
@@ -2525,8 +2550,11 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseLepPtPlusLeadingJetPt_Zexc2jet_TUnfold_NOEFFWEIGHTS  = newTH2D("hresponseLepPtPlusLeadingJetPt_Zexc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 exc jet", 2 * nLepJetPt_INCLUDELOWPT_gen_ZRatios, lepJetPt_INCLUDELOWPT_gen_ZRatios_SPLIT, nLepJetPt_INCLUDELOWPT_gen_ZRatios, lepJetPt_INCLUDELOWPT_gen_ZRatios);
     hresponseLepPtPlusLeadingJetPt_Zexc3jet_TUnfold_NOEFFWEIGHTS  = newTH2D("hresponseLepPtPlusLeadingJetPt_Zexc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 3 exc jet", 2 * nLepJetPt_INCLUDELOWPT_gen_ZRatios, lepJetPt_INCLUDELOWPT_gen_ZRatios_SPLIT, nLepJetPt_INCLUDELOWPT_gen_ZRatios, lepJetPt_INCLUDELOWPT_gen_ZRatios);
 
+    // ---------------------------------------------------------------------------
 
     // --- AK8 jet-based distributions for jet-multiplicity ratios ---
+
+    // Lepton Pt + Leading AK8 Jet Pt ---
     double lepJetAK8Pt_ZRatios_SPLIT[ (2 * nLepJetAK8Pt_ZRatios) + 1 ];
     splitBinsInTwoForTUnfold(nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
 
@@ -2544,15 +2572,6 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
     hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 3 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
 
-    LepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH1D("LepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "lepton pt plus Ht,2/2 for 2 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
-    LepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH1D("LepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "lepton pt plus Ht,2/2 for 3 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
-    genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH1D("genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "gen lepton pt plus Ht,2/2 for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH1D("genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "gen lepton pt plus Ht,2/2 for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "hresp lepton pt plus Ht,2/2 for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "hresp lepton pt plus Ht,2/2 for 3 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus Ht,2/2 for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus Ht,2/2 for 3 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-
     // exclusive 
     LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold", "lepton pt plus LJ pt for 1 AK8 exc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
     LepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold", "lepton pt plus LJ pt for 2 AK8 exc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
@@ -2567,6 +2586,19 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 AK8 exc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
     hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 3 AK8 exc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
 
+    // Lepton Pt + HT,2/2 (AK8) ---
+    double lepJetAK8HTover2_ZRatios_SPLIT[ (2 * nLepJetAK8HTover2_ZRatios) + 1 ];
+    splitBinsInTwoForTUnfold(nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT);
+
+    // inclusive
+    LepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH1D("LepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "lepton pt plus Ht,2/2 for 2 AK8 inc jet", lpT_HTover2, 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT);
+    LepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH1D("LepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "lepton pt plus Ht,2/2 for 3 AK8 inc jet", lpT_HTover2, 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT);
+    genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH1D("genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "gen lepton pt plus Ht,2/2 for 2 AK8 inc jet", lpT_HTover2, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
+    genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH1D("genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "gen lepton pt plus Ht,2/2 for 3 AK8 inc jet", lpT_HTover2, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
+    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold", "hresp lepton pt plus Ht,2/2 for 2 AK8 inc jet", 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
+    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold", "hresp lepton pt plus Ht,2/2 for 3 AK8 inc jet", 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
+    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus Ht,2/2 for 2 AK8 inc jet", 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
+    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus Ht,2/2 for 3 AK8 inc jet", 2 * nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios_SPLIT, nLepJetAK8HTover2_ZRatios, lepJetAK8HTover2_ZRatios);
 
     //*************************************************************** End TUnfold histos **********************************************************************************//
 

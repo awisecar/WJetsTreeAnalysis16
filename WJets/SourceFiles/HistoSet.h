@@ -1786,6 +1786,22 @@ public:
     TH2D *hresponsedPhiLepJet2_Zinc2jet_TUnfold;
     TH2D *hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
+    // other AK4 dist's --
+    TH1D *dRapidityJets_Zinc2jet_TUnfold;
+	TH1D *gendRapidityJets_Zinc2jet_TUnfold;
+	TH2D *hresponsedRapidityJets_Zinc2jet_TUnfold;
+	TH2D *hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
+	TH1D *gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dRLepCloseJetCo500dR04_Zinc1jet_TUnfold;
+	TH1D *gendRLepCloseJetCo500dR04_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseJetCo500dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
     // --- AK8 jet kinematics ---
 
     // 1st jet kinematics (AK8 jet)
@@ -1819,6 +1835,22 @@ public:
     TH1D *gendPhiLepJet2AK8_Zinc2jet_TUnfold;
     TH2D *hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold;
     TH2D *hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    // other AK8 dist's --
+    TH1D *dRapidityJetsAK8_Zinc2jet_TUnfold;
+	TH1D *gendRapidityJetsAK8_Zinc2jet_TUnfold;
+	TH2D *hresponsedRapidityJetsAK8_Zinc2jet_TUnfold;
+	TH2D *hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold;
+	TH1D *gendRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold;
+	TH1D *gendRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold;
+	TH2D *hresponsedRLepCloseAK8JetCo500dR08_Zinc1jet_TUnfold_NOEFFWEIGHTS;
 
     // ---------------------------------------------------------------------------
 
@@ -1854,6 +1886,8 @@ public:
 
     // --- AK8 jet-based distributions for jet-multiplicity ratios ---
 
+    // Lepton Pt + Leading AK8 Jet Pt ---
+
     // inclusive
     TH1D *LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold;
     TH1D *LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold;
@@ -1868,15 +1902,6 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS;
 
-    TH1D *LepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
-    TH1D *LepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
-    TH1D *genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
-    TH1D *genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
-    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
-    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
-    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
-    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS;
-
     // exclusive 
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold;
     TH1D *LepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold;
@@ -1890,6 +1915,20 @@ public:
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc1jet_TUnfold_NOEFFWEIGHTS;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc2jet_TUnfold_NOEFFWEIGHTS;
     TH2D *hresponseLepPtPlusLeadingJetAK8Pt_Zexc3jet_TUnfold_NOEFFWEIGHTS;
+
+    // Lepton Pt + HT,2/2 (AK8) ---
+    
+    // inclusive
+    TH1D *LepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH1D *LepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH1D *genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH1D *genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+    TH2D *hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS;
+
+    
     
 
     //*************************************************************** End TUnfold histos **********************************************************************************//

@@ -53,18 +53,22 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ##############################
 
 ### Running full 2016 data/MC, incl. QCD BG
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
 # doWhat = [42, 51, 52, 53, 54, 61, 62, 63] # w+jets files
 # doWhat = [51, 52, 53, 54] # w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 30] # everything but w+jets
-# doWhat = [21]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 42, 51, 52, 53, 54]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 42]
+# doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]
+# doWhat = [42]
 
-doQCD = [0, 1, 2, 3] # all regions
+# doQCD = [0, 1, 2, 3] # all regions
 # doQCD = [0] # signal region
-#doQCD = [1, 2, 3] # control regions
+# doQCD = [1, 2, 3] # control regions
+#doQCD = [3]
 
-doSysRunning = [0]
+# doSysRunning = [0]
 
 years = [2016]
 
@@ -116,9 +120,9 @@ years = [2016]
 #doSysRunning = [1]
 
 ########## JES Syst
-#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
-#doQCD = [0]
-#doSysRunning = [2]
+doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
+doQCD = [0]
+doSysRunning = [2]
 
 ########## XSec Syst
 #doWhat = [21, 22, 23, 24, 25, 26, 27, 30] #Background
@@ -141,16 +145,10 @@ years = [2016]
 # doSysRunning = [6]
 
 ########### L1Prefire Syst
-# doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
+#doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
+# doWhat = [54]
 # doQCD = [0]
 # doSysRunning = [11]
-
-##############################
-## Migrations Study
-#doWhat = [41, 51, 52, 53, 54]
-#doQCD = [0]
-#doSysRunning = [0]
-##############################
 
 ##############################
 ## ttbar SFs (remember to turn doBJets to 2)
@@ -201,5 +199,5 @@ moveFile = 'mv '+submitName+' '+mtmpdir+'/'+submitName
 print '\nCleaning up...'
 print moveFile
 os.system(moveFile)
-print '\nFinished!\n'
 
+print '\nFinished!\n'
