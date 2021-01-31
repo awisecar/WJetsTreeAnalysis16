@@ -1,0 +1,1 @@
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v3/MC/CRAB_PrivateMC/crab_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu/210126_213325/0000/Bonzai-WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu_1.root

@@ -1,0 +1,2 @@
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v2/MC/CRAB_PrivateMC/crab_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu/210131_010457/0000/Bonzai-WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu_1.root
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v2/MC/CRAB_PrivateMC/crab_WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu/210131_010457/0000/Bonzai-WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-VJetPruner-SMu_2.root

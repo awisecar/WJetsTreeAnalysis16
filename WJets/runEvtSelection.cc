@@ -20,7 +20,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
         
     //------------------
 
-    //  int doWhat       = 42;
+     //int doWhat       = 41;
     // int doWhat       = 63;
     //    int doWhat       = 14;
       //int doWhat       = 27;
@@ -32,11 +32,11 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
 
 
-        // int doQCD        = 0;
+        //int doQCD        = 0;
                              // 0-3 : 4 combination between isolation/anti-isolation and MT cuts for QCD BG estimation
 
         
-        // int doSysRunning = 0;
+        //int doSysRunning = 0;
         // int doSysRunning = 2;
                              // 0 - no syst running, 100 - all systematic runnings,
                              // 1 - PU, 2 - JES, 3 - XSEC, 4 - JER, 5 - LepSF,
@@ -54,7 +54,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                             
     //   int year        = 2016;
-    //    int year        = 2017;
+       //int year        = 2017;
     //   int year        = 2018;
                            // 2016, 2017, or 2018 data/MC
 
@@ -401,20 +401,20 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
            
         }
     
-        // //W+jets inclusive NLO-FxFx sample   
-        // if (doWhat == 41 || doWhat == 100 || doWhat == 200){
-        //     int doGen = 0;
-        //     if ((lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0) && lepSelection.find("SMuE") == -1)  doGen = 1 ;
+        // W+jets inclusive NLO-FxFx sample   
+        if (doWhat == 41 || doWhat == 100 || doWhat == 200){
+            int doGen = 0;
+            if ((lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0) && lepSelection.find("SMuE") == -1)  doGen = 1;
 
-        //     for (unsigned int i(0); i < NSystWJets; i++){
-        //         if (!doGen ) continue;
-        //         if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
-        //         if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+            for (unsigned int i(0); i < NSystWJets; i++){
+                if (!doGen ) continue;
+                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
+                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
 
-        //         ZJetsAndDPS DMuWJFxFx(lepSelection+"_13TeV_WJets_FxFx_dR_5311_List", muLumi* 60290.0 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-        //         DMuWJFxFx.Loop(1, doGen,  doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-        //     }
-        // }
+                ZJetsAndDPS DMuWJFxFx(lepSelection+"_13TeV_WJets_FxFx_dR_5311_List", year, muLumi * 60410.0 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                DMuWJFxFx.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+            }
+        }
 
         // W+jets inclusive LO-MLM sample
         if (doWhat == 42 || doWhat == 100 || doWhat == 200){
@@ -779,6 +779,21 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                DMuDYMix.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
            
+        }
+
+        // W+jets inclusive NLO-FxFx sample   
+        if (doWhat == 41 || doWhat == 100 || doWhat == 200){
+            int doGen = 0;
+            if ((lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0) && lepSelection.find("SMuE") == -1)  doGen = 1;
+
+            for (unsigned int i(0); i < NSystWJets; i++){
+                if (!doGen ) continue;
+                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
+                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+
+                ZJetsAndDPS DMuWJFxFx(lepSelection+"_13TeV_WJets_FxFx_dR_5311_List", year, muLumi * 67270.0 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                DMuWJFxFx.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+            }
         }
 
         // W+jets inclusive LO-MLM sample
@@ -1161,6 +1176,21 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                DMuDYMix.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
            
+        }
+
+        // W+jets inclusive NLO-FxFx sample   
+        if (doWhat == 41 || doWhat == 100 || doWhat == 200){
+            int doGen = 0;
+            if ((lepSelection.find("SE") == 0 || lepSelection.find("SMu") == 0) && lepSelection.find("SMuE") == -1)  doGen = 1;
+
+            for (unsigned int i(0); i < NSystWJets; i++){
+                if (!doGen ) continue;
+                if ( ( lepSelection.find("SMu") == 0 || lepSelection.find("SE") == 0 ) && wjSyst[i] == 3) continue;
+                if (wjSyst[i] != doSysRunning && doSysRunning != 100) continue;
+
+                ZJetsAndDPS DMuWJFxFx(lepSelection+"_13TeV_WJets_FxFx_dR_5311_List", year, muLumi * 66870.0 , 1., 1, !doDataEff, wjSyst[i], wjDir[i], wjScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
+                DMuWJFxFx.Loop(1, doGen,  year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
+            }
         }
 
         // W+jets inclusive LO-MLM sample

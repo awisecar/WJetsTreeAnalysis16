@@ -2018,7 +2018,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if (PRINTEVENTINFO && jentry == eventOfInterest) cout << __LINE__ << " PRINTEVENTINFO: For jet #" << i << ": pT, eta = " << JetAk08Pt->at(i) << ", " << JetAk08Eta->at(i) << endl;
                 
                 // loose pt cut
-                bool jetAK8PassesLoosePtCut(jetAK8.pt >= 180.);
+                bool jetAK8PassesLoosePtCut(jetAK8.pt >= 200.);
 
                 // AK8 JES uncertainties (if scale =/= 0) ----
                 // NOTE: not recalculating MET when re-scaling AK8 jets here, because

@@ -14,10 +14,10 @@ void runMergeTop(){
     // mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto
     // mergeTop("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
-     mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
-     mergeTop("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
-     mergeTop("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
-     mergeTop("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
+     //mergeTop("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+     //mergeTop("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+     //mergeTop("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+     //mergeTop("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
     // mergeTop("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
     // mergeTop("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
@@ -25,14 +25,14 @@ void runMergeTop(){
     // mergeTop("SMu", 0, 30, 3, 0, -1); // btag veto, doQCD=3
 
     // systematics --
-    //mergeTop("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
-    //mergeTop("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
-    //mergeTop("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-    //mergeTop("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-    //mergeTop("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
-    //mergeTop("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
-    //mergeTop("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
-    //mergeTop("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+    mergeTop("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeTop("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+    mergeTop("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeTop("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+    mergeTop("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeTop("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+    mergeTop("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+    mergeTop("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
 
 }
 

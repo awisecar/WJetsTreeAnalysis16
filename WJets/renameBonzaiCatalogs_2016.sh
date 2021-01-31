@@ -16,6 +16,7 @@ mv Bonzais-WJetsToLNu_Pt-100To250_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJ
 mv Bonzais-WJetsToLNu_Pt-250To400_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-250To400_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_Pt-400To600_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-400To600_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_Pt-600ToInf_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt SMu_13TeV_WJets_FxFx_Wpt-600ToInf_dR_5311_List.txt
+mv Bonzais-WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-all-VJetPruner-SMu.txt             SMu_13TeV_WJets_FxFx_dR_5311_List.txt
 mv Bonzais-WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-all-VJetPruner-SMu.txt              SMu_13TeV_WJets_MLM_dR_5311_List.txt
 
 # background
