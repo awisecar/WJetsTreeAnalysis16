@@ -33,8 +33,14 @@ mv Bonzais-TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-all-VJet
 mv Bonzais-TTWJetsToQQ_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-all-VJetPruner-SMu.txt                         SMu_13TeV_ttW_QQ_channel_dR_5311_List.txt
 mv Bonzais-TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8-all-VJetPruner-SMu.txt                                SMu_13TeV_ttZ_LLNuNu_channel_dR_5311_List.txt
 mv Bonzais-TTZToQQ_TuneCUETP8M1_13TeV-amcatnlo-pythia8-all-VJetPruner-SMu.txt                                         SMu_13TeV_ttZ_QQ_channel_dR_5311_List.txt
-mv Bonzais-WWTo2L2Nu_13TeV-powheg-all-VJetPruner-SMu.txt                                                              SMu_13TeV_WW_dR_5311_List.txt
-mv Bonzais-WZ_TuneCUETP8M1_13TeV-pythia8-all-VJetPruner-SMu.txt                                                       SMu_13TeV_WZ_dR_5311_List.txt
-mv Bonzais-ZZ_TuneCUETP8M1_13TeV-pythia8-all-VJetPruner-SMu.txt                                                       SMu_13TeV_ZZ_dR_5311_List.txt
+mv Bonzais-WWTo2L2Nu_13TeV-powheg-all-VJetPruner-SMu.txt                                                              SMu_13TeV_WWTo2L2Nu_dR_5311_List.txt
+mv Bonzais-WWToLNuQQ_13TeV-powheg-all-VJetPruner-SMu.txt                                                              SMu_13TeV_WWToLNuQQ_dR_5311_List.txt
+mv Bonzais-WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                      SMu_13TeV_WZTo1L1Nu2Q_dR_5311_List.txt
+mv Bonzais-WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                        SMu_13TeV_WZTo1L3Nu_dR_5311_List.txt
+mv Bonzais-WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                         SMu_13TeV_WZTo2L2Q_dR_5311_List.txt
+mv Bonzais-ZZTo2L2Nu_13TeV_powheg_pythia8-all-VJetPruner-SMu.txt                                                      SMu_13TeV_ZZTo2L2Nu_dR_5311_List.txt
+mv Bonzais-ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                         SMu_13TeV_ZZTo2L2Q_dR_5311_List.txt
+# mv Bonzais-WZ_TuneCUETP8M1_13TeV-pythia8-all-VJetPruner-SMu.txt                                                       SMu_13TeV_WZ_dR_5311_List.txt
+# mv Bonzais-ZZ_TuneCUETP8M1_13TeV-pythia8-all-VJetPruner-SMu.txt                                                       SMu_13TeV_ZZ_dR_5311_List.txt
 
 

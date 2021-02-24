@@ -62,13 +62,16 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 42]
 # doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]
 # doWhat = [42]
+# doWhat = [41, 51, 52, 53, 54, 61, 62, 63] # w+jets files
+# doWhat = [221, 222, 223] # diboson files
+doWhat = [51, 52, 53, 54]
 
-#doQCD = [0, 1, 2, 3] # all regions
-# doQCD = [0] # signal region
+doQCD = [0, 1, 2, 3] # all regions
+#doQCD = [0] # signal region
 # doQCD = [1, 2, 3] # control regions
 #doQCD = [3]
 
-#doSysRunning = [0]
+doSysRunning = [0]
 
 years = [2016]
 
@@ -146,9 +149,9 @@ years = [2016]
 
 ########### L1Prefire Syst
 #doWhat = [21, 22, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
-doWhat = [24]
-doQCD = [0]
-doSysRunning = [11]
+#doWhat = [24]
+#doQCD = [0]
+#doSysRunning = [11]
 
 ##############################
 ## ttbar SFs (remember to turn doBJets to 2)
