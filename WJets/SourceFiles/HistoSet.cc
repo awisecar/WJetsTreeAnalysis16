@@ -333,8 +333,12 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //use for lep pt + LJ pt -----
     // ---
-    int nLepJetAK8Pt_ZRatios(6);
-    double lepJetAK8Pt_ZRatios[7] = {250, 300, 450, 600, 800, 1100, 1500};
+    // int nLepJetAK8Pt_ZRatios(6);
+    // double lepJetAK8Pt_ZRatios[7] = {250, 300, 450, 600, 800, 1100, 1500};
+    // updated binning for alternate selection, 7 MAR 21 ALW
+    int nLepJetAK8Pt_ZRatios(4);
+    double lepJetAK8Pt_ZRatios[5] = {400, 550, 800, 1100, 1500};
+
     // ---
     int nLepJetAK8Pt_2_ZRatios(20);
     double lepJetAK8Pt_2_ZRatios[21] = {225, 230, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
@@ -2454,9 +2458,9 @@ HistoSet::HistoSet(string leptonFlavor)
 	hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta y btwn jets (N_{jets} #geq 2)", 24, 0, 4.8, 12, 0, 4.8);
 
     dRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH1D("dRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "#Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.4, 4.);
-	gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH1D("gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.4, 4.);
-	hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
-	hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
+	// gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH1D("gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.4, 4.);
+	// hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
+	// hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn muon closest jet Co 300 (N_{jets} #geq 1)", 36,  0.4, 4., 18,  0.4, 4.);
 
     dRLepCloseJetCo500dR04_Zinc1jet_TUnfold = newTH1D("dRLepCloseJetCo500dR04_Zinc1jet_TUnfold", "#Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 36,  0.4, 4.);
 	gendRLepCloseJetCo500dR04_Zinc1jet_TUnfold = newTH1D("gendRLepCloseJetCo500dR04_Zinc1jet_TUnfold", "gen #Delta R btwn muon closest jet Co 500 (N_{jets} #geq 1)", "#DeltaR(#mu, closest jet)", 18,  0.4, 4.);
