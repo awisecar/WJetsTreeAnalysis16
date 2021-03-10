@@ -295,23 +295,6 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
            }
         }
 
-      //  // Background -- Diboson
-      //  if (doWhat == 22 || doWhat == 100 || doWhat == 200){
-      //     for (unsigned int i(0); i < NSystMC; i++){
-      //         if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
-
-      //         ZJetsAndDPS DMuWWInc(lepSelection+"_13TeV_WW_dR_5311_List", year, muLumi * 12.178  , 1., 1, !doDataEff, wwSyst[i], wwDir[i], wwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWWInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuWZInc(lepSelection+"_13TeV_WZ_dR_5311_List", year, muLumi * 47.13 , 1., 1, !doDataEff, wzSyst[i], wzDir[i], wzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuZZInc(lepSelection+"_13TeV_ZZ_dR_5311_List", year, muLumi * 16.523 ,  1., 1, !doDataEff, zzSyst[i], zzDir[i], zzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuZZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //     }
-      //  }
-
         // Background -- WW
         if (doWhat == 221 || doWhat == 100 || doWhat == 200){
            for (unsigned int i(0); i < NSystMC; i++){
@@ -710,26 +693,6 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                DMuTT3.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
-
-      //  // Background -- Diboson
-      //  // /WWTo2L2Nu_NNPDF31_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM
-      //  // /WZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-      //  // /ZZ_TuneCP5_13TeV-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM
-      //  if (doWhat == 22 || doWhat == 100 || doWhat == 200){
-      //     for (unsigned int i(0); i < NSystMC; i++){
-      //         if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
-
-      //         ZJetsAndDPS DMuWWInc(lepSelection+"_13TeV_WW_dR_5311_List", year, muLumi * 12.178, 1., 1, !doDataEff, wwSyst[i], wwDir[i], wwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWWInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuWZInc(lepSelection+"_13TeV_WZ_dR_5311_List", year, muLumi * 47.13, 1., 1, !doDataEff, wzSyst[i], wzDir[i], wzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuZZInc(lepSelection+"_13TeV_ZZ_dR_5311_List", year, muLumi * 16.523,  1., 1, !doDataEff, zzSyst[i], zzDir[i], zzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuZZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //     }
-      //  }
 
         // Background -- WW
         if (doWhat == 221 || doWhat == 100 || doWhat == 200){
@@ -1146,26 +1109,6 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
                DMuTT3.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
            }
         }
-
-      //  // Background -- Diboson
-      //  // /WWTo2L2Nu_NNPDF31_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM
-      //  // /WZ_TuneCP5_PSweights_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM
-      //  // /ZZ_TuneCP5_13TeV-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM
-      //  if (doWhat == 22 || doWhat == 100 || doWhat == 200){
-      //     for (unsigned int i(0); i < NSystMC; i++){
-      //         if (bgSyst[i] != doSysRunning && doSysRunning != 100) continue;
-
-      //         ZJetsAndDPS DMuWWInc(lepSelection+"_13TeV_WW_dR_5311_List", year, muLumi * 12.178, 1., 1, !doDataEff, wwSyst[i], wwDir[i], wwScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWWInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuWZInc(lepSelection+"_13TeV_WZ_dR_5311_List", year, muLumi * 47.13, 1., 1, !doDataEff, wzSyst[i], wzDir[i], wzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuWZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //         ZJetsAndDPS DMuZZInc(lepSelection+"_13TeV_ZZ_dR_5311_List", year, muLumi * 16.523,  1., 1, !doDataEff, zzSyst[i], zzDir[i], zzScale[i], jetPtMin, jetPtMax, ZPtMin, ZEtaMin, ZEtaMax, METcut, jetEtaMin, jetEtaMax);
-      //         DMuZZInc.Loop(1, 0, year, doQCD,  doSSign, doInvMassCut, doBJets, doPUStudy, doFlat, doRoch, doVarWidth);
-
-      //     }
-      //  }
 
         // Background -- WW
         if (doWhat == 221 || doWhat == 100 || doWhat == 200){

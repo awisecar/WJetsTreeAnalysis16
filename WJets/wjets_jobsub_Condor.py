@@ -51,116 +51,99 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 # os.system('cd '+mtmpdir)
 
 ##############################
+### ----- 2016 -----
 
-### Running full 2016 data/MC, incl. QCD BG
 doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
-# doWhat = [42, 51, 52, 53, 54, 61, 62, 63] # w+jets files
-# doWhat = [51, 52, 53, 54] # w+jets pT-binned
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30] # everything but w+jets
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 42, 51, 52, 53, 54]
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 42]
-# doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]
-# doWhat = [42]
-# doWhat = [41, 51, 52, 53, 54, 61, 62, 63] # w+jets files
-# doWhat = [221, 222, 223] # diboson files
-# doWhat = [51, 52, 53, 54]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]   # full set of files, w+jets jet-binned
 
 doQCD = [0, 1, 2, 3] # all regions
 #doQCD = [0] # signal region
-# doQCD = [1, 2, 3] # control regions
-#doQCD = [3]
+#doQCD = [1, 2, 3] # control regions
 
 doSysRunning = [0]
 
 years = [2016]
 
 ##############################
+### ----- 2017 -----
 
-# Running full 2017 data/MC, incl. QCD BG
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] # only data
-# doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 61, 62, 63] # only MC, w+jets jet-binned
-#doWhat = [13, 14, 23, 27, 30, 63]
-#doWhat = [23, 27, 63]
-# doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 30, 61, 62, 63] # just MC
-#doWhat = [61, 62, 63] # just W+jets MC
-# doWhat = [213]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]     # full set of files, w+jets jet-binned
 
 # doQCD = [0, 1, 2, 3] # signal and control regions
 # doQCD = [0] # signal region
 # doQCD = [1, 2, 3] # control regions
-# doQCD = [2,3]
 
 # doSysRunning = [0]
 
 # years = [2017]
 
 ##############################
+### ----- 2018 -----
 
-## Running full 2018 data/MC, incl. QCD BG
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63] # full set of files, w+jets jet-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
-# # doWhat = [211, 212, 213]
-# # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 221, 222, 223, 23, 24, 30, 61, 62, 63] 
-# # doWhat = [213]
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]     # full set of files, w+jets jet-binned
 
 # doQCD = [0, 1, 2, 3] #signal and control regions
-# # doQCD = [0, 1]
-# # doQCD = [0] #signal region
+# doQCD = [0] #signal region
 
 # doSysRunning = [0]
 
 # years = [2018]
 
 ##############################
-## Systematics ---
+### ----- Systematics -----
 
-########## PU Syst
-#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
+########## Pileup (PU)
+#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]            #Background & Signal, 2016
+#doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal, 2017+2018
 #doQCD = [0]
 #doSysRunning = [1]
 
-########## JES Syst
+########## Jet Energy Scale (JES)
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19] #Data
 #doQCD = [0]
 #doSysRunning = [2]
 
-########## XSec Syst
-#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30] #Background
+########## BG Cross Sections (XSEC)
+#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30]            #Background, 2016
+#doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30] #Background, 2017+2018
 #doQCD = [0]
 #doSysRunning = [3]
 
-########## JER Syst
+########## Jet Energy Resolution (JER)
 #doWhat = [51, 52, 53, 54] #W+jets MC
 #doQCD = [0]
 #doSysRunning = [4]
 
-########### LepSF Syst
-#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
+########### Lepton Eff. Scale Factors (LepSF)
+#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]            #Background & Signal, 2016
+#doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal, 2017+2018
 #doQCD = [0]
 #doSysRunning = [5]
 
-########### BTagSF Syst
-# doWhat = [21, 221, 222, 223, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s
-# doQCD = [0]
-# doSysRunning = [6]
+########### B-Tagging Eff. Scale Factors (BTagSF) <-- NOT USED FOR NOW
+#doWhat = [21, 221, 222, 223, 23, 24, 30, 51, 52, 53, 54]            #BG + W+jets MC for syst. uncert.'s, 2016
+#doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 30, 51, 52, 53, 54] #BG + W+jets MC for syst. uncert.'s, 2017+2018
+#doQCD = [0]
+#doSysRunning = [6]
 
-########### L1Prefire Syst
-#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal
-#doWhat = [24]
+########### L1 Prefiring Effect (L1Prefire)
+#doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]            #Background & Signal, 2016
+#doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal, 2017+2018
 #doQCD = [0]
 #doSysRunning = [11]
 
 ##############################
-## ttbar SFs (remember to turn doBJets to 2)
-## we do not run QCD BG for this control region study
+### ----- ttbar SFs -----
+# Remember to turn doBJets to 2!
+# We do not run QCD BG for this control region study
+
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 30, 61, 62, 63]
-# doWhat = [61, 62, 63]
 # doQCD = [0]
 # doSysRunning = [0]
 # years = [2017]
+
 ##############################
 
 for year in years:
