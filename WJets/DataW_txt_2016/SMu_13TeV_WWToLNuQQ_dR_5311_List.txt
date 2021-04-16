@@ -1,1 +1,1 @@
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v3/MC/CRAB_PrivateMC/crab_WWToLNuQQ_13TeV-powheg-VJetPruner-SMu/210126_213258/0000/Bonzai-WWToLNuQQ_13TeV-powheg-VJetPruner-SMu_1.root
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2016/17Jul2018/Bonzai/v4/MC/CRAB_PrivateMC/crab_WWToLNuQQ_13TeV-powheg-VJetPruner-SMu/210413_002926/0000/Bonzai-WWToLNuQQ_13TeV-powheg-VJetPruner-SMu_1.root

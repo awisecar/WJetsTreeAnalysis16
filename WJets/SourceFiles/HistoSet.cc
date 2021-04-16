@@ -325,19 +325,34 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //use for jet pt -----
     // ---
-    int nJetAK8Pt_ZRatios(6);
-    double jetAK8Pt_ZRatios[7] = {200, 250, 350, 450, 600, 800, 1200};
+    // int nJetAK8Pt_ZRatios(6);
+    // double jetAK8Pt_ZRatios[7] = {200, 250, 350, 450, 600, 800, 1200};
+    int nJetAK8Pt_ZRatios(13);
+    double jetAK8Pt_ZRatios[14] = {30, 50, 75, 100, 130, 160, 200, 250, 300, 350, 450, 600, 800, 1200};
     // ---
     int nJetAK8Pt_2_ZRatios(24);
     double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
+
+
 
     //use for lep pt + LJ pt -----
     // ---
     // int nLepJetAK8Pt_ZRatios(6);
     // double lepJetAK8Pt_ZRatios[7] = {250, 300, 450, 600, 800, 1100, 1500};
     // updated binning for alternate selection, 10 MAR 21 ALW
-    int nLepJetAK8Pt_ZRatios(5);
-    double lepJetAK8Pt_ZRatios[6] = {300, 400, 550, 800, 1100, 1500};
+    // int nLepJetAK8Pt_ZRatios(5);
+    // double lepJetAK8Pt_ZRatios[6] = {300, 400, 550, 800, 1100, 1500};
+    // ---
+    // 16 APRIL 21 ALW
+    // for Mu Pt + LJ Pt (AK8) distributions for ratio have a different fiducial selection
+    // at reco level than the do at gen level, so in order to have entries in all the bins
+    // and allow for migration effects, include lower pT bins for reco-level dist.
+    int nLepJetAK8Pt_ZRatios(10);
+    double lepJetAK8Pt_ZRatios[11] = {150, 180, 210, 250, 310, 400, 500, 650, 800, 1100, 1500};
+    int nLepJetAK8Pt_ZRatios_RECO(12);
+    double lepJetAK8Pt_ZRatios_RECO[13] = {80, 100, 150, 180, 210, 250, 310, 400, 500, 650, 800, 1100, 1500};
+
+
 
     // ---
     int nLepJetAK8Pt_2_ZRatios(20);
@@ -2562,18 +2577,33 @@ HistoSet::HistoSet(string leptonFlavor)
     double lepJetAK8Pt_ZRatios_SPLIT[ (2 * nLepJetAK8Pt_ZRatios) + 1 ];
     splitBinsInTwoForTUnfold(nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
 
+    // NOTE: for the Mu Pt + Leading Jet Pt (AK8) R21 ratio, we account for bin migrations with a different fiducial selection at reco and gen levels
+    // In order to not have empty diagonal elements in the migration matrix, we have chosen different binnings for reco and gen level, as they have different
+    // minimum values due to cuts on the objects
+
     // inclusive
-    LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
-    LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
-    LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold", "lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
+    // standard choice where reco binning is just gen binning with each bin split into two --
+    // LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
+    // LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
+    // genLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "gen lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "gen lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // different binnings b/t reco and gen --
+    LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO);
+    LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO);
     genLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "gen lepton pt plus LJ pt for 1 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
     genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "gen lepton pt plus LJ pt for 2 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", nLepJetAK8Pt_ZRatios_RECO, lepJetAK8Pt_ZRatios_RECO, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
+    // 3 jet inc. dist.'s --
+    LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold = newTH1D("LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold", "lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT);
     genLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold = newTH1D("genLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold", "gen lepton pt plus LJ pt for 3 AK8 inc jet", lpT_LJpT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
     hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold", "hresp lepton pt plus LJ pt for 3 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 1 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
-    hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 2 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
     hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS", "hresp lepton pt plus LJ pt for 3 AK8 inc jet", 2 * nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios_SPLIT, nLepJetAK8Pt_ZRatios, lepJetAK8Pt_ZRatios);
 
     // exclusive 
