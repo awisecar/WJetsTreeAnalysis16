@@ -4,18 +4,14 @@ import sys
 import datetime
 import csv
 from array import array
-
-print("\nBegin!")
-
 ####################################
-
 # Select number of sublists, year
 numSubLists = 10
-year = 2016
-# year = 2017
+#year = 2016
+year = 2017
 # year = 2018
-
 ####################################
+print("\nBegin!")
 
 directory = "DataW_txt_" + str(year) + "/"
 

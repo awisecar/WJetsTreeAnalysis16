@@ -327,8 +327,8 @@ HistoSet::HistoSet(string leptonFlavor)
     // ---
     // int nJetAK8Pt_ZRatios(6);
     // double jetAK8Pt_ZRatios[7] = {200, 250, 350, 450, 600, 800, 1200};
-    int nJetAK8Pt_ZRatios(13);
-    double jetAK8Pt_ZRatios[14] = {30, 50, 75, 100, 130, 160, 200, 250, 300, 350, 450, 600, 800, 1200};
+    int nJetAK8Pt_ZRatios(16);
+    double jetAK8Pt_ZRatios[17] = {30, 50, 75, 100, 130, 160, 200, 250, 300, 350, 425, 500, 585, 680, 780, 900, 1100};
     // ---
     int nJetAK8Pt_2_ZRatios(24);
     double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
@@ -347,10 +347,10 @@ HistoSet::HistoSet(string leptonFlavor)
     // for Mu Pt + LJ Pt (AK8) distributions for ratio have a different fiducial selection
     // at reco level than the do at gen level, so in order to have entries in all the bins
     // and allow for migration effects, include lower pT bins for reco-level dist.
-    int nLepJetAK8Pt_ZRatios(10);
-    double lepJetAK8Pt_ZRatios[11] = {150, 180, 210, 250, 310, 400, 500, 650, 800, 1100, 1500};
-    int nLepJetAK8Pt_ZRatios_RECO(12);
-    double lepJetAK8Pt_ZRatios_RECO[13] = {80, 100, 150, 180, 210, 250, 310, 400, 500, 650, 800, 1100, 1500};
+    int nLepJetAK8Pt_ZRatios(9);
+    double lepJetAK8Pt_ZRatios[10] = {150, 200, 250, 315, 400, 500, 625, 800, 1050, 1400};
+    int nLepJetAK8Pt_ZRatios_RECO(11);
+    double lepJetAK8Pt_ZRatios_RECO[12] = {80, 100, 150, 200, 250, 315, 400, 500, 625, 800, 1050, 1400};
 
 
 
