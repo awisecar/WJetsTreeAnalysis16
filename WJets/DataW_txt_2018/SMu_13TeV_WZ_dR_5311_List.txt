@@ -1,3 +1,0 @@
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v2/MC/CRAB_PrivateMC/crab_WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu/200505_150748/0000/Bonzai-WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu_1.root
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v2/MC/CRAB_PrivateMC/crab_WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu/200505_150748/0000/Bonzai-WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu_2.root
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v2/MC/CRAB_PrivateMC/crab_WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu/200505_150748/0000/Bonzai-WZ_TuneCP5_PSweights_13TeV-pythia8-VJetPruner-SMu_3.root

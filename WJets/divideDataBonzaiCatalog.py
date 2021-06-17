@@ -8,8 +8,8 @@ from array import array
 # Select number of sublists, year
 numSubLists = 10
 #year = 2016
-year = 2017
-# year = 2018
+#year = 2017
+year = 2018
 ####################################
 print("\nBegin!")
 

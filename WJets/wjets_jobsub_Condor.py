@@ -68,7 +68,7 @@ years = [2016]
 ##############################
 ### ----- 2017 -----
 
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
+# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 41, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]     # full set of files, w+jets jet-binned
 
 # doQCD = [0, 1, 2, 3] # signal and control regions
@@ -82,15 +82,16 @@ years = [2016]
 ##############################
 ### ----- 2018 -----
 
-# doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 41, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]     # full set of files, w+jets jet-binned
+#doWhat = [15]
 
-# doQCD = [0, 1, 2, 3] #signal and control regions
-# doQCD = [0] #signal region
+#doQCD = [0, 1, 2, 3] #signal and control regions
+#doQCD = [0] #signal region
 
-# doSysRunning = [0]
+#doSysRunning = [0]
 
-# years = [2018]
+#years = [2018]
 
 ##############################
 ### ----- Systematics -----
@@ -120,6 +121,7 @@ years = [2016]
 ########### Lepton Eff. Scale Factors (LepSF)
 #doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]            #Background & Signal, 2016
 #doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal, 2017+2018
+#doWhat = [212]
 #doQCD = [0]
 #doSysRunning = [5]
 

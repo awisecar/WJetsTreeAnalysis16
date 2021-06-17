@@ -3232,9 +3232,18 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
             if (nGoodGenJetsAK8_30 >= 1){
                 genFirstJetAK8Pt_Zinc1jet_TUnfold->Fill(genJetsAK8_30[0].pt, genWeight);
+
+                // if ( (genLep1.Pt() >= 50.) && (genJetsAK8_30[0].pt >= 30.) ){
+                //     genLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8_30[0].pt, genWeight);
+                // }
+
             }
             if (nGoodGenJetsAK8_30 >= 2){
                 genSecondJetAK8Pt_Zinc2jet_TUnfold->Fill(genJetsAK8_30[1].pt, genWeight);
+
+                // if ( (genLep1.Pt() >= 50.) && (genJetsAK8_30[0].pt >= 30.) ){
+                //     genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8_30[0].pt, genWeight);
+                // }
             }
 
 
@@ -5059,10 +5068,21 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             if (nGoodGenJetsAK8_30 >= 1 && nGoodJetsAK8_30 >= 1){
                 hresponseFirstJetAK8Pt_Zinc1jet_TUnfold->Fill(jetsAK8_30[0].pt, genJetsAK8_30[0].pt, weight);
                 hresponseFirstJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(jetsAK8_30[0].pt, genJetsAK8_30[0].pt, genWeight);
+
+                // if ( (genLep1.Pt() >= 50.) && (genJetsAK8_30[0].pt >= 30.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
+                //     hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8_30[0].pt, weight);
+                //     hresponseLepPtPlusLeadingJetAK8Pt_Zinc1jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8_30[0].pt, genWeight);
+                // } 
+                
             }
             if (nGoodGenJetsAK8_30 >= 2 && nGoodJetsAK8_30 >= 2){
                 hresponseSecondJetAK8Pt_Zinc2jet_TUnfold->Fill(jetsAK8_30[1].pt, genJetsAK8_30[1].pt, weight);
                 hresponseSecondJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(jetsAK8_30[1].pt, genJetsAK8_30[1].pt, genWeight);
+
+                // if ( (genLep1.Pt() >= 50.) && (genJetsAK8_30[0].pt >= 30.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
+                //     hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8_30[0].pt, weight);
+                //     hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8_30[0].pt, genWeight);
+                // }
             }
             if (nGoodGenJetsAK8 >= 1 && nGoodJetsAK8_30 >= 1){
                 if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){

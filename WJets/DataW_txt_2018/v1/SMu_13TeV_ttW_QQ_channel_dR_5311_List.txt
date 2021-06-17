@@ -1,2 +1,0 @@
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v1/MC/CRAB_PrivateMC/crab_TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-VJetPruner-SMu/200207_090806/0000/Bonzai-TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-VJetPruner-SMu_1.root
-/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/2018/17Sep2018/Bonzai/v1/MC/CRAB_PrivateMC/crab_TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-VJetPruner-SMu/200207_090806/0000/Bonzai-TTWJetsToQQ_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-VJetPruner-SMu_2.root

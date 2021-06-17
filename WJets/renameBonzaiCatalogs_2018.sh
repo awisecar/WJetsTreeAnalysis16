@@ -47,6 +47,4 @@ mv Bonzais-WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt  
 mv Bonzais-WZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                  SMu_13TeV_WZTo2L2Q_dR_5311_List.txt
 mv Bonzais-ZZTo2L2Nu_TuneCP5_13TeV_powheg_pythia8-all-VJetPruner-SMu.txt                                       SMu_13TeV_ZZTo2L2Nu_dR_5311_List.txt
 mv Bonzais-ZZTo2L2Q_13TeV_amcatnloFXFX_madspin_pythia8-all-VJetPruner-SMu.txt                                  SMu_13TeV_ZZTo2L2Q_dR_5311_List.txt
-# mv Bonzais-WZ_TuneCP5_PSweights_13TeV-pythia8-all-VJetPruner-SMu.txt                                           SMu_13TeV_WZ_dR_5311_List.txt
-# mv Bonzais-ZZ_TuneCP5_13TeV-pythia8-all-VJetPruner-SMu.txt                                                     SMu_13TeV_ZZ_dR_5311_List.txt
 
