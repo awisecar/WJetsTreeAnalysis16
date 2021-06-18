@@ -132,6 +132,35 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
     
     //==========================================================================================================//
+    //     NLO Electroweak Corrections (for GEN)     //
+    //===============================================//
+
+    bool doGenNloEWcorr(true);
+    // bool doGenNloEWcorr(false);
+
+    TH1D *hGenNloEWcorr = NULL;
+    if (hasGenInfo && doGenNloEWcorr){
+
+        std::cout << "Doing NLO electroweak corrections!" << std::endl;
+        TFile *fGenNloEWcorr = new TFile("EfficiencyTables/nloEWcorr.root");
+        hGenNloEWcorr = (TH1D*) fGenNloEWcorr->Get("h_nloEW_corr");
+        hGenNloEWcorr->SetDirectory(0);
+        if (fGenNloEWcorr) fGenNloEWcorr->Close();
+
+        // std::cout << "hGenNloEWcorr:" << std::endl;
+        for (int i(1); i <= hGenNloEWcorr->GetNbinsX(); i++){
+            double binEdgeLow = hGenNloEWcorr->GetXaxis()->GetBinLowEdge(i);
+            double binEdgeHigh = hGenNloEWcorr->GetXaxis()->GetBinUpEdge(i);
+            double binContent = hGenNloEWcorr->GetBinContent(i);
+            // std::cout << "Bin #" << i << ", [" << binEdgeLow << ", " << binEdgeHigh << "]: " << binContent << std::endl;
+        }
+
+        std::cout << std::endl;
+    }
+
+    //==========================================================================================================//
+
+    //==========================================================================================================//
     //     Systematics: jec, pu, xsec     //
     //====================================//
     
@@ -247,7 +276,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // eventOfInterest is the event whose content we want to investigate if PRINTEVENTINFO is on
     int eventOfInterest = 100;
     for (Long64_t jentry(0); jentry < nentries; jentry++){
-    // for (Long64_t jentry(0); jentry < 3000000; jentry++){
+    // for (Long64_t jentry(0); jentry < 50000; jentry++){
         if (PRINTEVENTINFO && jentry == eventOfInterest) cout << "\n" << __LINE__ << " PRINTEVENTINFO: ==================== EVENT INFO for Event # " << eventOfInterest << " ==================== " << endl;
 
         Long64_t ientry = LoadTree(jentry);
@@ -288,6 +317,37 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         double genWeightBackup(genWeight);
         TotalGenWeight += genWeightBackup;
         //---
+
+        // ----------------------------------------------------------
+        // --- NLO EW Corrections multiplied into genWeight ---
+        if (hasGenInfo && doGenNloEWcorr){
+            
+            // Get gen-level W boson pT for the event
+            double genWpT(0.);
+            if (GWbosonPt->size() > 0) genWpT = GWbosonPt->at(0);
+            else genWpT = 0.;
+            // std::cout << "genWpT = " << genWpT << std::endl;
+
+            // Get EW correction value based on gen-level W boson pT
+            double nloEWcorr(1.0);
+            if (genWpT > 30.0){
+                int binIdx(-1);
+                for (int i(1); i <= hGenNloEWcorr->GetNbinsX(); i++){
+                    double binEdgeLow = hGenNloEWcorr->GetXaxis()->GetBinLowEdge(i);
+                    double binEdgeHigh = hGenNloEWcorr->GetXaxis()->GetBinUpEdge(i);
+                    if ( (genWpT >= binEdgeLow) && (genWpT <= binEdgeHigh) ){
+                        binIdx = i;
+                        break;
+                    }
+                }
+                nloEWcorr = hGenNloEWcorr->GetBinContent(binIdx);
+                // std::cout << " >>> genWpT = " << genWpT << std::endl;
+                // std::cout << " >>> nloEWcorr = " << nloEWcorr << std::endl;
+            }
+            genWeight *= nloEWcorr;
+
+        }
+        // ----------------------------------------------------------
         
         if (hasRecoInfo){
             if (energy == "13TeV" && doW){
@@ -2704,7 +2764,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         //=======================================================================================================//
 
         // Wb study
-        if ( doWbsyst && countWbBjets == 1 && hasGenInfo){
+        if (doWbsyst && countWbBjets == 1 && hasGenInfo){
             weight = weight * WbSystSF;
             genWeight = genWeight * WbSystSF;
         }
@@ -5631,6 +5691,8 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     /////////////////////////////
     // GENERATOR VARIABLES
 
+    GWbosonPt = 0;
+
     GLepBarePt = 0;
     GLepBareEta = 0;
     GLepBarePhi = 0;
@@ -5841,6 +5903,8 @@ void ZJetsAndDPS::Init(bool hasRecoInfo, bool hasGenInfo){
     } //end hasRecoInfo
 
     if (hasGenInfo){
+
+        fChain->SetBranchAddress("GWbosonPt", &GWbosonPt, &b_GWbosonPt);
 
         //Generator level leptons, not-dressed
         fChain->SetBranchAddress("GLepBarePt", &GLepBarePt, &b_GLepBarePt);

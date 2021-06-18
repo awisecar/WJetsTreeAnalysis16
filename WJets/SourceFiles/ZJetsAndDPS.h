@@ -83,6 +83,10 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_TrigMETBit;   //!
     
     // GENERATOR LEVEL (hasGenInfo) --------------------
+
+    vector<float>    *GWbosonPt;
+    TBranch          *b_GWbosonPt;   //!
+
     //Generator level leptons, not-dressed
     vector<float>  *GLepBarePt;
     vector<float>  *GLepBareEta;
@@ -303,7 +307,6 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk08JecUncUp;
     TBranch        *b_JetAk08JecUncDwn;
     
-
     // Other functions
     string   CreateOutputFileName(bool, bool, int, bool, int, int, bool, bool);
     Int_t    Cut(Long64_t entry);
@@ -349,5 +352,3 @@ class ZJetsAndDPS: public HistoSet {
 };
 
 #endif
-
-

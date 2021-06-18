@@ -27,7 +27,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
     //    int doWhat       = 100;
                               // 100 - all samples; 200 - all MC samples 
                               // 10, 11, ... - individual data samples, 1 - background , 2 - tau ?, 3 - DY, 
-                              // 41 - W+jets inc. NLO-FxFx, 42 - W+jets inc. LO-MLM
+                              // 41 - W+jets incl. NLO-FxFx, 42 - W+jets incl. LO-MLM
                               // 5 - W+jets FxFx W pT-binned, 6 - W+jets FxFx jet-binned,
                               // 51 - MC gen, 90 - PDF Syst., 1001 - do pull DY samples
 
@@ -54,7 +54,7 @@ void runEvtSelection(int doWhat = 0, int doQCD = 0, int doSysRunning = 0, int ye
 
                             
     //    int year        = 2016;
-       //int year        = 2017;
+    //    int year        = 2017;
     //   int year        = 2018;
                            // 2016, 2017, or 2018 data/MC
 
