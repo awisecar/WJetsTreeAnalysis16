@@ -14,6 +14,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <numeric>
 
 #include "standalone_LumiReWeighting.h"
 #include "getFilesAndHistograms.h"
@@ -131,12 +132,22 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     std::cout << std::endl;
     //==========================================================================================================//
     
+    // Switch to do theoretical uncertainties (scales, PDF, alpha-s) for theoretical predictions
+    // bool doTheoryUncert(true);
+    bool doTheoryUncert(false);
+
+    // Switch for which theoretical uncertainty to calculate
+    // --- Scale uncertainties (11 - 18)
+    // --- PDF uncertainty (up/down) (21, 22)
+    // --- alpha-s uncertainty (up/down) (31, 32)
+    int whichTheoryUncert(21);
+
     //==========================================================================================================//
     //     NLO Electroweak Corrections (for GEN)     //
     //===============================================//
 
-    bool doGenNloEWcorr(true);
-    // bool doGenNloEWcorr(false);
+    // bool doGenNloEWcorr(true);
+    bool doGenNloEWcorr(false);
 
     TH1D *hGenNloEWcorr = NULL;
     if (hasGenInfo && doGenNloEWcorr){
@@ -317,6 +328,72 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
         double genWeightBackup(genWeight);
         TotalGenWeight += genWeightBackup;
         //---
+
+        // -------------------------------------------------------------
+        // --- Theoretical uncertainties for W+Jets NLO FxFx samples ---
+        if (hasGenInfo && doTheoryUncert){
+            double theoryVarWeight(1.0);
+
+            // --- Scale Uncertainties ----------------------------------
+            if ( (whichTheoryUncert >= 11) && (whichTheoryUncert <= 18) ){
+                double valueTemp(EvtWeights->at(0));
+
+                // indexing of scale variations in EvtWeights is the same for all years
+                // but... not all of the 8 scale variations included are "physical"
+                // the unphysical variations are where (muR, muF) = (2, 0.5) or (0.5, 2)
+                if ( (whichTheoryUncert == 15) || (whichTheoryUncert == 17) ){ // unphysical variations
+                    valueTemp = EvtWeights->at(0);
+                }
+                else valueTemp = EvtWeights->at(whichTheoryUncert-9);
+                
+                // divide by the central GEN weight to get fractional variation
+                theoryVarWeight = valueTemp/EvtWeights->at(0);
+            }
+            // --- PDF Set Uncertainties --------------------------------
+            if ( (whichTheoryUncert == 21) || (whichTheoryUncert == 22) ){
+
+                // get the 100 PDF replica sets
+                std::vector<double> pdfReplicaVar;
+                // 2016
+                if (year == 2016){
+                    for (int i(0); i < 100; i++) pdfReplicaVar.push_back( EvtWeights->at(i+10) );
+                }
+                // 2017, 2018
+                if ( (year == 2017) || (year == 2018) ){
+                    for (int i(0); i < 100; i++) pdfReplicaVar.push_back( EvtWeights->at(i+114) );
+                }
+                
+                // EDIT: check this code again....
+                // calculate mean
+                double sum = std::accumulate(pdfReplicaVar.begin(), pdfReplicaVar.end(), 0.0);
+                double mean = sum / pdfReplicaVar.size();
+                // calculate standard deviation
+                std::vector<double> diff(pdfReplicaVar.size());
+                std::transform(pdfReplicaVar.begin(), pdfReplicaVar.end(), diff.begin(), std::bind2nd(std::minus<double>(), mean));
+                double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
+                double stdev = std::sqrt(sq_sum / pdfReplicaVar.size());
+
+                // for uncertainty calculation, do 1 +- std/mean
+                if (whichTheoryUncert == 21) theoryVarWeight = 1.0 + (stdev/mean);
+                if (whichTheoryUncert == 22) theoryVarWeight = 1.0 - (stdev/mean);
+            }
+            // --- alpha-s Uncertainties --------------------------------
+            if ( (whichTheoryUncert == 31) || (whichTheoryUncert == 32) ){
+                double valueTemp(EvtWeights->at(0));
+
+                // 2016
+                if (year == 2016) valueTemp = EvtWeights->at(whichTheoryUncert+79);
+                // 2017, 2018
+                if ( (year == 2017) || (year == 2018) ) valueTemp = EvtWeights->at(whichTheoryUncert+80);
+
+                // divide by the central GEN weight to get fractional variation
+                theoryVarWeight = valueTemp/EvtWeights->at(0);
+            }
+
+            // Multiply reweighting factor from theory uncert. variations into main genWeight
+            genWeight *= theoryVarWeight; 
+        }
+        // -------------------------------------------------------------
 
         // ----------------------------------------------------------
         // --- NLO EW Corrections multiplied into genWeight ---
