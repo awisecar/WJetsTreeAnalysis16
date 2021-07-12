@@ -1792,6 +1792,16 @@ public:
 	TH2D *hresponsedRapidityJets_Zinc2jet_TUnfold;
 	TH2D *hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
+    TH1D *dRJets_Zinc2jet_TUnfold;
+    TH1D *gendRJets_Zinc2jet_TUnfold;
+    TH2D *hresponsedRJets_Zinc2jet_TUnfold;
+    TH2D *hresponsedRJets_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *diJetMass_Zinc2jet_TUnfold;
+    TH1D *gendiJetMass_Zinc2jet_TUnfold;
+    TH2D *hresponsediJetMass_Zinc2jet_TUnfold;
+    TH2D *hresponsediJetMass_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
     TH1D *dRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
 	TH1D *gendRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
 	TH2D *hresponsedRLepCloseJetCo300dR04_Zinc1jet_TUnfold;
@@ -1841,6 +1851,16 @@ public:
 	TH1D *gendRapidityJetsAK8_Zinc2jet_TUnfold;
 	TH2D *hresponsedRapidityJetsAK8_Zinc2jet_TUnfold;
 	TH2D *hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *dRJetsAK8_Zinc2jet_TUnfold;
+    TH1D *gendRJetsAK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedRJetsAK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedRJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
+    TH1D *diJetAK8Mass_Zinc2jet_TUnfold;
+    TH1D *gendiJetAK8Mass_Zinc2jet_TUnfold;
+    TH2D *hresponsediJetAK8Mass_Zinc2jet_TUnfold;
+    TH2D *hresponsediJetAK8Mass_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
     TH1D *dRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold;
 	TH1D *gendRLepCloseAK8JetCo300dR08_Zinc1jet_TUnfold;
