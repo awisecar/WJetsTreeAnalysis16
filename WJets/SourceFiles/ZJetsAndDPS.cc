@@ -3573,6 +3573,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 gendPhiJets_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
                 gendPhiJets_2_Zinc2jet->Fill(deltaPhi(genLeadJ, genSecondJ), genWeight);
+                gendPhiJets_Zinc2jet_TUnfold->Fill(deltaPhi(genNewLeadJ, genNewSecondJ), genWeight);
                 
                 // genBestdPhiJets_Zinc2jet->Fill(deltaPhi(genBestTwoJets.first, genBestTwoJets.second), genWeight);
                 gendEtaJets_Zinc2jet->Fill(genLeadJ.Eta() - genSecondJ.Eta(), genWeight);
@@ -3701,12 +3702,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) ){
                     genLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                    genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
                 }
-                genLepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
+                
 
                 genSecondJetAK8AbsRapidity_Zinc2jet_TUnfold->Fill(fabs(genNewSecondJAK8.Rapidity()), genWeight);
                 gendPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(genLep1, genNewSecondJAK8), genWeight);
                 
+                gendPhiJetsAK8_Zinc2jet_TUnfold->Fill(deltaPhi(genNewLeadJAK8, genNewSecondJAK8), genWeight);
                 gendRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), genWeight);
                 gendRJetsAK8_Zinc2jet_TUnfold->Fill(deltaRYPhi(genNewLeadJAK8, genNewSecondJAK8), genWeight);
 
@@ -3781,9 +3784,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
 
                 if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) ){
                     genLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+                    genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
                 }
 
-                genLepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
+                
 
                 if (nGoodGenJetsAK8 == 3){
                     genLeadingJetAK8Pt_Zexc3jet->Fill(genJetsAK8[0].pt, genWeight);
@@ -4220,6 +4224,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 diJetAK8Mass_Zinc2jet_TUnfold->Fill(jet1Plus2AK8_30.M(), weight);
                 if ( (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
                     LepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, weight);
+                    LepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., weight);
                 }
 
                 if (nGoodJetsAK8_30 == 2){
@@ -4232,6 +4237,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             if (nGoodJetsAK8_30 >= 3){
                 if ( (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
                     LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, weight);
+                    LepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., weight);
                 }
             }
 
@@ -4495,6 +4501,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 dPhiJets_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
                 dPhiJets_2_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), weight);
+                dPhiJets_Zinc2jet_TUnfold->Fill(deltaPhi(newLeadJ, newSecondJ), weight);
                 
                 // BestdPhiJets_Zinc2jet->Fill(deltaPhi(bestTwoJets.first, bestTwoJets.second), weight);
                 dEtaJets_Zinc2jet->Fill(leadJ.Eta() - secondJ.Eta(), weight);
@@ -4701,11 +4708,10 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LepPtPlusLeadingJetAK8Pt_Zinc2jet->Fill(lepton1.pt + jetsAK8[0].pt, weight);
                 LepPtPlusLeadingJetAK8Pt_2_Zinc2jet->Fill(lepton1.pt + jetsAK8[0].pt, weight);
                 
-                LepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., weight);
-
                 SecondJetAK8AbsRapidity_Zinc2jet_TUnfold->Fill(fabs(newSecondJAK8.Rapidity()), weight);
                 dPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(lep1, newSecondJAK8), weight);
                 
+                dPhiJetsAK8_Zinc2jet_TUnfold->Fill(deltaPhi(newLeadJAK8, newSecondJAK8), weight);
                 dRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), weight);
                 dRJetsAK8_Zinc2jet_TUnfold->Fill(deltaRYPhi(newLeadJAK8, newSecondJAK8), weight);
 
@@ -4819,7 +4825,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 LepPtPlusLeadingJetAK8Pt_2_Zinc3jet->Fill(lepton1.pt + jetsAK8[0].pt, weight);
 
                 // LepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, weight);
-                LepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., weight);
+                
 
                 if (nGoodJetsAK8 == 3){
                     LeadingJetAK8Pt_Zexc3jet->Fill(jetsAK8[0].pt, weight);
@@ -5314,6 +5320,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
                     hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8[0].pt, weight);
                     hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+
+                    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., weight);
+                    hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
                 }
                 if (nGoodGenJetsAK8 == 2 && nGoodJetsAK8_30 == 2){
                     if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
@@ -5326,6 +5335,9 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 if ( (genLep1.Pt() >= 50.) && (genJetsAK8[0].pt >= 100.) && (lepton1.pt >= 50.) && (jetsAK8_30[0].pt >= 30.) ){
                     hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8[0].pt, weight);
                     hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + jetsAK8_30[0].pt, genLep1.Pt()+genJetsAK8[0].pt, genWeight);
+
+                    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., weight);
+                    hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + (jetsAK8_30[0].pt + jetsAK8_30[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
                 }
             }
 
@@ -5422,6 +5434,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 
                 hresponsedPhiJets_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), deltaPhi(genLeadJ, genSecondJ), weight);
                 hresponsedPhiJets_2_Zinc2jet->Fill(deltaPhi(leadJ, secondJ), deltaPhi(genLeadJ, genSecondJ), weight);
+                hresponsedPhiJets_Zinc2jet_TUnfold->Fill(deltaPhi(newLeadJ, newSecondJ), deltaPhi(genNewLeadJ, genNewSecondJ), weight);
+                hresponsedPhiJets_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(newLeadJ, newSecondJ), deltaPhi(genNewLeadJ, genNewSecondJ), genWeight);
                 
                 hresponsedPhiJetsFB_Zinc2jet->Fill(deltaPhi(vJetYOrdered[0], vJetYOrdered[vJetYOrdered.size() - 1] ), deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), weight);
                 hresponsedPhiJetsFB_2_Zinc2jet->Fill(deltaPhi(vJetYOrdered[0], vJetYOrdered[vJetYOrdered.size() - 1] ), deltaPhi(genvJetYOrdered[0], genvJetYOrdered[genvJetYOrdered.size() - 1] ), weight);
@@ -5457,14 +5471,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 hresponseLepPtPlusLeadingJetAK8Pt_Zinc2jet->Fill(lepton1.pt + jetsAK8[0].pt, genLep1.Pt()+genJetsAK8[0].pt, weight);
                 hresponseLepPtPlusLeadingJetAK8Pt_2_Zinc2jet->Fill(lepton1.pt + jetsAK8[0].pt, genLep1.Pt()+genJetsAK8[0].pt, weight);
 
-                hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., weight);
-                hresponseLepPtPlusHT2over2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
+                
 
                 hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold->Fill(fabs(newSecondJAK8.Rapidity()), fabs(genNewSecondJAK8.Rapidity()), weight);
                 hresponseSecondJetAK8AbsRapidity_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newSecondJAK8.Rapidity()), fabs(genNewSecondJAK8.Rapidity()), genWeight);
                 hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold->Fill(deltaPhi(lep1, newSecondJAK8), deltaPhi(genLep1, genNewSecondJAK8), weight);
                 hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(lep1, newSecondJAK8), deltaPhi(genLep1, genNewSecondJAK8), genWeight);
                 
+                hresponsedPhiJetsAK8_Zinc2jet_TUnfold->Fill(deltaPhi(newLeadJAK8, newSecondJAK8), deltaPhi(genNewLeadJAK8, genNewSecondJAK8), weight);
+                hresponsedPhiJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(deltaPhi(newLeadJAK8, newSecondJAK8), deltaPhi(genNewLeadJAK8, genNewSecondJAK8), genWeight);
                 hresponsedRapidityJetsAK8_Zinc2jet_TUnfold->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), weight);
 	            hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS->Fill(fabs(newLeadJAK8.Rapidity() - newSecondJAK8.Rapidity()), fabs(genNewLeadJAK8.Rapidity() - genNewSecondJAK8.Rapidity()), genWeight);
                 hresponsedRJetsAK8_Zinc2jet_TUnfold->Fill(deltaRYPhi(newLeadJAK8, newSecondJAK8), deltaRYPhi(genNewLeadJAK8, genNewSecondJAK8), weight);
@@ -5531,8 +5546,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 // hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold->Fill(lepton1.pt + jetsAK8[0].pt, genLep1.Pt()+genJetsAK8[0].pt, weight);
                 // hresponseLepPtPlusLeadingJetAK8Pt_Zinc3jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + jetsAK8[0].pt, genLep1.Pt()+genJetsAK8[0].pt, genWeight);
 
-                hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., weight);
-                hresponseLepPtPlusHT2over2AK8_Zinc3jet_TUnfold_NOEFFWEIGHTS->Fill(lepton1.pt + (jetsAK8[0].pt + jetsAK8[1].pt)/2., genLep1.Pt() + (genJetsAK8[0].pt + genJetsAK8[1].pt)/2., genWeight);
+                
 
                 if (nGoodGenJetsAK8 == 3 && nGoodJetsAK8 == 3){
                     hresponseLeadingJetAK8Pt_Zexc3jet->Fill(jetsAK8[0].pt, genJetsAK8[0].pt, weight);

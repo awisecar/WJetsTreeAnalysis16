@@ -1787,6 +1787,12 @@ public:
     TH2D *hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
     // other AK4 dist's --
+
+    TH1D *dPhiJets_Zinc2jet_TUnfold;
+    TH1D *gendPhiJets_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiJets_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiJets_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
     TH1D *dRapidityJets_Zinc2jet_TUnfold;
 	TH1D *gendRapidityJets_Zinc2jet_TUnfold;
 	TH2D *hresponsedRapidityJets_Zinc2jet_TUnfold;
@@ -1847,6 +1853,12 @@ public:
     TH2D *hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
 
     // other AK8 dist's --
+
+    TH1D *dPhiJetsAK8_Zinc2jet_TUnfold;
+    TH1D *gendPhiJetsAK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiJetsAK8_Zinc2jet_TUnfold;
+    TH2D *hresponsedPhiJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS;
+
     TH1D *dRapidityJetsAK8_Zinc2jet_TUnfold;
 	TH1D *gendRapidityJetsAK8_Zinc2jet_TUnfold;
 	TH2D *hresponsedRapidityJetsAK8_Zinc2jet_TUnfold;

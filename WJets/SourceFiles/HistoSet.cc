@@ -165,13 +165,13 @@ HistoSet::HistoSet(string leptonFlavor)
         lJetdEta = "#Delta#eta(#mu,j_{1})";
     }
 
-
-    int nJetPt_Zinc1jet(16);
-    double jetPt_Zinc1jet[17] =  {20, 24, 30, 39, 49, 62, 79, 105, 138, 181, 231, 294, 375, 550, 900, 1400, 2000};
-
-    int nJetPt_Zinc2jet(15);
-    double jetPt_Zinc2jet[16] =  {20, 24, 30, 39, 49, 62, 78, 105, 142, 185, 235, 320, 430, 600, 900, 1500};
-
+    // First AK4 Jet pT
+    int nJetPt_Zinc1jet(14);
+    double jetPt_Zinc1jet[15] =  {20, 30, 40, 55, 75, 105, 145, 200, 270, 365, 500, 650, 850, 1200, 1600}; 
+    
+    // Second AK4 Jet pT
+    int nJetPt_Zinc2jet(12);
+    double jetPt_Zinc2jet[13] =  {20, 30, 40, 55, 75, 105, 150, 220, 320, 450, 600, 800, 1200};
 
     int nJetPt_Zinc3jet(10);
     double jetPt_Zinc3jet[11] =  {20, 24, 30, 41, 59, 81, 110, 152, 200, 300, 550};
@@ -333,23 +333,17 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //use for jet pt -----
     // ---
-    // int nJetAK8Pt_ZRatios(6);
-    // double jetAK8Pt_ZRatios[7] = {200, 250, 350, 450, 600, 800, 1200};
-    // int nJetAK8Pt_ZRatios(16);
-    // double jetAK8Pt_ZRatios[17] = {30, 50, 75, 100, 130, 160, 200, 250, 300, 350, 425, 500, 585, 680, 780, 900, 1100};
-    // ALW 19 MAY 21 -- re-binned with larger bin widths b/c was seeing fluctuations in the unfolded data
+    // First AK8 Jet pT 
     int nJetAK8Pt_ZRatios(11);
-    double jetAK8Pt_ZRatios[12] = {30, 50, 80, 125, 185, 260, 360, 500, 700, 900, 1400, 2000};
-
+    double jetAK8Pt_ZRatios[12] = {30, 50, 80, 125, 185, 260, 360, 500, 680, 900, 1200, 1500};
     // ---
     int nJetAK8Pt_2_ZRatios(24);
     double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
     // ---
+    // Second AK8 Jet pT
     int nJetAK8Pt_Zinc2jet(9);
-    double jetAK8Pt_Zinc2jet[10] = {30, 50, 80, 125, 185, 275, 400, 650, 1000, 1500};
-
-
+    double jetAK8Pt_Zinc2jet[10] = {30, 50, 80, 125, 185, 275, 400, 575, 800, 1200};
 
     //use for lep pt + LJ pt -----
     // ---
@@ -378,8 +372,10 @@ HistoSet::HistoSet(string leptonFlavor)
 
     //use for lep pt + HT,2/2 -----
     // ---
-    int nLepJetAK8HTover2_ZRatios(6);
-    double lepJetAK8HTover2_ZRatios[7] = {300, 400, 550, 700, 900, 1200, 1600};
+    // int nLepJetAK8HTover2_ZRatios(6);
+    // double lepJetAK8HTover2_ZRatios[7] = {300, 400, 550, 700, 900, 1200, 1600};
+    int nLepJetAK8HTover2_ZRatios(8);
+    double lepJetAK8HTover2_ZRatios[9] = {80, 125, 200, 275, 375, 525, 725, 1050, 1500};
     // ---
 
     //use for W pt based things -----
@@ -2487,15 +2483,21 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet2_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon jet2 (N_{jets} #geq 2)", 36,  0, PI, 18,  0, PI);
 
     // --- other AK4 dist's --
+
+    dPhiJets_Zinc2jet_TUnfold                       = newTH1D("dPhiJets_Zinc2jet_TUnfold", "#Delta#phi btwn jets (N_{jets} #geq 2)", jdPhi, 40, 0, PI);
+    gendPhiJets_Zinc2jet_TUnfold                    = newTH1D("gendPhiJets_Zinc2jet_TUnfold", "gen #Delta#phi btwn jets (N_{jets} #geq 2)", jdPhi, 20, 0, PI);
+    hresponsedPhiJets_Zinc2jet_TUnfold              = newTH2D("hresponsedPhiJets_Zinc2jet_TUnfold", "hresp #Delta#phi btwn jets (N_{jets} #geq 2)", 40, 0, PI, 20, 0, PI);
+    hresponsedPhiJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn jets (N_{jets} #geq 2)", 40, 0, PI, 20, 0, PI);
+
     dRapidityJets_Zinc2jet_TUnfold = newTH1D("dRapidityJets_Zinc2jet_TUnfold", "#Delta y btwn jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})", 24, 0, 4.8);
 	gendRapidityJets_Zinc2jet_TUnfold = newTH1D("gendRapidityJets_Zinc2jet_TUnfold", "gen #Delta y btwn jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})", 12, 0, 4.8);
 	hresponsedRapidityJets_Zinc2jet_TUnfold = newTH2D("hresponsedRapidityJets_Zinc2jet_TUnfold", "hresp #Delta y btwn jets (N_{jets} #geq 2)", 24, 0, 4.8, 12, 0, 4.8);
 	hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRapidityJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta y btwn jets (N_{jets} #geq 2)", 24, 0, 4.8, 12, 0, 4.8);
 
-    dRJets_Zinc2jet_TUnfold = newTH1D("dRJets_Zinc2jet_TUnfold", "#Delta R btwn jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",   50,  0.4,  5.4);
-    gendRJets_Zinc2jet_TUnfold = newTH1D("gendRJets_Zinc2jet_TUnfold", "gen #Delta R btwn jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",  25,  0.4,  5.4);
-    hresponsedRJets_Zinc2jet_TUnfold = newTH2D("hresponsedRJets_Zinc2jet_TUnfold", "hresp #Delta R btwn jets (N_{jets} #geq 2)",  50,  0.4,  5.4, 25,  0.4,  5.4);
-    hresponsedRJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn jets (N_{jets} #geq 2)",  50,  0.4,  5.4, 25,  0.4,  5.4);
+    dRJets_Zinc2jet_TUnfold = newTH1D("dRJets_Zinc2jet_TUnfold", "#Delta R btwn jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",   54,  0.4,  5.8);
+    gendRJets_Zinc2jet_TUnfold = newTH1D("gendRJets_Zinc2jet_TUnfold", "gen #Delta R btwn jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",  27,  0.4,  5.8);
+    hresponsedRJets_Zinc2jet_TUnfold = newTH2D("hresponsedRJets_Zinc2jet_TUnfold", "hresp #Delta R btwn jets (N_{jets} #geq 2)",  54,  0.4,  5.8, 27,  0.4,  5.8);
+    hresponsedRJets_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRJets_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn jets (N_{jets} #geq 2)",  54,  0.4,  5.8, 27,  0.4,  5.8);
 
     double dijetMass_Zinc2jet_SPLIT[ (2 * nDijetMass_Zinc2jet) + 1 ];
     splitBinsInTwoForTUnfold(nDijetMass_Zinc2jet, dijetMass_Zinc2jet, dijetMass_Zinc2jet_SPLIT);
@@ -2552,15 +2554,21 @@ HistoSet::HistoSet(string leptonFlavor)
     hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiLepJet2AK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn muon AK8 jet2 (N_{jets, AK8} #geq 2)", 20,  0, PI, 10,  0, PI);
 
     // other AK8 dist's --
+    
+    dPhiJetsAK8_Zinc2jet_TUnfold                       = newTH1D("dPhiJetsAK8_Zinc2jet_TUnfold", "#Delta#phi btwn AK8 jets (N_{jets} #geq 2)", jdPhi, 24, 0, PI);
+    gendPhiJetsAK8_Zinc2jet_TUnfold                    = newTH1D("gendPhiJetsAK8_Zinc2jet_TUnfold", "gen #Delta#phi btwn AK8 jets (N_{jets} #geq 2)", jdPhi, 12, 0, PI);
+    hresponsedPhiJetsAK8_Zinc2jet_TUnfold              = newTH2D("hresponsedPhiJetsAK8_Zinc2jet_TUnfold", "hresp #Delta#phi btwn AK8 jets (N_{jets} #geq 2)", 24, 0, PI, 12, 0, PI);
+    hresponsedPhiJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedPhiJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta#phi btwn AK8 jets (N_{jets} #geq 2)", 24, 0, PI, 12, 0, PI);
+    
     dRapidityJetsAK8_Zinc2jet_TUnfold = newTH1D("dRapidityJetsAK8_Zinc2jet_TUnfold", "#Delta y btwn AK8 jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})",  20, 0, 4.8);
 	gendRapidityJetsAK8_Zinc2jet_TUnfold = newTH1D("gendRapidityJetsAK8_Zinc2jet_TUnfold", "gen #Delta y btwn AK8 jets (N_{jets} #geq 2)", "#Deltay(j_{1 }j_{2})",  10, 0, 4.8);
 	hresponsedRapidityJetsAK8_Zinc2jet_TUnfold = newTH2D("hresponsedRapidityJetsAK8_Zinc2jet_TUnfold", "hresp #Delta y btwn AK8 jets (N_{jets} #geq 2)", 20, 0, 4.8, 10, 0, 4.8);
 	hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRapidityJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta y btwn AK8 jets (N_{jets} #geq 2)", 20, 0, 4.8, 10, 0, 4.8);
 
-    dRJetsAK8_Zinc2jet_TUnfold = newTH1D("dRJetsAK8_Zinc2jet_TUnfold", "#Delta R btwn AK8 jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",   30,  0.8,  5.4);
-    gendRJetsAK8_Zinc2jet_TUnfold = newTH1D("gendRJetsAK8_Zinc2jet_TUnfold", "gen #Delta R btwn AK8 jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",  15,  0.8,  5.4);
-    hresponsedRJetsAK8_Zinc2jet_TUnfold = newTH2D("hresponsedRJetsAK8_Zinc2jet_TUnfold", "hresp #Delta R btwn AK8 jets (N_{jets} #geq 2)",  30,  0.8,  5.4, 15,  0.8,  5.4);
-    hresponsedRJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn AK8 jets (N_{jets} #geq 2)",  30,  0.8,  5.4, 15,  0.8,  5.4);
+    dRJetsAK8_Zinc2jet_TUnfold = newTH1D("dRJetsAK8_Zinc2jet_TUnfold", "#Delta R btwn AK8 jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",   34,  0.8,  5.9);
+    gendRJetsAK8_Zinc2jet_TUnfold = newTH1D("gendRJetsAK8_Zinc2jet_TUnfold", "gen #Delta R btwn AK8 jets (N_{jets} #geq 2)", "#DeltaR(j_{1 }j_{2})",  17,  0.8,  5.9);
+    hresponsedRJetsAK8_Zinc2jet_TUnfold = newTH2D("hresponsedRJetsAK8_Zinc2jet_TUnfold", "hresp #Delta R btwn AK8 jets (N_{jets} #geq 2)",  34,  0.8,  5.9, 17,  0.8,  5.9);
+    hresponsedRJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS = newTH2D("hresponsedRJetsAK8_Zinc2jet_TUnfold_NOEFFWEIGHTS", "hresp #Delta R btwn AK8 jets (N_{jets} #geq 2)",  34,  0.8,  5.9, 17,  0.8,  5.9);
 
     double dijetAK8Mass_Zinc2jet_SPLIT[ (2 * nDijetAK8Mass_Zinc2jet) + 1 ];
     splitBinsInTwoForTUnfold(nDijetAK8Mass_Zinc2jet, dijetAK8Mass_Zinc2jet, dijetAK8Mass_Zinc2jet_SPLIT);

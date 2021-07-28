@@ -24,7 +24,9 @@ void mergeAllYears(){
         int fileSelect = FilesTTbarWJets[i];
         TString fileNameTemp =  ProcessInfo[fileSelect].filename;
 
-        mergeSampleAllYears("SMu", 0, 30, 0, 0, 0, fileNameTemp); // no bveto, doQCD=0
+        //mergeSampleAllYears("SMu", 0, 30, 0, 0, 0, fileNameTemp); // no bveto, doQCD=0
+        mergeSampleAllYears("SMu", 0, 30, 0, 0, -1, fileNameTemp); // b-tag veto, doQCD=0
+
     }
 
 }

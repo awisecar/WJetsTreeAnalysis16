@@ -258,198 +258,198 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
 			
             //andrew -- comment out this next block if you want to turn ttBar SFs off
 	        // // else if (i == 5){ // ttbar is file 5 when QCD is turned off (ttbar study) -- see fileNames.h
-            // else if (i == 6){ //ttbar is file 6 when running usual distributions with bveto == -1
+         //    else if (i == 6){ //ttbar is file 6 when running usual distributions with bveto == -1
 
-            //    hist[i][j]->SetFillColor(Colors[i]);
-            //    hist[i][j]->SetLineColor(Colors[i]);
-            //    legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
+         //       hist[i][j]->SetFillColor(Colors[i]);
+         //       hist[i][j]->SetLineColor(Colors[i]);
+         //       legend[j]->AddEntry(hist[i][j], legendNames[i].c_str(), "f");
 
-            //    //factors applied for jet multiplicities of 2 to 8
-            //    //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions i.e. file[5]=ttbar (see fileNames.h)
-            //    //note: I believe the scaling of the histograms is actually not saved back into the original file; 
-            //    //the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
-            //    if (year == 2016){
-            //        // inclusive jet cut
-            //        if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2016inc[0];
-            //        else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2016inc[1];
-            //        else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2016inc[2];
-            //        else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2016inc[3];
-            //        else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2016inc[4];
-            //        else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2016inc[5];
-            //        else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2016inc[6];
-            //        // exclusive jet cut
-            //        else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2016exc[0];
-            //        else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2016exc[1];
-            //        else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2016exc[2];
-            //        else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2016exc[3];
-            //        else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2016exc[4];
-            //        else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2016exc[5];
-            //        else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2016exc[6];
-            //        // if not >= 2 jets cut, set xsec SF to 1
-            //        else SFttbar = 1.;
-            //    }
-            //    else if (year == 2017){
-            //        // inclusive jet cut
-            //        if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2017inc[0];
-            //        else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2017inc[1];
-            //        else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2017inc[2];
-            //        else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2017inc[3];
-            //        else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2017inc[4];
-            //        else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2017inc[5];
-            //        else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2017inc[6];
-            //        // exclusive jet cut
-            //        else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2017exc[0];
-            //        else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2017exc[1];
-            //        else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2017exc[2];
-            //        else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2017exc[3];
-            //        else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2017exc[4];
-            //        else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2017exc[5];
-            //        else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2017exc[6];
-            //        // if not >= 2 jets cut, set xsec SF to 1
-            //        else SFttbar = 1.;
-            //    }
-            //    else{
-            //        // inclusive jet cut
-            //        if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2018inc[0];
-            //        else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2018inc[1];
-            //        else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2018inc[2];
-            //        else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2018inc[3];
-            //        else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2018inc[4];
-            //        else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2018inc[5];
-            //        else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2018inc[6];
-            //        // exclusive jet cut
-            //        else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2018exc[0];
-            //        else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2018exc[1];
-            //        else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2018exc[2];
-            //        else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2018exc[3];
-            //        else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2018exc[4];
-            //        else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2018exc[5];
-            //        else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2018exc[6];
-            //        // if not >= 2 jets cut, set xsec SF to 1
-            //        else SFttbar = 1.;
-            //    }
+         //       //factors applied for jet multiplicities of 2 to 8
+         //       //here I need to make sure we apply SFs to only ttbar distribution, not to other MC distributions i.e. file[5]=ttbar (see fileNames.h)
+         //       //note: I believe the scaling of the histograms is actually not saved back into the original file; 
+         //       //the getFile function used to grab the source file only "reads" the rootfile, doesn't "recreate" it
+         //       if (year == 2016){
+         //           // inclusive jet cut
+         //           if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2016inc[0];
+         //           else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2016inc[1];
+         //           else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2016inc[2];
+         //           else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2016inc[3];
+         //           else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2016inc[4];
+         //           else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2016inc[5];
+         //           else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2016inc[6];
+         //           // exclusive jet cut
+         //           else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2016exc[0];
+         //           else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2016exc[1];
+         //           else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2016exc[2];
+         //           else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2016exc[3];
+         //           else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2016exc[4];
+         //           else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2016exc[5];
+         //           else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2016exc[6];
+         //           // if not >= 2 jets cut, set xsec SF to 1
+         //           else SFttbar = 1.;
+         //       }
+         //       else if (year == 2017){
+         //           // inclusive jet cut
+         //           if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2017inc[0];
+         //           else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2017inc[1];
+         //           else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2017inc[2];
+         //           else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2017inc[3];
+         //           else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2017inc[4];
+         //           else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2017inc[5];
+         //           else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2017inc[6];
+         //           // exclusive jet cut
+         //           else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2017exc[0];
+         //           else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2017exc[1];
+         //           else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2017exc[2];
+         //           else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2017exc[3];
+         //           else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2017exc[4];
+         //           else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2017exc[5];
+         //           else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2017exc[6];
+         //           // if not >= 2 jets cut, set xsec SF to 1
+         //           else SFttbar = 1.;
+         //       }
+         //       else{
+         //           // inclusive jet cut
+         //           if (histoName[j].find("Zinc2jet")!= string::npos)      SFttbar = ttBarSF_2018inc[0];
+         //           else if (histoName[j].find("Zinc3jet")!= string::npos) SFttbar = ttBarSF_2018inc[1];
+         //           else if (histoName[j].find("Zinc4jet")!= string::npos) SFttbar = ttBarSF_2018inc[2];
+         //           else if (histoName[j].find("Zinc5jet")!= string::npos) SFttbar = ttBarSF_2018inc[3];
+         //           else if (histoName[j].find("Zinc6jet")!= string::npos) SFttbar = ttBarSF_2018inc[4];
+         //           else if (histoName[j].find("Zinc7jet")!= string::npos) SFttbar = ttBarSF_2018inc[5];
+         //           else if (histoName[j].find("Zinc8jet")!= string::npos) SFttbar = ttBarSF_2018inc[6];
+         //           // exclusive jet cut
+         //           else if (histoName[j].find("Zexc2jet")!= string::npos) SFttbar = ttBarSF_2018exc[0];
+         //           else if (histoName[j].find("Zexc3jet")!= string::npos) SFttbar = ttBarSF_2018exc[1];
+         //           else if (histoName[j].find("Zexc4jet")!= string::npos) SFttbar = ttBarSF_2018exc[2];
+         //           else if (histoName[j].find("Zexc5jet")!= string::npos) SFttbar = ttBarSF_2018exc[3];
+         //           else if (histoName[j].find("Zexc6jet")!= string::npos) SFttbar = ttBarSF_2018exc[4];
+         //           else if (histoName[j].find("Zexc7jet")!= string::npos) SFttbar = ttBarSF_2018exc[5];
+         //           else if (histoName[j].find("Zexc8jet")!= string::npos) SFttbar = ttBarSF_2018exc[6];
+         //           // if not >= 2 jets cut, set xsec SF to 1
+         //           else SFttbar = 1.;
+         //       }
 
-            //    //the two sections below scale the jet multiplicities
-            //    //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
-            //    if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
-            //        if (year == 2016){
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2016inc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2016inc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2016inc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2016inc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2016inc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2016inc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2016inc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2016inc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2016inc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2016inc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2016inc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2016inc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2016inc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2016inc[6]);
-            //        }
-            //        else if (year == 2017){
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2017inc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2017inc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2017inc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2017inc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2017inc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2017inc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2017inc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2017inc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2017inc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2017inc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2017inc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2017inc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2017inc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2017inc[6]);
-            //        }
-            //        else {
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2018inc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2018inc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2018inc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2018inc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2018inc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2018inc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2018inc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2018inc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2018inc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2018inc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2018inc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2018inc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2018inc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2018inc[6]);
-            //        }
-            //    }
-            //    else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
-            //        if (year == 2016){
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2016exc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2016exc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2016exc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2016exc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2016exc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2016exc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2016exc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2016exc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2016exc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2016exc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2016exc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2016exc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2016exc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2016exc[6]);
-            //        }
-            //        else if (year == 2017){
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2017exc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2017exc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2017exc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2017exc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2017exc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2017exc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2017exc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2017exc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2017exc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2017exc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2017exc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2017exc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2017exc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2017exc[6]);
-            //        }
-            //        else{
-            //            // bin contents
-            //            hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2018exc[0]);
-            //            hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2018exc[1]);
-            //            hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2018exc[2]);
-            //            hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2018exc[3]);
-            //            hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2018exc[4]);
-            //            hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2018exc[5]);
-            //            hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2018exc[6]);
-            //            // bin errors 
-            //            hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2018exc[0]);
-            //            hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2018exc[1]);
-            //            hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2018exc[2]);
-            //            hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2018exc[3]);
-            //            hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2018exc[4]);
-            //            hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2018exc[5]);
-            //            hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2018exc[6]);
-            //        }
-            //    }
-            //    else {
-            //        //it is this line where we scale the ttbar MC for each of the histograms
-            //        //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
-            //        hist[i][j]->Scale(SFttbar);
-            //    }
+         //       //the two sections below scale the jet multiplicities
+         //       //bin number 3 is 2 jet mult. (histogram bin number 1 is 0 jet bin)
+         //       if (histoName[j].find("ZNGoodJets_Zinc") != string::npos){
+         //           if (year == 2016){
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2016inc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2016inc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2016inc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2016inc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2016inc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2016inc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2016inc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2016inc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2016inc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2016inc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2016inc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2016inc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2016inc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2016inc[6]);
+         //           }
+         //           else if (year == 2017){
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2017inc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2017inc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2017inc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2017inc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2017inc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2017inc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2017inc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2017inc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2017inc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2017inc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2017inc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2017inc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2017inc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2017inc[6]);
+         //           }
+         //           else {
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2018inc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2018inc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2018inc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2018inc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2018inc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2018inc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2018inc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2018inc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2018inc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2018inc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2018inc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2018inc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2018inc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2018inc[6]);
+         //           }
+         //       }
+         //       else if (histoName[j].find("ZNGoodJets_Zexc") != string::npos){
+         //           if (year == 2016){
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2016exc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2016exc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2016exc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2016exc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2016exc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2016exc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2016exc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2016exc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2016exc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2016exc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2016exc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2016exc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2016exc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2016exc[6]);
+         //           }
+         //           else if (year == 2017){
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2017exc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2017exc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2017exc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2017exc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2017exc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2017exc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2017exc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2017exc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2017exc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2017exc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2017exc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2017exc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2017exc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2017exc[6]);
+         //           }
+         //           else{
+         //               // bin contents
+         //               hist[i][j]->SetBinContent(3, hist[i][j]->GetBinContent(3)*ttBarSF_2018exc[0]);
+         //               hist[i][j]->SetBinContent(4, hist[i][j]->GetBinContent(4)*ttBarSF_2018exc[1]);
+         //               hist[i][j]->SetBinContent(5, hist[i][j]->GetBinContent(5)*ttBarSF_2018exc[2]);
+         //               hist[i][j]->SetBinContent(6, hist[i][j]->GetBinContent(6)*ttBarSF_2018exc[3]);
+         //               hist[i][j]->SetBinContent(7, hist[i][j]->GetBinContent(7)*ttBarSF_2018exc[4]);
+         //               hist[i][j]->SetBinContent(8, hist[i][j]->GetBinContent(8)*ttBarSF_2018exc[5]);
+         //               hist[i][j]->SetBinContent(9, hist[i][j]->GetBinContent(9)*ttBarSF_2018exc[6]);
+         //               // bin errors 
+         //               hist[i][j]->SetBinError(3, hist[i][j]->GetBinError(3)*ttBarSF_2018exc[0]);
+         //               hist[i][j]->SetBinError(4, hist[i][j]->GetBinError(4)*ttBarSF_2018exc[1]);
+         //               hist[i][j]->SetBinError(5, hist[i][j]->GetBinError(5)*ttBarSF_2018exc[2]);
+         //               hist[i][j]->SetBinError(6, hist[i][j]->GetBinError(6)*ttBarSF_2018exc[3]);
+         //               hist[i][j]->SetBinError(7, hist[i][j]->GetBinError(7)*ttBarSF_2018exc[4]);
+         //               hist[i][j]->SetBinError(8, hist[i][j]->GetBinError(8)*ttBarSF_2018exc[5]);
+         //               hist[i][j]->SetBinError(9, hist[i][j]->GetBinError(9)*ttBarSF_2018exc[6]);
+         //           }
+         //       }
+         //       else {
+         //           //it is this line where we scale the ttbar MC for each of the histograms
+         //           //if the name of the histogram does not contain one of the phrases above, it is simply scaled by 1
+         //           hist[i][j]->Scale(SFttbar);
+         //       }
 
-	        //  } // END SCALING OF TTBAR
+	 //         } // END SCALING OF TTBAR
 
             // -----------------------------------------------------------------------------------------
 
@@ -553,12 +553,12 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         hist[0][i]->DrawCopy("e same");
         legend[i]->Draw();
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
-        cmsPre[i]->DrawLatex(0.27,0.87, " Work in Progress"); //uncomment later on
+        cmsPre[i]->DrawLatex(0.27,0.87, " Preliminary"); //uncomment later on
        
         if (yearStr == "2016")      intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
         else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71,0.955, "41.5 fb^{-1} (13 TeV)");
         else if (yearStr == "2018") intLumi[i]->DrawLatex(0.71,0.955, "59.7 fb^{-1} (13 TeV)");
-        else intLumi[i]->DrawLatex(0.71,0.955, "137.16 fb^{-1} (13 TeV)");
+        else intLumi[i]->DrawLatex(0.69,0.955, "137.16 fb^{-1} (13 TeV)");
 
         if (histoName[i].find("inc0") == string::npos){
             if (histoName[i].find("AK8") != string::npos){
