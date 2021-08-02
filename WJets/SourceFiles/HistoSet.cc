@@ -166,12 +166,12 @@ HistoSet::HistoSet(string leptonFlavor)
     }
 
     // First AK4 Jet pT
-    int nJetPt_Zinc1jet(14);
-    double jetPt_Zinc1jet[15] =  {20, 30, 40, 55, 75, 105, 145, 200, 270, 365, 500, 650, 850, 1200, 1600}; 
+    int nJetPt_Zinc1jet(13);
+    double jetPt_Zinc1jet[14] =  {20, 30, 40, 55, 75, 105, 145, 200, 270, 365, 500, 750, 1100, 1500}; 
     
     // Second AK4 Jet pT
-    int nJetPt_Zinc2jet(12);
-    double jetPt_Zinc2jet[13] =  {20, 30, 40, 55, 75, 105, 150, 220, 320, 450, 600, 800, 1200};
+    int nJetPt_Zinc2jet(11);
+    double jetPt_Zinc2jet[12] =  {20, 30, 40, 55, 75, 105, 150, 220, 320, 450, 700, 1000};
 
     int nJetPt_Zinc3jet(10);
     double jetPt_Zinc3jet[11] =  {20, 24, 30, 41, 59, 81, 110, 152, 200, 300, 550};
@@ -334,16 +334,16 @@ HistoSet::HistoSet(string leptonFlavor)
     //use for jet pt -----
     // ---
     // First AK8 Jet pT 
-    int nJetAK8Pt_ZRatios(11);
-    double jetAK8Pt_ZRatios[12] = {30, 50, 80, 125, 185, 260, 360, 500, 680, 900, 1200, 1500};
+    int nJetAK8Pt_ZRatios(10);
+    double jetAK8Pt_ZRatios[11] = {30, 50, 80, 125, 185, 260, 360, 500, 750, 1100, 1500};
     // ---
     int nJetAK8Pt_2_ZRatios(24);
     double jetAK8Pt_2_ZRatios[25] = {200, 205, 210, 215, 220, 227.5, 235, 242.5, 250, 262.5, 275, 292.5, 310, 332.5, 355, 380, 405, 437.5, 470, 520, 570, 645, 720, 860, 1000};
 
     // ---
     // Second AK8 Jet pT
-    int nJetAK8Pt_Zinc2jet(9);
-    double jetAK8Pt_Zinc2jet[10] = {30, 50, 80, 125, 185, 275, 400, 575, 800, 1200};
+    int nJetAK8Pt_Zinc2jet(8);
+    double jetAK8Pt_Zinc2jet[9] = {30, 50, 80, 130, 200, 300, 450, 700, 1000};
 
     //use for lep pt + LJ pt -----
     // ---

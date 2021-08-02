@@ -555,10 +555,10 @@ void Plotter(string leptonFlavor = "SMu", int year = 2016, int JetPtMin = 30,
         cmsColl[i]->DrawLatex(0.17,0.87, "CMS");
         cmsPre[i]->DrawLatex(0.27,0.87, " Preliminary"); //uncomment later on
        
-        if (yearStr == "2016")      intLumi[i]->DrawLatex(0.71,0.955, "35.9 fb^{-1} (13 TeV)");
-        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71,0.955, "41.5 fb^{-1} (13 TeV)");
-        else if (yearStr == "2018") intLumi[i]->DrawLatex(0.71,0.955, "59.7 fb^{-1} (13 TeV)");
-        else intLumi[i]->DrawLatex(0.69,0.955, "137.16 fb^{-1} (13 TeV)");
+        if (yearStr == "2016")      intLumi[i]->DrawLatex(0.71, 0.955, "35.9 fb^{-1} (13 TeV)");
+        else if (yearStr == "2017") intLumi[i]->DrawLatex(0.71, 0.955, "41.5 fb^{-1} (13 TeV)");
+        else if (yearStr == "2018") intLumi[i]->DrawLatex(0.71, 0.955, "59.7 fb^{-1} (13 TeV)");
+        else intLumi[i]->DrawLatex(0.67, 0.955, "137.16 fb^{-1} (13 TeV)");
 
         if (histoName[i].find("inc0") == string::npos){
             if (histoName[i].find("AK8") != string::npos){
