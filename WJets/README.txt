@@ -1,8 +1,69 @@
 # WJetsTreeAnalysis16
 
-#########################################
-### Note: THIS README NEEDS TO BE UPDATED
-#########################################
+# -----------------------------------------------------------------------------------------
+merging of W+jets histos --
+
+
+--- to find empty Root files in HistoFiles folders ---
+find . -type f -size -450k
+---------------------------------------------------
+
+
+first merge signal region/central, no systematics
+./wjets_Merge_Data_NoBVeto.sh
+	- OR ./wjets_Merge_Data_BVeto.sh 
+./wjets_Merge_Wpt_NoBVeto.sh
+	- OR ./wjets_Merge_Wpt_BVeto.sh
+merge BG's --
+(no TT merge for 2016)
+	- OR root -b -q -l runMergeTT.cc
+root -b -q -l runMergeTTV.cc
+root -b -q -l runMergeVV.cc
+root -b -q -l runMergeTop.cc
+and run QCD --
+root -b -q -l runQCD.cc
+then plots --
+root -b -q -l runPlots.cc
+
+
+then merge systematics...  
+merge data for syst = 2 --
+./wjets_Merge_Data_Syst_NoBVeto.sh
+merge W+jets for syst = 1, 4, 5, 11 --
+./wjets_Merge_Wpt_Syst_NoBVeto.sh
+then merge BG's for syst = 1, 3, 5, 11 --
+(no TT merge for 2016)
+	- OR root -b -q -l runMergeTT.cc
+root -b -q -l runMergeTTV.cc
+root -b -q -l runMergeVV.cc
+root -b -q -l runMergeTop.cc
+
+
+======
+
+
+have to rename histogram folders to 
+HistoFiles_2016, etc
+all before were named
+HistoFiles_2016_noBVeto, etc
+
+then run --
+root -b -q -l mergeAllYears.cc  
+NOTE: ttbar xsec SFs are applied per year here before merging all years to get Run2 combined
+- meaning you have to turn the ttBar xsec SFs off in SourceFiles/Plotter.cc before running plots
+
+to make plots, have to rename HistoFiles_Run2 to HistoFiles before plotting
+
+now make plots for merged Run2 --
+root -b -q -l runPlots.cc
+
+
+
+# -----------------------------------------------------------------------------------------
+
+##################################################### 
+### Note: THIS README (below) NEEDS TO BE UPDATED ###
+##################################################### 
 
 The instructions for running the W+jets 13TeV analysis code on bonzai ntuples (data and MC) for CMS Run 2 data.
 

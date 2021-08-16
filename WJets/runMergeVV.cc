@@ -7,30 +7,29 @@
 void mergeVV(string lepSelection = "SMu", int systematics = 0, int jetPtCutMin = 30, int doQCD = 0, int METcut = 0, int doBJets = -1);
 
 void runMergeVV(){
-    //mergeVV("SMu", 0, 30, 0, 0, -1); // bveto of 1 jet
-    //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto
-    // mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
 
     // central --
-    mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
-    mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
-    mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
-    mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
+    //mergeVV("SMu", 0, 30, 0, 0, 0); // no bveto, doQCD=0
+    //mergeVV("SMu", 0, 30, 1, 0, 0); // no bveto, doQCD=1
+    //mergeVV("SMu", 0, 30, 2, 0, 0); // no bveto, doQCD=2
+    //mergeVV("SMu", 0, 30, 3, 0, 0); // no bveto, doQCD=3
 
     // mergeVV("SMu", 0, 30, 0, 0, -1); // btag veto, doQCD=0
     // mergeVV("SMu", 0, 30, 1, 0, -1); // btag veto, doQCD=1
     // mergeVV("SMu", 0, 30, 2, 0, -1); // btag veto, doQCD=2
     // mergeVV("SMu", 0, 30, 3, 0, -1); // btag veto, doQCD=3
 
+    // mergeVV("SMu", 0, 30, 0, 0, 2); // >= 2 btags required
+
     // systematics --
-     //mergeVV("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
-     //mergeVV("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
-     //mergeVV("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-     //mergeVV("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
-     //mergeVV("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
-     //mergeVV("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
-     //mergeVV("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
-     //mergeVV("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+     mergeVV("SMu",   1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+     mergeVV("SMu",  -1, 30, 0, 0, 0); // no bveto, doQCD=0, syst=1
+     mergeVV("SMu",   3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+     mergeVV("SMu",  -3, 30, 0, 0, 0); // no bveto, doQCD=0, syst=3
+     mergeVV("SMu",   5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+     mergeVV("SMu",  -5, 30, 0, 0, 0); // no bveto, doQCD=0, syst=5
+     mergeVV("SMu",  11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
+     mergeVV("SMu", -11, 30, 0, 0, 0); // no bveto, doQCD=0, syst=11
     
 }
 

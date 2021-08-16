@@ -53,17 +53,17 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 ##############################
 ### ----- 2016 -----
 
-doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 41, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
+#doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 41, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]   # full set of files, w+jets jet-binned
 #doWhat = [41]
 #doWhat = [51, 52, 53, 54, 61, 62, 63]
 # doWhat = [61, 62, 63]
 
-doQCD = [0, 1, 2, 3] # all regions
+#doQCD = [0, 1, 2, 3] # all regions
 # doQCD = [0] # signal region
 #doQCD = [1, 2, 3] # control regions
 
-doSysRunning = [0]
+#doSysRunning = [0]
 
 years = [2016]
 
@@ -123,7 +123,6 @@ years = [2016]
 ########### Lepton Eff. Scale Factors (LepSF)
 #doWhat = [21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54]            #Background & Signal, 2016
 #doWhat = [211, 212, 213, 221, 222, 223, 23, 24, 25, 26, 27, 30, 51, 52, 53, 54] #Background & Signal, 2017+2018
-#doWhat = [212]
 #doQCD = [0]
 #doSysRunning = [5]
 
