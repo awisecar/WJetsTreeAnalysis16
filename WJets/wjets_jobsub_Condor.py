@@ -28,11 +28,11 @@ submit += 'log = '+mtmpdir+'/wjetsSub_$(ClusterId)_$(ProcId).log\n'
 # submit += 'request_cpus = 2\n\n'
 
 # submit += '+JobFlavour = "testmatch"\n\n' #testmatch is 3d queue
-submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
+# submit += '+JobFlavour = "tomorrow"\n\n' #tomorrow is 1d queue
 # submit += '+MaxRuntime = 43200\n\n' # set for 12h (12h = 43200s)
 # submit += '+MaxRuntime = 36000\n\n' # set for 10h (10h = 36000s)
 # submit += '+MaxRuntime = 32400\n\n' # set for 9h (9h = 32400s)
-# submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
+submit += '+JobFlavour = "workday"\n\n' #workday is 8h queue
 # submit += '+JobFlavour = "espresso"\n\n' #espresso is 20min queue
 
 submit += 'queue argument in 1'
@@ -55,15 +55,15 @@ cmsswdir = '/afs/cern.ch/user/a/awisecar/WJetsTreeAnalysis16_lxplus7/CMSSW_7_6_0
 
 #doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 41, 42, 51, 52, 53, 54] # full set of files, w+jets pT-binned
 # doWhat = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 221, 222, 223, 23, 24, 25, 26, 27, 30, 42, 61, 62, 63]   # full set of files, w+jets jet-binned
-#doWhat = [41]
+doWhat = [41]
 #doWhat = [51, 52, 53, 54, 61, 62, 63]
 # doWhat = [61, 62, 63]
 
 #doQCD = [0, 1, 2, 3] # all regions
-# doQCD = [0] # signal region
+doQCD = [0] # signal region
 #doQCD = [1, 2, 3] # control regions
 
-#doSysRunning = [0]
+doSysRunning = [0]
 
 years = [2016]
 

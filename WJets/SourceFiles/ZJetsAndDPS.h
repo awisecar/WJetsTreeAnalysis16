@@ -308,7 +308,7 @@ class ZJetsAndDPS: public HistoSet {
     TBranch        *b_JetAk08JecUncDwn;
     
     // Other functions
-    string   CreateOutputFileName(bool, bool, int, bool, int, int, bool, bool);
+    string   CreateOutputFileName(bool, bool, int, bool, int, int, bool, bool, bool, int);
     Int_t    Cut(Long64_t entry);
     Int_t    GetEntry(Long64_t entry);
     Long64_t LoadTree(Long64_t entry);

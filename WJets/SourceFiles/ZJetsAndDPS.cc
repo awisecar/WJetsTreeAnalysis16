@@ -66,15 +66,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     // Turn on MET filtering
     bool doMETFiltering = true;
 
-    //==========================================================================================================//
-    //         Create output file        //
-    //===================================//
-    string command = "mkdir -p " + outputDirectory;
-    system(command.c_str());
-    string outputFileName = CreateOutputFileName(useRoch, doFlat, doPUStudy, doVarWidth, doBJets, doQCD, doSSign , doInvMassCut);
-    TFile *outputFile = new TFile(outputFileName.c_str(), "RECREATE");
-    //==========================================================================================================//
-
     std::cout << std::endl;
     //==========================================================================================================//
     //       Load efficiency tables        //
@@ -137,8 +128,8 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==============================================================//
     
     // Switch to do theoretical uncertainties (scales, PDF, alpha-s) for theoretical predictions
-    // bool doTheoryUncert(true);
-    bool doTheoryUncert(false);
+    bool doTheoryUncert(true);
+    // bool doTheoryUncert(false);
 
     // Switch for which theoretical uncertainty to calculate
     // --- Scale uncertainties (11 - 18)
@@ -233,7 +224,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     cout << "\nsumEventW = " << sumEventW <<endl;
 
     //------------------------------------
-    std::cout << "\n-----> Print out variables: " << std::endl;
+    std::cout << "\n-----> Print out variables/switches: " << std::endl;
 
     std::cout << "---> Switches -- " << std::endl;
     std::cout << "hasRecoInfo: " << hasRecoInfo << std::endl;
@@ -276,6 +267,15 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     std::cout << "MTCut: " << MTCut << std::endl;
 
     std::cout << "---> Systematic: " << systematics << ", Direction: " << direction << ", XSecFactor: " << xsecfactor << std::endl;
+
+    //==========================================================================================================//
+    //         Create output file        //
+    //===================================//
+    string command = "mkdir -p " + outputDirectory;
+    system(command.c_str());
+    string outputFileName = CreateOutputFileName(useRoch, doFlat, doPUStudy, doVarWidth, doBJets, doQCD, doSSign, doInvMassCut, doTheoryUncert, whichTheoryUncert);
+    TFile *outputFile = new TFile(outputFileName.c_str(), "RECREATE");
+    //==========================================================================================================//
 
     //==========================================================================================================//
     // Start looping over all the events //
@@ -359,7 +359,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
             // --- PDF Set Uncertainties --------------------------------
             if ( (whichTheoryUncert == 21) || (whichTheoryUncert == 22) ){
 
-                // get the 100 PDF replica sets
+                // get the 100 PDF replica set weights
                 std::vector<double> pdfReplicaVar;
                 // 2016
                 if (year == 2016){
@@ -370,7 +370,6 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                     for (int i(0); i < 100; i++) pdfReplicaVar.push_back( EvtWeights->at(i+114) );
                 }
                 
-                // EDIT: check this code again....
                 // calculate mean
                 double sum = std::accumulate(pdfReplicaVar.begin(), pdfReplicaVar.end(), 0.0);
                 double mean = sum / pdfReplicaVar.size();
@@ -378,7 +377,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
                 std::vector<double> diff(pdfReplicaVar.size());
                 std::transform(pdfReplicaVar.begin(), pdfReplicaVar.end(), diff.begin(), std::bind2nd(std::minus<double>(), mean));
                 double sq_sum = std::inner_product(diff.begin(), diff.end(), diff.begin(), 0.0);
-                double stdev = std::sqrt(sq_sum / pdfReplicaVar.size());
+                double stdev = std::sqrt( sq_sum / (pdfReplicaVar.size()-1) );
 
                 // for uncertainty calculation, do 1 +- std/mean
                 if (whichTheoryUncert == 21) theoryVarWeight = 1.0 + (stdev/mean);
@@ -5812,8 +5811,10 @@ ZJetsAndDPS::~ZJetsAndDPS(){
     delete fChain->GetCurrentFile();
 }
 
-string ZJetsAndDPS::CreateOutputFileName(bool useRoch, bool doFlat, int doPUStudy, bool doVarWidth, int doBJets, int doQCD, bool doSSign, bool doInvMassCut){
+string ZJetsAndDPS::CreateOutputFileName(bool useRoch, bool doFlat, int doPUStudy, bool doVarWidth, int doBJets, int doQCD, bool doSSign, bool doInvMassCut, bool doTheoryUncert, int whichTheoryUncert){
+    
     ostringstream result;
+
     result << outputDirectory << fileName;
     result << "_EffiCorr_" << useEfficiencyCorrection;
     result << "_TrigCorr_" << useTriggerCorrection;
@@ -5834,11 +5835,13 @@ string ZJetsAndDPS::CreateOutputFileName(bool useRoch, bool doFlat, int doPUStud
     if (doVarWidth) result << "_VarWidth";
     if (doInvMassCut) result << "_InvMass";
     if (doSSign) result << "_SS";
+
     if (doBJets > 0) result << "_BJets";
     if (doBJets < 0) result << "_BVeto";
-    if (doQCD>0) result << "_QCD" << doQCD;
+    if (doQCD > 0) result << "_QCD" << doQCD;
     if (METcut > 0) result << "_MET" << METcut;
-
+    if (doTheoryUncert) result << "_TheoryUncert_" << whichTheoryUncert;
+    
     result << ".root";
     return result.str();
 }
