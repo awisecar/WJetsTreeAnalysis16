@@ -128,14 +128,14 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==============================================================//
     
     // Switch to do theoretical uncertainties (scales, PDF, alpha-s) for theoretical predictions
-    bool doTheoryUncert(true);
-    // bool doTheoryUncert(false);
+    // bool doTheoryUncert(true);
+    bool doTheoryUncert(false);
 
     // Switch for which theoretical uncertainty to calculate
     // --- Scale uncertainties (11 - 18)
     // --- PDF uncertainty (up/down) (21, 22)
     // --- alpha-s uncertainty (up/down) (31, 32)
-    int whichTheoryUncert(21);
+    int whichTheoryUncert(11);
 
     //==========================================================================================================//
     //     NLO Electroweak Corrections (for GEN)     //
@@ -280,7 +280,7 @@ void ZJetsAndDPS::Loop(bool hasRecoInfo, bool hasGenInfo, int year, int doQCD, b
     //==========================================================================================================//
     // Start looping over all the events //
     //===================================//
-    printf("\nProcessing : %s    -->   %s \n", fileName.c_str(), outputFileName.c_str()); 
+    printf("\nProcessing: %s   -->   %s \n", fileName.c_str(), outputFileName.c_str()); 
 
     //--- Initialize the tree branches ---
     Init(hasRecoInfo, hasGenInfo);

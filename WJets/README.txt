@@ -1,13 +1,54 @@
 # WJetsTreeAnalysis16
 
 # -----------------------------------------------------------------------------------------
-merging of W+jets histos --
 
+purpose --
+- this code runs over the events (of both data and MC type) contained in the "Bonzai" trees produced using the ntuple-izer code, performing the object/event selections and filling events that pass these criteria into various histograms for a variety of W+jets observables
+- this is done for the data events, and then for the signal MC and BG MC events
+- plots are made to assess the agreement between data and predicted (signal+BG) events at reconstructed-level 
+
+set up --
+mkdir WJetsTreeAnalysis16_lxplus7
+cd WJetsTreeAnalysis16_lxplus7
+cmsrel CMSSW_7_6_0
+cd CMSSW_7_6_0/src
+<pull repo>
+
+
+
+running the code --
+(running the code in any case first involves the compiling of the code in SourceFiles)
+
+runEvtSelection.cc     >>> the main script that executes the event selection loop for a given set of switches, which are:
+  - doWhat - the specific sample to run (the data sample, or the signal MC or one of the BG MC samples)
+  - doQCD - selects the W+jets signal region (0) or one of the 3 control regions (1,2,3) used in the data-driven derivation of the QCD BG
+  - doSysRunning - whether to run the nominal event selection cuts (0) or the systematic uncertainty variations (all other values), where some of these systematic variations may only run on a subset of the samples used in the analysis
+  - doBJets - switch used to include a veto on events that contain >=1 b-tagged jets (-1), or to require events to have >=2 b-tagged jets (2, used for running ttBar control region derive ttBar SFs), or to ignore the b-tagged jet content of the event (0, this is currently the value used for running the analysis with the nominal selections)
+  - year - the year of data-taking of the data/MC samples (2016, 2017, 2018 for each of the three years of Run 2)
+
+wjets_jobsub_Condor.py >>> this script submits separate HTcondor jobs for each of the physics processes/QCD region variations/systematic variations/etc needed to run the analysis
+
+--> if you want to run the code locally, comment out the top line in the runEventSelection.cc script and enable the switches doWhat, doQCD, doSysRunning, year --> then run 'root -b -q -l runEventSelection.cc'
+--> if you want to run the condor job submission, comment out the mentioned switches and uncomment the top line of the script, then run 'python wjets_jobsub_Condor.py'
+
+
+in order to add and fill new histograms, need to edit:
+SourceFiles/HistoSet.h     >>> declare histogram objects
+SourceFiles/HistoSet.cc    >>> give histograms name, title, binning
+SourceFiles/ZJetsAndDPS.cc >>> main event loop that makes object/event selection cuts, fills histograms
+
+
+*** NOTE ***
+final reco-level histogram files and plots are already made and are here:
+/eos/cms/store/group/phys_smp/AnalysisFramework/Baobab/awisecar/wjetsRun2_histoFiles_forRecoPlots
+
+
+
+merging of W+jets histos --
 
 --- to find empty Root files in HistoFiles folders ---
 find . -type f -size -450k
 ---------------------------------------------------
-
 
 first merge signal region/central, no systematics
 ./wjets_Merge_Data_NoBVeto.sh
@@ -56,6 +97,20 @@ to make plots, have to rename HistoFiles_Run2 to HistoFiles before plotting
 
 now make plots for merged Run2 --
 root -b -q -l runPlots.cc
+
+
+
+
+
+
+
+
+to run ttBar SF derivation:
+...
+
+
+to run the theoretical uncertainties (scales, PDF, alpha-s) for the W+jets NLO FxFx samples:
+...
 
 
 
